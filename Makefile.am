@@ -6,11 +6,11 @@ SUBDIRS = po
 
 # DBus service file
 dbus_servicesdir = $(DBUSSERVICEDIR)
-dbus_services_DATA = indicator-power.service
+dbus_services_DATA = data/indicator-power.service
 
 # Rule to make the service file with libexecdir expanded
 %.service: %.service.in
-        sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+	sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 ############################################################
 
@@ -23,7 +23,7 @@ libexec_PROGRAMS = indicator-power-service
 powerlibdir = $(INDICATORDIR)
 powerlib_LTLIBRARIES = libpower.la
 libpower_la_SOURCES = \
-        indicator-power.c
+        src/indicator-power.c
 libpower_la_CFLAGS = \
         $(INDICATOR_CFLAGS) \
         -Wall -Werror \
@@ -39,10 +39,11 @@ libpower_la_LDFLAGS = \
 ################
 
 indicator_power_service_SOURCES = \
-        power-service.c
+        src/power-service.c
 indicator_power_service_CFLAGS = \
         $(POWERSERVICE_CFLAGS) \
         -Wall -Werror \
+        -DLOCALEDIR=\"$(localedir)\" \
         -DG_LOG_DOMAIN=\"Power-Me\"
 indicator_power_service_LDADD = \
         $(POWERSERVICE_LIBS)
