@@ -44,7 +44,7 @@ indicator_power_service_CFLAGS = \
         $(POWERSERVICE_CFLAGS) \
         -Wall -Werror \
         -DLOCALEDIR=\"$(localedir)\" \
-        -DG_LOG_DOMAIN=\"Power-Me\"
+        -DG_LOG_DOMAIN=\"Indicator-Power\"
 indicator_power_service_LDADD = \
         $(POWERSERVICE_LIBS)
 

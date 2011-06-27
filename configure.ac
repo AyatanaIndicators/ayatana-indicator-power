@@ -152,7 +152,7 @@ AC_OUTPUT
 
 AC_MSG_NOTICE([
 
-Me Indicator Configuration:
+Power Indicator Configuration:
 
 	Prefix:        $prefix
 	GTK:           $with_gtk
