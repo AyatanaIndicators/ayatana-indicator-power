@@ -44,6 +44,8 @@ static DbusmenuMenuitem *root_menuitem = NULL;
 /*TODO Do we need this?*/
 /*static PowerServiceDbus *dbus_interface = NULL;*/
 
+/* Global Items */
+static DbusmenuMenuitem *settings = NULL;
 
 /* Repsonds to the service object saying it's time to shutdown.
    It stops the mainloop. */
@@ -60,6 +62,20 @@ static void
 build_menus (gpointer data)
 {
   /*TODO*/
+
+  settings = dbusmenu_menuitem_new();
+  dbusmenu_menuitem_property_set (settings,
+                                  DBUSMENU_MENUITEM_PROP_LABEL,
+                                  _("Power Settings..."));
+  /* insensitive until we check for available apps */
+/*
+  dbusmenu_menuitem_property_set_bool (settings, DBUSMENU_MENUITEM_PROP_ENABLED, FALSE);
+  g_signal_connect (G_OBJECT (settings),
+                    DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED,
+                    G_CALLBACK (activate_cb),
+                    "indicator-power-preferences");
+*/
+  dbusmenu_menuitem_child_append (root_menuitem, settings);
 }
 
 gint
