@@ -40,7 +40,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 static IndicatorService *service = NULL;
 static GMainLoop        *mainloop = NULL;
 static DbusmenuServer   *server = NULL;
-static DbusmenuMenuitem *root_menuitem = NULL;
 /*TODO Do we need this?*/
 /*static PowerServiceDbus *dbus_interface = NULL;*/
 
@@ -59,7 +58,7 @@ service_shutdown (IndicatorService *service,
 }
 
 static void
-build_menus (gpointer data)
+build_menus (DbusmenuMenuitem *root_menuitem)
 {
   /*TODO*/
 
@@ -82,6 +81,8 @@ gint
 main (gint    argc,
       gchar **argv)
 {
+  DbusmenuMenuitem *root_menuitem = NULL;
+
   g_type_init();
 
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
