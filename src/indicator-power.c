@@ -1,7 +1,7 @@
 /*
 An indicator to power related information in the menubar.
 
-Copyright 2010 Codethink Ltd.
+Copyright 2011 Canonical Ltd.
 
 Authors:
     Javier Jardon <javier.jardon@codethink.co.uk>

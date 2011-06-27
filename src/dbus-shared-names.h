@@ -2,7 +2,7 @@
 A small wrapper utility to load indicators and put them as menu items
 into the gnome-panel using it's applet interface.
 
-Copyright 2010 Codethink Ltd.
+Copyright 2011 Canonical Ltd.
 
 Authors:
     Javier Jardon <javier.jardon@codethink.co.uk>
