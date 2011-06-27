@@ -43,9 +43,6 @@ static DbusmenuServer   *server = NULL;
 /*TODO Do we need this?*/
 /*static PowerServiceDbus *dbus_interface = NULL;*/
 
-/* Global Items */
-static DbusmenuMenuitem *settings = NULL;
-
 /* Repsonds to the service object saying it's time to shutdown.
    It stops the mainloop. */
 static void
@@ -58,23 +55,53 @@ service_shutdown (IndicatorService *service,
 }
 
 static void
+spawn_on_activate_cb (DbusmenuMenuitem *mi,
+                      guint             timestamp,
+                      gpointer          user_data)
+{
+  GError * error = NULL;
+
+  if (!g_spawn_command_line_async (user_data, &error))
+  {
+    g_warning ("Unable to start %s: %s", (char *)user_data, error->message);
+    g_error_free (error);
+  }
+}
+
+static void
 build_menus (DbusmenuMenuitem *root_menuitem)
 {
-  /*TODO*/
+  DbusmenuMenuitem *power_mi = NULL;
+  DbusmenuMenuitem *separator_mi = NULL;
+  DbusmenuMenuitem *settings_mi = NULL;
 
-  settings = dbusmenu_menuitem_new();
-  dbusmenu_menuitem_property_set (settings,
+  power_mi = dbusmenu_menuitem_new ();
+  dbusmenu_menuitem_property_set (power_mi,
+                                  DBUSMENU_MENUITEM_PROP_LABEL,
+                                  _("Laptop Battery 0:25")); /*TODO*/
+  g_signal_connect (G_OBJECT (power_mi),
+                    DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED,
+                    G_CALLBACK (spawn_on_activate_cb),
+                    "gnome-power-statistic");
+
+  settings_mi = dbusmenu_menuitem_new();
+  dbusmenu_menuitem_property_set (settings_mi,
                                   DBUSMENU_MENUITEM_PROP_LABEL,
                                   _("Power Settings..."));
-  /* insensitive until we check for available apps */
-/*
-  dbusmenu_menuitem_property_set_bool (settings, DBUSMENU_MENUITEM_PROP_ENABLED, FALSE);
-  g_signal_connect (G_OBJECT (settings),
+  g_signal_connect (G_OBJECT (power_mi),
                     DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED,
-                    G_CALLBACK (activate_cb),
-                    "indicator-power-preferences");
-*/
-  dbusmenu_menuitem_child_append (root_menuitem, settings);
+                    G_CALLBACK (spawn_on_activate_cb),
+                    "gnome-power-preferences");
+
+  separator_mi = dbusmenu_menuitem_new ();
+  dbusmenu_menuitem_property_set (separator_mi,
+                                  DBUSMENU_MENUITEM_PROP_TYPE,
+                                  DBUSMENU_CLIENT_TYPES_SEPARATOR);
+
+
+  dbusmenu_menuitem_child_append (root_menuitem, power_mi);
+  dbusmenu_menuitem_child_append (root_menuitem, separator_mi);
+  dbusmenu_menuitem_child_append (root_menuitem, settings_mi);
 }
 
 gint
