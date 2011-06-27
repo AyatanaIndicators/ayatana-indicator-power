@@ -19,7 +19,6 @@ AM_SILENT_RULES([yes])
 # Check for programs
 AC_PROG_CC
 AM_PROG_CC_C_O
-AM_PROG_VALAC([0.12])
 
 # Initialize libtool
 LT_PREREQ([2.2.6])
