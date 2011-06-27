@@ -23,6 +23,8 @@ libexec_PROGRAMS = indicator-power-service
 powerlibdir = $(INDICATORDIR)
 powerlib_LTLIBRARIES = libpower.la
 libpower_la_SOURCES = \
+        src/dbus-shared-names.h \
+        src/gen-power-service.xml.h \
         src/indicator-power.c
 libpower_la_CFLAGS = \
         $(INDICATOR_CFLAGS) \
@@ -39,6 +41,9 @@ libpower_la_LDFLAGS = \
 ################
 
 indicator_power_service_SOURCES = \
+        src/gen-power-service.xml.c \
+        src/power-service-dbus.h \
+        src/power-service-dbus.c \
         src/power-service.c
 indicator_power_service_CFLAGS = \
         $(POWERSERVICE_CFLAGS) \
@@ -47,6 +52,21 @@ indicator_power_service_CFLAGS = \
         -DG_LOG_DOMAIN=\"Indicator-Power\"
 indicator_power_service_LDADD = \
         $(POWERSERVICE_LIBS)
+
+src/gen-%.xml.c: src/%.xml
+	@echo "Building $@ from $<"
+	@echo "const char * _$(subst -,_,$(subst .,_,$(notdir $(basename $<)))) = " > $@
+	@sed -e "s:\":\\\\\":g" -e s:^:\": -e s:\$$:\\\\n\": $< >> $@
+	@echo ";" >> $@
+
+src/gen-%.xml.h: src/%.xml
+	@echo "Building $@ from $<"
+	@echo "extern const char * _$(subst -,_,$(subst .,_,$(notdir $(basename $<))));" > $@
+
+BUILT_SOURCES = \
+        src/gen-power-service.xml.c \
+        src/gen-power-service.xml.h
+
 
 ############################################################
 

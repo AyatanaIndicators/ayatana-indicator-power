@@ -35,13 +35,13 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <libindicator/indicator-service.h>
 
+#include "power-service-dbus.h"
 #include "dbus-shared-names.h"
 
 static IndicatorService *service = NULL;
 static GMainLoop        *mainloop = NULL;
 static DbusmenuServer   *server = NULL;
-/*TODO Do we need this?*/
-/*static PowerServiceDbus *dbus_interface = NULL;*/
+static PowerServiceDbus *dbus_interface = NULL;
 
 /* Repsonds to the service object saying it's time to shutdown.
    It stops the mainloop. */
@@ -133,8 +133,7 @@ main (gint    argc,
   build_menus (root_menuitem);
 
   /* Setup dbus interface */
-  /*TODO*/
-  /*dbus_interface = g_object_new (POWER_SERVICE_DBUS_TYPE, NULL);*/
+  dbus_interface = g_object_new (POWER_SERVICE_DBUS_TYPE, NULL);
 
   mainloop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run(mainloop);

@@ -22,7 +22,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #ifndef __DBUS_SHARED_NAMES_H__
-#define __DBUS_SHARED_NAMES_H__ 1
+#define __DBUS_SHARED_NAMES_H__
 
 #define INDICATOR_POWER_DBUS_NAME              "com.canonical.indicator.power"
 #define INDICATOR_POWER_DBUS_VERSION           1
