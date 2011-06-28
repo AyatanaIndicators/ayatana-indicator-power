@@ -85,8 +85,8 @@ struct _IndicatorPowerPrivate
   GtkLabel *label;
   GtkImage *status_image;
 
-  GCancellable        *status_proxy_cancel;
-  GDBusProxy          *status_proxy;
+  GCancellable        *service_proxy_cancel;
+  GDBusProxy          *service_proxy;
   IdoCalendarMenuItem *ido_entry;
 };
 
@@ -127,6 +127,68 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
 
+/* Update the power right now.  Usually the result of a timezone switch. */
+static void
+update_power (IndicatorPower *self)
+{
+ /*TODO*/
+}
+
+/* Receives all signals from the service, routed to the appropriate functions */
+static void
+receive_signal (GDBusProxy *proxy,
+                gchar      *sender_name,
+                gchar      *signal_name,
+                GVariant   *parameters,
+                gpointer    user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+
+  if (g_strcmp0(signal_name, "UpdatePower") == 0)
+    {
+      update_power (self);
+    }
+}
+
+/* Callback from trying to create the proxy for the service, this
+   could include starting the service.  Sometimes it'll fail and
+   we'll try to start that dang service again! */
+static void
+service_proxy_cb (GObject      *object,
+                  GAsyncResult *res,
+                  gpointer      user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+  GDBusProxy *proxy;
+  GError *error = NULL;
+
+  proxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+
+  if (priv->service_proxy_cancel != NULL)
+    {
+      g_object_unref (priv->service_proxy_cancel);
+      priv->service_proxy_cancel = NULL;
+    }
+
+  if (error != NULL)
+    {
+      g_error ("Could not grab DBus proxy for %s: %s", INDICATOR_POWER_DBUS_NAME, error->message);
+      g_error_free (error);
+
+      return;
+    }
+
+    /* Okay, we're good to grab the proxy at this point, we're
+    sure that it's ours. */
+    priv->service_proxy = proxy;
+
+    g_signal_connect (priv->service_proxy,
+                      "g-signal",
+                      G_CALLBACK (receive_signal),
+                      self);
+}
+
 static void
 indicator_power_init (IndicatorPower *self)
 {
@@ -162,6 +224,18 @@ indicator_power_init (IndicatorPower *self)
                                     DBUSMENU_ENTRY_MENUITEM_TYPE,
                                     new_entry_item);
 */
+
+  priv->service_proxy_cancel = g_cancellable_new();
+
+  g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                            G_DBUS_PROXY_FLAGS_NONE,
+                            NULL,
+                            INDICATOR_POWER_DBUS_NAME,
+                            INDICATOR_POWER_DBUS_OBJECT,
+                            INDICATOR_POWER_SERVICE_DBUS_INTERFACE,
+                            priv->service_proxy_cancel,
+                            service_proxy_cb,
+                            self);
 }
 
 static void
