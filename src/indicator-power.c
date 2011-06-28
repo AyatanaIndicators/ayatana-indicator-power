@@ -423,7 +423,7 @@ get_accessible_desc (IndicatorObject *io)
   IndicatorPowerPrivate *priv = self->priv;
   const gchar *name;
 
-  if (priv->label == NULL)
+  if (priv->label != NULL)
   {
     name = gtk_label_get_text (priv->label);
 
