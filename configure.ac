@@ -35,15 +35,6 @@ GTK_REQUIRED_VERSION=2.24
 GTK3_REQUIRED_VERSION=3.0
 INDICATOR_DISPLAY_OBJECTS=0.2
 INDICATOR_REQUIRED_VERSION=0.3.0
-DBUSMENUGLIB_REQUIRED_VERSION=0.4
-DBUSMENUGTK_REQUIRED_VERSION=0.4
-
-PKG_CHECK_MODULES([POWERSERVICE],[
-        dbusmenu-glib-0.4 >= $DBUSMENUGLIB_REQUIRED_VERSION
-        glib-2.0 >= $GLIB_REQUIRED_VERSION
-        indicator3 >= $INDICATOR_REQUIRED_VERSION
-        gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION
-])
 
 AC_ARG_WITH([gtk],
             [AS_HELP_STRING([--with-gtk],
@@ -55,14 +46,12 @@ AS_IF([test "x$with_gtk" = x3],
       [PKG_CHECK_MODULES([INDICATOR],[
                           gtk+-3.0 >= $GTK3_REQUIRED_VERSION
                           indicator3 >= $INDICATOR_REQUIRED_VERSION
-                          libido3-0.1 >= $INDICATOR_DISPLAY_OBJECTS
-                          dbusmenu-gtk3-0.4 >= $DBUSMENUGTK_REQUIRED_VERSION])],
+                          libido3-0.1 >= $INDICATOR_DISPLAY_OBJECTS])],
       [test "x$with_gtk" = x2],
       [PKG_CHECK_MODULES([INDICATOR],[
                           gtk+-2.0 >= $GTK_REQUIRED_VERSION
                           indicator >= $INDICATOR_REQUIRED_VERSION
-                          libido-0.1 >= $INDICATOR_DISPLAY_OBJECTS
-                          dbusmenu-gtk-0.4 >= $DBUSMENUGTK_REQUIRED_VERSION])],
+                          libido-0.1 >= $INDICATOR_DISPLAY_OBJECTS])],
       [AC_MSG_FAILURE([Value for --with-gtk was neither 2 nor 3])]
 )
 AC_SUBST(INDICATOR_CFLAGS)

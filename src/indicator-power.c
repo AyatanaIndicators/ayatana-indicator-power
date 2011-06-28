@@ -34,16 +34,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator-object.h>
 #include <libindicator/indicator-service-manager.h>
 #include <libindicator/indicator-image-helper.h>
-
-/* DBusMenu */
 #include <libido/libido.h>
-#if GTK_CHECK_VERSION(3, 0, 0)
-#include <libdbusmenu-gtk3/menu.h>
-#include <libdbusmenu-gtk3/menuitem.h>
-#else
-#include <libdbusmenu-gtk/menu.h>
-#include <libdbusmenu-gtk/menuitem.h>
-#endif
 
 #include "dbus-shared-names.h"
 
@@ -79,8 +70,7 @@ struct _IndicatorPowerPrivate
 {
   IndicatorServiceManager *service;
 
-  DbusmenuGtkMenu   *menu;
-  DbusmenuGtkClient *client;
+  GtkMenu   *menu;
 
   GtkLabel *label;
   GtkImage *status_image;
@@ -202,7 +192,6 @@ indicator_power_init (IndicatorPower *self)
   /* Init variables */
   priv->service = NULL;
   priv->menu = NULL;
-  priv->client = NULL;
 
   /* Do stuff with them */
   priv->service = indicator_service_manager_new_version (INDICATOR_POWER_DBUS_NAME,
@@ -214,16 +203,10 @@ indicator_power_init (IndicatorPower *self)
                     self);
 */
 
-  /* Builds the dbusmenu for the service. */
-  priv->menu = dbusmenu_gtkmenu_new (INDICATOR_POWER_DBUS_NAME,
-                                     INDICATOR_POWER_DBUS_OBJECT);
-  priv->client = dbusmenu_gtkmenu_get_client (priv->menu);
+  priv->menu = GTK_MENU (gtk_menu_new ());
+  gtk_menu_set_title (priv->menu, _("Power"));
 
-/*
-  dbusmenu_client_add_type_handler (DBUSMENU_CLIENT (client),
-                                    DBUSMENU_ENTRY_MENUITEM_TYPE,
-                                    new_entry_item);
-*/
+  gtk_menu_popup (priv->menu, NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time ());
 
   priv->service_proxy_cancel = g_cancellable_new();
 

@@ -2,20 +2,6 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = po
 
-############################################################
-
-# DBus service file
-dbus_servicesdir = $(DBUSSERVICEDIR)
-dbus_services_DATA = data/indicator-power.service
-
-# Rule to make the service file with libexecdir expanded
-%.service: %.service.in
-	sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
-
-############################################################
-
-libexec_PROGRAMS = indicator-power-service
-
 ###################
 # Indicator Stuff
 ###################
@@ -35,38 +21,6 @@ libpower_la_LIBADD = \
 libpower_la_LDFLAGS = \
         -module \
         -avoid-version
-
-################
-# Status Stuff
-################
-
-indicator_power_service_SOURCES = \
-        src/gen-power-service.xml.c \
-        src/power-service-dbus.h \
-        src/power-service-dbus.c \
-        src/power-service.c
-indicator_power_service_CFLAGS = \
-        $(POWERSERVICE_CFLAGS) \
-        -Wall -Werror \
-        -DLOCALEDIR=\"$(localedir)\" \
-        -DG_LOG_DOMAIN=\"Indicator-Power\"
-indicator_power_service_LDADD = \
-        $(POWERSERVICE_LIBS)
-
-src/gen-%.xml.c: src/%.xml
-	@echo "Building $@ from $<"
-	@echo "const char * _$(subst -,_,$(subst .,_,$(notdir $(basename $<)))) = " > $@
-	@sed -e "s:\":\\\\\":g" -e s:^:\": -e s:\$$:\\\\n\": $< >> $@
-	@echo ";" >> $@
-
-src/gen-%.xml.h: src/%.xml
-	@echo "Building $@ from $<"
-	@echo "extern const char * _$(subst -,_,$(subst .,_,$(notdir $(basename $<))));" > $@
-
-BUILT_SOURCES = \
-        src/gen-power-service.xml.c \
-        src/gen-power-service.xml.h
-
 
 ############################################################
 

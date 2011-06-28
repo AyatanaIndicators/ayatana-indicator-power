@@ -24,11 +24,10 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __DBUS_SHARED_NAMES_H__
 #define __DBUS_SHARED_NAMES_H__
 
+
 #define INDICATOR_POWER_DBUS_NAME              "com.canonical.indicator.power"
 #define INDICATOR_POWER_DBUS_VERSION           1
 #define INDICATOR_POWER_DBUS_OBJECT            "/com/canonical/indicator/power/menu"
-#define INDICATOR_POWER_SERVICE_DBUS_OBJECT    "/com/canonical/indicator/power/service"
-#define INDICATOR_POWER_SERVICE_DBUS_INTERFACE "com.canonical.indicator.power.service"
 
 
 #endif /* __DBUS_SHARED_NAMES_H__ */
