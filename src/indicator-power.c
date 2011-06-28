@@ -32,10 +32,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Indicator Stuff */
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
-#include <libindicator/indicator-service-manager.h>
 #include <libindicator/indicator-image-helper.h>
-
-#include "dbus-shared-names.h"
 
 #define DEFAULT_ICON   "battery"
 
@@ -67,8 +64,6 @@ GType indicator_power_get_type (void) G_GNUC_CONST;
 
 struct _IndicatorPowerPrivate
 {
-  IndicatorServiceManager *service;
-
   GtkMenu   *menu;
 
   GtkLabel *label;
@@ -188,18 +183,7 @@ indicator_power_init (IndicatorPower *self)
   priv = self->priv;
 
   /* Init variables */
-  priv->service = NULL;
   priv->menu = NULL;
-
-  /* Do stuff with them */
-  priv->service = indicator_service_manager_new_version (INDICATOR_POWER_DBUS_NAME,
-                                                         INDICATOR_POWER_DBUS_VERSION);
-/*
-  g_signal_connect (G_OBJECT (priv->service),
-                    INDICATOR_SERVICE_MANAGER_SIGNAL_CONNECTION_CHANGE,
-                    G_CALLBACK (connection_changed),
-                    self);
-*/
 
   priv->menu = GTK_MENU (gtk_menu_new ());
   gtk_menu_set_title (priv->menu, _("Power"));
@@ -222,15 +206,6 @@ indicator_power_init (IndicatorPower *self)
 static void
 indicator_power_dispose (GObject *object)
 {
-  IndicatorPower *self = INDICATOR_POWER (object);
-  IndicatorPowerPrivate *priv = self->priv;
-
-  if (priv->service != NULL)
-  {
-    g_object_unref (G_OBJECT (priv->service));
-    priv->service = NULL;
-  }
-
   G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
 }
 

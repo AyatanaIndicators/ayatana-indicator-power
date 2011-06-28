@@ -9,8 +9,6 @@ SUBDIRS = po
 powerlibdir = $(INDICATORDIR)
 powerlib_LTLIBRARIES = libpower.la
 libpower_la_SOURCES = \
-        src/dbus-shared-names.h \
-        src/gen-power-service.xml.h \
         src/indicator-power.c
 libpower_la_CFLAGS = \
         $(INDICATOR_CFLAGS) \
