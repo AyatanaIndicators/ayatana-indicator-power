@@ -69,8 +69,8 @@ struct _IndicatorPowerPrivate
   GtkLabel *label;
   GtkImage *status_image;
 
-  GCancellable        *service_proxy_cancel;
-  GDBusProxy          *service_proxy;
+  GCancellable *proxy_cancel;
+  GDBusProxy   *proxy;
 };
 
 /* Prototypes */
@@ -110,14 +110,24 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
 
-/* Update the power right now.  Usually the result of a timezone switch. */
 static void
-update_power (IndicatorPower *self)
+get_primary_device_cb (GObject      *source_object,
+                       GAsyncResult *res,
+                       gpointer      user_data)
 {
- /*TODO*/
+  GVariant *result;
+  GError *error = NULL;
+
+  result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (result == NULL)
+    {
+      g_printerr ("Error getting primary device: %s\n", error->message);
+      g_error_free (error);
+
+      return;
+    }
 }
 
-/* Receives all signals from the service, routed to the appropriate functions */
 static void
 receive_signal (GDBusProxy *proxy,
                 gchar      *sender_name,
@@ -126,16 +136,22 @@ receive_signal (GDBusProxy *proxy,
                 gpointer    user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
 
-  if (g_strcmp0(signal_name, "UpdatePower") == 0)
+  if (g_strcmp0 (signal_name, "Changed") == 0)
     {
-      update_power (self);
+      /* get the new state */
+      g_dbus_proxy_call (priv->proxy,
+                         "GetPrimaryDevice",
+                         NULL,
+                         G_DBUS_CALL_FLAGS_NONE,
+                         -1,
+                         priv->proxy_cancel,
+                         get_primary_device_cb,
+                         user_data);
     }
 }
 
-/* Callback from trying to create the proxy for the service, this
-   could include starting the service.  Sometimes it'll fail and
-   we'll try to start that dang service again! */
 static void
 service_proxy_cb (GObject      *object,
                   GAsyncResult *res,
@@ -143,33 +159,39 @@ service_proxy_cb (GObject      *object,
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
-  GDBusProxy *proxy;
   GError *error = NULL;
 
-  proxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+  priv->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 
-  if (priv->service_proxy_cancel != NULL)
+  if (priv->proxy_cancel != NULL)
     {
-      g_object_unref (priv->service_proxy_cancel);
-      priv->service_proxy_cancel = NULL;
+      g_object_unref (priv->proxy_cancel);
+      priv->proxy_cancel = NULL;
     }
 
   if (error != NULL)
     {
-      g_error ("Could not grab DBus proxy for %s: %s", INDICATOR_POWER_DBUS_NAME, error->message);
+      g_error ("Error creating proxy: %s", error->message);
       g_error_free (error);
 
       return;
     }
 
-    /* Okay, we're good to grab the proxy at this point, we're
-    sure that it's ours. */
-    priv->service_proxy = proxy;
+  /* we want to change the primary device changes */
+  g_signal_connect (priv->proxy,
+                    "g-signal",
+                    G_CALLBACK (receive_signal),
+                    user_data);
 
-    g_signal_connect (priv->service_proxy,
-                      "g-signal",
-                      G_CALLBACK (receive_signal),
-                      self);
+  /* get the initial state */
+  g_dbus_proxy_call (priv->proxy,
+                     "GetPrimaryDevice",
+                     NULL,
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     priv->proxy_cancel,
+                     get_primary_device_cb,
+                     user_data);
 }
 
 static void
@@ -190,15 +212,15 @@ indicator_power_init (IndicatorPower *self)
 
   gtk_menu_popup (priv->menu, NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time ());
 
-  priv->service_proxy_cancel = g_cancellable_new();
+  priv->proxy_cancel = g_cancellable_new();
 
   g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
                             G_DBUS_PROXY_FLAGS_NONE,
                             NULL,
-                            INDICATOR_POWER_DBUS_NAME,
-                            INDICATOR_POWER_DBUS_OBJECT,
-                            INDICATOR_POWER_SERVICE_DBUS_INTERFACE,
-                            priv->service_proxy_cancel,
+                            "org.gnome.PowerManager",
+                            "/org/gnome/PowerManager",
+                            "org.gnome.PowerManager",
+                            priv->proxy_cancel,
                             service_proxy_cb,
                             self);
 }
