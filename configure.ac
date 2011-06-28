@@ -45,13 +45,11 @@ AC_ARG_WITH([gtk],
 AS_IF([test "x$with_gtk" = x3],
       [PKG_CHECK_MODULES([INDICATOR],[
                           gtk+-3.0 >= $GTK3_REQUIRED_VERSION
-                          indicator3 >= $INDICATOR_REQUIRED_VERSION
-                          libido3-0.1 >= $INDICATOR_DISPLAY_OBJECTS])],
+                          indicator3 >= $INDICATOR_REQUIRED_VERSION])],
       [test "x$with_gtk" = x2],
       [PKG_CHECK_MODULES([INDICATOR],[
                           gtk+-2.0 >= $GTK_REQUIRED_VERSION
-                          indicator >= $INDICATOR_REQUIRED_VERSION
-                          libido-0.1 >= $INDICATOR_DISPLAY_OBJECTS])],
+                          indicator >= $INDICATOR_REQUIRED_VERSION])],
       [AC_MSG_FAILURE([Value for --with-gtk was neither 2 nor 3])]
 )
 AC_SUBST(INDICATOR_CFLAGS)

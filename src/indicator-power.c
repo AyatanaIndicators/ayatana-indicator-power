@@ -34,7 +34,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator-object.h>
 #include <libindicator/indicator-service-manager.h>
 #include <libindicator/indicator-image-helper.h>
-#include <libido/libido.h>
 
 #include "dbus-shared-names.h"
 
@@ -77,7 +76,6 @@ struct _IndicatorPowerPrivate
 
   GCancellable        *service_proxy_cancel;
   GDBusProxy          *service_proxy;
-  IdoCalendarMenuItem *ido_entry;
 };
 
 /* Prototypes */
