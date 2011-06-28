@@ -29,6 +29,9 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+/* upower */
+#include <libupower-glib/upower.h>
+
 /* Indicator Stuff */
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
@@ -110,13 +113,67 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
 
+static gchar *
+get_timestring (guint64 time_secs)
+{
+  gchar* timestring = NULL;
+  gint  hours;
+  gint  minutes;
+
+  /* Add 0.5 to do rounding */
+  minutes = (int) ( ( time_secs / 60.0 ) + 0.5 );
+
+  if (minutes == 0)
+    {
+      timestring = g_strdup (_("Unknown time"));
+      return timestring;
+    }
+
+  if (minutes < 60)
+    {
+      timestring = g_strdup_printf (ngettext ("%i minute",
+                                    "%i minutes",
+                                    minutes), minutes);
+      return timestring;
+    }
+
+  hours = minutes / 60;
+  minutes = minutes % 60;
+
+  if (minutes == 0)
+    {
+      timestring = g_strdup_printf (ngettext (
+                                    "%i hour",
+                                    "%i hours",
+                                    hours), hours);
+      return timestring;
+    }
+
+  /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+   * Swap order with "%2$s %2$i %1$s %1$i if needed */
+  timestring = g_strdup_printf (_("%i %s %i %s"),
+                                hours, ngettext ("hour", "hours", hours),
+                                minutes, ngettext ("minute", "minutes", minutes));
+  return timestring;
+}
+
 static void
 get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
                        gpointer      user_data)
 {
+  UpDeviceKind kind;
+  UpDeviceState state;
   GVariant *result;
   GError *error = NULL;
+  const gchar *title = NULL;
+  gchar *details = NULL;
+  gchar *display_string = NULL;
+  gchar *icon_name = NULL;
+  gchar *object_path = NULL;
+  gdouble percentage;
+  guint64 time;
+  gchar *time_string = NULL;
 
   result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (result == NULL)
@@ -126,6 +183,83 @@ get_primary_device_cb (GObject      *source_object,
 
       return;
     }
+
+  /* set the text */
+  g_variant_get (result,
+                 "((susdut))",
+                 &object_path,
+                 &kind,
+                 &display_string,
+                 &percentage,
+                 &state,
+                 &time);
+
+  g_debug ("got data from object %s", object_path);
+
+  /* get the title
+   * translate it as it has limited entries as devices that are
+   * fully charged are not returned as the primary device */
+  if (kind == UP_DEVICE_KIND_BATTERY)
+    {
+      switch (state)
+        {
+          case UP_DEVICE_STATE_CHARGING:
+            title = _("Battery charging");
+            break;
+          case UP_DEVICE_STATE_DISCHARGING:
+            title = _("Battery discharging");
+            break;
+          default:
+            break;
+        }
+    }
+  else if (kind == UP_DEVICE_KIND_UPS)
+    {
+      switch (state)
+        {
+          case UP_DEVICE_STATE_CHARGING:
+            title = _("UPS charging");
+            break;
+          case UP_DEVICE_STATE_DISCHARGING:
+            title = _("UPS discharging");
+            break;
+          default:
+            break;
+        }
+    }
+
+  /* get the description */
+  if (time > 0)
+    {
+      time_string = get_timestring (time);
+
+      if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          /* TRANSLATORS: %1 is a time string, e.g. "1 hour 5 minutes" */
+          details = g_strdup_printf(_("%s until charged (%.0lf%%)"),
+                                    time_string, percentage);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          /* TRANSLATORS: %1 is a time string, e.g. "1 hour 5 minutes" */
+          details = g_strdup_printf(_("%s until empty (%.0lf%%)"),
+                                    time_string, percentage);
+        }
+    }
+  else
+    {
+      /* TRANSLATORS: %1 is a percentage value. Note: this string is only
+       * used when we don't have a time value */
+      details = g_strdup_printf(_("%.0lf%% charged"),
+                                percentage);
+    }
+
+  g_free (details);
+  g_free (display_string);
+  g_free (time_string);
+  g_free (object_path);
+  g_free (icon_name);
+  g_variant_unref (result);
 }
 
 static void
