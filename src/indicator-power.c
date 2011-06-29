@@ -329,6 +329,49 @@ service_proxy_cb (GObject      *object,
 }
 
 static void
+show_preferences_cb (GtkMenuItem *item,
+                     gpointer     data)
+{
+  const gchar *command = "gnome-power-preferences";
+
+  if (g_spawn_command_line_async (command, NULL) == FALSE)
+    g_warning ("Couldn't execute command: %s", command);
+}
+
+static void
+build_menu (IndicatorPower *self)
+{
+  IndicatorPowerPrivate *priv = self->priv;
+  GtkWidget *item;
+  GtkWidget *image;
+  guint n_devices = 1; /*TODO*/
+
+  priv->menu = GTK_MENU (gtk_menu_new ());
+
+  item = gtk_image_menu_item_new_from_stock ("battery", NULL);
+  gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* only do the seporator if we have at least one device */
+  if (n_devices != 0)
+    {
+      item = gtk_separator_menu_item_new ();
+      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    }
+
+  /* preferences */
+  item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
+  image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+  g_signal_connect (G_OBJECT (item), "activate",
+                    G_CALLBACK (show_preferences_cb), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* show the menu */
+  gtk_widget_show_all (GTK_WIDGET (priv->menu));
+}
+
+static void
 indicator_power_init (IndicatorPower *self)
 {
   IndicatorPowerPrivate *priv;
@@ -341,10 +384,7 @@ indicator_power_init (IndicatorPower *self)
   /* Init variables */
   priv->menu = NULL;
 
-  priv->menu = GTK_MENU (gtk_menu_new ());
-  gtk_menu_set_title (priv->menu, _("Power"));
-
-  gtk_menu_popup (priv->menu, NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time ());
+  build_menu (self);
 
   priv->proxy_cancel = g_cancellable_new();
 
