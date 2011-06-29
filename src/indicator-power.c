@@ -329,6 +329,18 @@ service_proxy_cb (GObject      *object,
 }
 
 static void
+show_info_cb (GtkMenuItem *item,
+              gpointer     data)
+{
+  /*TODO: show the statistics of the specific device*/
+  const gchar *command = "gnome-power-statistics";
+
+  if (g_spawn_command_line_async (command, NULL) == FALSE)
+    g_warning ("Couldn't execute command: %s", command);
+}
+
+
+static void
 show_preferences_cb (GtkMenuItem *item,
                      gpointer     data)
 {
@@ -350,6 +362,8 @@ build_menu (IndicatorPower *self)
 
   item = gtk_image_menu_item_new_from_stock ("battery", NULL);
   gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
+  g_signal_connect (G_OBJECT (item), "activate",
+                    G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
   /* only do the seporator if we have at least one device */
