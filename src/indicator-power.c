@@ -37,7 +37,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator-object.h>
 #include <libindicator/indicator-image-helper.h>
 
-#define DEFAULT_ICON   "battery"
+#define DEFAULT_ICON   "battery-empty"
 
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
 #define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
@@ -162,6 +162,7 @@ get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
                        gpointer      user_data)
 {
+  IndicatorPowerPrivate *priv = INDICATOR_POWER (user_data)->priv;
   UpDeviceKind kind;
   UpDeviceState state;
   GVariant *result;
@@ -184,7 +185,7 @@ get_primary_device_cb (GObject      *source_object,
       return;
     }
 
-  /* set the text */
+  /* set the icon and text */
   g_variant_get (result,
                  "((susdut))",
                  &object_path,
@@ -195,6 +196,10 @@ get_primary_device_cb (GObject      *source_object,
                  &time);
 
   g_debug ("got data from object %s", object_path);
+
+  /* set icon */
+  priv->status_image = indicator_image_helper (icon_name);
+  gtk_widget_show (GTK_WIDGET (priv->status_image));
 
   /* get the title
    * translate it as it has limited entries as devices that are
@@ -477,7 +482,7 @@ get_image (IndicatorObject *io)
   if (priv->status_image == NULL)
   {
     /* Will create the status icon if it doesn't exist already */
-    priv->status_image = indicator_image_helper (DEFAULT_ICON "-panel");
+    priv->status_image = indicator_image_helper (DEFAULT_ICON);
     gtk_widget_show (GTK_WIDGET (priv->status_image));
   }
 
