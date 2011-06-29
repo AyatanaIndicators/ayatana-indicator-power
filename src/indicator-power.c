@@ -339,6 +339,12 @@ show_info_cb (GtkMenuItem *item,
     g_warning ("Couldn't execute command: %s", command);
 }
 
+static void
+option_toggled_cb (GtkCheckMenuItem *item,
+                   gpointer     user_data)
+{
+  /*TODO*/
+}
 
 static void
 show_preferences_cb (GtkMenuItem *item,
@@ -372,6 +378,21 @@ build_menu (IndicatorPower *self)
       item = gtk_separator_menu_item_new ();
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
     }
+
+  /* options */
+  item = gtk_check_menu_item_new_with_label (_("Icon Only"));
+  g_signal_connect (G_OBJECT (item), "toggled",
+                    G_CALLBACK (option_toggled_cb), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  item = gtk_check_menu_item_new_with_label (_("Time Remining"));
+  g_signal_connect (G_OBJECT (item), "toggled",
+                    G_CALLBACK (option_toggled_cb), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* separator */
+  item = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
   /* preferences */
   item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
