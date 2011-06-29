@@ -381,11 +381,13 @@ build_menu (IndicatorPower *self)
 
   /* options */
   item = gtk_check_menu_item_new_with_label (_("Icon Only"));
+  g_object_set (item, "draw-as-radio", TRUE, NULL);
   g_signal_connect (G_OBJECT (item), "toggled",
                     G_CALLBACK (option_toggled_cb), item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
   item = gtk_check_menu_item_new_with_label (_("Time Remining"));
+  g_object_set (item, "draw-as-radio", TRUE, NULL);
   g_signal_connect (G_OBJECT (item), "toggled",
                     G_CALLBACK (option_toggled_cb), item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
