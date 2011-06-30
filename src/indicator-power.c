@@ -357,7 +357,7 @@ static void
 show_preferences_cb (GtkMenuItem *item,
                      gpointer     data)
 {
-  const gchar *command = "gnome-power-preferences";
+  const gchar *command = "gnome-control-center power";
 
   if (g_spawn_command_line_async (command, NULL) == FALSE)
     g_warning ("Couldn't execute command: %s", command);
