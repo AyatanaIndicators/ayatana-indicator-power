@@ -261,6 +261,8 @@ get_primary_device_cb (GObject      *source_object,
       details = g_strdup_printf(_("%.0lf%% charged"),
                                 percentage);
     }
+  gtk_label_set_label (GTK_LABEL (priv->label),
+                       details);
 
   g_free (details);
   g_free (device_icon);
@@ -353,16 +355,8 @@ option_toggled_cb (GtkCheckMenuItem *item,
   IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
 
-  if (gtk_check_menu_item_get_active (item))
-    {
-      g_debug ("Updating username label");
-      gtk_label_set_text (priv->label, "0:45 Remaining"); /*TODO*/
-      gtk_widget_show (GTK_WIDGET(priv->label));
-    }
-  else
-    {
-      gtk_widget_hide (GTK_WIDGET(priv->label));
-    }
+  gtk_widget_set_visible (GTK_WIDGET (priv->label),
+                          gtk_check_menu_item_get_active (item));
 }
 
 static void
