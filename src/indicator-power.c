@@ -169,6 +169,7 @@ get_primary_device_cb (GObject      *source_object,
   GError *error = NULL;
   const gchar *title = NULL;
   gchar *details = NULL;
+  gchar **device_icons;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
@@ -197,8 +198,10 @@ get_primary_device_cb (GObject      *source_object,
   g_debug ("got data from object %s", object_path);
 
   /* set icon */
+  device_icons = g_strsplit (device_icon, " ", -1);
   indicator_image_helper_update (priv->status_image,
-                                 device_icon);
+                                 device_icons[3]);
+  g_strfreev (device_icons);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
   /* get the title
