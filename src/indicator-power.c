@@ -350,7 +350,19 @@ static void
 option_toggled_cb (GtkCheckMenuItem *item,
                    gpointer     user_data)
 {
-  /*TODO*/
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+
+  if (gtk_check_menu_item_get_active (item))
+    {
+      g_debug ("Updating username label");
+      gtk_label_set_text (priv->label, "0:45 Remaining"); /*TODO*/
+      gtk_widget_show (GTK_WIDGET(priv->label));
+    }
+  else
+    {
+      gtk_widget_hide (GTK_WIDGET(priv->label));
+    }
 }
 
 static void
@@ -390,7 +402,7 @@ build_menu (IndicatorPower *self)
   item = gtk_check_menu_item_new_with_label (_("Show Time Remining"));
   g_object_set (item, "draw-as-radio", TRUE, NULL);
   g_signal_connect (G_OBJECT (item), "toggled",
-                    G_CALLBACK (option_toggled_cb), item);
+                    G_CALLBACK (option_toggled_cb), self);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
   /* separator */
@@ -461,10 +473,10 @@ get_label (IndicatorObject *io)
   IndicatorPowerPrivate *priv = self->priv;
 
   if (priv->label == NULL)
-  {
-    /* Create the label if it doesn't exist already */
-    priv->label = GTK_LABEL (gtk_label_new ("Power"));
-  }
+    {
+      /* Create the label if it doesn't exist already */
+      priv->label = GTK_LABEL (gtk_label_new (""));
+    }
 
   return priv->label;
 }
