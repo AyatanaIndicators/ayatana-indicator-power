@@ -197,7 +197,8 @@ get_primary_device_cb (GObject      *source_object,
   g_debug ("got data from object %s", object_path);
 
   /* set icon */
-  priv->status_image = indicator_image_helper (device_icon);
+  indicator_image_helper_update (priv->status_image,
+                                 device_icon);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
   /* get the title
