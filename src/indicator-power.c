@@ -169,8 +169,7 @@ get_primary_device_cb (GObject      *source_object,
   GError *error = NULL;
   const gchar *title = NULL;
   gchar *details = NULL;
-  gchar *display_string = NULL;
-  gchar *icon_name = NULL;
+  gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
@@ -190,7 +189,7 @@ get_primary_device_cb (GObject      *source_object,
                  "((susdut))",
                  &object_path,
                  &kind,
-                 &display_string,
+                 &device_icon,
                  &percentage,
                  &state,
                  &time);
@@ -198,7 +197,7 @@ get_primary_device_cb (GObject      *source_object,
   g_debug ("got data from object %s", object_path);
 
   /* set icon */
-  priv->status_image = indicator_image_helper (icon_name);
+  priv->status_image = indicator_image_helper (device_icon);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
   /* get the title
@@ -260,10 +259,9 @@ get_primary_device_cb (GObject      *source_object,
     }
 
   g_free (details);
-  g_free (display_string);
+  g_free (device_icon);
   g_free (time_string);
   g_free (object_path);
-  g_free (icon_name);
   g_variant_unref (result);
 }
 
