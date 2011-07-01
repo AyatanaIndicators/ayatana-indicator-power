@@ -285,8 +285,8 @@ get_primary_device_cb (GObject      *source_object,
                       &short_timestring,
                       &detailed_timestring);
 
-      label_text = g_strdup_printf(_("%s (%s)"),
-                                   device_name, short_timestring);
+      label_text = g_strdup_printf(_("(%s)"),
+                                   short_timestring);
 
       if (state == UP_DEVICE_STATE_CHARGING)
         {
