@@ -113,10 +113,11 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
 
-static gchar *
-get_timestring (guint64 time_secs)
+static void
+get_timestring (guint64   time_secs,
+                gchar   **short_timestring,
+                gchar   **detailed_timestring)
 {
-  gchar* timestring = NULL;
   gint  hours;
   gint  minutes;
 
@@ -125,36 +126,41 @@ get_timestring (guint64 time_secs)
 
   if (minutes == 0)
     {
-      timestring = g_strdup (_("Unknown time"));
-      return timestring;
+      *short_timestring = g_strdup (_("Unknown time"));
+      *detailed_timestring = g_strdup (_("Unknown time"));
+
+      return;
     }
 
   if (minutes < 60)
     {
-      timestring = g_strdup_printf (ngettext ("%i minute",
-                                    "%i minutes",
-                                    minutes), minutes);
-      return timestring;
+      *short_timestring = g_strdup_printf ("0:%i", minutes);
+      *detailed_timestring = g_strdup_printf (ngettext ("%i minute",
+                                              "%i minutes",
+                                              minutes), minutes);
+      return;
     }
 
   hours = minutes / 60;
   minutes = minutes % 60;
 
+  *short_timestring = g_strdup_printf ("%i:%i", hours, minutes);
+
   if (minutes == 0)
     {
-      timestring = g_strdup_printf (ngettext (
-                                    "%i hour",
-                                    "%i hours",
-                                    hours), hours);
-      return timestring;
+      *detailed_timestring = g_strdup_printf (ngettext (
+                                              "%i hour",
+                                              "%i hours",
+                                              hours), hours);
     }
-
-  /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-   * Swap order with "%2$s %2$i %1$s %1$i if needed */
-  timestring = g_strdup_printf (_("%i %s %i %s"),
-                                hours, ngettext ("hour", "hours", hours),
-                                minutes, ngettext ("minute", "minutes", minutes));
-  return timestring;
+  else
+    {
+      /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+       * Swap order with "%2$s %2$i %1$s %1$i if needed */
+      *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
+                                              hours, ngettext ("hour", "hours", hours),
+                                              minutes, ngettext ("minute", "minutes", minutes));
+    }
 }
 
 static const gchar *
@@ -220,7 +226,8 @@ get_primary_device_cb (GObject      *source_object,
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
-  gchar *time_string = NULL;
+  gchar *short_timestring = NULL;
+  gchar *detailed_timestring = NULL;
 
   result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (result == NULL)
@@ -256,19 +263,21 @@ get_primary_device_cb (GObject      *source_object,
   /* get the description */
   if (time > 0)
     {
-      time_string = get_timestring (time);
+      get_timestring (time,
+                      &short_timestring,
+                      &detailed_timestring);
 
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
           details = g_strdup_printf(_("%s (%s until charged (%.0lf%%))"),
-                                    device_name, time_string, percentage);
+                                    device_name, detailed_timestring, percentage);
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
           details = g_strdup_printf(_("%s (%s until empty (%.0lf%%))"),
-                                    device_name, time_string, percentage);
+                                    device_name, detailed_timestring, percentage);
         }
     }
   else
@@ -283,7 +292,8 @@ get_primary_device_cb (GObject      *source_object,
 
   g_free (details);
   g_free (device_icon);
-  g_free (time_string);
+  g_free (short_timestring);
+  g_free (detailed_timestring);
   g_free (object_path);
   g_variant_unref (result);
 }
