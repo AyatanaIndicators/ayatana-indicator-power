@@ -71,6 +71,7 @@ struct _IndicatorPowerPrivate
 
   GtkLabel *label;
   GtkImage *status_image;
+  gchar    *accessible_desc;
 
   GCancellable *proxy_cancel;
   GDBusProxy   *proxy;
@@ -210,11 +211,27 @@ device_kind_to_localised_string (UpDeviceKind kind)
 }
 
 static void
+set_accessible_desc (IndicatorPower *self,
+                     const gchar    *desc)
+{
+  IndicatorPowerPrivate *priv = self->priv;
+
+  if (desc == NULL || strlen(desc) == 0)
+    return;
+
+  g_free (priv->accessible_desc);
+
+  priv->accessible_desc = g_strdup (desc);
+}
+
+
+static void
 get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
                        gpointer      user_data)
 {
-  IndicatorPowerPrivate *priv = INDICATOR_POWER (user_data)->priv;
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
   GVariant *result;
@@ -294,6 +311,7 @@ get_primary_device_cb (GObject      *source_object,
     }
   gtk_label_set_label (GTK_LABEL (priv->label),
                        label_text);
+  set_accessible_desc (self, details);
 
   g_free (label_text);
   g_free (details);
@@ -460,6 +478,7 @@ indicator_power_init (IndicatorPower *self)
 
   /* Init variables */
   priv->menu = NULL;
+  priv->accessible_desc = NULL;
 
   build_menu (self);
 
@@ -538,14 +557,6 @@ get_accessible_desc (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
   IndicatorPowerPrivate *priv = self->priv;
-  const gchar *name;
 
-  if (priv->label != NULL)
-  {
-    name = gtk_label_get_text (priv->label);
-
-    return name;
-  }
-
-  return NULL;
+  return priv->accessible_desc;
 }
