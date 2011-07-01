@@ -37,25 +37,10 @@ INDICATOR_REQUIRED_VERSION=0.3.0
 UPOWER_REQUIRED_VERSION=0.9.5
 
 PKG_CHECK_MODULES([UPOWER],[upower-glib >= UPOWER_REQUIRED_VERSION])
-
-AC_ARG_WITH([gtk],
-            [AS_HELP_STRING([--with-gtk],
-                            [Which version of gtk to use for the indicator @<:@default=3@:>@])],
-            [],
-            [with_gtk=3])
-
-AS_IF([test "x$with_gtk" = x3],
-      [PKG_CHECK_MODULES([INDICATOR],[
-                          gtk+-3.0 >= $GTK3_REQUIRED_VERSION
-                          indicator3 >= $INDICATOR_REQUIRED_VERSION])],
-      [test "x$with_gtk" = x2],
-      [PKG_CHECK_MODULES([INDICATOR],[
-                          gtk+-2.0 >= $GTK_REQUIRED_VERSION
-                          indicator >= $INDICATOR_REQUIRED_VERSION])],
-      [AC_MSG_FAILURE([Value for --with-gtk was neither 2 nor 3])]
-)
-AC_SUBST(INDICATOR_CFLAGS)
-AC_SUBST(INDICATOR_LIBS)
+PKG_CHECK_MODULES([INDICATOR],[
+        gtk+-3.0 >= $GTK3_REQUIRED_VERSION
+        indicator3 >= $INDICATOR_REQUIRED_VERSION
+])
 
 ###########################
 # Check to see if we're local
@@ -143,5 +128,4 @@ AC_MSG_NOTICE([
 Power Indicator Configuration:
 
 	Prefix:        $prefix
-	GTK:           $with_gtk
 ])
