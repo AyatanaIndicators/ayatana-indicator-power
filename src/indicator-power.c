@@ -228,6 +228,7 @@ get_primary_device_cb (GObject      *source_object,
   const gchar *device_name;
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
+  gchar *label_text = NULL;
 
   result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (result == NULL)
@@ -267,6 +268,9 @@ get_primary_device_cb (GObject      *source_object,
                       &short_timestring,
                       &detailed_timestring);
 
+      label_text = g_strdup_printf(_("%s (%s)"),
+                                   device_name, short_timestring);
+
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
@@ -286,10 +290,12 @@ get_primary_device_cb (GObject      *source_object,
        * used when we don't have a time value */
       details = g_strdup_printf(_("%s (%.0lf%%)"),
                                 device_name, percentage);
+      label_text = g_strdup (details);
     }
   gtk_label_set_label (GTK_LABEL (priv->label),
-                       details);
+                       label_text);
 
+  g_free (label_text);
   g_free (details);
   g_free (device_icon);
   g_free (short_timestring);
