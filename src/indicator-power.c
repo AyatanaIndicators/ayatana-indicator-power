@@ -157,6 +157,52 @@ get_timestring (guint64 time_secs)
   return timestring;
 }
 
+static const gchar *
+device_kind_to_localised_string (UpDeviceKind kind)
+{
+  const gchar *text = NULL;
+
+  switch (kind) {
+    case UP_DEVICE_KIND_LINE_POWER:
+      /* TRANSLATORS: system power cord */
+      text = gettext ("AC adapter");
+      break;
+    case UP_DEVICE_KIND_BATTERY:
+      /* TRANSLATORS: laptop primary battery */
+      text = gettext ("Laptop battery");
+      break;
+    case UP_DEVICE_KIND_UPS:
+      /* TRANSLATORS: battery-backed AC power source */
+      text = gettext ("UPS");
+      break;
+    case UP_DEVICE_KIND_MONITOR:
+      /* TRANSLATORS: a monitor is a device to measure voltage and current */
+      text = gettext ("Monitor");
+      break;
+    case UP_DEVICE_KIND_MOUSE:
+      /* TRANSLATORS: wireless mice with internal batteries */
+      text = gettext ("Mouse");
+      break;
+    case UP_DEVICE_KIND_KEYBOARD:
+      /* TRANSLATORS: wireless keyboard with internal battery */
+      text = gettext ("Keyboard");
+      break;
+    case UP_DEVICE_KIND_PDA:
+      /* TRANSLATORS: portable device */
+      text = gettext ("PDA");
+      break;
+    case UP_DEVICE_KIND_PHONE:
+      /* TRANSLATORS: cell phone (mobile...) */
+      text = gettext ("Cell phone");
+      break;
+    default:
+      g_warning ("enum unrecognised: %i", kind);
+      text = up_device_kind_to_string (kind);
+    }
+
+  return text;
+}
+
 static void
 get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
@@ -167,13 +213,13 @@ get_primary_device_cb (GObject      *source_object,
   UpDeviceState state;
   GVariant *result;
   GError *error = NULL;
-  const gchar *title = NULL;
   gchar *details = NULL;
   gchar **device_icons;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
+  const gchar *device_name;
   gchar *time_string = NULL;
 
   result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
@@ -204,37 +250,8 @@ get_primary_device_cb (GObject      *source_object,
   g_strfreev (device_icons);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
-  /* get the title
-   * translate it as it has limited entries as devices that are
-   * fully charged are not returned as the primary device */
-  if (kind == UP_DEVICE_KIND_BATTERY)
-    {
-      switch (state)
-        {
-          case UP_DEVICE_STATE_CHARGING:
-            title = _("Battery charging");
-            break;
-          case UP_DEVICE_STATE_DISCHARGING:
-            title = _("Battery discharging");
-            break;
-          default:
-            break;
-        }
-    }
-  else if (kind == UP_DEVICE_KIND_UPS)
-    {
-      switch (state)
-        {
-          case UP_DEVICE_STATE_CHARGING:
-            title = _("UPS charging");
-            break;
-          case UP_DEVICE_STATE_DISCHARGING:
-            title = _("UPS discharging");
-            break;
-          default:
-            break;
-        }
-    }
+  /* get the device name */
+  device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
   if (time > 0)
@@ -243,23 +260,23 @@ get_primary_device_cb (GObject      *source_object,
 
       if (state == UP_DEVICE_STATE_CHARGING)
         {
-          /* TRANSLATORS: %1 is a time string, e.g. "1 hour 5 minutes" */
-          details = g_strdup_printf(_("%s until charged (%.0lf%%)"),
-                                    time_string, percentage);
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          details = g_strdup_printf(_("%s (%s until charged (%.0lf%%))"),
+                                    device_name, time_string, percentage);
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
-          /* TRANSLATORS: %1 is a time string, e.g. "1 hour 5 minutes" */
-          details = g_strdup_printf(_("%s until empty (%.0lf%%)"),
-                                    time_string, percentage);
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          details = g_strdup_printf(_("%s (%s until empty (%.0lf%%))"),
+                                    device_name, time_string, percentage);
         }
     }
   else
     {
-      /* TRANSLATORS: %1 is a percentage value. Note: this string is only
+      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
        * used when we don't have a time value */
-      details = g_strdup_printf(_("%.0lf%% charged"),
-                                percentage);
+      details = g_strdup_printf(_("%s (%.0lf%%)"),
+                                device_name, percentage);
     }
   gtk_label_set_label (GTK_LABEL (priv->label),
                        details);
