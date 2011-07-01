@@ -424,14 +424,19 @@ static void
 build_menu (IndicatorPower *self)
 {
   IndicatorPowerPrivate *priv = self->priv;
+  GtkWidget *icon;
   GtkWidget *item;
   GtkWidget *image;
   guint n_devices = 1; /*TODO*/
 
   priv->menu = GTK_MENU (gtk_menu_new ());
 
-  item = gtk_image_menu_item_new_from_stock ("battery", NULL);
+  icon = gtk_image_new_from_icon_name ("battery", GTK_ICON_SIZE_MENU);
+
+  item = gtk_image_menu_item_new ();
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
   gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
