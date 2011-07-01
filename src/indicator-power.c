@@ -202,6 +202,18 @@ device_kind_to_localised_string (UpDeviceKind kind)
       /* TRANSLATORS: cell phone (mobile...) */
       text = gettext ("Cell phone");
       break;
+    case UP_DEVICE_KIND_MEDIA_PLAYER:
+      /* TRANSLATORS: media player, mp3 etc */
+      text = gettext ("Media player");
+      break;
+    case UP_DEVICE_KIND_TABLET:
+      /* TRANSLATORS: tablet device */
+      text = gettext ("Tablet");
+      break;
+    case UP_DEVICE_KIND_COMPUTER:
+      /* TRANSLATORS: tablet device */
+      text = gettext ("Computer");
+      break;
     default:
       g_warning ("enum unrecognised: %i", kind);
       text = up_device_kind_to_string (kind);
