@@ -176,7 +176,7 @@ device_kind_to_localised_string (UpDeviceKind kind)
       break;
     case UP_DEVICE_KIND_BATTERY:
       /* TRANSLATORS: laptop primary battery */
-      text = gettext ("Laptop battery");
+      text = gettext ("Battery");
       break;
     case UP_DEVICE_KIND_UPS:
       /* TRANSLATORS: battery-backed AC power source */
