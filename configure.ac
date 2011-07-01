@@ -128,4 +128,5 @@ AC_MSG_NOTICE([
 Power Indicator Configuration:
 
 	Prefix:        $prefix
+	Local Install: $with_localinstall
 ])
