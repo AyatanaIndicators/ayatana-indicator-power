@@ -236,7 +236,6 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
-
 static void
 get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
@@ -497,8 +496,6 @@ indicator_power_init (IndicatorPower *self)
   priv->menu = NULL;
   priv->accessible_desc = NULL;
 
-  build_menu (self);
-
   priv->proxy_cancel = g_cancellable_new();
 
   g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
@@ -565,6 +562,8 @@ get_menu (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
   IndicatorPowerPrivate *priv = self->priv;
+
+  build_menu (self);
 
   return GTK_MENU (priv->menu);
 }
