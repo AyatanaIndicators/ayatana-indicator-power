@@ -115,6 +115,38 @@ indicator_power_class_init (IndicatorPowerClass *klass)
 }
 
 static void
+show_info_cb (GtkMenuItem *item,
+              gpointer     data)
+{
+  /*TODO: show the statistics of the specific device*/
+  const gchar *command = "gnome-power-statistics";
+
+  if (g_spawn_command_line_async (command, NULL) == FALSE)
+    g_warning ("Couldn't execute command: %s", command);
+}
+
+static void
+option_toggled_cb (GtkCheckMenuItem *item,
+                   gpointer     user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+
+  gtk_widget_set_visible (GTK_WIDGET (priv->label),
+                          gtk_check_menu_item_get_active (item));
+}
+
+static void
+show_preferences_cb (GtkMenuItem *item,
+                     gpointer     data)
+{
+  const gchar *command = "gnome-control-center power";
+
+  if (g_spawn_command_line_async (command, NULL) == FALSE)
+    g_warning ("Couldn't execute command: %s", command);
+}
+
+static void
 get_timestring (guint64   time_secs,
                 gchar   **short_timestring,
                 gchar   **detailed_timestring)
@@ -413,38 +445,6 @@ service_proxy_cb (GObject      *object,
                      priv->proxy_cancel,
                      get_primary_device_cb,
                      user_data);
-}
-
-static void
-show_info_cb (GtkMenuItem *item,
-              gpointer     data)
-{
-  /*TODO: show the statistics of the specific device*/
-  const gchar *command = "gnome-power-statistics";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
-}
-
-static void
-option_toggled_cb (GtkCheckMenuItem *item,
-                   gpointer     user_data)
-{
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
-
-  gtk_widget_set_visible (GTK_WIDGET (priv->label),
-                          gtk_check_menu_item_get_active (item));
-}
-
-static void
-show_preferences_cb (GtkMenuItem *item,
-                     gpointer     data)
-{
-  const gchar *command = "gnome-control-center power";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
 }
 
 static void
