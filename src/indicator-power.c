@@ -223,6 +223,50 @@ device_kind_to_localised_string (UpDeviceKind kind)
 }
 
 static void
+build_device_time_details (const gchar    *device_name,
+                           guint64         time,
+                           UpDeviceState   state,
+                           gdouble         percentage,
+                           gchar         **short_details,
+                           gchar         **details)
+{
+  gchar *short_timestring = NULL;
+  gchar *detailed_timestring = NULL;
+
+  if (time > 0)
+    {
+      get_timestring (time,
+                      &short_timestring,
+                      &detailed_timestring);
+
+      *short_details = g_strdup_printf ("(%s)",
+                                        short_timestring);
+
+      if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          *details = g_strdup_printf (_("%s (%s until charged (%.0lf%%))"),
+                                      device_name, detailed_timestring, percentage);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          *details = g_strdup_printf (_("%s (%s until empty (%.0lf%%))"),
+                                      device_name, detailed_timestring, percentage);
+        }
+    }
+  else
+    {
+      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
+       * used when we don't have a time value */
+      *details = g_strdup_printf (_("%s (%.0lf%%)"),
+                                  device_name, percentage);
+      *short_details = g_strdup_printf (_("(%.0lf%%)"),
+                                        percentage);
+    }
+}
+
+static void
 set_accessible_desc (IndicatorPower *self,
                      const gchar    *desc)
 {
@@ -247,6 +291,7 @@ get_primary_device_cb (GObject      *source_object,
   UpDeviceState state;
   GVariant *result;
   GError *error = NULL;
+  gchar *short_details = NULL;
   gchar *details = NULL;
   gchar **device_icons;
   gchar *device_icon = NULL;
@@ -256,7 +301,6 @@ get_primary_device_cb (GObject      *source_object,
   const gchar *device_name;
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
-  gchar *label_text = NULL;
 
   result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (result == NULL)
@@ -290,41 +334,13 @@ get_primary_device_cb (GObject      *source_object,
   device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
-  if (time > 0)
-    {
-      get_timestring (time,
-                      &short_timestring,
-                      &detailed_timestring);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details);
 
-      label_text = g_strdup_printf(_("(%s)"),
-                                   short_timestring);
-
-      if (state == UP_DEVICE_STATE_CHARGING)
-        {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          details = g_strdup_printf(_("%s (%s until charged (%.0lf%%))"),
-                                    device_name, detailed_timestring, percentage);
-        }
-      else if (state == UP_DEVICE_STATE_DISCHARGING)
-        {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          details = g_strdup_printf(_("%s (%s until empty (%.0lf%%))"),
-                                    device_name, detailed_timestring, percentage);
-        }
-    }
-  else
-    {
-      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
-       * used when we don't have a time value */
-      details = g_strdup_printf(_("%s (%.0lf%%)"),
-                                device_name, percentage);
-      label_text = g_strdup (details);
-    }
   gtk_label_set_label (GTK_LABEL (priv->label),
-                       label_text);
+                       short_details);
   set_accessible_desc (self, details);
 
-  g_free (label_text);
+  g_free (short_details);
   g_free (details);
   g_free (device_icon);
   g_free (short_timestring);
