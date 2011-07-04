@@ -75,6 +75,8 @@ struct _IndicatorPowerPrivate
 
   GCancellable *proxy_cancel;
   GDBusProxy   *proxy;
+
+  GVariant *device;
 };
 
 /* Prototypes */
@@ -312,28 +314,75 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
+static guint
+menu_add_device (GtkMenu  *menu,
+                 GVariant *device)
+{
+  UpDeviceKind kind;
+  UpDeviceState state;
+  GtkWidget *icon;
+  GtkWidget *item;
+  gchar *device_icon = NULL;
+  gchar *object_path = NULL;
+  gdouble percentage;
+  guint64 time;
+  const gchar *device_name;
+  gchar *short_details = NULL;
+  gchar *details = NULL;
+  guint n_devices = 0;
+
+  if (device == NULL)
+    return n_devices;
+
+  g_variant_get (device,
+                 "((susdut))",
+                 &object_path,
+                 &kind,
+                 &device_icon,
+                 &percentage,
+                 &state,
+                 &time);
+
+  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
+  n_devices++;
+
+  icon = gtk_image_new_from_icon_name (device_icon, GTK_ICON_SIZE_MENU);
+  device_name = device_kind_to_localised_string (kind);
+
+  g_print ("Device: %s\n", device_name);
+
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details);
+
+  g_print ("Details: %s\n", details);
+
+  item = gtk_image_menu_item_new ();
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
+  gtk_menu_item_set_label (GTK_MENU_ITEM (item), details);
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+  g_signal_connect (G_OBJECT (item), "activate",
+                    G_CALLBACK (show_info_cb), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  return n_devices;
+}
+
 static void
 build_menu (IndicatorPower *self)
 {
   IndicatorPowerPrivate *priv = self->priv;
-  GtkWidget *icon;
   GtkWidget *item;
   GtkWidget *image;
-  guint n_devices = 1; /*TODO*/
+  guint n_devices = 0;
 
   priv->menu = GTK_MENU (gtk_menu_new ());
 
-  icon = gtk_image_new_from_icon_name ("battery", GTK_ICON_SIZE_MENU);
+  /* devices */
+  n_devices += menu_add_device (priv->menu, priv->device);
 
-  item = gtk_image_menu_item_new ();
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
-  gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_info_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+  g_print ("Num devices: %d\n", n_devices);
 
-  /* only do the seporator if we have at least one device */
+  /* only do the separator if we have at least one device */
   if (n_devices != 0)
     {
       item = gtk_separator_menu_item_new ();
@@ -393,6 +442,8 @@ get_primary_device_cb (GObject      *source_object,
 
       return;
     }
+
+  priv->device = result;
 
   /* set the icon and text */
   g_variant_get (result,
