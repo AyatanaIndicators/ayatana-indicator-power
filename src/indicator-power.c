@@ -313,6 +313,57 @@ set_accessible_desc (IndicatorPower *self,
 }
 
 static void
+build_menu (IndicatorPower *self)
+{
+  IndicatorPowerPrivate *priv = self->priv;
+  GtkWidget *icon;
+  GtkWidget *item;
+  GtkWidget *image;
+  guint n_devices = 1; /*TODO*/
+
+  priv->menu = GTK_MENU (gtk_menu_new ());
+
+  icon = gtk_image_new_from_icon_name ("battery", GTK_ICON_SIZE_MENU);
+
+  item = gtk_image_menu_item_new ();
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
+  gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+  g_signal_connect (G_OBJECT (item), "activate",
+                    G_CALLBACK (show_info_cb), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* only do the seporator if we have at least one device */
+  if (n_devices != 0)
+    {
+      item = gtk_separator_menu_item_new ();
+      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    }
+
+  /* options */
+  item = gtk_check_menu_item_new_with_label (_("Show Time Remining"));
+  g_object_set (item, "draw-as-radio", TRUE, NULL);
+  g_signal_connect (G_OBJECT (item), "toggled",
+                    G_CALLBACK (option_toggled_cb), self);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* separator */
+  item = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* preferences */
+  item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
+  image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+  g_signal_connect (G_OBJECT (item), "activate",
+                    G_CALLBACK (show_preferences_cb), NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+
+  /* show the menu */
+  gtk_widget_show_all (GTK_WIDGET (priv->menu));
+}
+
+static void
 get_primary_device_cb (GObject      *source_object,
                        GAsyncResult *res,
                        gpointer      user_data)
@@ -371,6 +422,8 @@ get_primary_device_cb (GObject      *source_object,
   gtk_label_set_label (GTK_LABEL (priv->label),
                        short_details);
   set_accessible_desc (self, details);
+
+  build_menu (self);
 
   g_free (short_details);
   g_free (details);
@@ -445,57 +498,6 @@ service_proxy_cb (GObject      *object,
                      priv->proxy_cancel,
                      get_primary_device_cb,
                      user_data);
-}
-
-static void
-build_menu (IndicatorPower *self)
-{
-  IndicatorPowerPrivate *priv = self->priv;
-  GtkWidget *icon;
-  GtkWidget *item;
-  GtkWidget *image;
-  guint n_devices = 1; /*TODO*/
-
-  priv->menu = GTK_MENU (gtk_menu_new ());
-
-  icon = gtk_image_new_from_icon_name ("battery", GTK_ICON_SIZE_MENU);
-
-  item = gtk_image_menu_item_new ();
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
-  gtk_menu_item_set_label (GTK_MENU_ITEM (item), "Battery Remaining: 0:45s");  /*TODO*/
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_info_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-
-  /* only do the seporator if we have at least one device */
-  if (n_devices != 0)
-    {
-      item = gtk_separator_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-    }
-
-  /* options */
-  item = gtk_check_menu_item_new_with_label (_("Show Time Remining"));
-  g_object_set (item, "draw-as-radio", TRUE, NULL);
-  g_signal_connect (G_OBJECT (item), "toggled",
-                    G_CALLBACK (option_toggled_cb), self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-
-  /* separator */
-  item = gtk_separator_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-
-  /* preferences */
-  item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
-  image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_preferences_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-
-  /* show the menu */
-  gtk_widget_show_all (GTK_WIDGET (priv->menu));
 }
 
 static void
