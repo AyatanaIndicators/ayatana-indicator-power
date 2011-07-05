@@ -349,7 +349,7 @@ menu_add_device (GtkMenu  *menu,
   n_devices++;
 
   device_icons = g_strsplit (device_icon, " ", -1);
-  icon = gtk_image_new_from_icon_name (device_icons[3], GTK_ICON_SIZE_MENU);
+  icon = gtk_image_new_from_icon_name (device_icons[3], GTK_ICON_SIZE_SMALL_TOOLBAR);
   g_strfreev (device_icons);
   device_name = device_kind_to_localised_string (kind);
 
