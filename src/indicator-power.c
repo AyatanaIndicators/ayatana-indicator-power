@@ -350,11 +350,7 @@ menu_add_device (GtkMenu  *menu,
   icon = gtk_image_new_from_icon_name (device_icon, GTK_ICON_SIZE_MENU);
   device_name = device_kind_to_localised_string (kind);
 
-  g_print ("Device: %s\n", device_name);
-
   build_device_time_details (device_name, time, state, percentage, &short_details, &details);
-
-  g_print ("Details: %s\n", details);
 
   item = gtk_image_menu_item_new ();
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
@@ -421,7 +417,6 @@ get_primary_device_cb (GObject      *source_object,
   IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
-  GVariant *result;
   GError *error = NULL;
   gchar *short_details = NULL;
   gchar *details = NULL;
@@ -434,8 +429,8 @@ get_primary_device_cb (GObject      *source_object,
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
 
-  result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
-  if (result == NULL)
+  priv->device = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (priv->device == NULL)
     {
       g_printerr ("Error getting primary device: %s\n", error->message);
       g_error_free (error);
@@ -443,10 +438,8 @@ get_primary_device_cb (GObject      *source_object,
       return;
     }
 
-  priv->device = result;
-
   /* set the icon and text */
-  g_variant_get (result,
+  g_variant_get (priv->device,
                  "((susdut))",
                  &object_path,
                  &kind,
@@ -482,7 +475,6 @@ get_primary_device_cb (GObject      *source_object,
   g_free (short_timestring);
   g_free (detailed_timestring);
   g_free (object_path);
-  g_variant_unref (result);
 }
 
 static void
