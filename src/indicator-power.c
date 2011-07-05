@@ -169,7 +169,7 @@ get_timestring (guint64   time_secs,
 
   if (minutes < 60)
     {
-      *short_timestring = g_strdup_printf ("0:%i", minutes);
+      *short_timestring = g_strdup_printf ("0:%.2i", minutes);
       *detailed_timestring = g_strdup_printf (ngettext ("%i minute",
                                               "%i minutes",
                                               minutes), minutes);
@@ -179,7 +179,7 @@ get_timestring (guint64   time_secs,
   hours = minutes / 60;
   minutes = minutes % 60;
 
-  *short_timestring = g_strdup_printf ("%i:%i", hours, minutes);
+  *short_timestring = g_strdup_printf ("%i:%.2i", hours, minutes);
 
   if (minutes == 0)
     {
