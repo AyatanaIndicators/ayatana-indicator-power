@@ -323,6 +323,7 @@ menu_add_device (GtkMenu  *menu,
   GtkWidget *icon;
   GtkWidget *item;
   gchar *device_icon = NULL;
+  gchar **device_icons;
   gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
@@ -347,7 +348,9 @@ menu_add_device (GtkMenu  *menu,
 
   n_devices++;
 
-  icon = gtk_image_new_from_icon_name (device_icon, GTK_ICON_SIZE_MENU);
+  device_icons = g_strsplit (device_icon, " ", -1);
+  icon = gtk_image_new_from_icon_name (device_icons[3], GTK_ICON_SIZE_MENU);
+  g_strfreev (device_icons);
   device_name = device_kind_to_localised_string (kind);
 
   build_device_time_details (device_name, time, state, percentage, &short_details, &details);
