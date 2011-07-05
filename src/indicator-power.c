@@ -376,8 +376,6 @@ build_menu (IndicatorPower *self)
   /* devices */
   n_devices += menu_add_device (priv->menu, priv->device);
 
-  g_print ("Num devices: %d\n", n_devices);
-
   /* only do the separator if we have at least one device */
   if (n_devices != 0)
     {
@@ -448,7 +446,7 @@ get_primary_device_cb (GObject      *source_object,
                  &state,
                  &time);
 
-  g_debug ("got data from object %s", object_path);
+  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* set icon */
   device_icons = g_strsplit (device_icon, " ", -1);
