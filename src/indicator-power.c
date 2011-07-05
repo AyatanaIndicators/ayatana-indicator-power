@@ -616,16 +616,6 @@ get_image (IndicatorObject *io)
   return priv->status_image;
 }
 
-static void
-build_menu_cb (GtkWidget * menu,
-               G_GNUC_UNUSED GParamSpec *pspec,
-               gpointer user_data)
-{
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-
-  build_menu (self);
-}
-
 static GtkMenu *
 get_menu (IndicatorObject *io)
 {
@@ -633,9 +623,6 @@ get_menu (IndicatorObject *io)
   IndicatorPowerPrivate *priv = self->priv;
 
   build_menu (self);
-
-  g_signal_connect (priv->menu, "notify::visible",
-                    G_CALLBACK (build_menu_cb), self);
 
   return GTK_MENU (priv->menu);
 }
