@@ -369,9 +369,14 @@ build_menu (IndicatorPower *self)
   IndicatorPowerPrivate *priv = self->priv;
   GtkWidget *item;
   GtkWidget *image;
+  GList *children;
   guint n_devices = 0;
 
-  priv->menu = GTK_MENU (gtk_menu_new ());
+  if (priv->menu == NULL)
+    priv->menu = GTK_MENU (gtk_menu_new ());
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
+  g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
 
   /* devices */
   n_devices += menu_add_device (priv->menu, priv->device);
