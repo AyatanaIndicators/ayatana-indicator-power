@@ -37,7 +37,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator-object.h>
 #include <libindicator/indicator-image-helper.h>
 
-#define DEFAULT_ICON   "gpm-battery-empty"
+#define DEFAULT_ICON   "gpm-battery-missing"
 
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
 #define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
