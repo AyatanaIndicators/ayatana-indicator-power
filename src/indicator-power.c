@@ -35,7 +35,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Indicator Stuff */
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
-#include <libindicator/indicator-image-helper.h>
 
 #define DEFAULT_ICON   "gpm-battery-missing"
 
@@ -323,8 +322,8 @@ menu_add_device (GtkMenu  *menu,
   UpDeviceState state;
   GtkWidget *icon;
   GtkWidget *item;
+  GIcon *device_gicons;
   gchar *device_icon = NULL;
-  gchar **device_icons;
   gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
@@ -349,13 +348,16 @@ menu_add_device (GtkMenu  *menu,
 
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
-  device_icons = g_strsplit (device_icon, " ", -1);
-  icon = gtk_image_new_from_icon_name (device_icons[3], GTK_ICON_SIZE_SMALL_TOOLBAR);
-  g_strfreev (device_icons);
+  /* Process the data */
+  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  icon = gtk_image_new_from_gicon (device_gicons,
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+
   device_name = device_kind_to_localised_string (kind);
 
   build_device_time_details (device_name, time, state, percentage, &short_details, &details);
 
+  /* Create menu item */
   item = gtk_image_menu_item_new ();
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
   gtk_menu_item_set_label (GTK_MENU_ITEM (item), details);
@@ -479,11 +481,11 @@ get_devices_cb (GObject      *source_object,
   IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
+  GIcon *device_gicons;
   GVariant *devices_container;
   GError *error = NULL;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  gchar **device_icons;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
@@ -521,15 +523,14 @@ get_devices_cb (GObject      *source_object,
                  &time);
 
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
-  g_debug ("%s: device_icons: %s\n", G_STRFUNC, device_icon);
 
   /* set icon */
-  device_icons = g_strsplit (device_icon, " ", -1);
-  g_debug ("%s: label icon: %s\n", G_STRFUNC, device_icons[3]);
-  indicator_image_helper_update (priv->status_image,
-                                 device_icons[3]);
-  g_strfreev (device_icons);
+  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  gtk_image_set_from_gicon (priv->status_image,
+                            device_gicons,
+                            GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
+
 
   /* get the device name */
   device_name = device_kind_to_localised_string (kind);
@@ -681,11 +682,14 @@ get_image (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
   IndicatorPowerPrivate *priv = self->priv;
+  GIcon *gicon;
 
   if (priv->status_image == NULL)
   {
     /* Will create the status icon if it doesn't exist already */
-    priv->status_image = indicator_image_helper (DEFAULT_ICON);
+    gicon = g_themed_icon_new (DEFAULT_ICON);
+    priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
+                                                              GTK_ICON_SIZE_LARGE_TOOLBAR));
     gtk_widget_show (GTK_WIDGET (priv->status_image));
   }
 
