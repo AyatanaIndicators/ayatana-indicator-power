@@ -315,7 +315,7 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
-static guint
+static void
 menu_add_device (GtkMenu  *menu,
                  GVariant *device)
 {
@@ -331,10 +331,9 @@ menu_add_device (GtkMenu  *menu,
   const gchar *device_name;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  guint n_devices = 0;
 
   if (device == NULL)
-    return n_devices;
+    return;
 
   g_variant_get (device,
                  "(susdut)",
@@ -345,9 +344,10 @@ menu_add_device (GtkMenu  *menu,
                  &state,
                  &time);
 
-  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+  if (kind == UP_DEVICE_KIND_LINE_POWER)
+    return;
 
-  n_devices++;
+  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   device_icons = g_strsplit (device_icon, " ", -1);
   icon = gtk_image_new_from_icon_name (device_icons[3], GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -363,6 +363,27 @@ menu_add_device (GtkMenu  *menu,
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+}
+
+static gsize
+menu_add_devices (GtkMenu  *menu,
+                  GVariant *devices)
+{
+  GVariant *device;
+  gsize n_devices;
+  guint i;
+
+  if (devices == NULL)
+    return 0;
+
+  n_devices = g_variant_n_children (devices);
+  g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
+
+  for (i = 0; i < n_devices; i++)
+    {
+      device = g_variant_get_child_value (devices, i);
+      menu_add_device (menu, device);
+    }
 
   return n_devices;
 }
@@ -374,7 +395,7 @@ build_menu (IndicatorPower *self)
   GtkWidget *item;
   GtkWidget *image;
   GList *children;
-  guint n_devices = 0;
+  gsize n_devices = 0;
 
   if (priv->menu == NULL)
     priv->menu = GTK_MENU (gtk_menu_new ());
@@ -383,7 +404,7 @@ build_menu (IndicatorPower *self)
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
 
   /* devices */
-  n_devices += menu_add_device (priv->menu, priv->device);
+  n_devices = menu_add_devices (priv->menu, priv->devices);
 
   /* only do the separator if we have at least one device */
   if (n_devices != 0)
@@ -416,11 +437,10 @@ build_menu (IndicatorPower *self)
 }
 
 static GVariant *
-get_primary_device (GVariant *container)
+get_primary_device (GVariant *devices)
 {
   UpDeviceKind kind;
   UpDeviceState state;
-  GVariant *devices;
   GVariant *primary_device = NULL;
   gchar *object_path;
   gchar *device_icon;
@@ -428,8 +448,6 @@ get_primary_device (GVariant *container)
   guint64 time;
   gsize n_devices;
   guint i;
-
-  devices = g_variant_get_child_value (container, 0);
 
   n_devices = g_variant_n_children (devices);
   g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
@@ -461,6 +479,7 @@ get_devices_cb (GObject      *source_object,
   IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
+  GVariant *devices_container;
   GError *error = NULL;
   gchar *short_details = NULL;
   gchar *details = NULL;
@@ -473,14 +492,15 @@ get_devices_cb (GObject      *source_object,
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
 
-  priv->devices = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
-  if (priv->devices == NULL)
+  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (devices_container == NULL)
     {
       g_printerr ("Error getting devices: %s\n", error->message);
       g_error_free (error);
 
       return;
     }
+  priv->devices = g_variant_get_child_value (devices_container, 0);
 
   priv->device = get_primary_device (priv->devices);
   if (priv->device == NULL)
@@ -501,9 +521,11 @@ get_devices_cb (GObject      *source_object,
                  &time);
 
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+  g_debug ("%s: device_icons: %s\n", G_STRFUNC, device_icon);
 
   /* set icon */
   device_icons = g_strsplit (device_icon, " ", -1);
+  g_debug ("%s: label icon: %s\n", G_STRFUNC, device_icons[3]);
   indicator_image_helper_update (priv->status_image,
                                  device_icons[3]);
   g_strfreev (device_icons);
