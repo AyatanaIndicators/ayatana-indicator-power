@@ -1,0 +1,5 @@
+indicator-power (0.1-0ubuntu1) oneiric; urgency=low
+
+  * Initial package (LP: #807132)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 07 Jul 2011 13:12:21 -0400

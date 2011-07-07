@@ -1,0 +1,23 @@
+Source: indicator-power
+Section: gnome
+Priority: optional
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Build-Depends: debhelper (>= 8),
+               quilt,
+               libgtk-3-dev,
+               libindicator3-dev (>= 0.3.19),
+               libupower-glib-dev (>= 0.9.5),
+               libdbus-1-dev,
+               intltool
+Standards-Version: 3.9.2
+Homepage: https://launchpad.net/indicator-power
+Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-power/ubuntu
+Vcs-Browser: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-power/ubuntu
+
+Package: indicator-power
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, upower, gnome-control-center (>= 3.1), gnome-power-manager
+Recommends: indicator-applet (>= 0.2) | indicator-renderer
+Description: Indicator showing power state.
+ This indicator displays current power management information and gives 
+ the user a way to access power management preferences.
