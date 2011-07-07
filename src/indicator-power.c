@@ -76,6 +76,7 @@ struct _IndicatorPowerPrivate
   GCancellable *proxy_cancel;
   GDBusProxy   *proxy;
 
+  GVariant *devices;
   GVariant *device;
 };
 
@@ -336,7 +337,7 @@ menu_add_device (GtkMenu  *menu,
     return n_devices;
 
   g_variant_get (device,
-                 "((susdut))",
+                 "(susdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -414,10 +415,47 @@ build_menu (IndicatorPower *self)
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 }
 
+static GVariant *
+get_primary_device (GVariant *container)
+{
+  UpDeviceKind kind;
+  UpDeviceState state;
+  GVariant *devices;
+  GVariant *primary_device = NULL;
+  gchar *object_path;
+  gchar *device_icon;
+  gdouble percentage;
+  guint64 time;
+  gsize n_devices;
+  guint i;
+
+  devices = g_variant_get_child_value (container, 0);
+
+  n_devices = g_variant_n_children (devices);
+  g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
+
+  for (i = 0; i < n_devices; i++)
+    {
+      primary_device = g_variant_get_child_value (devices, i);
+      g_variant_get (primary_device,
+                     "(susdut)",
+                     &object_path,
+                     &kind,
+                     &device_icon,
+                     &percentage,
+                     &state,
+                     &time);
+
+      g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+    }
+
+  return primary_device;
+}
+
 static void
-get_primary_device_cb (GObject      *source_object,
-                       GAsyncResult *res,
-                       gpointer      user_data)
+get_devices_cb (GObject      *source_object,
+                GAsyncResult *res,
+                gpointer      user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
@@ -435,18 +473,26 @@ get_primary_device_cb (GObject      *source_object,
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
 
-  priv->device = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  priv->devices = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (priv->devices == NULL)
+    {
+      g_printerr ("Error getting devices: %s\n", error->message);
+      g_error_free (error);
+
+      return;
+    }
+
+  priv->device = get_primary_device (priv->devices);
   if (priv->device == NULL)
     {
-      g_printerr ("Error getting primary device: %s\n", error->message);
-      g_error_free (error);
+      g_printerr ("Error getting primary device");
 
       return;
     }
 
   /* set the icon and text */
   g_variant_get (priv->device,
-                 "((susdut))",
+                 "(susdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -497,12 +543,12 @@ receive_signal (GDBusProxy *proxy,
     {
       /* get the new state */
       g_dbus_proxy_call (priv->proxy,
-                         "GetPrimaryDevice",
+                         "GetDevices",
                          NULL,
                          G_DBUS_CALL_FLAGS_NONE,
                          -1,
                          priv->proxy_cancel,
-                         get_primary_device_cb,
+                         get_devices_cb,
                          user_data);
     }
 }
@@ -540,12 +586,12 @@ service_proxy_cb (GObject      *object,
 
   /* get the initial state */
   g_dbus_proxy_call (priv->proxy,
-                     "GetPrimaryDevice",
+                     "GetDevices",
                      NULL,
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      priv->proxy_cancel,
-                     get_primary_device_cb,
+                     get_devices_cb,
                      user_data);
 }
 
