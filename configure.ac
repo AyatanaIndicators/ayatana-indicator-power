@@ -1,5 +1,5 @@
 AC_INIT([indicator-power],
-        [0.1],
+        [0.2],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])
@@ -30,13 +30,13 @@ LT_INIT
 ###########################
 
 GTK_REQUIRED_VERSION=3.0
-INDICATOR_REQUIRED_VERSION=0.3.0
+INDICATOR_REQUIRED_VERSION=0.3.90
 UPOWER_REQUIRED_VERSION=0.9.5
 
 PKG_CHECK_MODULES([UPOWER],[upower-glib >= UPOWER_REQUIRED_VERSION])
 PKG_CHECK_MODULES([INDICATOR],[
         gtk+-3.0 >= $GTK_REQUIRED_VERSION
-        indicator3 >= $INDICATOR_REQUIRED_VERSION
+        indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION
 ])
 
 ###########################
@@ -54,29 +54,13 @@ AC_ARG_ENABLE([localinstall],
 # Indicator Info
 ###########################
 
-if test "x$with_localinstall" = "xyes"; then
-	INDICATORDIR="${libdir}/indicators/3/"
-	INDICATORICONSDIR="${datadir}/indicator-applet/icons/"
-elif test "x$with_gtk" = x2; then
-        INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator`
-        INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator`
-else
-        INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator3`
-        INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator3`
-fi
+AS_IF([test "x$with_localinstall" = "xyes"],
+      [INDICATORDIR="${libdir}/indicators3/2/"
+       INDICATORICONSDIR="${datadir}/indicator-applet/icons/"],
+      [INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator3-0.4`
+       INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator3-0.4`])
 AC_SUBST(INDICATORDIR)
 AC_SUBST(INDICATORICONSDIR)
-
-###########################
-# DBus Service Info
-###########################
-
-if test "x$with_localinstall" = "xyes"; then
-	DBUSSERVICEDIR="${datadir}/dbus-1/services/"
-else
-	DBUSSERVICEDIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`
-fi
-AC_SUBST(DBUSSERVICEDIR)
 
 ##############################
 # Custom Junk
