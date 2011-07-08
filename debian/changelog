@@ -1,8 +1,10 @@
-indicator-power (0.2-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.2-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
+  * debian/control
+    - Bump build depends for libindicator to >- 0.3.90
 
- -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Jul 2011 09:58:14 -0400
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Jul 2011 09:59:26 -0400
 
 indicator-power (0.1-0ubuntu1) oneiric; urgency=low
 
