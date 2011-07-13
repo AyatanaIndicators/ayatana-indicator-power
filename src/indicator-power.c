@@ -473,17 +473,13 @@ get_primary_device (GVariant *devices)
 }
 
 static void
-get_devices_cb (GObject      *source_object,
-                GAsyncResult *res,
-                gpointer      user_data)
+put_primary_device (IndicatorPower *self,
+                    GVariant *device)
 {
-  IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
   GIcon *device_gicons;
-  GVariant *devices_container;
-  GError *error = NULL;
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *device_icon = NULL;
@@ -491,29 +487,9 @@ get_devices_cb (GObject      *source_object,
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
-  gchar *short_timestring = NULL;
-  gchar *detailed_timestring = NULL;
-
-  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
-  if (devices_container == NULL)
-    {
-      g_printerr ("Error getting devices: %s\n", error->message);
-      g_error_free (error);
-
-      return;
-    }
-  priv->devices = g_variant_get_child_value (devices_container, 0);
-
-  priv->device = get_primary_device (priv->devices);
-  if (priv->device == NULL)
-    {
-      g_printerr ("Error getting primary device");
-
-      return;
-    }
 
   /* set the icon and text */
-  g_variant_get (priv->device,
+  g_variant_get (device,
                  "(susdut)",
                  &object_path,
                  &kind,
@@ -542,14 +518,43 @@ get_devices_cb (GObject      *source_object,
                        short_details);
   set_accessible_desc (self, details);
 
-  build_menu (self);
-
   g_free (short_details);
   g_free (details);
   g_free (device_icon);
-  g_free (short_timestring);
-  g_free (detailed_timestring);
   g_free (object_path);
+}
+
+static void
+get_devices_cb (GObject      *source_object,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+  GVariant *devices_container;
+  GError *error = NULL;
+
+  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (devices_container == NULL)
+    {
+      g_printerr ("Error getting devices: %s\n", error->message);
+      g_error_free (error);
+
+      return;
+    }
+  priv->devices = g_variant_get_child_value (devices_container, 0);
+
+  priv->device = get_primary_device (priv->devices);
+  if (priv->device == NULL)
+    {
+      g_printerr ("Error getting primary device");
+
+      return;
+    }
+
+  put_primary_device (self, priv->device);
+
+  build_menu (self);
 }
 
 static void
