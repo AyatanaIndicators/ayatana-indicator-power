@@ -262,7 +262,8 @@ build_device_time_details (const gchar    *device_name,
                            UpDeviceState   state,
                            gdouble         percentage,
                            gchar         **short_details,
-                           gchar         **details)
+                           gchar         **details,
+                           gchar         **accesible_name)
 {
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
@@ -279,24 +280,46 @@ build_device_time_details (const gchar    *device_name,
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *details = g_strdup_printf (_("%s (%s until charged (%.0lf%%))"),
-                                      device_name, detailed_timestring, percentage);
+          *accesible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
+                                             device_name, detailed_timestring, percentage);
+          *details = g_strdup_printf (_("%s (%s to charge)"),
+                                      device_name, short_timestring);
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *details = g_strdup_printf (_("%s (%s until empty (%.0lf%%))"),
-                                      device_name, detailed_timestring, percentage);
+          if (time > 43200) /* 12 hours */
+            {
+              *accesible_name = g_strdup_printf (_("%s"), device_name);
+              *details = g_strdup_printf (_("%s"), device_name);
+            }
+          else
+            {
+              /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+              *accesible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
+                                                 device_name, detailed_timestring, percentage);
+              *details = g_strdup_printf (_("%s (%s left)"),
+                                          device_name, short_timestring);
+            }
         }
     }
   else
     {
-      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
-       * used when we don't have a time value */
-      *details = g_strdup_printf (_("%s (%.0lf%%)"),
-                                  device_name, percentage);
-      *short_details = g_strdup_printf (_("(%.0lf%%)"),
-                                        percentage);
+      if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+        {
+          *details = g_strdup_printf (_("%s (charged)"), device_name);
+          *accesible_name = g_strdup (*details);
+          *short_details = g_strdup (_("(charged)"));
+        }
+      else
+        {
+          /* TRANSLATORS: %2 is a percentage value. Note: this string is only
+           * used when we don't have a time value */
+          *details = g_strdup_printf (_("%s (%.0lf%%)"),
+                                      device_name, percentage);
+          *accesible_name = g_strdup (*details);
+          *short_details = g_strdup_printf (_("(%.0lf%%)"),
+                                            percentage);
+        }
     }
 }
 
@@ -330,6 +353,7 @@ menu_add_device (GtkMenu  *menu,
   const gchar *device_name;
   gchar *short_details = NULL;
   gchar *details = NULL;
+  gchar *accesible_name = NULL;
 
   if (device == NULL)
     return;
@@ -355,7 +379,7 @@ menu_add_device (GtkMenu  *menu,
 
   device_name = device_kind_to_localised_string (kind);
 
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
@@ -417,7 +441,6 @@ build_menu (IndicatorPower *self)
 
   /* options */
   item = gtk_check_menu_item_new_with_label (_("Show Time Remaining"));
-  g_object_set (item, "draw-as-radio", TRUE, NULL);
   g_signal_connect (G_OBJECT (item), "toggled",
                     G_CALLBACK (option_toggled_cb), self);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
@@ -443,11 +466,18 @@ get_primary_device (GVariant *devices)
 {
   UpDeviceKind kind;
   UpDeviceState state;
+  GVariant *device;
+  GVariant *primary_device_charging = NULL;
+  GVariant *primary_device_discharging = NULL;
   GVariant *primary_device = NULL;
+  gboolean charging = FALSE;
+  gboolean discharging = FALSE;
   gchar *object_path;
   gchar *device_icon;
   gdouble percentage;
   guint64 time;
+  guint64 min_discharging_time = G_MAXUINT64;
+  guint64 max_charging_time = 0;
   gsize n_devices;
   guint i;
 
@@ -456,8 +486,8 @@ get_primary_device (GVariant *devices)
 
   for (i = 0; i < n_devices; i++)
     {
-      primary_device = g_variant_get_child_value (devices, i);
-      g_variant_get (primary_device,
+      device = g_variant_get_child_value (devices, i);
+      g_variant_get (device,
                      "(susdut)",
                      &object_path,
                      &kind,
@@ -467,53 +497,61 @@ get_primary_device (GVariant *devices)
                      &time);
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
+      if (primary_device == NULL && kind == UP_DEVICE_KIND_BATTERY)
+        primary_device = device;
+
+      if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          discharging = TRUE;
+          if (time < min_discharging_time)
+            {
+              min_discharging_time = time;
+              primary_device_discharging = device;
+            }
+        }
+      else if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          charging = TRUE;
+          if (time > max_charging_time)
+            {
+              max_charging_time = time;
+              primary_device_charging = device;
+            }
+        }
+    }
+
+  if (discharging)
+    {
+      primary_device = primary_device_discharging;
+    }
+  else if (charging)
+    {
+      primary_device = primary_device_charging;
     }
 
   return primary_device;
 }
 
 static void
-get_devices_cb (GObject      *source_object,
-                GAsyncResult *res,
-                gpointer      user_data)
+put_primary_device (IndicatorPower *self,
+                    GVariant *device)
 {
-  IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
   GIcon *device_gicons;
-  GVariant *devices_container;
-  GError *error = NULL;
   gchar *short_details = NULL;
   gchar *details = NULL;
+  gchar *accesible_name = NULL;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
-  gchar *short_timestring = NULL;
-  gchar *detailed_timestring = NULL;
-
-  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
-  if (devices_container == NULL)
-    {
-      g_printerr ("Error getting devices: %s\n", error->message);
-      g_error_free (error);
-
-      return;
-    }
-  priv->devices = g_variant_get_child_value (devices_container, 0);
-
-  priv->device = get_primary_device (priv->devices);
-  if (priv->device == NULL)
-    {
-      g_printerr ("Error getting primary device");
-
-      return;
-    }
 
   /* set the icon and text */
-  g_variant_get (priv->device,
+  g_variant_get (device,
                  "(susdut)",
                  &object_path,
                  &kind,
@@ -536,20 +574,49 @@ get_devices_cb (GObject      *source_object,
   device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
 
   gtk_label_set_label (GTK_LABEL (priv->label),
                        short_details);
-  set_accessible_desc (self, details);
-
-  build_menu (self);
+  set_accessible_desc (self, accesible_name);
 
   g_free (short_details);
   g_free (details);
   g_free (device_icon);
-  g_free (short_timestring);
-  g_free (detailed_timestring);
   g_free (object_path);
+}
+
+static void
+get_devices_cb (GObject      *source_object,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+  GVariant *devices_container;
+  GError *error = NULL;
+
+  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
+  if (devices_container == NULL)
+    {
+      g_printerr ("Error getting devices: %s\n", error->message);
+      g_error_free (error);
+
+      return;
+    }
+  priv->devices = g_variant_get_child_value (devices_container, 0);
+
+  priv->device = get_primary_device (priv->devices);
+  if (priv->device == NULL)
+    {
+      g_printerr ("Error getting primary device");
+
+      return;
+    }
+
+  put_primary_device (self, priv->device);
+
+  build_menu (self);
 }
 
 static void
