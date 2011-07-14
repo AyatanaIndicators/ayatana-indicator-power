@@ -287,11 +287,19 @@ build_device_time_details (const gchar    *device_name,
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accesible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
-                                             device_name, detailed_timestring, percentage);
-          *details = g_strdup_printf (_("%s (%s left)"),
-                                      device_name, short_timestring);
+          if (time > 43200) /* 12 hours */
+            {
+              *accesible_name = g_strdup_printf (_("%s"), device_name);
+              *details = g_strdup_printf (_("%s"), device_name);
+            }
+          else
+            {
+              /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+              *accesible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
+                                                 device_name, detailed_timestring, percentage);
+              *details = g_strdup_printf (_("%s (%s left)"),
+                                          device_name, short_timestring);
+            }
         }
     }
   else
