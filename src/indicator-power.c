@@ -443,11 +443,18 @@ get_primary_device (GVariant *devices)
 {
   UpDeviceKind kind;
   UpDeviceState state;
+  GVariant *device;
+  GVariant *primary_device_charging = NULL;
+  GVariant *primary_device_discharging = NULL;
   GVariant *primary_device = NULL;
+  gboolean charging = FALSE;
+  gboolean discharging = FALSE;
   gchar *object_path;
   gchar *device_icon;
   gdouble percentage;
   guint64 time;
+  guint64 min_discharging_time = G_MAXUINT64;
+  guint64 max_charging_time = 0;
   gsize n_devices;
   guint i;
 
@@ -456,8 +463,8 @@ get_primary_device (GVariant *devices)
 
   for (i = 0; i < n_devices; i++)
     {
-      primary_device = g_variant_get_child_value (devices, i);
-      g_variant_get (primary_device,
+      device = g_variant_get_child_value (devices, i);
+      g_variant_get (device,
                      "(susdut)",
                      &object_path,
                      &kind,
@@ -467,6 +474,37 @@ get_primary_device (GVariant *devices)
                      &time);
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
+      if (primary_device == NULL && kind == UP_DEVICE_KIND_BATTERY)
+        primary_device = device;
+
+      if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          discharging = TRUE;
+          if (time < min_discharging_time)
+            {
+              min_discharging_time = time;
+              primary_device_discharging = device;
+            }
+        }
+      else if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          charging = TRUE;
+          if (time > max_charging_time)
+            {
+              max_charging_time = time;
+              primary_device_charging = device;
+            }
+        }
+    }
+
+  if (discharging)
+    {
+      primary_device = primary_device_discharging;
+    }
+  else if (charging)
+    {
+      primary_device = primary_device_charging;
     }
 
   return primary_device;
