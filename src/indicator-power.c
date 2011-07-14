@@ -308,7 +308,7 @@ build_device_time_details (const gchar    *device_name,
         {
           *details = g_strdup_printf (_("%s (charged)"), device_name);
           *accesible_name = g_strdup (*details);
-          *short_details = g_strdup (*details);
+          *short_details = g_strdup (_("(charged)"));
         }
       else
         {
