@@ -1,3 +1,17 @@
+indicator-power (0.3-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    - Refine the text of the items in the menu to follow the specification
+    - Draw option checkbox as check, not radio
+    - Show the apropiate icon depending of the status of the devices
+
+2011-07-13  Javier Jardón  <javier.jardon@codethink.co.uk>
+
+        Create new function to store the logic to put the primary device
+
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 14 Jul 2011 11:04:23 -0400
+
 indicator-power (0.2-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
