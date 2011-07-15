@@ -498,9 +498,6 @@ get_primary_device (GVariant *devices)
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
-      if (primary_device == NULL && kind == UP_DEVICE_KIND_BATTERY)
-        primary_device = device;
-
       if (state == UP_DEVICE_STATE_DISCHARGING)
         {
           discharging = TRUE;
@@ -518,6 +515,10 @@ get_primary_device (GVariant *devices)
               max_charging_time = time;
               primary_device_charging = device;
             }
+        }
+      else
+        {
+          primary_device = device;
         }
     }
 
