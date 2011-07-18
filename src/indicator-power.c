@@ -452,13 +452,9 @@ build_menu (IndicatorPower *self)
     }
 
   /* options */
-  item = gtk_check_menu_item_new_with_label (_("Show Time Remaining"));
+  item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
   g_signal_connect (G_OBJECT (item), "toggled",
                     G_CALLBACK (option_toggled_cb), self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-
-  /* separator */
-  item = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
   /* preferences */
