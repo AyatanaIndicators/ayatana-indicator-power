@@ -38,6 +38,18 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DEFAULT_ICON   "gpm-battery-missing"
 
+#if HAVE_GSD
+#define DBUS_SERVICE                "org.gnome.SettingsDaemon"
+#define DBUS_PATH                   "/org/gnome/SettingsDaemon"
+#define POWER_DBUS_PATH             DBUS_PATH "/Power"
+#define POWER_DBUS_INTERFACE        "org.gnome.SettingsDaemon.Power"
+#else
+#define DBUS_SERVICE                "org.gnome.PowerManager"
+#define DBUS_PATH                   "/org/gnome/PowerManager"
+#define POWER_DBUS_PATH             DBUS_PATH
+#define POWER_DBUS_INTERFACE        "org.gnome.PowerManager"
+#endif
+
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
 #define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
 #define INDICATOR_POWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), INDICATOR_POWER_TYPE, IndicatorPowerClass))
@@ -705,9 +717,9 @@ indicator_power_init (IndicatorPower *self)
   g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
                             G_DBUS_PROXY_FLAGS_NONE,
                             NULL,
-                            "org.gnome.PowerManager",
-                            "/org/gnome/PowerManager",
-                            "org.gnome.PowerManager",
+                            DBUS_SERVICE,
+                            POWER_DBUS_PATH,
+                            POWER_DBUS_INTERFACE,
                             priv->proxy_cancel,
                             service_proxy_cb,
                             self);
