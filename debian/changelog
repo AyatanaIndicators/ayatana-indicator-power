@@ -1,8 +1,12 @@
 indicator-power (0.4-0ubuntu1) UNRELEASED; urgency=low
 
   * New upstream release.
+    - Always select a device (LP: #810872)
+    - Use the dbus interface provided in g-s-d 3.1.4
+  * debian/control
+    - Added build depends for gnome-settings-daemon-dev >= 3.1.4 
 
- -- Ken VanDine <ken.vandine@canonical.com>  Tue, 19 Jul 2011 12:12:26 -0400
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 19 Jul 2011 12:52:06 -0400
 
 indicator-power (0.3-0ubuntu1) oneiric; urgency=low
 
