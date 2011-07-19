@@ -83,7 +83,7 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(powerlibdir)"
 LTLIBRARIES = $(powerlib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libpower_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+libpower_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libpower_la_OBJECTS = src/libpower_la-indicator-power.lo
 libpower_la_OBJECTS = $(am_libpower_la_OBJECTS)
@@ -204,6 +204,8 @@ GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GMSGFMT = @GMSGFMT@
 GMSGFMT_015 = @GMSGFMT_015@
 GREP = @GREP@
+GSD_CFLAGS = @GSD_CFLAGS@
+GSD_LIBS = @GSD_LIBS@
 INDICATORDIR = @INDICATORDIR@
 INDICATORICONSDIR = @INDICATORICONSDIR@
 INDICATOR_CFLAGS = @INDICATOR_CFLAGS@
@@ -332,11 +334,13 @@ libpower_la_SOURCES = \
         src/indicator-power.c
 
 libpower_la_CFLAGS = \
+        $(UPOWER_CFLAGS) \
         $(INDICATOR_CFLAGS) \
         -Wall -Werror \
         -DG_LOG_DOMAIN=\"Indicator-Power\"
 
 libpower_la_LIBADD = \
+        $(UPOWER_LIBS) \
         $(INDICATOR_LIBS)
 
 libpower_la_LDFLAGS = \
