@@ -1,5 +1,5 @@
 AC_INIT([indicator-power],
-        [0.3],
+        [0.4],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])
@@ -32,12 +32,16 @@ LT_INIT
 GTK_REQUIRED_VERSION=3.0
 INDICATOR_REQUIRED_VERSION=0.3.90
 UPOWER_REQUIRED_VERSION=0.9.5
+GSD_REQUIRED_VERSION=3.1.4
 
 PKG_CHECK_MODULES([UPOWER],[upower-glib >= UPOWER_REQUIRED_VERSION])
 PKG_CHECK_MODULES([INDICATOR],[
         gtk+-3.0 >= $GTK_REQUIRED_VERSION
         indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION
 ])
+PKG_CHECK_MODULES([GSD],[gnome-settings-daemon>= $GSD_REQUIRED_VERSION],
+                  [have_gsd=yes],[have_gsd=no])
+AM_CONDITIONAL([HAVE_GSD],[test x$have_gsd = xyes])
 
 ###########################
 # Check to see if we're local
