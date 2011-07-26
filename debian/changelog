@@ -1,12 +1,14 @@
-indicator-power (0.4-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.4-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
     - Always select a device (LP: #810872)
     - Use the dbus interface provided in g-s-d 3.1.4
   * debian/control
     - Added build depends for gnome-settings-daemon-dev >= 3.1.4 
+  * debian/source_indicator-power.py
+    - Install apport hook to collect upower -d output
 
- -- Ken VanDine <ken.vandine@canonical.com>  Tue, 19 Jul 2011 12:52:06 -0400
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 26 Jul 2011 16:34:30 -0400
 
 indicator-power (0.3-0ubuntu1) oneiric; urgency=low
 
