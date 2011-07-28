@@ -13,6 +13,7 @@ libpower_la_SOURCES = \
 libpower_la_CFLAGS = \
         $(UPOWER_CFLAGS) \
         $(INDICATOR_CFLAGS) \
+	-DHAVE_GSD \
         -Wall -Werror \
         -DG_LOG_DOMAIN=\"Indicator-Power\"
 libpower_la_LIBADD = \
