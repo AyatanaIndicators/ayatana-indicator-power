@@ -1,3 +1,12 @@
+indicator-power (0.4-0ubuntu2) oneiric; urgency=low
+
+  * debian/patches/fix_defines.patch
+    - Use the HAVE_GSD defines so it works without gpm
+  * debian/rules
+    - added autoreconf
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 28 Jul 2011 12:59:33 -0400
+
 indicator-power (0.4-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
