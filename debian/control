@@ -9,6 +9,7 @@ Build-Depends: debhelper (>= 8),
                libupower-glib-dev (>= 0.9.5),
                gnome-settings-daemon-dev (>= 3.1.4),
                libdbus-1-dev,
+               dh-autoreconf,
                intltool
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power

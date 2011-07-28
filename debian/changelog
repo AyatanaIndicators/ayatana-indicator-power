@@ -1,3 +1,10 @@
+indicator-power (0.4-0ubuntu3) oneiric; urgency=low
+
+  * debian/control
+    - Added dh-autoreconf to build depends 
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 28 Jul 2011 15:02:03 -0400
+
 indicator-power (0.4-0ubuntu2) oneiric; urgency=low
 
   * debian/patches/fix_defines.patch
