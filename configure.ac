@@ -91,8 +91,9 @@ IT_PROG_INTLTOOL([0.41.0])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
-AC_SUBST([GETTEXT_PACKAGE],[PACKAGE_TARNAME])
-AC_DEFINE([GETTEXT_PACKAGE],[PACKAGE_TARNAME],[Define to the gettext package name.])
+GETTEXT_PACKAGE=indicator-power
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",[Define to the gettext package name.])
 
 ###########################
 # Files
