@@ -1,4 +1,4 @@
-indicator-power (0.5-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.5-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
     - Set GETTEXT_PACKAGE to generate proper templates
