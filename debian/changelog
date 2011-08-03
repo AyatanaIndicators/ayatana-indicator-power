@@ -1,3 +1,13 @@
+indicator-power (0.5-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    - Set GETTEXT_PACKAGE to generate proper templates
+    - Dropped support for gnome-power-manager
+  * debian/patches/fix_defines.patch
+    - removed, merged upstream
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 03 Aug 2011 09:30:18 -0400
+
 indicator-power (0.4-0ubuntu3) oneiric; urgency=low
 
   * debian/control
