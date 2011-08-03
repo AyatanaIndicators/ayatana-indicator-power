@@ -419,6 +419,14 @@ menu_add_devices (GtkMenu  *menu,
   return n_devices;
 }
 
+static gboolean
+get_greeter_mode (void)
+{
+  const gchar *var;
+  var = g_getenv("INDICATOR_GREETER_MODE");
+  return (g_strcmp0(var, "1") == 0);
+}
+
 static void
 build_menu (IndicatorPower *self)
 {
@@ -437,26 +445,28 @@ build_menu (IndicatorPower *self)
   /* devices */
   n_devices = menu_add_devices (priv->menu, priv->devices);
 
-  /* only do the separator if we have at least one device */
-  if (n_devices != 0)
-    {
-      item = gtk_separator_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-    }
+  if (!get_greeter_mode ()) {
+    /* only do the separator if we have at least one device */
+    if (n_devices != 0)
+      {
+        item = gtk_separator_menu_item_new ();
+        gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+      }
 
-  /* options */
-  item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
-  g_signal_connect (G_OBJECT (item), "toggled",
-                    G_CALLBACK (option_toggled_cb), self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    /* options */
+    item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
+    g_signal_connect (G_OBJECT (item), "toggled",
+                      G_CALLBACK (option_toggled_cb), self);
+    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
-  /* preferences */
-  item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
-  image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_preferences_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    /* preferences */
+    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
+    image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+    g_signal_connect (G_OBJECT (item), "activate",
+                      G_CALLBACK (show_preferences_cb), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+  }
 
   /* show the menu */
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
