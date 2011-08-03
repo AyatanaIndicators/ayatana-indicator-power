@@ -39,9 +39,7 @@ PKG_CHECK_MODULES([INDICATOR],[
         gtk+-3.0 >= $GTK_REQUIRED_VERSION
         indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION
 ])
-PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION],
-                  [have_gsd=yes],[have_gsd=no])
-AM_CONDITIONAL([HAVE_GSD],[test x$have_gsd = xyes])
+PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION])
 
 ###########################
 # Check to see if we're local
