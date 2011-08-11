@@ -315,7 +315,7 @@ build_device_time_details (const gchar    *device_name,
           *accesible_name = g_strdup (*details);
           *short_details = g_strdup (_("(charged)"));
         }
-      else
+      else if (percentage > 0)
         {
           /* TRANSLATORS: %2 is a percentage value. Note: this string is only
            * used when we don't have a time value */
@@ -324,6 +324,12 @@ build_device_time_details (const gchar    *device_name,
           *accesible_name = g_strdup (*details);
           *short_details = g_strdup_printf (_("(%.0lf%%)"),
                                             percentage);
+        }
+      else
+        {
+          *details = g_strdup_printf (_("%s (not present)"), device_name);
+          *accesible_name = g_strdup (*details);
+          *short_details = g_strdup (_("(not present)"));
         }
     }
 }
