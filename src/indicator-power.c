@@ -306,6 +306,9 @@ build_device_time_details (const gchar    *device_name,
                                           device_name, short_timestring);
             }
         }
+
+      g_free (short_timestring);
+      g_free (detailed_timestring);
     }
   else
     {
@@ -401,6 +404,9 @@ menu_add_device (GtkMenu  *menu,
                     G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
+  g_free (short_details);
+  g_free (details);
+  g_free (accesible_name);
   g_free (device_icon);
   g_free (object_path);
 }
@@ -450,6 +456,7 @@ build_menu (IndicatorPower *self)
 
   children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
+  g_list_free (children);
 
   /* devices */
   n_devices = menu_add_devices (priv->menu, priv->devices);
@@ -610,6 +617,7 @@ put_primary_device (IndicatorPower *self,
 
   g_free (short_details);
   g_free (details);
+  g_free (accesible_name);
   g_free (device_icon);
   g_free (object_path);
 }
