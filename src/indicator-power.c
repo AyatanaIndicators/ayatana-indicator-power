@@ -502,6 +502,10 @@ get_primary_device (GVariant *devices)
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
+      /* not battery */
+      if (kind != UP_DEVICE_KIND_BATTERY)
+        continue;
+
       if (state == UP_DEVICE_STATE_DISCHARGING)
         {
           discharging = TRUE;
