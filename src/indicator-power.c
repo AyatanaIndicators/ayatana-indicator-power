@@ -394,6 +394,9 @@ menu_add_device (GtkMenu  *menu,
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  g_free (device_icon);
+  g_free (object_path);
 }
 
 static gsize
@@ -522,6 +525,9 @@ get_primary_device (GVariant *devices)
           primary_device = device;
         }
     }
+
+  g_free (device_icon);
+  g_free (object_path);
 
   if (discharging)
     {
