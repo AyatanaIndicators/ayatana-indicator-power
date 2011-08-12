@@ -551,10 +551,10 @@ get_primary_device (GVariant *devices)
         {
           primary_device = device;
         }
-    }
 
-  g_free (device_icon);
-  g_free (object_path);
+      g_free (device_icon);
+      g_free (object_path);
+    }
 
   if (discharging)
     {

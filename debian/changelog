@@ -1,4 +1,4 @@
-indicator-power (0.6-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.6-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
     - Show time left to use without brackets, time left to charge with 
@@ -8,8 +8,10 @@ indicator-power (0.6-0ubuntu1) UNRELEASED; urgency=low
     - Use a string when the energy source is not present instead 
       of 0%
     - only batteries status icons are allowed in the menu title
+  * src/indicator-power.c
+    - cherry picked crasher fix
   * debian/rules: 
-    - run intltool-update to update the translations template (lp: #820705)
+    - Don't autoreconf 
 
  -- Ken VanDine <ken.vandine@canonical.com>  Fri, 12 Aug 2011 09:57:47 -0400
 
