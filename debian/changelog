@@ -1,3 +1,11 @@
+indicator-power (0.6-0ubuntu2) oneiric; urgency=low
+
+  * src/indicator-power.c
+    - cherry pick fix to prevent it from showing the icon on devices that
+      have no battery
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 12 Aug 2011 16:17:51 -0400
+
 indicator-power (0.6-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.

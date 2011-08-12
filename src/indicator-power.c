@@ -793,7 +793,6 @@ get_image (IndicatorObject *io)
     gicon = g_themed_icon_new (DEFAULT_ICON);
     priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
-    gtk_widget_show (GTK_WIDGET (priv->status_image));
   }
 
   return priv->status_image;
