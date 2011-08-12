@@ -279,9 +279,6 @@ build_device_time_details (const gchar    *device_name,
                       &short_timestring,
                       &detailed_timestring);
 
-      *short_details = g_strdup_printf ("(%s)",
-                                        short_timestring);
-
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
@@ -289,9 +286,12 @@ build_device_time_details (const gchar    *device_name,
                                              device_name, detailed_timestring, percentage);
           *details = g_strdup_printf (_("%s (%s to charge)"),
                                       device_name, short_timestring);
+          *short_details = g_strdup_printf ("(%s)", short_timestring);
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
+          *short_details = g_strdup_printf ("%s", short_timestring);
+
           if (time > 43200) /* 12 hours */
             {
               *accesible_name = g_strdup_printf (_("%s"), device_name);
