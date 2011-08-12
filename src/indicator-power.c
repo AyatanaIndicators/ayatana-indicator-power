@@ -279,9 +279,6 @@ build_device_time_details (const gchar    *device_name,
                       &short_timestring,
                       &detailed_timestring);
 
-      *short_details = g_strdup_printf ("(%s)",
-                                        short_timestring);
-
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
@@ -289,9 +286,12 @@ build_device_time_details (const gchar    *device_name,
                                              device_name, detailed_timestring, percentage);
           *details = g_strdup_printf (_("%s (%s to charge)"),
                                       device_name, short_timestring);
+          *short_details = g_strdup_printf ("(%s)", short_timestring);
         }
       else if (state == UP_DEVICE_STATE_DISCHARGING)
         {
+          *short_details = g_strdup_printf ("%s", short_timestring);
+
           if (time > 43200) /* 12 hours */
             {
               *accesible_name = g_strdup_printf (_("%s"), device_name);
@@ -306,6 +306,9 @@ build_device_time_details (const gchar    *device_name,
                                           device_name, short_timestring);
             }
         }
+
+      g_free (short_timestring);
+      g_free (detailed_timestring);
     }
   else
     {
@@ -315,7 +318,7 @@ build_device_time_details (const gchar    *device_name,
           *accesible_name = g_strdup (*details);
           *short_details = g_strdup (_("(charged)"));
         }
-      else
+      else if (percentage > 0)
         {
           /* TRANSLATORS: %2 is a percentage value. Note: this string is only
            * used when we don't have a time value */
@@ -324,6 +327,12 @@ build_device_time_details (const gchar    *device_name,
           *accesible_name = g_strdup (*details);
           *short_details = g_strdup_printf (_("(%.0lf%%)"),
                                             percentage);
+        }
+      else
+        {
+          *details = g_strdup_printf (_("%s (not present)"), device_name);
+          *accesible_name = g_strdup (*details);
+          *short_details = g_strdup (_("(not present)"));
         }
     }
 }
@@ -394,6 +403,12 @@ menu_add_device (GtkMenu  *menu,
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  g_free (short_details);
+  g_free (details);
+  g_free (accesible_name);
+  g_free (device_icon);
+  g_free (object_path);
 }
 
 static gsize
@@ -419,6 +434,14 @@ menu_add_devices (GtkMenu  *menu,
   return n_devices;
 }
 
+static gboolean
+get_greeter_mode (void)
+{
+  const gchar *var;
+  var = g_getenv("INDICATOR_GREETER_MODE");
+  return (g_strcmp0(var, "1") == 0);
+}
+
 static void
 build_menu (IndicatorPower *self)
 {
@@ -433,30 +456,33 @@ build_menu (IndicatorPower *self)
 
   children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
+  g_list_free (children);
 
   /* devices */
   n_devices = menu_add_devices (priv->menu, priv->devices);
 
-  /* only do the separator if we have at least one device */
-  if (n_devices != 0)
-    {
-      item = gtk_separator_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
-    }
+  if (!get_greeter_mode ()) {
+    /* only do the separator if we have at least one device */
+    if (n_devices != 0)
+      {
+        item = gtk_separator_menu_item_new ();
+        gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+      }
 
-  /* options */
-  item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
-  g_signal_connect (G_OBJECT (item), "toggled",
-                    G_CALLBACK (option_toggled_cb), self);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    /* options */
+    item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
+    g_signal_connect (G_OBJECT (item), "toggled",
+                      G_CALLBACK (option_toggled_cb), self);
+    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
-  /* preferences */
-  item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
-  image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_preferences_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    /* preferences */
+    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
+    image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+    g_signal_connect (G_OBJECT (item), "activate",
+                      G_CALLBACK (show_preferences_cb), NULL);
+    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+  }
 
   /* show the menu */
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
@@ -499,6 +525,10 @@ get_primary_device (GVariant *devices)
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
+      /* not battery */
+      if (kind != UP_DEVICE_KIND_BATTERY)
+        continue;
+
       if (state == UP_DEVICE_STATE_DISCHARGING)
         {
           discharging = TRUE;
@@ -522,6 +552,9 @@ get_primary_device (GVariant *devices)
           primary_device = device;
         }
     }
+
+  g_free (device_icon);
+  g_free (object_path);
 
   if (discharging)
     {
@@ -584,6 +617,7 @@ put_primary_device (IndicatorPower *self,
 
   g_free (short_details);
   g_free (details);
+  g_free (accesible_name);
   g_free (device_icon);
   g_free (object_path);
 }

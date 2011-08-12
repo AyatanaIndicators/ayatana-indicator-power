@@ -14,3 +14,4 @@ override_dh_install:
 	find debian/indicator-power -name \*.a -delete
 	mkdir -p debian/indicator-power/usr/share/apport/package-hooks/
 	cp debian/source_indicator-power.py debian/indicator-power/usr/share/apport/package-hooks/
+	cd po; intltool-update --pot --verbose
