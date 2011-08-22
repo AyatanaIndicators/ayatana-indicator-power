@@ -359,6 +359,8 @@ menu_add_device (GtkMenu  *menu,
   UpDeviceState state;
   GtkWidget *icon;
   GtkWidget *item;
+  GtkWidget *details_label;
+  GtkWidget *grid;
   GIcon *device_gicons;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
@@ -397,12 +399,19 @@ menu_add_device (GtkMenu  *menu,
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
-  gtk_menu_item_set_label (GTK_MENU_ITEM (item), details);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
+  details_label = gtk_label_new (details);
+  gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
+  gtk_container_add (GTK_CONTAINER (item), grid);
+  gtk_widget_show (grid);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
   g_free (short_details);
   g_free (details);
