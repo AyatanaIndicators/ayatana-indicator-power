@@ -2,6 +2,13 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = po
 
+gsettingsschema_in_files = data/org.ubuntu.indicator-power.gschema.xml.in
+gsettings_SCHEMAS = $(gsettingsschema_in_files:.xml.in=.xml)
+
+@INTLTOOL_XML_NOMERGE_RULE@
+
+@GSETTINGS_RULES@
+
 ###################
 # Indicator Stuff
 ###################
@@ -24,7 +31,12 @@ libpower_la_LDFLAGS = \
 
 ############################################################
 
-EXTRA_DIST = autogen.sh
+EXTRA_DIST = \
+	$(gsettingsschema_in_files) \
+	autogen.sh
+
+CLEANFILES = \
+	$(gsettings_SCHEMAS)
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-localinstall
 

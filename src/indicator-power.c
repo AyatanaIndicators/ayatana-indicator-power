@@ -82,6 +82,8 @@ struct _IndicatorPowerPrivate
 
   GVariant *devices;
   GVariant *device;
+
+  GSettings *settings;
 };
 
 /* Prototypes */
@@ -138,9 +140,15 @@ option_toggled_cb (GtkCheckMenuItem *item,
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
+  gboolean visible;
+
+  visible = gtk_check_menu_item_get_active (item);
 
   gtk_widget_set_visible (GTK_WIDGET (priv->label),
-                          gtk_check_menu_item_get_active (item));
+                          visible);
+
+  g_settings_set_boolean (priv->settings, "show-time",
+                          visible);
 }
 
 static void
@@ -459,6 +467,7 @@ build_menu (IndicatorPower *self)
   GtkWidget *image;
   GList *children;
   gsize n_devices = 0;
+  gboolean visible;
 
   if (priv->menu == NULL)
     priv->menu = GTK_MENU (gtk_menu_new ());
@@ -482,6 +491,8 @@ build_menu (IndicatorPower *self)
     item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
     g_signal_connect (G_OBJECT (item), "toggled",
                       G_CALLBACK (option_toggled_cb), self);
+    visible = g_settings_get_boolean (priv->settings, "show-time");
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), visible);
     gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
     /* preferences */
@@ -755,6 +766,9 @@ indicator_power_init (IndicatorPower *self)
                             priv->proxy_cancel,
                             service_proxy_cb,
                             self);
+
+  /* GSettings */
+  priv->settings = g_settings_new ("org.ubuntu.indicator-power");
 }
 
 static void
