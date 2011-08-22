@@ -31,12 +31,18 @@ libpower_la_LDFLAGS = \
 
 ############################################################
 
+dist_noinst_DATA = \
+        $(gsettings_in_file)
+
 EXTRA_DIST = \
 	$(gsettingsschema_in_files) \
 	autogen.sh
 
 CLEANFILES = \
 	$(gsettings_SCHEMAS)
+
+MAINTAINERCLEANFILES = \
+	$(gsettings_SCHEMAS:.xml=.valid)
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-localinstall
 
