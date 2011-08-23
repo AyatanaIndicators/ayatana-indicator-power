@@ -82,6 +82,8 @@ struct _IndicatorPowerPrivate
 
   GVariant *devices;
   GVariant *device;
+
+  GSettings *settings;
 };
 
 /* Prototypes */
@@ -138,9 +140,15 @@ option_toggled_cb (GtkCheckMenuItem *item,
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
   IndicatorPowerPrivate *priv = self->priv;
+  gboolean visible;
+
+  visible = gtk_check_menu_item_get_active (item);
 
   gtk_widget_set_visible (GTK_WIDGET (priv->label),
-                          gtk_check_menu_item_get_active (item));
+                          visible);
+
+  g_settings_set_boolean (priv->settings, "show-time",
+                          visible);
 }
 
 static void
@@ -359,6 +367,8 @@ menu_add_device (GtkMenu  *menu,
   UpDeviceState state;
   GtkWidget *icon;
   GtkWidget *item;
+  GtkWidget *details_label;
+  GtkWidget *grid;
   GIcon *device_gicons;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
@@ -397,12 +407,19 @@ menu_add_device (GtkMenu  *menu,
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
-  gtk_menu_item_set_label (GTK_MENU_ITEM (item), details);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
+  details_label = gtk_label_new (details);
+  gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
+  gtk_container_add (GTK_CONTAINER (item), grid);
+  gtk_widget_show (grid);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
   g_signal_connect (G_OBJECT (item), "activate",
                     G_CALLBACK (show_info_cb), NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
   g_free (short_details);
   g_free (details);
@@ -450,6 +467,7 @@ build_menu (IndicatorPower *self)
   GtkWidget *image;
   GList *children;
   gsize n_devices = 0;
+  gboolean visible;
 
   if (priv->menu == NULL)
     priv->menu = GTK_MENU (gtk_menu_new ());
@@ -473,10 +491,12 @@ build_menu (IndicatorPower *self)
     item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
     g_signal_connect (G_OBJECT (item), "toggled",
                       G_CALLBACK (option_toggled_cb), self);
+    visible = g_settings_get_boolean (priv->settings, "show-time");
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), visible);
     gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
     /* preferences */
-    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings ..."));
+    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings..."));
     image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     g_signal_connect (G_OBJECT (item), "activate",
@@ -551,10 +571,10 @@ get_primary_device (GVariant *devices)
         {
           primary_device = device;
         }
-    }
 
-  g_free (device_icon);
-  g_free (object_path);
+      g_free (device_icon);
+      g_free (object_path);
+    }
 
   if (discharging)
     {
@@ -746,6 +766,9 @@ indicator_power_init (IndicatorPower *self)
                             priv->proxy_cancel,
                             service_proxy_cb,
                             self);
+
+  /* GSettings */
+  priv->settings = g_settings_new ("org.ubuntu.indicator-power");
 }
 
 static void
@@ -793,7 +816,6 @@ get_image (IndicatorObject *io)
     gicon = g_themed_icon_new (DEFAULT_ICON);
     priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
-    gtk_widget_show (GTK_WIDGET (priv->status_image));
   }
 
   return priv->status_image;
