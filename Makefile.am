@@ -35,7 +35,7 @@ dist_noinst_SCRIPTS = \
 	autogen.sh
 
 dist_noinst_DATA = \
-	data/org.ubuntu.indicator-power.gschema.xml
+	data/org.ubuntu.indicator-power.gschema.xml \
 	$(gsettings_in_file)
 
 CLEANFILES = \
