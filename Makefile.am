@@ -2,8 +2,8 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = po
 
-gsettingsschema_in_files = data/org.ubuntu.indicator-power.gschema.xml.in
-gsettings_SCHEMAS = $(gsettingsschema_in_files:.xml.in=.xml)
+gsettings_in_file = data/org.ubuntu.indicator-power.gschema.xml.in
+gsettings_SCHEMAS = $(gsettings_in_file:.xml.in=.xml)
 
 @INTLTOOL_XML_NOMERGE_RULE@
 
@@ -31,12 +31,12 @@ libpower_la_LDFLAGS = \
 
 ############################################################
 
-dist_noinst_DATA = \
-        $(gsettings_in_file)
-
-EXTRA_DIST = \
-	$(gsettingsschema_in_files) \
+dist_noinst_SCRIPTS = \
 	autogen.sh
+
+dist_noinst_DATA = \
+	data/org.ubuntu.indicator-power.gschema.xml
+	$(gsettings_in_file)
 
 CLEANFILES = \
 	$(gsettings_SCHEMAS)
