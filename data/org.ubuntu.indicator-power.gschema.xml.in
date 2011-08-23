@@ -1,0 +1,9 @@
+<schemalist>
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="org.ubuntu.indicator-power" path="/org/ubuntu/indicator-power/">
+    <key name="show-time" type="b">
+      <default>false</default>
+      <_summary>Show time in Menu Bar</_summary>
+      <_description>Whether show the time in the menu bar.</_description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,4 +1,4 @@
-indicator-power (0.7-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.7-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
     - Use gsettings to store the status of "Show time in Menu Bar" 
@@ -7,6 +7,8 @@ indicator-power (0.7-0ubuntu1) UNRELEASED; urgency=low
     - Do not use a space before an ellipsis at the end of a string.
   * debian/control
     - Added build depends for libglib2.0-dev
+  * data/org.ubuntu.indicator-power.gschema.xml.in
+    - cherry pick typo fix from trunk
 
  -- Ken VanDine <ken.vandine@canonical.com>  Tue, 23 Aug 2011 12:44:58 -0400
 
