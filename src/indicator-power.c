@@ -496,7 +496,7 @@ build_menu (IndicatorPower *self)
     gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
     /* preferences */
-    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings..."));
+    item = gtk_image_menu_item_new_with_label (_("Power Settings..."));
     image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     g_signal_connect (G_OBJECT (item), "activate",
@@ -661,6 +661,7 @@ get_devices_cb (GObject      *source_object,
       return;
     }
   priv->devices = g_variant_get_child_value (devices_container, 0);
+  g_variant_unref (devices_container);
 
   priv->device = get_primary_device (priv->devices);
   if (priv->device == NULL)
