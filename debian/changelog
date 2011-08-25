@@ -1,3 +1,11 @@
+indicator-power (0.7-0ubuntu2) oneiric; urgency=low
+
+  * debian/control
+    - depend on gnome-settings-daemon instead of 
+      gnome-power-manager (LP: #833397)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 25 Aug 2011 09:13:55 -0400
+
 indicator-power (0.7-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.

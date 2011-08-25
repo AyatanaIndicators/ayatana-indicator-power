@@ -18,7 +18,7 @@ Vcs-Browser: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-power/ubuntu
 
 Package: indicator-power
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, upower, gnome-control-center (>= 3.1), gnome-power-manager
+Depends: ${shlibs:Depends}, ${misc:Depends}, upower, gnome-control-center (>= 3.1), gnome-settings-daemon
 Recommends: indicator-applet (>= 0.2) | indicator-renderer
 Description: Indicator showing power state.
  This indicator displays current power management information and gives 
