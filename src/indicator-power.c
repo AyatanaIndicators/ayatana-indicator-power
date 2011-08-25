@@ -769,7 +769,7 @@ indicator_power_init (IndicatorPower *self)
                             self);
 
   /* GSettings */
-  priv->settings = g_settings_new ("org.ubuntu.indicator-power");
+  priv->settings = g_settings_new ("com.canonical.indicator.power");
 }
 
 static void
