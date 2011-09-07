@@ -409,7 +409,7 @@ menu_add_device (GtkMenu  *menu,
   item = gtk_image_menu_item_new ();
 
   grid = gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
   gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
   details_label = gtk_label_new (details);
   gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
