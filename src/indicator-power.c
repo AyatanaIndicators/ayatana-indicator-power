@@ -533,6 +533,7 @@ get_primary_device (GVariant *devices)
 
   for (i = 0; i < n_devices; i++)
     {
+      time = 0;
       device = g_variant_get_child_value (devices, i);
       g_variant_get (device,
                      "(susdut)",
@@ -561,6 +562,10 @@ get_primary_device (GVariant *devices)
       else if (state == UP_DEVICE_STATE_CHARGING)
         {
           charging = TRUE;
+          if (time == 0) /* Battery broken */
+            {
+              primary_device_charging = device;
+            }
           if (time > max_charging_time)
             {
               max_charging_time = time;
