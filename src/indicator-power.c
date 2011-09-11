@@ -183,7 +183,7 @@ get_timestring (guint64   time_secs,
   if (minutes < 60)
     {
       *short_timestring = g_strdup_printf ("0:%.2i", minutes);
-      *detailed_timestring = g_strdup_printf (ngettext ("%i minute",
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
                                               "%i minutes",
                                               minutes), minutes);
       return;
@@ -196,7 +196,7 @@ get_timestring (guint64   time_secs,
 
   if (minutes == 0)
     {
-      *detailed_timestring = g_strdup_printf (ngettext (
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
                                               "%i hour",
                                               "%i hours",
                                               hours), hours);
@@ -206,8 +206,8 @@ get_timestring (guint64   time_secs,
       /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
        * Swap order with "%2$s %2$i %1$s %1$i if needed */
       *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
-                                              hours, ngettext ("hour", "hours", hours),
-                                              minutes, ngettext ("minute", "minutes", minutes));
+                                              hours, g_dngettext (GETTEXT_PACKAGE, "hour", "hours", hours),
+                                              minutes, g_dngettext (GETTEXT_PACKAGE, "minute", "minutes", minutes));
     }
 }
 
@@ -219,47 +219,47 @@ device_kind_to_localised_string (UpDeviceKind kind)
   switch (kind) {
     case UP_DEVICE_KIND_LINE_POWER:
       /* TRANSLATORS: system power cord */
-      text = gettext ("AC adapter");
+      text = _("AC adapter");
       break;
     case UP_DEVICE_KIND_BATTERY:
       /* TRANSLATORS: laptop primary battery */
-      text = gettext ("Battery");
+      text = _("Battery");
       break;
     case UP_DEVICE_KIND_UPS:
       /* TRANSLATORS: battery-backed AC power source */
-      text = gettext ("UPS");
+      text = _("UPS");
       break;
     case UP_DEVICE_KIND_MONITOR:
       /* TRANSLATORS: a monitor is a device to measure voltage and current */
-      text = gettext ("Monitor");
+      text = _("Monitor");
       break;
     case UP_DEVICE_KIND_MOUSE:
       /* TRANSLATORS: wireless mice with internal batteries */
-      text = gettext ("Mouse");
+      text = _("Mouse");
       break;
     case UP_DEVICE_KIND_KEYBOARD:
       /* TRANSLATORS: wireless keyboard with internal battery */
-      text = gettext ("Keyboard");
+      text = _("Keyboard");
       break;
     case UP_DEVICE_KIND_PDA:
       /* TRANSLATORS: portable device */
-      text = gettext ("PDA");
+      text = _("PDA");
       break;
     case UP_DEVICE_KIND_PHONE:
       /* TRANSLATORS: cell phone (mobile...) */
-      text = gettext ("Cell phone");
+      text = _("Cell phone");
       break;
     case UP_DEVICE_KIND_MEDIA_PLAYER:
       /* TRANSLATORS: media player, mp3 etc */
-      text = gettext ("Media player");
+      text = _("Media player");
       break;
     case UP_DEVICE_KIND_TABLET:
       /* TRANSLATORS: tablet device */
-      text = gettext ("Tablet");
+      text = _("Tablet");
       break;
     case UP_DEVICE_KIND_COMPUTER:
       /* TRANSLATORS: tablet device */
-      text = gettext ("Computer");
+      text = _("Computer");
       break;
     default:
       g_warning ("enum unrecognised: %i", kind);
