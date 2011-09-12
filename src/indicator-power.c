@@ -839,6 +839,7 @@ get_label (IndicatorObject *io)
     {
       /* Create the label if it doesn't exist already */
       priv->label = GTK_LABEL (gtk_label_new (""));
+      gtk_widget_set_visible (GTK_WIDGET (priv->label), FALSE);
     }
 
   return priv->label;
