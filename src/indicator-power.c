@@ -359,6 +359,41 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
+static GIcon*
+get_device_icon (UpDeviceKind kind,
+                 UpDeviceState state,
+                 gchar *device_icon)
+{
+  GIcon *gicon;
+
+  if (kind == UP_DEVICE_KIND_BATTERY &&
+      state == UP_DEVICE_STATE_CHARGING)
+    {
+      GString *filename;
+      gchar **iconnames;
+      const gchar *kind_str;
+
+      kind_str = up_device_kind_to_string (kind);
+      filename = g_string_new (NULL);
+      g_string_append_printf (filename, "battery-caution-charging-symbolic;");
+      g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (filename, "battery-caution-charging;");
+
+      iconnames = g_strsplit (filename->str, ";", -1);
+      gicon = g_themed_icon_new_from_names (iconnames, -1);
+
+      g_strfreev (iconnames);
+      g_string_free (filename, TRUE);
+    }
+  else
+    {
+      gicon = g_icon_new_for_string (device_icon, NULL);
+    }
+
+  return gicon;
+}
+
+
 static void
 menu_add_device (GtkMenu  *menu,
                  GVariant *device)
@@ -397,7 +432,7 @@ menu_add_device (GtkMenu  *menu,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* Process the data */
-  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  device_gicons = get_device_icon (kind, state, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
 
@@ -623,7 +658,7 @@ put_primary_device (IndicatorPower *self,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* set icon */
-  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  device_gicons = get_device_icon (kind, state, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
