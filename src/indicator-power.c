@@ -79,6 +79,7 @@ struct _IndicatorPowerPrivate
 
   GCancellable *proxy_cancel;
   GDBusProxy   *proxy;
+  guint         watcher_id;
 
   GVariant *devices;
   GVariant *device;
@@ -783,6 +784,28 @@ service_proxy_cb (GObject      *object,
 }
 
 static void
+gsd_appeared_callback (GDBusConnection *connection,
+                       const gchar     *name,
+                       const gchar     *name_owner,
+                       gpointer         user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+
+  priv->proxy_cancel = g_cancellable_new ();
+
+  g_dbus_proxy_new (connection,
+                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                    NULL,
+                    name,
+                    POWER_DBUS_PATH,
+                    POWER_DBUS_INTERFACE,
+                    priv->proxy_cancel,
+                    service_proxy_cb,
+                    self);
+}
+
+static void
 indicator_power_init (IndicatorPower *self)
 {
   IndicatorPowerPrivate *priv;
@@ -796,17 +819,14 @@ indicator_power_init (IndicatorPower *self)
   priv->menu = NULL;
   priv->accessible_desc = NULL;
 
-  priv->proxy_cancel = g_cancellable_new();
 
-  g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
-                            G_DBUS_PROXY_FLAGS_NONE,
-                            NULL,
-                            DBUS_SERVICE,
-                            POWER_DBUS_PATH,
-                            POWER_DBUS_INTERFACE,
-                            priv->proxy_cancel,
-                            service_proxy_cb,
-                            self);
+  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                       DBUS_SERVICE,
+                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                       gsd_appeared_callback,
+                                       NULL,
+                                       self,
+                                       NULL);
 
   /* GSettings */
   priv->settings = g_settings_new ("com.canonical.indicator.power");
