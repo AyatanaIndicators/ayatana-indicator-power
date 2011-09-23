@@ -1,4 +1,4 @@
-indicator-power (0.9-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (0.9-0ubuntu1) oneiric; urgency=low
 
   * New upstream release.
     - Use correct dgettext and g_dngettext calls (LP: #846895)
@@ -10,6 +10,8 @@ indicator-power (0.9-0ubuntu1) UNRELEASED; urgency=low
       appear (LP: #854717)
   * po/POTFILES.in
     - Fixed gsettings schema filename
+  * debian/copyright
+    - Removed an extra line to make dep5 compliant
 
  -- Ken VanDine <ken.vandine@canonical.com>  Fri, 23 Sep 2011 13:03:13 -0400
 
