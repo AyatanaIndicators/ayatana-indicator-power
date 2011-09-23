@@ -1,2 +1,2 @@
-data/org.ubuntu.indicator-power.gschema.xml.in
+data/com.canonical.indicator.power.gschema.xml.in
 src/indicator-power.c
