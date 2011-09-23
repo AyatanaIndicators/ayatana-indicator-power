@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema path="/org/ubuntu/indicator-power/" id="org.ubuntu.indicator-power" gettext-domain="@GETTEXT_PACKAGE@">
-    <key type="b" name="show-label">
+  <schema path="/com/canonical/indicator/power/" id="com.canonical.indicator.power" gettext-domain="@GETTEXT_PACKAGE@">
+    <key type="b" name="show-time">
       <default>false</default>
       <summary>Show time in Menu Bar</summary>
       <description>Whether show the time in the menu bar.</description>

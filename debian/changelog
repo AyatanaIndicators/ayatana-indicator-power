@@ -1,3 +1,16 @@
+indicator-power (0.9-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    - Use correct dgettext and g_dngettext calls (LP: #846895)
+    - Ensure we use the same icon for all charge levels if we are in the 
+      charging status (LP: #824629)
+    - Fix gap when the power indicator is not show (LP: #842188)
+    - Do not show (charged) in menu title when fully charged (LP: #850011)
+    - Do not activate g-s-d, but just watch dbus for g-s-d to 
+      appear (LP: #854717)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 23 Sep 2011 13:03:13 -0400
+
 indicator-power (0.7-0ubuntu2) oneiric; urgency=low
 
   * debian/control
