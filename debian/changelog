@@ -8,6 +8,8 @@ indicator-power (0.9-0ubuntu1) UNRELEASED; urgency=low
     - Do not show (charged) in menu title when fully charged (LP: #850011)
     - Do not activate g-s-d, but just watch dbus for g-s-d to 
       appear (LP: #854717)
+  * po/POTFILES.in
+    - Fixed gsettings schema filename
 
  -- Ken VanDine <ken.vandine@canonical.com>  Fri, 23 Sep 2011 13:03:13 -0400
 
