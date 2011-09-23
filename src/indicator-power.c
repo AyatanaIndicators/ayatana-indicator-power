@@ -79,6 +79,7 @@ struct _IndicatorPowerPrivate
 
   GCancellable *proxy_cancel;
   GDBusProxy   *proxy;
+  guint         watcher_id;
 
   GVariant *devices;
   GVariant *device;
@@ -183,7 +184,7 @@ get_timestring (guint64   time_secs,
   if (minutes < 60)
     {
       *short_timestring = g_strdup_printf ("0:%.2i", minutes);
-      *detailed_timestring = g_strdup_printf (ngettext ("%i minute",
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
                                               "%i minutes",
                                               minutes), minutes);
       return;
@@ -196,7 +197,7 @@ get_timestring (guint64   time_secs,
 
   if (minutes == 0)
     {
-      *detailed_timestring = g_strdup_printf (ngettext (
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
                                               "%i hour",
                                               "%i hours",
                                               hours), hours);
@@ -206,8 +207,8 @@ get_timestring (guint64   time_secs,
       /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
        * Swap order with "%2$s %2$i %1$s %1$i if needed */
       *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
-                                              hours, ngettext ("hour", "hours", hours),
-                                              minutes, ngettext ("minute", "minutes", minutes));
+                                              hours, g_dngettext (GETTEXT_PACKAGE, "hour", "hours", hours),
+                                              minutes, g_dngettext (GETTEXT_PACKAGE, "minute", "minutes", minutes));
     }
 }
 
@@ -219,47 +220,47 @@ device_kind_to_localised_string (UpDeviceKind kind)
   switch (kind) {
     case UP_DEVICE_KIND_LINE_POWER:
       /* TRANSLATORS: system power cord */
-      text = gettext ("AC adapter");
+      text = _("AC adapter");
       break;
     case UP_DEVICE_KIND_BATTERY:
       /* TRANSLATORS: laptop primary battery */
-      text = gettext ("Battery");
+      text = _("Battery");
       break;
     case UP_DEVICE_KIND_UPS:
       /* TRANSLATORS: battery-backed AC power source */
-      text = gettext ("UPS");
+      text = _("UPS");
       break;
     case UP_DEVICE_KIND_MONITOR:
       /* TRANSLATORS: a monitor is a device to measure voltage and current */
-      text = gettext ("Monitor");
+      text = _("Monitor");
       break;
     case UP_DEVICE_KIND_MOUSE:
       /* TRANSLATORS: wireless mice with internal batteries */
-      text = gettext ("Mouse");
+      text = _("Mouse");
       break;
     case UP_DEVICE_KIND_KEYBOARD:
       /* TRANSLATORS: wireless keyboard with internal battery */
-      text = gettext ("Keyboard");
+      text = _("Keyboard");
       break;
     case UP_DEVICE_KIND_PDA:
       /* TRANSLATORS: portable device */
-      text = gettext ("PDA");
+      text = _("PDA");
       break;
     case UP_DEVICE_KIND_PHONE:
       /* TRANSLATORS: cell phone (mobile...) */
-      text = gettext ("Cell phone");
+      text = _("Cell phone");
       break;
     case UP_DEVICE_KIND_MEDIA_PLAYER:
       /* TRANSLATORS: media player, mp3 etc */
-      text = gettext ("Media player");
+      text = _("Media player");
       break;
     case UP_DEVICE_KIND_TABLET:
       /* TRANSLATORS: tablet device */
-      text = gettext ("Tablet");
+      text = _("Tablet");
       break;
     case UP_DEVICE_KIND_COMPUTER:
       /* TRANSLATORS: tablet device */
-      text = gettext ("Computer");
+      text = _("Computer");
       break;
     default:
       g_warning ("enum unrecognised: %i", kind);
@@ -324,7 +325,7 @@ build_device_time_details (const gchar    *device_name,
         {
           *details = g_strdup_printf (_("%s (charged)"), device_name);
           *accesible_name = g_strdup (*details);
-          *short_details = g_strdup (_("(charged)"));
+          *short_details = g_strdup ("");
         }
       else if (percentage > 0)
         {
@@ -358,6 +359,41 @@ set_accessible_desc (IndicatorPower *self,
 
   priv->accessible_desc = g_strdup (desc);
 }
+
+static GIcon*
+get_device_icon (UpDeviceKind kind,
+                 UpDeviceState state,
+                 gchar *device_icon)
+{
+  GIcon *gicon;
+
+  if (kind == UP_DEVICE_KIND_BATTERY &&
+      state == UP_DEVICE_STATE_CHARGING)
+    {
+      GString *filename;
+      gchar **iconnames;
+      const gchar *kind_str;
+
+      kind_str = up_device_kind_to_string (kind);
+      filename = g_string_new (NULL);
+      g_string_append_printf (filename, "battery-caution-charging-symbolic;");
+      g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (filename, "battery-caution-charging;");
+
+      iconnames = g_strsplit (filename->str, ";", -1);
+      gicon = g_themed_icon_new_from_names (iconnames, -1);
+
+      g_strfreev (iconnames);
+      g_string_free (filename, TRUE);
+    }
+  else
+    {
+      gicon = g_icon_new_for_string (device_icon, NULL);
+    }
+
+  return gicon;
+}
+
 
 static void
 menu_add_device (GtkMenu  *menu,
@@ -397,7 +433,7 @@ menu_add_device (GtkMenu  *menu,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* Process the data */
-  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  device_gicons = get_device_icon (kind, state, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
 
@@ -409,7 +445,7 @@ menu_add_device (GtkMenu  *menu,
   item = gtk_image_menu_item_new ();
 
   grid = gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
   gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
   details_label = gtk_label_new (details);
   gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
@@ -496,7 +532,7 @@ build_menu (IndicatorPower *self)
     gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
 
     /* preferences */
-    item = gtk_image_menu_item_new_with_mnemonic (_("Power Settings..."));
+    item = gtk_image_menu_item_new_with_label (_("Power Settings..."));
     image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     g_signal_connect (G_OBJECT (item), "activate",
@@ -533,6 +569,7 @@ get_primary_device (GVariant *devices)
 
   for (i = 0; i < n_devices; i++)
     {
+      time = 0;
       device = g_variant_get_child_value (devices, i);
       g_variant_get (device,
                      "(susdut)",
@@ -561,6 +598,10 @@ get_primary_device (GVariant *devices)
       else if (state == UP_DEVICE_STATE_CHARGING)
         {
           charging = TRUE;
+          if (time == 0) /* Battery broken */
+            {
+              primary_device_charging = device;
+            }
           if (time > max_charging_time)
             {
               max_charging_time = time;
@@ -618,7 +659,7 @@ put_primary_device (IndicatorPower *self,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* set icon */
-  device_gicons = g_icon_new_for_string (device_icon, NULL);
+  device_gicons = get_device_icon (kind, state, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -661,6 +702,7 @@ get_devices_cb (GObject      *source_object,
       return;
     }
   priv->devices = g_variant_get_child_value (devices_container, 0);
+  g_variant_unref (devices_container);
 
   priv->device = get_primary_device (priv->devices);
   if (priv->device == NULL)
@@ -742,6 +784,28 @@ service_proxy_cb (GObject      *object,
 }
 
 static void
+gsd_appeared_callback (GDBusConnection *connection,
+                       const gchar     *name,
+                       const gchar     *name_owner,
+                       gpointer         user_data)
+{
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+  IndicatorPowerPrivate *priv = self->priv;
+
+  priv->proxy_cancel = g_cancellable_new ();
+
+  g_dbus_proxy_new (connection,
+                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                    NULL,
+                    name,
+                    POWER_DBUS_PATH,
+                    POWER_DBUS_INTERFACE,
+                    priv->proxy_cancel,
+                    service_proxy_cb,
+                    self);
+}
+
+static void
 indicator_power_init (IndicatorPower *self)
 {
   IndicatorPowerPrivate *priv;
@@ -755,20 +819,17 @@ indicator_power_init (IndicatorPower *self)
   priv->menu = NULL;
   priv->accessible_desc = NULL;
 
-  priv->proxy_cancel = g_cancellable_new();
 
-  g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
-                            G_DBUS_PROXY_FLAGS_NONE,
-                            NULL,
-                            DBUS_SERVICE,
-                            POWER_DBUS_PATH,
-                            POWER_DBUS_INTERFACE,
-                            priv->proxy_cancel,
-                            service_proxy_cb,
-                            self);
+  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                       DBUS_SERVICE,
+                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                       gsd_appeared_callback,
+                                       NULL,
+                                       self,
+                                       NULL);
 
   /* GSettings */
-  priv->settings = g_settings_new ("org.ubuntu.indicator-power");
+  priv->settings = g_settings_new ("com.canonical.indicator.power");
 }
 
 static void
@@ -798,6 +859,7 @@ get_label (IndicatorObject *io)
     {
       /* Create the label if it doesn't exist already */
       priv->label = GTK_LABEL (gtk_label_new (""));
+      gtk_widget_set_visible (GTK_WIDGET (priv->label), FALSE);
     }
 
   return priv->label;
