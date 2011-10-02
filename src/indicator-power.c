@@ -427,10 +427,15 @@ menu_add_device (GtkMenu  *menu,
                  &state,
                  &time);
 
-  if (kind == UP_DEVICE_KIND_LINE_POWER)
+  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
+  /* Try to fix the case when we get a empty battery bay as a real battery */
+  if (state == UP_DEVICE_STATE_UNKNOWN &&
+      percentage == 0)
     return;
 
-  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+  if (kind == UP_DEVICE_KIND_LINE_POWER)
+    return;
 
   /* Process the data */
   device_gicons = get_device_icon (kind, state, device_icon);
@@ -581,6 +586,11 @@ get_primary_device (GVariant *devices)
                      &time);
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
+      /* Try to fix the case when we get a empty battery bay as a real battery */
+      if (state == UP_DEVICE_STATE_UNKNOWN &&
+          percentage == 0)
+        continue;
 
       /* not battery */
       if (kind != UP_DEVICE_KIND_BATTERY)
