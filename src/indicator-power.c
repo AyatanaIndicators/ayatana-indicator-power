@@ -368,7 +368,7 @@ get_device_icon (UpDeviceKind kind,
   GIcon *gicon;
 
   if (kind == UP_DEVICE_KIND_BATTERY &&
-      state == UP_DEVICE_STATE_CHARGING)
+      (state == UP_DEVICE_STATE_CHARGING || state == UP_DEVICE_STATE_FULLY_CHARGED))
     {
       GString *filename;
       gchar **iconnames;
@@ -376,9 +376,19 @@ get_device_icon (UpDeviceKind kind,
 
       kind_str = up_device_kind_to_string (kind);
       filename = g_string_new (NULL);
-      g_string_append_printf (filename, "battery-caution-charging-symbolic;");
-      g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
-      g_string_append_printf (filename, "battery-caution-charging;");
+
+      if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          g_string_append_printf (filename, "battery-caution-charging-symbolic;");
+          g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
+          g_string_append_printf (filename, "battery-caution-charging;");
+        }
+      else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+        {
+          g_string_append_printf (filename, "battery-full-charging-symbolic;");
+          g_string_append_printf (filename, "gpm-%s-100-charging;", kind_str);
+          g_string_append_printf (filename, "battery-full-charging;");
+        }
 
       iconnames = g_strsplit (filename->str, ";", -1);
       gicon = g_themed_icon_new_from_names (iconnames, -1);
