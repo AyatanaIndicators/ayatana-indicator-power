@@ -429,11 +429,6 @@ menu_add_device (GtkMenu  *menu,
 
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
-  /* Try to fix the case when we get a empty battery bay as a real battery */
-  if (state == UP_DEVICE_STATE_UNKNOWN &&
-      percentage == 0)
-    return;
-
   if (kind == UP_DEVICE_KIND_LINE_POWER)
     return;
 
