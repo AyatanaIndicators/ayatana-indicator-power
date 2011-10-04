@@ -361,44 +361,73 @@ set_accessible_desc (IndicatorPower *self,
 }
 
 static GIcon*
-get_device_icon (UpDeviceKind kind,
-                 UpDeviceState state,
-                 gchar *device_icon)
+build_battery_icon (UpDeviceState  state,
+                    gchar         *suffix_str)
 {
   GIcon *gicon;
 
-  if (kind == UP_DEVICE_KIND_BATTERY &&
-      (state == UP_DEVICE_STATE_CHARGING || state == UP_DEVICE_STATE_FULLY_CHARGED))
+  GString *filename;
+  gchar **iconnames;
+
+  filename = g_string_new (NULL);
+
+  if (state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
-      GString *filename;
-      gchar **iconnames;
-      const gchar *kind_str;
-
-      kind_str = up_device_kind_to_string (kind);
-      filename = g_string_new (NULL);
-
-      if (state == UP_DEVICE_STATE_CHARGING)
-        {
-          g_string_append_printf (filename, "battery-caution-charging-symbolic;");
-          g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
-          g_string_append_printf (filename, "battery-caution-charging;");
-        }
-      else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
-        {
-          g_string_append_printf (filename, "battery-full-charging-symbolic;");
-          g_string_append_printf (filename, "gpm-%s-100-charging;", kind_str);
-          g_string_append_printf (filename, "battery-full-charging;");
-        }
-
-      iconnames = g_strsplit (filename->str, ";", -1);
-      gicon = g_themed_icon_new_from_names (iconnames, -1);
-
-      g_strfreev (iconnames);
-      g_string_free (filename, TRUE);
+      g_string_append (filename, "battery-charged;");
+      g_string_append (filename, "battery-full-charged-symbolic;");
+      g_string_append (filename, "battery-full-charged;");
     }
-  else
+  else if (state == UP_DEVICE_STATE_CHARGING)
     {
-      gicon = g_icon_new_for_string (device_icon, NULL);
+      g_string_append (filename, "battery-000-charging;");
+      g_string_append (filename, "battery-caution-charging-symbolic");
+      g_string_append (filename, "battery-caution-charging");
+    }
+  else if (state == UP_DEVICE_STATE_DISCHARGING)
+    {
+      g_string_append_printf (filename, "battery-%s;", suffix_str);
+      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+    }
+
+  iconnames = g_strsplit (filename->str, ";", -1);
+  gicon = g_themed_icon_new_from_names (iconnames, -1);
+
+  g_strfreev (iconnames);
+  g_string_free (filename, TRUE);
+
+  return gicon;
+}
+
+static GIcon*
+get_device_icon (UpDeviceKind   kind,
+                 UpDeviceState  state,
+                 guint64        time_sec,
+                 gchar         *device_icon)
+{
+  GIcon *gicon;
+
+  gicon = g_icon_new_for_string (device_icon, NULL);
+
+  if (kind == UP_DEVICE_KIND_BATTERY &&
+      (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+       state == UP_DEVICE_STATE_CHARGING ||
+       state == UP_DEVICE_STATE_DISCHARGING))
+    {
+      if (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+          state == UP_DEVICE_STATE_CHARGING)
+        {
+          gicon = build_battery_icon (state, NULL);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          if ((time_sec > 60 * 30) && /* more than 30 minutes left */
+              (g_strrstr (device_icon, "000") ||
+               g_strrstr (device_icon, "020") ||
+               g_strrstr (device_icon, "caution"))) /* the icon is red */
+            {
+              gicon = build_battery_icon (state, "low");
+            }
+        }
     }
 
   return gicon;
@@ -443,7 +472,7 @@ menu_add_device (GtkMenu  *menu,
     return;
 
   /* Process the data */
-  device_gicons = get_device_icon (kind, state, device_icon);
+  device_gicons = get_device_icon (kind, state, time, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
 
@@ -674,7 +703,7 @@ put_primary_device (IndicatorPower *self,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* set icon */
-  device_gicons = get_device_icon (kind, state, device_icon);
+  device_gicons = get_device_icon (kind, state, time, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
