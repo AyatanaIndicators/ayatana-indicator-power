@@ -380,8 +380,8 @@ build_battery_icon (UpDeviceState  state,
   else if (state == UP_DEVICE_STATE_CHARGING)
     {
       g_string_append (filename, "battery-000-charging;");
-      g_string_append (filename, "battery-caution-charging-symbolic");
-      g_string_append (filename, "battery-caution-charging");
+      g_string_append (filename, "battery-caution-charging-symbolic;");
+      g_string_append (filename, "battery-caution-charging;");
     }
   else if (state == UP_DEVICE_STATE_DISCHARGING)
     {
