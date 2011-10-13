@@ -376,17 +376,22 @@ build_battery_icon (UpDeviceState  state,
       g_string_append (filename, "battery-charged;");
       g_string_append (filename, "battery-full-charged-symbolic;");
       g_string_append (filename, "battery-full-charged;");
+      g_string_append (filename, "gpm-battery-charged;");
+      g_string_append (filename, "gpm-battery-100-charging;");
     }
   else if (state == UP_DEVICE_STATE_CHARGING)
     {
       g_string_append (filename, "battery-000-charging;");
       g_string_append (filename, "battery-caution-charging-symbolic;");
       g_string_append (filename, "battery-caution-charging;");
+      g_string_append (filename, "gpm-battery-000-charging;");
     }
   else if (state == UP_DEVICE_STATE_DISCHARGING)
     {
       g_string_append_printf (filename, "battery-%s;", suffix_str);
       g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+      g_string_append (filename, "battery-040;");
+      g_string_append (filename, "gpm-battery-040;");
     }
 
   iconnames = g_strsplit (filename->str, ";", -1);
