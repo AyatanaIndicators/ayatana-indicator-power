@@ -360,6 +360,20 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
+static const gchar *
+get_icon_percentage_for_status (const gchar *status)
+{
+
+  if (g_strcmp0 (status, "caution") == 0)
+    return "000";
+  else if (g_strcmp0 (status, "low") == 0)
+    return "040";
+  else if (g_strcmp0 (status, "good") == 0)
+    return "080";
+  else
+    return "100";
+}
+
 static GIcon*
 build_battery_icon (UpDeviceState  state,
                     gchar         *suffix_str)
@@ -388,10 +402,11 @@ build_battery_icon (UpDeviceState  state,
     }
   else if (state == UP_DEVICE_STATE_DISCHARGING)
     {
+      const gchar *percentage = get_icon_percentage_for_status (suffix_str);
       g_string_append_printf (filename, "battery-%s;", suffix_str);
       g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
-      g_string_append (filename, "battery-040;");
-      g_string_append (filename, "gpm-battery-040;");
+      g_string_append_printf (filename, "battery-%s;", percentage);
+      g_string_append_printf (filename, "gpm-battery-%s;", percentage);
     }
 
   iconnames = g_strsplit (filename->str, ";", -1);
