@@ -360,35 +360,94 @@ set_accessible_desc (IndicatorPower *self,
   priv->accessible_desc = g_strdup (desc);
 }
 
+static const gchar *
+get_icon_percentage_for_status (const gchar *status)
+{
+
+  if (g_strcmp0 (status, "caution") == 0)
+    return "000";
+  else if (g_strcmp0 (status, "low") == 0)
+    return "040";
+  else if (g_strcmp0 (status, "good") == 0)
+    return "080";
+  else
+    return "100";
+}
+
 static GIcon*
-get_device_icon (UpDeviceKind kind,
-                 UpDeviceState state,
-                 gchar *device_icon)
+build_battery_icon (UpDeviceState  state,
+                    gchar         *suffix_str)
 {
   GIcon *gicon;
 
-  if (kind == UP_DEVICE_KIND_BATTERY &&
-      state == UP_DEVICE_STATE_CHARGING)
+  GString *filename;
+  gchar **iconnames;
+
+  filename = g_string_new (NULL);
+
+  if (state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
-      GString *filename;
-      gchar **iconnames;
-      const gchar *kind_str;
-
-      kind_str = up_device_kind_to_string (kind);
-      filename = g_string_new (NULL);
-      g_string_append_printf (filename, "battery-caution-charging-symbolic;");
-      g_string_append_printf (filename, "gpm-%s-000-charging;", kind_str);
-      g_string_append_printf (filename, "battery-caution-charging;");
-
-      iconnames = g_strsplit (filename->str, ";", -1);
-      gicon = g_themed_icon_new_from_names (iconnames, -1);
-
-      g_strfreev (iconnames);
-      g_string_free (filename, TRUE);
+      g_string_append (filename, "battery-charged;");
+      g_string_append (filename, "battery-full-charged-symbolic;");
+      g_string_append (filename, "battery-full-charged;");
+      g_string_append (filename, "gpm-battery-charged;");
+      g_string_append (filename, "gpm-battery-100-charging;");
     }
-  else
+  else if (state == UP_DEVICE_STATE_CHARGING)
     {
-      gicon = g_icon_new_for_string (device_icon, NULL);
+      g_string_append (filename, "battery-000-charging;");
+      g_string_append (filename, "battery-caution-charging-symbolic;");
+      g_string_append (filename, "battery-caution-charging;");
+      g_string_append (filename, "gpm-battery-000-charging;");
+    }
+  else if (state == UP_DEVICE_STATE_DISCHARGING)
+    {
+      const gchar *percentage = get_icon_percentage_for_status (suffix_str);
+      g_string_append_printf (filename, "battery-%s;", suffix_str);
+      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+      g_string_append_printf (filename, "battery-%s;", percentage);
+      g_string_append_printf (filename, "gpm-battery-%s;", percentage);
+    }
+
+  iconnames = g_strsplit (filename->str, ";", -1);
+  gicon = g_themed_icon_new_from_names (iconnames, -1);
+
+  g_strfreev (iconnames);
+  g_string_free (filename, TRUE);
+
+  return gicon;
+}
+
+static GIcon*
+get_device_icon (UpDeviceKind   kind,
+                 UpDeviceState  state,
+                 guint64        time_sec,
+                 gchar         *device_icon)
+{
+  GIcon *gicon;
+
+  gicon = g_icon_new_for_string (device_icon, NULL);
+
+  if (kind == UP_DEVICE_KIND_BATTERY &&
+      (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+       state == UP_DEVICE_STATE_CHARGING ||
+       state == UP_DEVICE_STATE_DISCHARGING))
+    {
+      if (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+          state == UP_DEVICE_STATE_CHARGING)
+        {
+          gicon = build_battery_icon (state, NULL);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          if ((time_sec > 60 * 30) && /* more than 30 minutes left */
+              (g_strrstr (device_icon, "000") ||
+               g_strrstr (device_icon, "020") ||
+               g_strrstr (device_icon, "caution"))) /* the icon is red */
+            {
+              gicon = build_battery_icon (state, "low");
+            }
+        }
     }
 
   return gicon;
@@ -427,13 +486,13 @@ menu_add_device (GtkMenu  *menu,
                  &state,
                  &time);
 
+  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+
   if (kind == UP_DEVICE_KIND_LINE_POWER)
     return;
 
-  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
-
   /* Process the data */
-  device_gicons = get_device_icon (kind, state, device_icon);
+  device_gicons = get_device_icon (kind, state, time, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
 
@@ -582,6 +641,11 @@ get_primary_device (GVariant *devices)
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
+      /* Try to fix the case when we get a empty battery bay as a real battery */
+      if (state == UP_DEVICE_STATE_UNKNOWN &&
+          percentage == 0)
+        continue;
+
       /* not battery */
       if (kind != UP_DEVICE_KIND_BATTERY)
         continue;
@@ -659,7 +723,7 @@ put_primary_device (IndicatorPower *self,
   g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
   /* set icon */
-  device_gicons = get_device_icon (kind, state, device_icon);
+  device_gicons = get_device_icon (kind, state, time, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
