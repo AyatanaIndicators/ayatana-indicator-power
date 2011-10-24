@@ -1,3 +1,16 @@
+indicator-power (0.10-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    - Use battery-with-a-plug when the batttery is fully charged but still 
+      on AC (LP: #865342)
+    - Only show a red icon when we have less than 30 minutes of battery 
+      remaining (LP: #743823)
+    - Fix icon creation for UP_DEVICE_STATE_CHARGING state
+    - support for old name icons
+    - Do not hardcode icon percentage when discharging
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 24 Oct 2011 11:07:54 -0400
+
 indicator-power (0.9-0ubuntu2) oneiric; urgency=low
 
   * src/indicator-power.c
