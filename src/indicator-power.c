@@ -97,6 +97,7 @@ static GtkLabel*        get_label                       (IndicatorObject * io);
 static GtkImage*        get_image                       (IndicatorObject * io);
 static GtkMenu*         get_menu                        (IndicatorObject * io);
 static const gchar*     get_accessible_desc             (IndicatorObject * io);
+static const gchar*     get_name_hint                   (IndicatorObject * io);
 
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
@@ -120,6 +121,7 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   io_class->get_image = get_image;
   io_class->get_menu = get_menu;
   io_class->get_accessible_desc = get_accessible_desc;
+  io_class->get_name_hint = get_name_hint;
 
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
@@ -965,4 +967,10 @@ get_accessible_desc (IndicatorObject *io)
   IndicatorPowerPrivate *priv = self->priv;
 
   return priv->accessible_desc;
+}
+
+static const gchar *
+get_name_hint (IndicatorObject *io)
+{
+  return PACKAGE_NAME;
 }
