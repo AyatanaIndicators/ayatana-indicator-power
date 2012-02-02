@@ -55,25 +55,12 @@ GType indicator_power_get_type (void);
 INDICATOR_SET_VERSION
 INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
 
-typedef struct _IndicatorPower         IndicatorPower;
-typedef struct _IndicatorPowerClass    IndicatorPowerClass;
-typedef struct _IndicatorPowerPrivate  IndicatorPowerPrivate;
-
-struct _IndicatorPower
-{
-  IndicatorObject parent_instance;
-
-  IndicatorPowerPrivate *priv;
-};
-
-struct _IndicatorPowerClass
-{
+typedef struct {
   IndicatorObjectClass parent_class;
-};
+}
+IndicatorPowerClass;
 
-
-struct _IndicatorPowerPrivate
-{
+typedef struct {
   GtkMenu   *menu;
 
   GtkLabel *label;
@@ -88,7 +75,15 @@ struct _IndicatorPowerPrivate
   GVariant *device;
 
   GSettings *settings;
-};
+}
+IndicatorPowerPrivate;
+
+typedef struct {
+  IndicatorObject parent_instance;
+
+  IndicatorPowerPrivate *priv;
+}
+IndicatorPower;
 
 /* Prototypes */
 static void             indicator_power_dispose         (GObject *object);
@@ -135,7 +130,6 @@ indicator_power_init (IndicatorPower *self)
   /* Init variables */
   priv->menu = NULL;
   priv->accessible_desc = NULL;
-
 
   priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                        DBUS_SERVICE,
