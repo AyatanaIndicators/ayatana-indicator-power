@@ -178,19 +178,10 @@ show_info_cb (GtkMenuItem *item,
 }
 
 static void
-option_toggled_cb (GtkCheckMenuItem *item,
-                   gpointer     user_data)
+option_toggled_cb (GtkCheckMenuItem *item, IndicatorPower * self)
 {
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  gboolean visible;
-
-  visible = gtk_check_menu_item_get_active (item);
-
   gtk_widget_set_visible (GTK_WIDGET (self->label),
-                          visible);
-
-  g_settings_set_boolean (self->settings, "show-time",
-                          visible);
+                          gtk_check_menu_item_get_active(item));
 }
 
 static void
@@ -597,7 +588,6 @@ build_menu (IndicatorPower *self)
   GtkWidget *image;
   GList *children;
   gsize n_devices = 0;
-  gboolean visible;
 
   if (self->menu == NULL)
     self->menu = GTK_MENU (gtk_menu_new ());
@@ -619,10 +609,8 @@ build_menu (IndicatorPower *self)
 
     /* options */
     item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
-    g_signal_connect (G_OBJECT (item), "toggled",
-                      G_CALLBACK (option_toggled_cb), self);
-    visible = g_settings_get_boolean (self->settings, "show-time");
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), visible);
+    g_signal_connect (item, "toggled", G_CALLBACK(option_toggled_cb), self);
+    g_settings_bind (self->settings, "show-time", item, "active", G_SETTINGS_BIND_DEFAULT);
     gtk_menu_shell_append (GTK_MENU_SHELL (self->menu), item);
 
     /* preferences */
