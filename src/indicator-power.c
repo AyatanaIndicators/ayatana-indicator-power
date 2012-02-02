@@ -845,11 +845,7 @@ service_proxy_cb (GObject      *object,
 
   self->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 
-  if (self->proxy_cancel != NULL)
-    {
-      g_object_unref (self->proxy_cancel);
-      self->proxy_cancel = NULL;
-    }
+  g_clear_object (&self->proxy_cancel);
 
   if (error != NULL)
     {
