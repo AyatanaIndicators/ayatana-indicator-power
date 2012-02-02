@@ -352,7 +352,7 @@ set_accessible_desc (IndicatorPower *self,
 {
   IndicatorPowerPrivate *priv = self->priv;
 
-  if (desc == NULL || strlen(desc) == 0)
+  if (desc == NULL || desc[0] == '\0')
     return;
 
   g_free (priv->accessible_desc);
@@ -905,6 +905,10 @@ indicator_power_dispose (GObject *object)
 static void
 indicator_power_finalize (GObject *object)
 {
+  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
+
+  g_free (priv->accessible_desc);
+
   G_OBJECT_CLASS (indicator_power_parent_class)->finalize (object);
 }
 
