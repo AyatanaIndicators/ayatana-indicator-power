@@ -24,7 +24,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 /* GStuff */
-#include <glib.h>
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
