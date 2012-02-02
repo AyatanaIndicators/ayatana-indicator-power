@@ -899,6 +899,10 @@ indicator_power_init (IndicatorPower *self)
 static void
 indicator_power_dispose (GObject *object)
 {
+  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
+
+  g_clear_object (&priv->settings);
+
   G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
 }
 
