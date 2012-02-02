@@ -112,7 +112,8 @@ indicator_power_class_init (IndicatorPowerClass *klass)
 static void
 indicator_power_init (IndicatorPower *self)
 {
-  self->menu = NULL;
+  self->menu = GTK_MENU(gtk_menu_new());
+
   self->accessible_desc = NULL;
 
   self->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
@@ -589,9 +590,7 @@ build_menu (IndicatorPower *self)
   GList *children;
   gsize n_devices = 0;
 
-  if (self->menu == NULL)
-    self->menu = GTK_MENU (gtk_menu_new ());
-
+  /* remove the existing menuitems */
   children = gtk_container_get_children (GTK_CONTAINER (self->menu));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
   g_list_free (children);
