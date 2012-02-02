@@ -161,14 +161,20 @@ indicator_power_finalize (GObject *object)
 ***/
 
 static void
+spawn_command_line_async (const char * command)
+{
+  GError * err = NULL;
+  if (!g_spawn_command_line_async (command, &err))
+      g_warning ("Couldn't execute command \"%s\": %s", command, err->message);
+  g_clear_error (&err);
+}
+
+static void
 show_info_cb (GtkMenuItem *item,
               gpointer     data)
 {
   /*TODO: show the statistics of the specific device*/
-  const gchar *command = "gnome-power-statistics";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
+  spawn_command_line_async ("gnome-power-statistics");
 }
 
 static void
@@ -191,10 +197,7 @@ static void
 show_preferences_cb (GtkMenuItem *item,
                      gpointer     data)
 {
-  const gchar *command = "gnome-control-center power";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
+  spawn_command_line_async ("gnome-control-center power");
 }
 
 static void
