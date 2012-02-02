@@ -88,8 +88,6 @@ struct _IndicatorPowerPrivate
 };
 
 /* Prototypes */
-static void             indicator_power_class_init      (IndicatorPowerClass *klass);
-static void             indicator_power_init            (IndicatorPower *self);
 static void             indicator_power_dispose         (GObject *object);
 static void             indicator_power_finalize        (GObject *object);
 
