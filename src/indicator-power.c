@@ -50,6 +50,11 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
 #define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
 
+GType indicator_power_get_type (void);
+
+INDICATOR_SET_VERSION
+INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
+
 typedef struct _IndicatorPower         IndicatorPower;
 typedef struct _IndicatorPowerClass    IndicatorPowerClass;
 typedef struct _IndicatorPowerPrivate  IndicatorPowerPrivate;
@@ -65,8 +70,6 @@ struct _IndicatorPowerClass
 {
   IndicatorObjectClass parent_class;
 };
-
-GType indicator_power_get_type (void) G_GNUC_CONST;
 
 
 struct _IndicatorPowerPrivate
@@ -100,10 +103,6 @@ static const gchar*     get_name_hint                   (IndicatorObject * io);
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
 
-
-/* Indicator stuff */
-INDICATOR_SET_VERSION
-INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
 
 
 static void
@@ -900,6 +899,16 @@ static void
 indicator_power_dispose (GObject *object)
 {
   IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
+
+  if (priv->devices != NULL) {
+    g_variant_unref (priv->devices);
+    priv->devices = NULL;
+  }
+
+  if (priv->device != NULL) {
+    g_variant_unref (priv->device);
+    priv->device = NULL;
+  }
 
   g_clear_object (&priv->settings);
 
