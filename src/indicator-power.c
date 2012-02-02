@@ -35,6 +35,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
 
+#define ICON_POLICY_KEY "icon-policy"
+
 #define DEFAULT_ICON   "gpm-battery-missing"
 
 #define DBUS_SERVICE                "org.gnome.SettingsDaemon"
@@ -76,6 +78,8 @@ typedef struct {
   GVariant *device;
 
   GSettings *settings;
+
+  gboolean visible;
 }
 IndicatorPower;
 
@@ -88,6 +92,9 @@ static GtkImage*        get_image                       (IndicatorObject * io);
 static GtkMenu*         get_menu                        (IndicatorObject * io);
 static const gchar*     get_accessible_desc             (IndicatorObject * io);
 static const gchar*     get_name_hint                   (IndicatorObject * io);
+
+static void update_visibility                           (IndicatorPower * self);
+static gboolean should_be_visible                       (IndicatorPower * self);
 
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
@@ -116,6 +123,8 @@ indicator_power_init (IndicatorPower *self)
 
   self->accessible_desc = NULL;
 
+  self->visible = FALSE;
+
   self->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                        DBUS_SERVICE,
                                        G_BUS_NAME_WATCHER_FLAGS_NONE,
@@ -125,6 +134,11 @@ indicator_power_init (IndicatorPower *self)
                                        NULL);
 
   self->settings = g_settings_new ("com.canonical.indicator.power");
+  g_signal_connect_swapped (G_OBJECT(self->settings), "changed::" ICON_POLICY_KEY,
+                            G_CALLBACK(update_visibility), self);
+  g_object_set (G_OBJECT(self),
+                INDICATOR_OBJECT_DEFAULT_VISIBILITY, self->visible,
+                NULL);
 }
 
 static void
@@ -645,7 +659,7 @@ get_primary_device (GVariant *devices)
   gsize n_devices;
   guint i;
 
-  n_devices = g_variant_n_children (devices);
+  n_devices = devices ? g_variant_n_children (devices) : 0;
   g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
 
   for (i = 0; i < n_devices; i++)
@@ -780,25 +794,46 @@ get_devices_cb (GObject      *source_object,
   devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (devices_container == NULL)
     {
-      g_printerr ("Error getting devices: %s\n", error->message);
+      g_message ("Couldn't get devices: %s\n", error->message);
       g_error_free (error);
-
-      return;
     }
-  self->devices = g_variant_get_child_value (devices_container, 0);
-  g_variant_unref (devices_container);
-
-  self->device = get_primary_device (self->devices);
-  if (self->device == NULL)
+  else /* update 'devices' */
     {
-      g_printerr ("Error getting primary device");
+      if (self->devices != NULL)
+        g_variant_unref (self->devices);
+      self->devices = g_variant_get_child_value (devices_container, 0);
 
-      return;
+      g_variant_unref (devices_container);
+
+      if (self->device != NULL)
+        g_variant_unref (self->device);
+      self->device = get_primary_device (self->devices);
+
+      if (self->device == NULL)
+        {
+          g_message ("Couldn't find primary device");
+        }
+      else
+        {
+          put_primary_device (self, self->device);
+        }
     }
-
-  put_primary_device (self, self->device);
 
   build_menu (self);
+
+  update_visibility (self);
+}
+
+static void
+update_visibility (IndicatorPower * self)
+{
+  const gboolean visible = should_be_visible (self);
+
+  if (self->visible != visible)
+    {
+      self->visible = visible;
+      indicator_object_set_visible (INDICATOR_OBJECT (self), visible);
+    }
 }
 
 static void
@@ -941,4 +976,72 @@ static const gchar *
 get_name_hint (IndicatorObject *io)
 {
   return PACKAGE_NAME;
+}
+
+/***
+****
+***/
+
+static void
+count_batteries(GVariant *devices, int *total, int *inuse)
+{
+  const int n_devices = devices ? g_variant_n_children (devices) : 0;
+
+  int i;
+  for (i=0; i<n_devices; i++)
+    {
+      GVariant * device = g_variant_get_child_value (devices, i);
+
+      UpDeviceKind kind;
+      g_variant_get_child (device, 1, "u", &kind);
+      if (kind == UP_DEVICE_KIND_BATTERY)
+        {
+          ++*total;
+
+          UpDeviceState state;
+          g_variant_get_child (device, 4, "u", &state);
+          if ((state == UP_DEVICE_STATE_CHARGING) || (state == UP_DEVICE_STATE_DISCHARGING))
+            ++*inuse;
+        }
+    }
+
+    g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
+}
+
+enum {
+  POWER_INDICATOR_ICON_POLICY_PRESENT,
+  POWER_INDICATOR_ICON_POLICY_CHARGE,
+  POWER_INDICATOR_ICON_POLICY_NEVER
+};
+
+static gboolean
+should_be_visible (IndicatorPower * self)
+{
+  gboolean visible = TRUE;
+
+  const int icon_policy = g_settings_get_enum (self->settings, "icon-policy");
+
+  g_debug ("icon_policy is: %d (present==0, charge==1, never==2)", icon_policy);
+
+  if (icon_policy == POWER_INDICATOR_ICON_POLICY_NEVER)
+    {
+      visible = FALSE;
+    }
+    else
+    {
+      int batteries=0, inuse=0;
+      count_batteries (self->devices, &batteries, &inuse);
+
+      if (icon_policy == POWER_INDICATOR_ICON_POLICY_PRESENT)
+        {
+          visible = batteries > 0;
+        }
+      else if (icon_policy == POWER_INDICATOR_ICON_POLICY_CHARGE)
+        {
+          visible = inuse > 0;
+        }
+    }
+
+  g_debug ("should_be_visible: %s", visible?"yes":"no");
+  return visible;
 }
