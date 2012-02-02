@@ -100,10 +100,9 @@ static GtkMenu*         get_menu                        (IndicatorObject * io);
 static const gchar*     get_accessible_desc             (IndicatorObject * io);
 static const gchar*     get_name_hint                   (IndicatorObject * io);
 
+static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
-
-
 
 static void
 indicator_power_class_init (IndicatorPowerClass *klass)
@@ -122,6 +121,66 @@ indicator_power_class_init (IndicatorPowerClass *klass)
 
   g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
 }
+
+static void
+indicator_power_init (IndicatorPower *self)
+{
+  IndicatorPowerPrivate *priv;
+
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                            INDICATOR_POWER_TYPE,
+                                            IndicatorPowerPrivate);
+  priv = self->priv;
+
+  /* Init variables */
+  priv->menu = NULL;
+  priv->accessible_desc = NULL;
+
+
+  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                       DBUS_SERVICE,
+                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                       gsd_appeared_callback,
+                                       NULL,
+                                       self,
+                                       NULL);
+
+  priv->settings = g_settings_new ("com.canonical.indicator.power");
+}
+
+static void
+indicator_power_dispose (GObject *object)
+{
+  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
+
+  if (priv->devices != NULL) {
+    g_variant_unref (priv->devices);
+    priv->devices = NULL;
+  }
+
+  if (priv->device != NULL) {
+    g_variant_unref (priv->device);
+    priv->device = NULL;
+  }
+
+  g_clear_object (&priv->settings);
+
+  G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
+}
+
+static void
+indicator_power_finalize (GObject *object)
+{
+  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
+
+  g_free (priv->accessible_desc);
+
+  G_OBJECT_CLASS (indicator_power_parent_class)->finalize (object);
+}
+
+/***
+****
+***/
 
 static void
 show_info_cb (GtkMenuItem *item,
@@ -866,63 +925,6 @@ gsd_appeared_callback (GDBusConnection *connection,
                     priv->proxy_cancel,
                     service_proxy_cb,
                     self);
-}
-
-static void
-indicator_power_init (IndicatorPower *self)
-{
-  IndicatorPowerPrivate *priv;
-
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_POWER_TYPE,
-                                            IndicatorPowerPrivate);
-  priv = self->priv;
-
-  /* Init variables */
-  priv->menu = NULL;
-  priv->accessible_desc = NULL;
-
-
-  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                       DBUS_SERVICE,
-                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                       gsd_appeared_callback,
-                                       NULL,
-                                       self,
-                                       NULL);
-
-  /* GSettings */
-  priv->settings = g_settings_new ("com.canonical.indicator.power");
-}
-
-static void
-indicator_power_dispose (GObject *object)
-{
-  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
-
-  if (priv->devices != NULL) {
-    g_variant_unref (priv->devices);
-    priv->devices = NULL;
-  }
-
-  if (priv->device != NULL) {
-    g_variant_unref (priv->device);
-    priv->device = NULL;
-  }
-
-  g_clear_object (&priv->settings);
-
-  G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
-}
-
-static void
-indicator_power_finalize (GObject *object)
-{
-  IndicatorPowerPrivate *priv = INDICATOR_POWER(object)->priv;
-
-  g_free (priv->accessible_desc);
-
-  G_OBJECT_CLASS (indicator_power_parent_class)->finalize (object);
 }
 
 
