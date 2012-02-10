@@ -48,6 +48,16 @@ PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION])
 GLIB_GSETTINGS
 
 ###########################
+# gcov coverage reporting
+###########################
+
+m4_include([m4/gcov.m4])
+AC_TDD_GCOV
+AC_SUBST(COVERAGE_CFLAGS)
+AC_SUBST(COVERAGE_CXXFLAGS)
+AC_SUBST(COVERAGE_LDFLAGS)
+
+###########################
 # Check to see if we're local
 ###########################
 
@@ -118,4 +128,5 @@ Power Indicator Configuration:
 
 	Prefix:        $prefix
 	Local Install: $with_localinstall
+	gcov:          $use_gcov
 ])
