@@ -158,6 +158,9 @@ indicator_power_dispose (GObject *object)
     self->device = NULL;
   }
 
+  g_clear_object (&self->proxy);
+  g_clear_object (&self->proxy_cancel);
+
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
