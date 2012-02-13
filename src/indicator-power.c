@@ -78,8 +78,6 @@ typedef struct {
   GVariant *device;
 
   GSettings *settings;
-
-  gboolean visible;
 }
 IndicatorPower;
 
@@ -123,8 +121,6 @@ indicator_power_init (IndicatorPower *self)
 
   self->accessible_desc = NULL;
 
-  self->visible = FALSE;
-
   self->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
                                        DBUS_SERVICE,
                                        G_BUS_NAME_WATCHER_FLAGS_NONE,
@@ -137,7 +133,7 @@ indicator_power_init (IndicatorPower *self)
   g_signal_connect_swapped (self->settings, "changed::" ICON_POLICY_KEY,
                             G_CALLBACK(update_visibility), self);
   g_object_set (G_OBJECT(self),
-                INDICATOR_OBJECT_DEFAULT_VISIBILITY, self->visible,
+                INDICATOR_OBJECT_DEFAULT_VISIBILITY, FALSE,
                 NULL);
 }
 
@@ -827,13 +823,8 @@ get_devices_cb (GObject      *source_object,
 static void
 update_visibility (IndicatorPower * self)
 {
-  const gboolean visible = should_be_visible (self);
-
-  if (self->visible != visible)
-    {
-      self->visible = visible;
-      indicator_object_set_visible (INDICATOR_OBJECT (self), visible);
-    }
+  indicator_object_set_visible (INDICATOR_OBJECT (self),
+                                should_be_visible (self));
 }
 
 static void
