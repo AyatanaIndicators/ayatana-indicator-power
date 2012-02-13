@@ -1019,7 +1019,7 @@ should_be_visible (IndicatorPower * self)
 {
   gboolean visible = TRUE;
 
-  const int icon_policy = g_settings_get_enum (self->settings, "icon-policy");
+  const int icon_policy = g_settings_get_enum (self->settings, ICON_POLICY_KEY);
 
   g_debug ("icon_policy is: %d (present==0, charge==1, never==2)", icon_policy);
 
