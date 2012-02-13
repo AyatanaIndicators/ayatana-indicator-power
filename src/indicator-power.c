@@ -51,6 +51,12 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
 #define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
 
+enum {
+  POWER_INDICATOR_ICON_POLICY_PRESENT,
+  POWER_INDICATOR_ICON_POLICY_CHARGE,
+  POWER_INDICATOR_ICON_POLICY_NEVER
+};
+
 GType indicator_power_get_type (void);
 
 INDICATOR_SET_VERSION
@@ -998,12 +1004,6 @@ count_batteries(GVariant *devices, int *total, int *inuse)
 
     g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
 }
-
-enum {
-  POWER_INDICATOR_ICON_POLICY_PRESENT,
-  POWER_INDICATOR_ICON_POLICY_CHARGE,
-  POWER_INDICATOR_ICON_POLICY_NEVER
-};
 
 static gboolean
 should_be_visible (IndicatorPower * self)
