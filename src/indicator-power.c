@@ -93,8 +93,8 @@ static GtkMenu*         get_menu                        (IndicatorObject * io);
 static const gchar*     get_accessible_desc             (IndicatorObject * io);
 static const gchar*     get_name_hint                   (IndicatorObject * io);
 
-static void update_visibility                           (IndicatorPower * self);
-static gboolean should_be_visible                       (IndicatorPower * self);
+static void             update_visibility               (IndicatorPower * self);
+static gboolean         should_be_visible               (IndicatorPower * self);
 
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
