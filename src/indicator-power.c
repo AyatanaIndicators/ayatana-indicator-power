@@ -134,7 +134,7 @@ indicator_power_init (IndicatorPower *self)
                                        NULL);
 
   self->settings = g_settings_new ("com.canonical.indicator.power");
-  g_signal_connect_swapped (G_OBJECT(self->settings), "changed::" ICON_POLICY_KEY,
+  g_signal_connect_swapped (self->settings, "changed::" ICON_POLICY_KEY,
                             G_CALLBACK(update_visibility), self);
   g_object_set (G_OBJECT(self),
                 INDICATOR_OBJECT_DEFAULT_VISIBILITY, self->visible,
