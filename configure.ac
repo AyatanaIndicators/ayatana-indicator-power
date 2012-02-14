@@ -1,5 +1,5 @@
 AC_INIT([indicator-power],
-        [0.10],
+        [1.90],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])
@@ -46,6 +46,16 @@ PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION])
 # GSETTINGS
 ###########################
 GLIB_GSETTINGS
+
+###########################
+# gcov coverage reporting
+###########################
+
+m4_include([m4/gcov.m4])
+AC_TDD_GCOV
+AC_SUBST(COVERAGE_CFLAGS)
+AC_SUBST(COVERAGE_CXXFLAGS)
+AC_SUBST(COVERAGE_LDFLAGS)
 
 ###########################
 # Check to see if we're local
@@ -105,6 +115,7 @@ AC_DEFINE([GETTEXT_PACKAGE],[PACKAGE_TARNAME],[Define to the gettext package nam
 AC_CONFIG_FILES([
 Makefile
 po/Makefile.in
+data/Makefile
 ])
 AC_OUTPUT
 
@@ -118,4 +129,5 @@ Power Indicator Configuration:
 
 	Prefix:        $prefix
 	Local Install: $with_localinstall
+	gcov:          $use_gcov
 ])
