@@ -85,7 +85,7 @@ struct _IndicatorPower
   GSettings *settings;
 };
 
-GType indicator_power_get_type (void);
+GType indicator_power_get_type (void) G_GNUC_CONST;
 
 INDICATOR_SET_VERSION
 INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
