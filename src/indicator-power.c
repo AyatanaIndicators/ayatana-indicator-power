@@ -44,6 +44,12 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define POWER_DBUS_PATH             DBUS_PATH "/Power"
 #define POWER_DBUS_INTERFACE        "org.gnome.SettingsDaemon.Power"
 
+enum {
+  POWER_INDICATOR_ICON_POLICY_PRESENT,
+  POWER_INDICATOR_ICON_POLICY_CHARGE,
+  POWER_INDICATOR_ICON_POLICY_NEVER
+};
+
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
 #define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
 #define INDICATOR_POWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), INDICATOR_POWER_TYPE, IndicatorPowerClass))
@@ -51,23 +57,16 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
 #define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
 
-enum {
-  POWER_INDICATOR_ICON_POLICY_PRESENT,
-  POWER_INDICATOR_ICON_POLICY_CHARGE,
-  POWER_INDICATOR_ICON_POLICY_NEVER
+typedef struct _IndicatorPowerClass    IndicatorPowerClass;
+typedef struct _IndicatorPower         IndicatorPower;
+
+struct _IndicatorPowerClass
+{
+  IndicatorObjectClass parent_class;
 };
 
-GType indicator_power_get_type (void);
-
-INDICATOR_SET_VERSION
-INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
-
-typedef struct {
-  IndicatorObjectClass parent_class;
-}
-IndicatorPowerClass;
-
-typedef struct {
+struct _IndicatorPower
+{
   IndicatorObject parent_instance;
 
   GtkMenu   *menu;
@@ -84,8 +83,12 @@ typedef struct {
   GVariant *device;
 
   GSettings *settings;
-}
-IndicatorPower;
+};
+
+GType indicator_power_get_type (void);
+
+INDICATOR_SET_VERSION
+INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
 
 /* Prototypes */
 static void             indicator_power_dispose         (GObject *object);
