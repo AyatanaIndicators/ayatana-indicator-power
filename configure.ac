@@ -115,6 +115,7 @@ AC_DEFINE([GETTEXT_PACKAGE],[PACKAGE_TARNAME],[Define to the gettext package nam
 AC_CONFIG_FILES([
 Makefile
 po/Makefile.in
+data/Makefile
 ])
 AC_OUTPUT
 
