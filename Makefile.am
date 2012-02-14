@@ -1,13 +1,8 @@
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = po
-
-gsettings_in_file = data/com.canonical.indicator.power.gschema.xml.in
-gsettings_SCHEMAS = $(gsettings_in_file:.xml.in=.xml)
-
-@INTLTOOL_XML_NOMERGE_RULE@
-
-@GSETTINGS_RULES@
+SUBDIRS = \
+	po \
+	data
 
 ###################
 # Indicator Stuff
@@ -20,12 +15,14 @@ libpower_la_SOURCES = \
 libpower_la_CFLAGS = \
         $(UPOWER_CFLAGS) \
         $(INDICATOR_CFLAGS) \
+		$(COVERAGE_CFLAGS) \
         -Wall -Werror \
         -DG_LOG_DOMAIN=\"Indicator-Power\"
 libpower_la_LIBADD = \
         $(UPOWER_LIBS) \
         $(INDICATOR_LIBS)
 libpower_la_LDFLAGS = \
+		$(COVERAGE_LDFLAGS) \
         -module \
         -avoid-version
 
@@ -33,16 +30,6 @@ libpower_la_LDFLAGS = \
 
 dist_noinst_SCRIPTS = \
 	autogen.sh
-
-dist_noinst_DATA = \
-	data/com.canonical.indicator.power.gschema.xml \
-	$(gsettings_in_file)
-
-CLEANFILES = \
-	$(gsettings_SCHEMAS)
-
-MAINTAINERCLEANFILES = \
-	$(gsettings_SCHEMAS:.xml=.valid)
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-localinstall
 
@@ -73,3 +60,39 @@ dist-hook:
         else \
 			echo Failed to generate AUTHORS: not a branch >&2; \
 	fi
+
+
+# Coverage targets
+
+.PHONY: clean-gcda
+clean-gcda:
+	@echo Removing old coverage results
+	-find -name '*.gcda' -print | xargs -r rm
+
+.PHONY: coverage-html generate-coverage-html clean-coverage-html
+coverage-html: clean-gcda
+	-$(MAKE) $(AM_MAKEFLAGS) -k check
+	$(MAKE) $(AM_MAKEFLAGS) generate-coverage-html
+
+generate-coverage-html:
+	@echo Collecting coverage data
+	$(LCOV) --directory $(top_builddir) --capture --output-file coverage.info --no-checksum --compat-libtool
+	LANG=C $(GENHTML) --prefix $(top_builddir) --output-directory coveragereport --title "Code Coverage" --legend --show-details coverage.info
+
+clean-coverage-html: clean-gcda
+	-$(LCOV) --directory $(top_builddir) -z
+	-rm -rf coverage.info coveragereport
+
+.PHONY: coverage-xml generate-coverage-xml clean-coverage-xml
+coverage-xml: clean-gcda
+	-$(MAKE) $(AM_MAKEFLAGS) -k check
+	$(MAKE) $(AM_MAKEFLAGS) generate-coverage-xml
+
+generate-coverage-xml:
+	@echo Generating coverage XML report
+	$(GCOVR) -x -r $(top_builddir) -o $(top_builddir)/coverage.xml
+
+clean-coverage-xml: clean-gcda
+	-rm -rf $(top_builddir)/coverage.xml
+
+clean-local: clean-coverage-html clean-coverage-xml

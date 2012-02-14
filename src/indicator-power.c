@@ -24,7 +24,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 /* GStuff */
-#include <glib.h>
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
@@ -36,12 +35,20 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
 
+#define ICON_POLICY_KEY "icon-policy"
+
 #define DEFAULT_ICON   "gpm-battery-missing"
 
 #define DBUS_SERVICE                "org.gnome.SettingsDaemon"
 #define DBUS_PATH                   "/org/gnome/SettingsDaemon"
 #define POWER_DBUS_PATH             DBUS_PATH "/Power"
 #define POWER_DBUS_INTERFACE        "org.gnome.SettingsDaemon.Power"
+
+enum {
+  POWER_INDICATOR_ICON_POLICY_PRESENT,
+  POWER_INDICATOR_ICON_POLICY_CHARGE,
+  POWER_INDICATOR_ICON_POLICY_NEVER
+};
 
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
 #define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
@@ -50,27 +57,18 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
 #define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
 
-typedef struct _IndicatorPower         IndicatorPower;
 typedef struct _IndicatorPowerClass    IndicatorPowerClass;
-typedef struct _IndicatorPowerPrivate  IndicatorPowerPrivate;
-
-struct _IndicatorPower
-{
-  IndicatorObject parent_instance;
-
-  IndicatorPowerPrivate *priv;
-};
+typedef struct _IndicatorPower         IndicatorPower;
 
 struct _IndicatorPowerClass
 {
   IndicatorObjectClass parent_class;
 };
 
-GType indicator_power_get_type (void) G_GNUC_CONST;
-
-
-struct _IndicatorPowerPrivate
+struct _IndicatorPower
 {
+  IndicatorObject parent_instance;
+
   GtkMenu   *menu;
 
   GtkLabel *label;
@@ -87,9 +85,12 @@ struct _IndicatorPowerPrivate
   GSettings *settings;
 };
 
+GType indicator_power_get_type (void) G_GNUC_CONST;
+
+INDICATOR_SET_VERSION
+INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
+
 /* Prototypes */
-static void             indicator_power_class_init      (IndicatorPowerClass *klass);
-static void             indicator_power_init            (IndicatorPower *self);
 static void             indicator_power_dispose         (GObject *object);
 static void             indicator_power_finalize        (GObject *object);
 
@@ -97,15 +98,14 @@ static GtkLabel*        get_label                       (IndicatorObject * io);
 static GtkImage*        get_image                       (IndicatorObject * io);
 static GtkMenu*         get_menu                        (IndicatorObject * io);
 static const gchar*     get_accessible_desc             (IndicatorObject * io);
+static const gchar*     get_name_hint                   (IndicatorObject * io);
 
+static void             update_visibility               (IndicatorPower * self);
+static gboolean         should_be_visible               (IndicatorPower * self);
+
+static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
-
-
-/* Indicator stuff */
-INDICATOR_SET_VERSION
-INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
-
 
 static void
 indicator_power_class_init (IndicatorPowerClass *klass)
@@ -120,8 +120,76 @@ indicator_power_class_init (IndicatorPowerClass *klass)
   io_class->get_image = get_image;
   io_class->get_menu = get_menu;
   io_class->get_accessible_desc = get_accessible_desc;
+  io_class->get_name_hint = get_name_hint;
+}
 
-  g_type_class_add_private (klass, sizeof (IndicatorPowerPrivate));
+static void
+indicator_power_init (IndicatorPower *self)
+{
+  self->menu = GTK_MENU(gtk_menu_new());
+
+  self->accessible_desc = NULL;
+
+  self->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                       DBUS_SERVICE,
+                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                       gsd_appeared_callback,
+                                       NULL,
+                                       self,
+                                       NULL);
+
+  self->settings = g_settings_new ("com.canonical.indicator.power");
+  g_signal_connect_swapped (self->settings, "changed::" ICON_POLICY_KEY,
+                            G_CALLBACK(update_visibility), self);
+  g_object_set (G_OBJECT(self),
+                INDICATOR_OBJECT_DEFAULT_VISIBILITY, FALSE,
+                NULL);
+}
+
+static void
+indicator_power_dispose (GObject *object)
+{
+  IndicatorPower *self = INDICATOR_POWER(object);
+
+  if (self->devices != NULL) {
+    g_variant_unref (self->devices);
+    self->devices = NULL;
+  }
+
+  if (self->device != NULL) {
+    g_variant_unref (self->device);
+    self->device = NULL;
+  }
+
+  g_clear_object (&self->proxy);
+  g_clear_object (&self->proxy_cancel);
+
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
+}
+
+static void
+indicator_power_finalize (GObject *object)
+{
+  IndicatorPower *self = INDICATOR_POWER(object);
+
+  g_free (self->accessible_desc);
+
+  G_OBJECT_CLASS (indicator_power_parent_class)->finalize (object);
+}
+
+/***
+****
+***/
+
+static void
+spawn_command_line_async (const char * command)
+{
+  GError * err = NULL;
+  if (!g_spawn_command_line_async (command, &err))
+      g_warning ("Couldn't execute command \"%s\": %s", command, err->message);
+  g_clear_error (&err);
 }
 
 static void
@@ -129,37 +197,21 @@ show_info_cb (GtkMenuItem *item,
               gpointer     data)
 {
   /*TODO: show the statistics of the specific device*/
-  const gchar *command = "gnome-power-statistics";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
+  spawn_command_line_async ("gnome-power-statistics");
 }
 
 static void
-option_toggled_cb (GtkCheckMenuItem *item,
-                   gpointer     user_data)
+option_toggled_cb (GtkCheckMenuItem *item, IndicatorPower * self)
 {
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
-  gboolean visible;
-
-  visible = gtk_check_menu_item_get_active (item);
-
-  gtk_widget_set_visible (GTK_WIDGET (priv->label),
-                          visible);
-
-  g_settings_set_boolean (priv->settings, "show-time",
-                          visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->label),
+                          gtk_check_menu_item_get_active(item));
 }
 
 static void
 show_preferences_cb (GtkMenuItem *item,
                      gpointer     data)
 {
-  const gchar *command = "gnome-control-center power";
-
-  if (g_spawn_command_line_async (command, NULL) == FALSE)
-    g_warning ("Couldn't execute command: %s", command);
+  spawn_command_line_async ("gnome-control-center power");
 }
 
 static void
@@ -350,14 +402,12 @@ static void
 set_accessible_desc (IndicatorPower *self,
                      const gchar    *desc)
 {
-  IndicatorPowerPrivate *priv = self->priv;
-
-  if (desc == NULL || strlen(desc) == 0)
+  if (desc == NULL || desc[0] == '\0')
     return;
 
-  g_free (priv->accessible_desc);
+  g_free (self->accessible_desc);
 
-  priv->accessible_desc = g_strdup (desc);
+  self->accessible_desc = g_strdup (desc);
 }
 
 static const gchar *
@@ -557,38 +607,32 @@ get_greeter_mode (void)
 static void
 build_menu (IndicatorPower *self)
 {
-  IndicatorPowerPrivate *priv = self->priv;
   GtkWidget *item;
   GtkWidget *image;
   GList *children;
   gsize n_devices = 0;
-  gboolean visible;
 
-  if (priv->menu == NULL)
-    priv->menu = GTK_MENU (gtk_menu_new ());
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
+  /* remove the existing menuitems */
+  children = gtk_container_get_children (GTK_CONTAINER (self->menu));
   g_list_foreach (children, (GFunc) gtk_widget_destroy, NULL);
   g_list_free (children);
 
   /* devices */
-  n_devices = menu_add_devices (priv->menu, priv->devices);
+  n_devices = menu_add_devices (self->menu, self->devices);
 
   if (!get_greeter_mode ()) {
     /* only do the separator if we have at least one device */
     if (n_devices != 0)
       {
         item = gtk_separator_menu_item_new ();
-        gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+        gtk_menu_shell_append (GTK_MENU_SHELL (self->menu), item);
       }
 
     /* options */
     item = gtk_check_menu_item_new_with_label (_("Show Time in Menu Bar"));
-    g_signal_connect (G_OBJECT (item), "toggled",
-                      G_CALLBACK (option_toggled_cb), self);
-    visible = g_settings_get_boolean (priv->settings, "show-time");
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), visible);
-    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    g_signal_connect (item, "toggled", G_CALLBACK(option_toggled_cb), self);
+    g_settings_bind (self->settings, "show-time", item, "active", G_SETTINGS_BIND_DEFAULT);
+    gtk_menu_shell_append (GTK_MENU_SHELL (self->menu), item);
 
     /* preferences */
     item = gtk_image_menu_item_new_with_label (_("Power Settings..."));
@@ -596,11 +640,11 @@ build_menu (IndicatorPower *self)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     g_signal_connect (G_OBJECT (item), "activate",
                       G_CALLBACK (show_preferences_cb), NULL);
-    gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (self->menu), item);
   }
 
   /* show the menu */
-  gtk_widget_show_all (GTK_WIDGET (priv->menu));
+  gtk_widget_show_all (GTK_WIDGET (self->menu));
 }
 
 static GVariant *
@@ -623,7 +667,7 @@ get_primary_device (GVariant *devices)
   gsize n_devices;
   guint i;
 
-  n_devices = g_variant_n_children (devices);
+  n_devices = devices ? g_variant_n_children (devices) : 0;
   g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
 
   for (i = 0; i < n_devices; i++)
@@ -697,7 +741,6 @@ static void
 put_primary_device (IndicatorPower *self,
                     GVariant *device)
 {
-  IndicatorPowerPrivate *priv = self->priv;
   UpDeviceKind kind;
   UpDeviceState state;
   GIcon *device_gicons;
@@ -724,10 +767,10 @@ put_primary_device (IndicatorPower *self,
 
   /* set icon */
   device_gicons = get_device_icon (kind, state, time, device_icon);
-  gtk_image_set_from_gicon (priv->status_image,
+  gtk_image_set_from_gicon (self->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show (GTK_WIDGET (priv->status_image));
+  gtk_widget_show (GTK_WIDGET (self->status_image));
 
 
   /* get the device name */
@@ -736,7 +779,7 @@ put_primary_device (IndicatorPower *self,
   /* get the description */
   build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
 
-  gtk_label_set_label (GTK_LABEL (priv->label),
+  gtk_label_set_label (GTK_LABEL (self->label),
                        short_details);
   set_accessible_desc (self, accesible_name);
 
@@ -753,32 +796,47 @@ get_devices_cb (GObject      *source_object,
                 gpointer      user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
   GVariant *devices_container;
   GError *error = NULL;
 
   devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (devices_container == NULL)
     {
-      g_printerr ("Error getting devices: %s\n", error->message);
+      g_message ("Couldn't get devices: %s\n", error->message);
       g_error_free (error);
-
-      return;
     }
-  priv->devices = g_variant_get_child_value (devices_container, 0);
-  g_variant_unref (devices_container);
-
-  priv->device = get_primary_device (priv->devices);
-  if (priv->device == NULL)
+  else /* update 'devices' */
     {
-      g_printerr ("Error getting primary device");
+      if (self->devices != NULL)
+        g_variant_unref (self->devices);
+      self->devices = g_variant_get_child_value (devices_container, 0);
 
-      return;
+      g_variant_unref (devices_container);
+
+      if (self->device != NULL)
+        g_variant_unref (self->device);
+      self->device = get_primary_device (self->devices);
+
+      if (self->device == NULL)
+        {
+          g_message ("Couldn't find primary device");
+        }
+      else
+        {
+          put_primary_device (self, self->device);
+        }
     }
-
-  put_primary_device (self, priv->device);
 
   build_menu (self);
+
+  update_visibility (self);
+}
+
+static void
+update_visibility (IndicatorPower * self)
+{
+  indicator_object_set_visible (INDICATOR_OBJECT (self),
+                                should_be_visible (self));
 }
 
 static void
@@ -789,17 +847,16 @@ receive_signal (GDBusProxy *proxy,
                 gpointer    user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
 
   if (g_strcmp0 (signal_name, "Changed") == 0)
     {
       /* get the new state */
-      g_dbus_proxy_call (priv->proxy,
+      g_dbus_proxy_call (self->proxy,
                          "GetDevices",
                          NULL,
                          G_DBUS_CALL_FLAGS_NONE,
                          -1,
-                         priv->proxy_cancel,
+                         self->proxy_cancel,
                          get_devices_cb,
                          user_data);
     }
@@ -811,16 +868,11 @@ service_proxy_cb (GObject      *object,
                   gpointer      user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
   GError *error = NULL;
 
-  priv->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+  self->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 
-  if (priv->proxy_cancel != NULL)
-    {
-      g_object_unref (priv->proxy_cancel);
-      priv->proxy_cancel = NULL;
-    }
+  g_clear_object (&self->proxy_cancel);
 
   if (error != NULL)
     {
@@ -831,18 +883,18 @@ service_proxy_cb (GObject      *object,
     }
 
   /* we want to change the primary device changes */
-  g_signal_connect (priv->proxy,
+  g_signal_connect (self->proxy,
                     "g-signal",
                     G_CALLBACK (receive_signal),
                     user_data);
 
   /* get the initial state */
-  g_dbus_proxy_call (priv->proxy,
+  g_dbus_proxy_call (self->proxy,
                      "GetDevices",
                      NULL,
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
-                     priv->proxy_cancel,
+                     self->proxy_cancel,
                      get_devices_cb,
                      user_data);
 }
@@ -854,9 +906,8 @@ gsd_appeared_callback (GDBusConnection *connection,
                        gpointer         user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate *priv = self->priv;
 
-  priv->proxy_cancel = g_cancellable_new ();
+  self->proxy_cancel = g_cancellable_new ();
 
   g_dbus_proxy_new (connection,
                     G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
@@ -864,48 +915,9 @@ gsd_appeared_callback (GDBusConnection *connection,
                     name,
                     POWER_DBUS_PATH,
                     POWER_DBUS_INTERFACE,
-                    priv->proxy_cancel,
+                    self->proxy_cancel,
                     service_proxy_cb,
                     self);
-}
-
-static void
-indicator_power_init (IndicatorPower *self)
-{
-  IndicatorPowerPrivate *priv;
-
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_POWER_TYPE,
-                                            IndicatorPowerPrivate);
-  priv = self->priv;
-
-  /* Init variables */
-  priv->menu = NULL;
-  priv->accessible_desc = NULL;
-
-
-  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                       DBUS_SERVICE,
-                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                       gsd_appeared_callback,
-                                       NULL,
-                                       self,
-                                       NULL);
-
-  /* GSettings */
-  priv->settings = g_settings_new ("com.canonical.indicator.power");
-}
-
-static void
-indicator_power_dispose (GObject *object)
-{
-  G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
-}
-
-static void
-indicator_power_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (indicator_power_parent_class)->finalize (object);
 }
 
 
@@ -917,52 +929,116 @@ static GtkLabel *
 get_label (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
-  IndicatorPowerPrivate *priv = self->priv;
 
-  if (priv->label == NULL)
+  if (self->label == NULL)
     {
       /* Create the label if it doesn't exist already */
-      priv->label = GTK_LABEL (gtk_label_new (""));
-      gtk_widget_set_visible (GTK_WIDGET (priv->label), FALSE);
+      self->label = GTK_LABEL (gtk_label_new (""));
+      gtk_widget_set_visible (GTK_WIDGET (self->label), FALSE);
     }
 
-  return priv->label;
+  return self->label;
 }
 
 static GtkImage *
 get_image (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
-  IndicatorPowerPrivate *priv = self->priv;
   GIcon *gicon;
 
-  if (priv->status_image == NULL)
+  if (self->status_image == NULL)
   {
     /* Will create the status icon if it doesn't exist already */
     gicon = g_themed_icon_new (DEFAULT_ICON);
-    priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
+    self->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
   }
 
-  return priv->status_image;
+  return self->status_image;
 }
 
 static GtkMenu *
 get_menu (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
-  IndicatorPowerPrivate *priv = self->priv;
 
   build_menu (self);
 
-  return GTK_MENU (priv->menu);
+  return GTK_MENU (self->menu);
 }
 
 static const gchar *
 get_accessible_desc (IndicatorObject *io)
 {
   IndicatorPower *self = INDICATOR_POWER (io);
-  IndicatorPowerPrivate *priv = self->priv;
 
-  return priv->accessible_desc;
+  return self->accessible_desc;
+}
+
+static const gchar *
+get_name_hint (IndicatorObject *io)
+{
+  return PACKAGE_NAME;
+}
+
+/***
+****
+***/
+
+static void
+count_batteries(GVariant *devices, int *total, int *inuse)
+{
+  const int n_devices = devices ? g_variant_n_children (devices) : 0;
+
+  int i;
+  for (i=0; i<n_devices; i++)
+    {
+      GVariant * device = g_variant_get_child_value (devices, i);
+
+      UpDeviceKind kind;
+      g_variant_get_child (device, 1, "u", &kind);
+      if (kind == UP_DEVICE_KIND_BATTERY)
+        {
+          ++*total;
+
+          UpDeviceState state;
+          g_variant_get_child (device, 4, "u", &state);
+          if ((state == UP_DEVICE_STATE_CHARGING) || (state == UP_DEVICE_STATE_DISCHARGING))
+            ++*inuse;
+        }
+    }
+
+    g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
+}
+
+static gboolean
+should_be_visible (IndicatorPower * self)
+{
+  gboolean visible = TRUE;
+
+  const int icon_policy = g_settings_get_enum (self->settings, ICON_POLICY_KEY);
+
+  g_debug ("icon_policy is: %d (present==0, charge==1, never==2)", icon_policy);
+
+  if (icon_policy == POWER_INDICATOR_ICON_POLICY_NEVER)
+    {
+      visible = FALSE;
+    }
+    else
+    {
+      int batteries=0, inuse=0;
+      count_batteries (self->devices, &batteries, &inuse);
+
+      if (icon_policy == POWER_INDICATOR_ICON_POLICY_PRESENT)
+        {
+          visible = batteries > 0;
+        }
+      else if (icon_policy == POWER_INDICATOR_ICON_POLICY_CHARGE)
+        {
+          visible = inuse > 0;
+        }
+    }
+
+  g_debug ("should_be_visible: %s", visible?"yes":"no");
+  return visible;
 }
