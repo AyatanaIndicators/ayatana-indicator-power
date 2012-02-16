@@ -840,26 +840,22 @@ update_visibility (IndicatorPower * self)
 }
 
 static void
-receive_signal (GDBusProxy *proxy,
-                gchar      *sender_name,
-                gchar      *signal_name,
-                GVariant   *parameters,
-                gpointer    user_data)
+receive_properties_changed (GDBusProxy *proxy                  G_GNUC_UNUSED,
+                            GVariant   *changed_properties     G_GNUC_UNUSED,
+                            GStrv       invalidated_properties G_GNUC_UNUSED,
+                            gpointer    user_data)
 {
   IndicatorPower *self = INDICATOR_POWER (user_data);
 
-  if (g_strcmp0 (signal_name, "Changed") == 0)
-    {
-      /* get the new state */
-      g_dbus_proxy_call (self->proxy,
-                         "GetDevices",
-                         NULL,
-                         G_DBUS_CALL_FLAGS_NONE,
-                         -1,
-                         self->proxy_cancel,
-                         get_devices_cb,
-                         user_data);
-    }
+  /* it's time to refresh our device list */
+  g_dbus_proxy_call (self->proxy,
+                     "GetDevices",
+                     NULL,
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     self->proxy_cancel,
+                     get_devices_cb,
+                     user_data);
 }
 
 static void
@@ -884,8 +880,8 @@ service_proxy_cb (GObject      *object,
 
   /* we want to change the primary device changes */
   g_signal_connect (self->proxy,
-                    "g-signal",
-                    G_CALLBACK (receive_signal),
+                    "g-properties-changed",
+                    G_CALLBACK (receive_properties_changed),
                     user_data);
 
   /* get the initial state */
