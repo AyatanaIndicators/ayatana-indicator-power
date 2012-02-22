@@ -402,12 +402,23 @@ static void
 set_accessible_desc (IndicatorPower *self,
                      const gchar    *desc)
 {
-  if (desc == NULL || desc[0] == '\0')
-    return;
+  if (desc && *desc)
+  {
+    /* update our copy of the string */
+      char * old_desc = self->accessible_desc;
+    self->accessible_desc = g_strdup (desc);
+    g_free (old_desc);
 
-  g_free (self->accessible_desc);
-
-  self->accessible_desc = g_strdup (desc);
+    /* have the entries use our string */
+    GList * l;
+    GList * entries = indicator_object_get_entries(INDICATOR_OBJECT(self));
+    for (l=entries; l!=NULL; l=l->next) {
+      IndicatorObjectEntry * entry = l->data;
+      entry->accessible_desc = self->accessible_desc;
+      g_signal_emit (self, INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE_ID, 0, entry);
+    }
+    g_list_free (entries);
+  }
 }
 
 static const gchar *
