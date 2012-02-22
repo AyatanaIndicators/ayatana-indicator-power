@@ -405,7 +405,7 @@ set_accessible_desc (IndicatorPower *self,
   if (desc && *desc)
   {
     /* update our copy of the string */
-      char * old_desc = self->accessible_desc;
+    char * old_desc = self->accessible_desc;
     self->accessible_desc = g_strdup (desc);
     g_free (old_desc);
 
