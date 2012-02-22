@@ -329,7 +329,7 @@ build_device_time_details (const gchar    *device_name,
                            gdouble         percentage,
                            gchar         **short_details,
                            gchar         **details,
-                           gchar         **accesible_name)
+                           gchar         **accessible_name)
 {
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
@@ -343,8 +343,8 @@ build_device_time_details (const gchar    *device_name,
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accesible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
-                                             device_name, detailed_timestring, percentage);
+          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
+                                              device_name, detailed_timestring, percentage);
           *details = g_strdup_printf (_("%s (%s to charge)"),
                                       device_name, short_timestring);
           *short_details = g_strdup_printf ("(%s)", short_timestring);
@@ -355,14 +355,14 @@ build_device_time_details (const gchar    *device_name,
 
           if (time > 43200) /* 12 hours */
             {
-              *accesible_name = g_strdup_printf (_("%s"), device_name);
+              *accessible_name = g_strdup_printf (_("%s"), device_name);
               *details = g_strdup_printf (_("%s"), device_name);
             }
           else
             {
               /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-              *accesible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
-                                                 device_name, detailed_timestring, percentage);
+              *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
+                                                  device_name, detailed_timestring, percentage);
               *details = g_strdup_printf (_("%s (%s left)"),
                                           device_name, short_timestring);
             }
@@ -376,7 +376,7 @@ build_device_time_details (const gchar    *device_name,
       if (state == UP_DEVICE_STATE_FULLY_CHARGED)
         {
           *details = g_strdup_printf (_("%s (charged)"), device_name);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup ("");
         }
       else if (percentage > 0)
@@ -385,14 +385,14 @@ build_device_time_details (const gchar    *device_name,
            * used when we don't have a time value */
           *details = g_strdup_printf (_("%s (%.0lf%%)"),
                                       device_name, percentage);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup_printf (_("(%.0lf%%)"),
                                             percentage);
         }
       else
         {
           *details = g_strdup_printf (_("%s (not present)"), device_name);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup (_("(not present)"));
         }
     }
@@ -533,7 +533,7 @@ menu_add_device (GtkMenu  *menu,
   const gchar *device_name;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  gchar *accesible_name = NULL;
+  gchar *accessible_name = NULL;
 
   if (device == NULL)
     return;
@@ -559,7 +559,7 @@ menu_add_device (GtkMenu  *menu,
 
   device_name = device_kind_to_localised_string (kind);
 
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
@@ -579,7 +579,7 @@ menu_add_device (GtkMenu  *menu,
 
   g_free (short_details);
   g_free (details);
-  g_free (accesible_name);
+  g_free (accessible_name);
   g_free (device_icon);
   g_free (object_path);
 }
@@ -757,7 +757,7 @@ put_primary_device (IndicatorPower *self,
   GIcon *device_gicons;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  gchar *accesible_name = NULL;
+  gchar *accessible_name = NULL;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
@@ -788,15 +788,15 @@ put_primary_device (IndicatorPower *self,
   device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
 
   gtk_label_set_label (GTK_LABEL (self->label),
                        short_details);
-  set_accessible_desc (self, accesible_name);
+  set_accessible_desc (self, accessible_name);
 
   g_free (short_details);
   g_free (details);
-  g_free (accesible_name);
+  g_free (accessible_name);
   g_free (device_icon);
   g_free (object_path);
 }
