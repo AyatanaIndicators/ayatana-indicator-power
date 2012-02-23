@@ -1,10 +1,10 @@
-indicator-power (1.91-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-power (1.91-0ubuntu1~ppa1) precise; urgency=low
 
   * New upstream release.
     * Fix for the icon not changing when state changes (LP: #933466)
     * Fix accessible descriptions (LP: #891932)
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 23 Feb 2012 00:32:33 -0600
+ -- Ted Gould <ted@ubuntu.com>  Thu, 23 Feb 2012 00:35:31 -0600
 
 indicator-power (1.90-0ubuntu2) precise; urgency=low
 
