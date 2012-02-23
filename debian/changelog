@@ -1,4 +1,4 @@
-indicator-power (1.91-0ubuntu1~ppa1) precise; urgency=low
+indicator-power (1.91-0ubuntu1) precise; urgency=low
 
   * New upstream release.
     * Fix for the icon not changing when state changes (LP: #933466)
