@@ -103,6 +103,8 @@ static const gchar*     get_name_hint                   (IndicatorObject * io);
 static void             update_visibility               (IndicatorPower * self);
 static gboolean         should_be_visible               (IndicatorPower * self);
 
+static void             on_entry_added                  (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data);
+
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
@@ -144,6 +146,9 @@ indicator_power_init (IndicatorPower *self)
   g_object_set (G_OBJECT(self),
                 INDICATOR_OBJECT_DEFAULT_VISIBILITY, FALSE,
                 NULL);
+
+  g_signal_connect (INDICATOR_OBJECT(self), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,
+                    G_CALLBACK(on_entry_added), NULL);
 }
 
 static void
@@ -329,7 +334,7 @@ build_device_time_details (const gchar    *device_name,
                            gdouble         percentage,
                            gchar         **short_details,
                            gchar         **details,
-                           gchar         **accesible_name)
+                           gchar         **accessible_name)
 {
   gchar *short_timestring = NULL;
   gchar *detailed_timestring = NULL;
@@ -343,8 +348,8 @@ build_device_time_details (const gchar    *device_name,
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accesible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
-                                             device_name, detailed_timestring, percentage);
+          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
+                                              device_name, detailed_timestring, percentage);
           *details = g_strdup_printf (_("%s (%s to charge)"),
                                       device_name, short_timestring);
           *short_details = g_strdup_printf ("(%s)", short_timestring);
@@ -355,14 +360,14 @@ build_device_time_details (const gchar    *device_name,
 
           if (time > 43200) /* 12 hours */
             {
-              *accesible_name = g_strdup_printf (_("%s"), device_name);
+              *accessible_name = g_strdup_printf (_("%s"), device_name);
               *details = g_strdup_printf (_("%s"), device_name);
             }
           else
             {
               /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-              *accesible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
-                                                 device_name, detailed_timestring, percentage);
+              *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
+                                                  device_name, detailed_timestring, percentage);
               *details = g_strdup_printf (_("%s (%s left)"),
                                           device_name, short_timestring);
             }
@@ -376,7 +381,7 @@ build_device_time_details (const gchar    *device_name,
       if (state == UP_DEVICE_STATE_FULLY_CHARGED)
         {
           *details = g_strdup_printf (_("%s (charged)"), device_name);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup ("");
         }
       else if (percentage > 0)
@@ -385,29 +390,62 @@ build_device_time_details (const gchar    *device_name,
            * used when we don't have a time value */
           *details = g_strdup_printf (_("%s (%.0lf%%)"),
                                       device_name, percentage);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup_printf (_("(%.0lf%%)"),
                                             percentage);
         }
       else
         {
           *details = g_strdup_printf (_("%s (not present)"), device_name);
-          *accesible_name = g_strdup (*details);
+          *accessible_name = g_strdup (*details);
           *short_details = g_strdup (_("(not present)"));
         }
     }
 }
 
+/* ensure that the entry is using self's accessible description */
 static void
-set_accessible_desc (IndicatorPower *self,
-                     const gchar    *desc)
+refresh_entry_accessible_desc (IndicatorPower * self, IndicatorObjectEntry * entry)
 {
-  if (desc == NULL || desc[0] == '\0')
-    return;
+  const char * newval = self->accessible_desc;
 
-  g_free (self->accessible_desc);
+  if (entry->accessible_desc != newval)
+  {
+    g_debug ("%s: setting entry %p accessible description to '%s'", G_STRFUNC, entry, newval);
+    entry->accessible_desc = newval;
+    g_signal_emit (self, INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE_ID, 0, entry);
+  }
+}
 
-  self->accessible_desc = g_strdup (desc);
+static void
+on_entry_added (IndicatorObject       * io,
+                IndicatorObjectEntry  * entry,
+                gpointer                user_data G_GNUC_UNUSED)
+{
+  refresh_entry_accessible_desc (INDICATOR_POWER(io), entry);
+}
+
+static void
+set_accessible_desc (IndicatorPower *self, const gchar *desc)
+{
+  g_debug ("%s: setting accessible description to '%s'", G_STRFUNC, desc);
+
+  if (desc && *desc)
+  {
+    /* update our copy of the string */
+    char * oldval = self->accessible_desc;
+    self->accessible_desc = g_strdup (desc);
+
+    /* ensure that the entries are using self's accessible description */
+    GList * l;
+    GList * entries = indicator_object_get_entries(INDICATOR_OBJECT(self));
+    for (l=entries; l!=NULL; l=l->next)
+      refresh_entry_accessible_desc (self, l->data);
+
+    /* cleanup */
+    g_list_free (entries);
+    g_free (oldval);
+  }
 }
 
 static const gchar *
@@ -522,7 +560,7 @@ menu_add_device (GtkMenu  *menu,
   const gchar *device_name;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  gchar *accesible_name = NULL;
+  gchar *accessible_name = NULL;
 
   if (device == NULL)
     return;
@@ -548,7 +586,7 @@ menu_add_device (GtkMenu  *menu,
 
   device_name = device_kind_to_localised_string (kind);
 
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
@@ -568,7 +606,7 @@ menu_add_device (GtkMenu  *menu,
 
   g_free (short_details);
   g_free (details);
-  g_free (accesible_name);
+  g_free (accessible_name);
   g_free (device_icon);
   g_free (object_path);
 }
@@ -746,7 +784,7 @@ put_primary_device (IndicatorPower *self,
   GIcon *device_gicons;
   gchar *short_details = NULL;
   gchar *details = NULL;
-  gchar *accesible_name = NULL;
+  gchar *accessible_name = NULL;
   gchar *device_icon = NULL;
   gchar *object_path = NULL;
   gdouble percentage;
@@ -777,15 +815,15 @@ put_primary_device (IndicatorPower *self,
   device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accesible_name);
+  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
 
   gtk_label_set_label (GTK_LABEL (self->label),
                        short_details);
-  set_accessible_desc (self, accesible_name);
+  set_accessible_desc (self, accessible_name);
 
   g_free (short_details);
   g_free (details);
-  g_free (accesible_name);
+  g_free (accessible_name);
   g_free (device_icon);
   g_free (object_path);
 }
