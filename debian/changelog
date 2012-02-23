@@ -1,7 +1,15 @@
-indicator-power (1.90-0ubuntu1~ppa1) precise; urgency=low
+indicator-power (1.90-0ubuntu2) precise; urgency=low
+
+  * src/indicator-power.c
+    - cherry picked a fix for the icon not changing when state 
+      changes (LP: #933466)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 17 Feb 2012 10:41:52 -0500
+
+indicator-power (1.90-0ubuntu1) precise; urgency=low
 
   * New upstream release.
-    * Support for hiding of icon and settings for it as well
+    * Support for hiding of icon and settings for it as well (lp: #811769)
     * Adding a name hint
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 14 Feb 2012 16:26:48 -0600
