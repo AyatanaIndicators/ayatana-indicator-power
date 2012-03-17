@@ -1040,6 +1040,8 @@ count_batteries(GVariant *devices, int *total, int *inuse)
           if ((state == UP_DEVICE_STATE_CHARGING) || (state == UP_DEVICE_STATE_DISCHARGING))
             ++*inuse;
         }
+
+      g_variant_unref (device);
     }
 
     g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
