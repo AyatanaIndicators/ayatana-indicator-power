@@ -615,7 +615,6 @@ static gsize
 menu_add_devices (GtkMenu  *menu,
                   GVariant *devices)
 {
-  GVariant *device;
   gsize n_devices;
   guint i;
 
@@ -627,8 +626,9 @@ menu_add_devices (GtkMenu  *menu,
 
   for (i = 0; i < n_devices; i++)
     {
-      device = g_variant_get_child_value (devices, i);
+      GVariant * device = g_variant_get_child_value (devices, i);
       menu_add_device (menu, device);
+      g_variant_unref (device);
     }
 
   return n_devices;
