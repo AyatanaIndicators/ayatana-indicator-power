@@ -512,9 +512,7 @@ get_device_icon (UpDeviceKind   kind,
                  guint64        time_sec,
                  const gchar   *device_icon)
 {
-  GIcon *gicon;
-
-  gicon = g_icon_new_for_string (device_icon, NULL);
+  GIcon *gicon = NULL;
 
   if (kind == UP_DEVICE_KIND_BATTERY &&
       (state == UP_DEVICE_STATE_FULLY_CHARGED ||
@@ -537,6 +535,9 @@ get_device_icon (UpDeviceKind   kind,
             }
         }
     }
+
+  if (gicon == NULL)
+    gicon = g_icon_new_for_string (device_icon, NULL);
 
   return gicon;
 }
