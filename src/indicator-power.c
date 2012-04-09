@@ -595,7 +595,7 @@ menu_add_device (GtkMenu  *menu,
   item = gtk_image_menu_item_new ();
   atk_object = gtk_widget_get_accessible(item);
   if (atk_object != NULL)
-    g_object_set (G_OBJECT(atk_object), "accessible-name", accessible_name, NULL);
+    atk_object_set_name (atk_object, accessible_name);
 
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
