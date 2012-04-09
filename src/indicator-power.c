@@ -585,6 +585,7 @@ menu_add_device (GtkMenu  *menu,
   device_gicons = get_device_icon (kind, state, time, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_clear_object (&device_gicons);
 
   device_name = device_kind_to_localised_string (kind);
 
@@ -811,6 +812,7 @@ put_primary_device (IndicatorPower *self,
   gtk_image_set_from_gicon (self->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_clear_object (&device_gicons);
   gtk_widget_show (GTK_WIDGET (self->status_image));
 
 
