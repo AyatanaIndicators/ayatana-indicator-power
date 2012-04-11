@@ -1,4 +1,4 @@
-indicator-power (1.93-0ubuntu1~ppa1) precise; urgency=low
+indicator-power (1.93-0ubuntu1) precise; urgency=low
 
   * New upstream release.
     * Fix for translatable strings not being extracted for i18n (LP: #957542)
