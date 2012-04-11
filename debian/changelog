@@ -1,4 +1,4 @@
-indicator-power (2.0-0ubuntu1~ppa1) precise; urgency=low
+indicator-power (2.0-0ubuntu1) precise; urgency=low
 
   * New upstream release.
     * Make menu items accessible with Orca Screen reader (LP: #953176)
