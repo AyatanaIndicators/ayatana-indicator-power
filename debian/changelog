@@ -1,3 +1,11 @@
+indicator-power (2.0-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Make menu items accessible with Orca Screen reader (LP: #953176)
+    * Plug memory leaks when updating our icons
+
+ -- Charles Kerr <charles.kerr@canonical.com>  Wed, 11 Apr 2012 10:11:27 -0500
+
 indicator-power (1.93-0ubuntu1) precise; urgency=low
 
   * New upstream release.

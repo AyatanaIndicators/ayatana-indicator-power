@@ -510,11 +510,9 @@ static GIcon*
 get_device_icon (UpDeviceKind   kind,
                  UpDeviceState  state,
                  guint64        time_sec,
-                 gchar         *device_icon)
+                 const gchar   *device_icon)
 {
-  GIcon *gicon;
-
-  gicon = g_icon_new_for_string (device_icon, NULL);
+  GIcon *gicon = NULL;
 
   if (kind == UP_DEVICE_KIND_BATTERY &&
       (state == UP_DEVICE_STATE_FULLY_CHARGED ||
@@ -538,6 +536,9 @@ get_device_icon (UpDeviceKind   kind,
         }
     }
 
+  if (gicon == NULL)
+    gicon = g_icon_new_for_string (device_icon, NULL);
+
   return gicon;
 }
 
@@ -553,20 +554,21 @@ menu_add_device (GtkMenu  *menu,
   GtkWidget *details_label;
   GtkWidget *grid;
   GIcon *device_gicons;
-  gchar *device_icon = NULL;
-  gchar *object_path = NULL;
+  const gchar *device_icon = NULL;
+  const gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
+  AtkObject *atk_object;
 
   if (device == NULL)
     return;
 
   g_variant_get (device,
-                 "(susdut)",
+                 "(&su&sdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -583,6 +585,7 @@ menu_add_device (GtkMenu  *menu,
   device_gicons = get_device_icon (kind, state, time, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_clear_object (&device_gicons);
 
   device_name = device_kind_to_localised_string (kind);
 
@@ -590,6 +593,9 @@ menu_add_device (GtkMenu  *menu,
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
+  atk_object = gtk_widget_get_accessible(item);
+  if (atk_object != NULL)
+    atk_object_set_name (atk_object, accessible_name);
 
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
@@ -607,8 +613,6 @@ menu_add_device (GtkMenu  *menu,
   g_free (short_details);
   g_free (details);
   g_free (accessible_name);
-  g_free (device_icon);
-  g_free (object_path);
 }
 
 static gsize
@@ -808,6 +812,7 @@ put_primary_device (IndicatorPower *self,
   gtk_image_set_from_gicon (self->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_clear_object (&device_gicons);
   gtk_widget_show (GTK_WIDGET (self->status_image));
 
 
