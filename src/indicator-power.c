@@ -510,7 +510,7 @@ static GIcon*
 get_device_icon (UpDeviceKind   kind,
                  UpDeviceState  state,
                  guint64        time_sec,
-                 gchar         *device_icon)
+                 const gchar   *device_icon)
 {
   GIcon *gicon;
 
@@ -553,8 +553,8 @@ menu_add_device (GtkMenu  *menu,
   GtkWidget *details_label;
   GtkWidget *grid;
   GIcon *device_gicons;
-  gchar *device_icon = NULL;
-  gchar *object_path = NULL;
+  const gchar *device_icon = NULL;
+  const gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
@@ -566,7 +566,7 @@ menu_add_device (GtkMenu  *menu,
     return;
 
   g_variant_get (device,
-                 "(susdut)",
+                 "(&su&sdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -607,8 +607,6 @@ menu_add_device (GtkMenu  *menu,
   g_free (short_details);
   g_free (details);
   g_free (accessible_name);
-  g_free (device_icon);
-  g_free (object_path);
 }
 
 static gsize
