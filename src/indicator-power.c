@@ -785,15 +785,15 @@ put_primary_device (IndicatorPower *self,
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
-  gchar *device_icon = NULL;
-  gchar *object_path = NULL;
+  const gchar *device_icon = NULL;
+  const gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
 
   /* set the icon and text */
   g_variant_get (device,
-                 "(susdut)",
+                 "(&su&sdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -825,8 +825,6 @@ put_primary_device (IndicatorPower *self,
   g_free (short_details);
   g_free (details);
   g_free (accessible_name);
-  g_free (device_icon);
-  g_free (object_path);
 }
 
 static void
