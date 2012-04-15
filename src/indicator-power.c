@@ -512,9 +512,7 @@ get_device_icon (UpDeviceKind   kind,
                  guint64        time_sec,
                  const gchar   *device_icon)
 {
-  GIcon *gicon;
-
-  gicon = g_icon_new_for_string (device_icon, NULL);
+  GIcon *gicon = NULL;
 
   if (kind == UP_DEVICE_KIND_BATTERY &&
       (state == UP_DEVICE_STATE_FULLY_CHARGED ||
@@ -537,6 +535,9 @@ get_device_icon (UpDeviceKind   kind,
             }
         }
     }
+
+  if (gicon == NULL)
+    gicon = g_icon_new_for_string (device_icon, NULL);
 
   return gicon;
 }
@@ -561,6 +562,7 @@ menu_add_device (GtkMenu  *menu,
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
+  AtkObject *atk_object;
 
   if (device == NULL)
     return;
@@ -583,6 +585,7 @@ menu_add_device (GtkMenu  *menu,
   device_gicons = get_device_icon (kind, state, time, device_icon);
   icon = gtk_image_new_from_gicon (device_gicons,
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_clear_object (&device_gicons);
 
   device_name = device_kind_to_localised_string (kind);
 
@@ -590,6 +593,9 @@ menu_add_device (GtkMenu  *menu,
 
   /* Create menu item */
   item = gtk_image_menu_item_new ();
+  atk_object = gtk_widget_get_accessible(item);
+  if (atk_object != NULL)
+    atk_object_set_name (atk_object, accessible_name);
 
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
@@ -802,6 +808,7 @@ put_primary_device (IndicatorPower *self,
   gtk_image_set_from_gicon (self->status_image,
                             device_gicons,
                             GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_clear_object (&device_gicons);
   gtk_widget_show (GTK_WIDGET (self->status_image));
 
 

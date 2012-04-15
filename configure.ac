@@ -1,5 +1,5 @@
 AC_INIT([indicator-power],
-        [1.92],
+        [2.0],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])
@@ -53,6 +53,9 @@ GLIB_GSETTINGS
 
 m4_include([m4/gcov.m4])
 AC_TDD_GCOV
+AM_CONDITIONAL([HAVE_GCOV], [test "x$ac_cv_check_gcov" = xyes])
+AM_CONDITIONAL([HAVE_LCOV], [test "x$ac_cv_check_lcov" = xyes])
+AM_CONDITIONAL([HAVE_GCOVR], [test "x$ac_cv_check_gcovr" = xyes])
 AC_SUBST(COVERAGE_CFLAGS)
 AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
