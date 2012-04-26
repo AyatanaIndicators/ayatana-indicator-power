@@ -619,7 +619,6 @@ static gsize
 menu_add_devices (GtkMenu  *menu,
                   GVariant *devices)
 {
-  GVariant *device;
   gsize n_devices;
   guint i;
 
@@ -631,8 +630,9 @@ menu_add_devices (GtkMenu  *menu,
 
   for (i = 0; i < n_devices; i++)
     {
-      device = g_variant_get_child_value (devices, i);
+      GVariant * device = g_variant_get_child_value (devices, i);
       menu_add_device (menu, device);
+      g_variant_unref (device);
     }
 
   return n_devices;
@@ -692,38 +692,34 @@ build_menu (IndicatorPower *self)
 static GVariant *
 get_primary_device (GVariant *devices)
 {
-  UpDeviceKind kind;
-  UpDeviceState state;
-  GVariant *device;
-  GVariant *primary_device_charging = NULL;
-  GVariant *primary_device_discharging = NULL;
-  GVariant *primary_device = NULL;
+  gint primary_device_charging_index = -1;
+  gint primary_device_discharging_index = -1;
+  gint primary_device_index = -1;
   gboolean charging = FALSE;
   gboolean discharging = FALSE;
-  gchar *object_path;
-  gchar *device_icon;
-  gdouble percentage;
-  guint64 time;
   guint64 min_discharging_time = G_MAXUINT64;
   guint64 max_charging_time = 0;
-  gsize n_devices;
   guint i;
 
-  n_devices = devices ? g_variant_n_children (devices) : 0;
+  const gsize n_devices = devices ? g_variant_n_children (devices) : 0;
   g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
 
   for (i = 0; i < n_devices; i++)
     {
-      time = 0;
-      device = g_variant_get_child_value (devices, i);
-      g_variant_get (device,
-                     "(susdut)",
-                     &object_path,
-                     &kind,
-                     &device_icon,
-                     &percentage,
-                     &state,
-                     &time);
+      const gchar *object_path;
+      UpDeviceKind kind;
+      const gchar *device_icon;
+      gdouble percentage;
+      UpDeviceState state;
+      guint64 time = 0;
+
+      g_variant_get_child (devices, i, "(&su&sdut)",
+                           &object_path,
+                           &kind,
+                           &device_icon,
+                           &percentage,
+                           &state,
+                           &time);
 
       g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
 
@@ -742,7 +738,7 @@ get_primary_device (GVariant *devices)
           if (time < min_discharging_time)
             {
               min_discharging_time = time;
-              primary_device_discharging = device;
+              primary_device_discharging_index = i;
             }
         }
       else if (state == UP_DEVICE_STATE_CHARGING)
@@ -750,33 +746,33 @@ get_primary_device (GVariant *devices)
           charging = TRUE;
           if (time == 0) /* Battery broken */
             {
-              primary_device_charging = device;
+              primary_device_charging_index = i;
             }
           if (time > max_charging_time)
             {
               max_charging_time = time;
-              primary_device_charging = device;
+              primary_device_charging_index = i;
             }
         }
       else
         {
-          primary_device = device;
+          primary_device_index = i;
         }
-
-      g_free (device_icon);
-      g_free (object_path);
     }
 
   if (discharging)
     {
-      primary_device = primary_device_discharging;
+      primary_device_index = primary_device_discharging_index;
     }
   else if (charging)
     {
-      primary_device = primary_device_charging;
+      primary_device_index = primary_device_charging_index;
     }
 
-  return primary_device;
+  if (primary_device_index >= 0)
+    return g_variant_get_child_value (devices, primary_device_index);
+
+  return NULL;
 }
 
 static void
@@ -789,15 +785,15 @@ put_primary_device (IndicatorPower *self,
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
-  gchar *device_icon = NULL;
-  gchar *object_path = NULL;
+  const gchar *device_icon = NULL;
+  const gchar *object_path = NULL;
   gdouble percentage;
   guint64 time;
   const gchar *device_name;
 
   /* set the icon and text */
   g_variant_get (device,
-                 "(susdut)",
+                 "(&su&sdut)",
                  &object_path,
                  &kind,
                  &device_icon,
@@ -829,8 +825,6 @@ put_primary_device (IndicatorPower *self,
   g_free (short_details);
   g_free (details);
   g_free (accessible_name);
-  g_free (device_icon);
-  g_free (object_path);
 }
 
 static void
@@ -1045,6 +1039,8 @@ count_batteries(GVariant *devices, int *total, int *inuse)
           if ((state == UP_DEVICE_STATE_CHARGING) || (state == UP_DEVICE_STATE_DISCHARGING))
             ++*inuse;
         }
+
+      g_variant_unref (device);
     }
 
     g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
