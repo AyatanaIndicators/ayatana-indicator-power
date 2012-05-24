@@ -22,6 +22,10 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "device.h"
 #include "indicator-power.h"
 
+/***
+****
+***/
+
 namespace
 {
   void ensure_glib_initialized ()
@@ -40,7 +44,27 @@ namespace
 ****
 ***/
 
-TEST(IndicatorTest, GObjectNew)
+class IndicatorTest : public ::testing::Test
+{
+  protected:
+
+    virtual void SetUp()
+    {
+      ensure_glib_initialized ();
+      g_setenv( "GSETTINGS_SCHEMA_DIR", SCHEMA_DIR, TRUE);
+      g_message ("GSETTINGS_SCHEMA_DIR is %s", g_getenv("GSETTINGS_SCHEMA_DIR"));
+    }
+
+    virtual void TearDown()
+    {
+    }
+};
+
+/***
+****
+***/
+
+TEST_F(IndicatorTest, GObjectNew)
 {
   ensure_glib_initialized ();
 
@@ -49,4 +73,3 @@ TEST(IndicatorTest, GObjectNew)
   ASSERT_TRUE (IS_INDICATOR_POWER(o));
   g_object_unref (o);
 }
-

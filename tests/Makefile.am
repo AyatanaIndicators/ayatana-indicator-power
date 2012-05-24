@@ -1,5 +1,6 @@
 TESTS =
-CLEANFILES =
+CLEANFILES = 
+BUILT_SOURCES =
 check_PROGRAMS =
 
 ###
@@ -34,6 +35,11 @@ TEST_CPPFLAGS = \
         $(INDICATOR_CFLAGS) \
         $(COVERAGE_CFLAGS)
 
+BUILT_SOURCES += gschemas.compiled
+CLEANFILES += gschemas.compiled
+gschemas.compiled: Makefile
+	@glib-compile-schemas --targetdir=$(abs_builddir) $(top_builddir)/data
+
 TESTS += test-device
 check_PROGRAMS += test-device
 test_device_SOURCES = test-device.cc
@@ -44,7 +50,7 @@ TESTS += test-indicator
 check_PROGRAMS += test-indicator
 test_indicator_SOURCES = test-indicator.cc
 test_indicator_LDADD = $(TEST_LIBS)
-test_indicator_CPPFLAGS = $(TEST_CPPFLAGS)
+test_indicator_CPPFLAGS = $(TEST_CPPFLAGS) -DSCHEMA_DIR="\"$(top_builddir)/tests/\""
 
 ###
 ###
