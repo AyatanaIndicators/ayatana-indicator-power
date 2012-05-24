@@ -677,7 +677,7 @@ build_menu (IndicatorPower *self)
     gtk_menu_shell_append (GTK_MENU_SHELL (self->menu), item);
 
     /* preferences */
-    item = gtk_image_menu_item_new_with_label (_("Power Settings..."));
+    item = gtk_image_menu_item_new_with_label (_("Power Settings…"));
     image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     g_signal_connect (G_OBJECT (item), "activate",
