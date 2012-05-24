@@ -48,6 +48,96 @@ TEST(DeviceTest, GObjectNew)
   g_object_unref (o);
 }
 
+TEST(DeviceTest, Properties)
+{
+  int i;
+  gdouble d;
+  GObject * o;
+  gchar * str;
+  guint64 u64;
+  const gchar * key;
+  GValue string_value = G_VALUE_INIT;
+  GValue object_value = G_VALUE_INIT;
+
+  ensure_glib_initialized ();
+
+  g_value_init (&string_value, G_TYPE_STRING);
+  g_value_init (&object_value, G_TYPE_OBJECT);
+  g_value_set_string (&string_value, "i am a string");
+
+  o = G_OBJECT (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
+  ASSERT_TRUE (o != NULL);
+  ASSERT_TRUE (INDICATOR_IS_POWER_DEVICE(o));
+
+  /* Test getting & setting a Device's properties.
+   * Also test that setting a property from an unrelated type has no effect. */
+
+  // KIND
+  key = INDICATOR_POWER_DEVICE_KIND;
+  g_object_set (o, key, UP_DEVICE_KIND_BATTERY, NULL);
+  g_object_get (o, key, &i, NULL);
+  ASSERT_EQ (i, UP_DEVICE_KIND_BATTERY);
+  g_object_set_property (o, key, &string_value);
+  g_object_get (o, key, &i, NULL);
+  ASSERT_EQ (i, UP_DEVICE_KIND_BATTERY);
+
+  // STATE
+  key = INDICATOR_POWER_DEVICE_STATE;
+  g_object_set (o, key, UP_DEVICE_STATE_CHARGING, NULL);
+  g_object_get (o, key, &i, NULL);
+  ASSERT_EQ (i, UP_DEVICE_STATE_CHARGING);
+  g_object_set_property (o, key, &string_value);
+  g_object_get (o, key, &i, NULL);
+  ASSERT_EQ (i, UP_DEVICE_STATE_CHARGING);
+
+  // OBJECT_PATH
+  key = INDICATOR_POWER_DEVICE_OBJECT_PATH;
+  g_object_set (o, key, "/object/path", NULL);
+  g_object_get (o, key, &str, NULL);
+  ASSERT_STREQ (str, "/object/path");
+  g_free (str);
+  g_object_set_property (o, key, &object_value);
+  g_object_get (o, key, &str, NULL);
+  ASSERT_STREQ (str, "/object/path");
+  g_free (str);
+
+  // ICON
+  key = INDICATOR_POWER_DEVICE_ICON;
+  g_object_set (o, key, "something", NULL);
+  g_object_get (o, key, &str, NULL);
+  ASSERT_STREQ (str, "something");
+  g_free (str);
+  str = NULL;
+  g_object_set_property (o, key, &object_value);
+  g_object_get (o, key, &str, NULL);
+  ASSERT_STREQ (str, "something");
+  g_free (str);
+  str = NULL;
+
+  // PERCENTAGE
+  key = INDICATOR_POWER_DEVICE_PERCENTAGE;
+  g_object_set (o, key, 50.0, NULL);
+  g_object_get (o, key, &d, NULL);
+  ASSERT_EQ((int)d, 50);
+  g_object_set_property (o, key, &object_value);
+  g_object_get (o, key, &d, NULL);
+  ASSERT_EQ((int)d, 50);
+
+  // TIME
+  key = INDICATOR_POWER_DEVICE_TIME;
+  g_object_set (o, key, 30, NULL);
+  g_object_get (o, key, &u64, NULL);
+  ASSERT_EQ(u64, 30);
+  g_object_set_property (o, key, &object_value);
+  g_object_get (o, key, &u64, NULL);
+  ASSERT_EQ(u64, 30);
+
+  // cleanup
+  g_object_unref (o);
+  g_value_unset (&object_value);
+  g_value_unset (&string_value);
+}
+
 TEST(DeviceTest, New)
 {
   ensure_glib_initialized ();
