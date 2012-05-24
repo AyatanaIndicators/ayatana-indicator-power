@@ -31,9 +31,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* upower */
 #include <libupower-glib/upower.h>
 
-/* Indicator Stuff */
-#include <libindicator/indicator.h>
-#include <libindicator/indicator-object.h>
+#include "indicator-power.h"
 
 #define ICON_POLICY_KEY "icon-policy"
 
@@ -49,43 +47,6 @@ enum {
   POWER_INDICATOR_ICON_POLICY_CHARGE,
   POWER_INDICATOR_ICON_POLICY_NEVER
 };
-
-#define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
-#define INDICATOR_POWER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INDICATOR_POWER_TYPE, IndicatorPower))
-#define INDICATOR_POWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), INDICATOR_POWER_TYPE, IndicatorPowerClass))
-#define IS_INDICATOR_POWER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), INDICATOR_POWER_TYPE))
-#define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
-#define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
-
-typedef struct _IndicatorPowerClass    IndicatorPowerClass;
-typedef struct _IndicatorPower         IndicatorPower;
-
-struct _IndicatorPowerClass
-{
-  IndicatorObjectClass parent_class;
-};
-
-struct _IndicatorPower
-{
-  IndicatorObject parent_instance;
-
-  GtkMenu   *menu;
-
-  GtkLabel *label;
-  GtkImage *status_image;
-  gchar    *accessible_desc;
-
-  GCancellable *proxy_cancel;
-  GDBusProxy   *proxy;
-  guint         watcher_id;
-
-  GVariant *devices;
-  GVariant *device;
-
-  GSettings *settings;
-};
-
-GType indicator_power_get_type (void) G_GNUC_CONST;
 
 INDICATOR_SET_VERSION
 INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
