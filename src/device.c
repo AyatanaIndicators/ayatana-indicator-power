@@ -151,32 +151,26 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
         switch (prop_id)
 	{
 		case PROP_KIND:
-			g_return_if_fail (G_VALUE_HOLDS_INT(value));
 			g_value_set_int (value, priv->kind);
 			break;
 
 		case PROP_STATE:
-			g_return_if_fail (G_VALUE_HOLDS_INT(value));
 			g_value_set_int (value, priv->state);
 			break;
 
 		case PROP_OBJECT_PATH:
-			g_return_if_fail (G_VALUE_HOLDS_STRING(value));
 			g_value_set_string (value, priv->object_path);
 			break;
 
 		case PROP_ICON:
-			g_return_if_fail (G_VALUE_HOLDS_STRING(value));
 			g_value_set_string (value, priv->icon);
 			break;
 
 		case PROP_PERCENTAGE:
-			g_return_if_fail (G_VALUE_HOLDS_DOUBLE(value));
 			g_value_set_double (value, priv->percentage);
 			break;
 
 		case PROP_TIME:
-			g_return_if_fail (G_VALUE_HOLDS_UINT64(value));
 			g_value_set_uint64 (value, priv->time);
 			break;
 
