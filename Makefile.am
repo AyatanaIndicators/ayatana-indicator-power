@@ -1,5 +1,12 @@
 SUBDIRS = po data src
 
+if BUILD_TESTS
+SUBDIRS += tests
+# build src first
+tests: src
+endif
+
+
 ############################################################
 
 dist_noinst_SCRIPTS = \
