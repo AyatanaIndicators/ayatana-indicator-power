@@ -45,7 +45,7 @@ TEST(DeviceTest, GObjectNew)
   GObject * o = G_OBJECT (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   ASSERT_TRUE (o != NULL);
   ASSERT_TRUE (INDICATOR_IS_POWER_DEVICE(o));
-  g_clear_pointer (&o, g_object_unref);
+  g_object_unref (o);
 }
 
 TEST(DeviceTest, New)
@@ -68,7 +68,7 @@ TEST(DeviceTest, New)
   ASSERT_EQ (indicator_power_device_get_time(device), 30);
 
   /* cleanup */
-  g_clear_pointer (&device, g_object_unref);
+  g_object_unref (device);
 }
 
 TEST(DeviceTest, NewFromVariant)
@@ -94,6 +94,6 @@ TEST(DeviceTest, NewFromVariant)
   ASSERT_EQ (indicator_power_device_get_time(device), 30);
 
   /* cleanup */
-  g_clear_pointer (&device, g_object_unref);
-  g_clear_pointer (&variant, g_variant_unref);
+  g_object_unref (device);
+  g_variant_unref (variant);
 }

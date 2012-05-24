@@ -47,6 +47,6 @@ TEST(IndicatorTest, GObjectNew)
   GObject * o = G_OBJECT (g_object_new (INDICATOR_POWER_TYPE, NULL));
   ASSERT_TRUE (o != NULL);
   ASSERT_TRUE (IS_INDICATOR_POWER(o));
-  g_clear_pointer (&o, g_object_unref);
+  g_object_unref (o);
 }
 
