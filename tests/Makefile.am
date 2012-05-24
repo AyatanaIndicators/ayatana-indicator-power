@@ -23,7 +23,7 @@ AM_CXXFLAGS = $(GTEST_CXXFLAGS)
 ###
 
 TEST_LIBS = \
-	$(top_builddir)/src/libpower.la \
+	$(top_builddir)/src/.libs/libpower.a \
 	$(INDICATOR_LIBS) \
 	$(UPOWER_LIBS) \
         $(COVERAGE_LDFLAGS) \
@@ -32,8 +32,7 @@ TEST_LIBS = \
 TEST_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(UPOWER_CFLAGS) \
-        $(INDICATOR_CFLAGS) \
-        $(COVERAGE_CFLAGS)
+        $(INDICATOR_CFLAGS)
 
 BUILT_SOURCES += gschemas.compiled
 CLEANFILES += gschemas.compiled
