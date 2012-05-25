@@ -171,7 +171,7 @@ TEST(DeviceTest, BadAccessors)
   indicator_power_device_get_object_path (device);
 
   // test that these functions can handle being passed non-device GObjects
-  device = g_cancellable_new ();
+  device = reinterpret_cast<IndicatorPowerDevice*>(g_cancellable_new ());
   indicator_power_device_get_kind (device);
   indicator_power_device_get_time (device);
   indicator_power_device_get_icon (device);
