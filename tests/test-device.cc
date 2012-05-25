@@ -163,10 +163,20 @@ TEST(DeviceTest, BadAccessors)
 
   // test that these functions can handle being passed NULL pointers
   IndicatorPowerDevice * device = NULL;
-  indicator_power_device_get_kind(device);
-  indicator_power_device_get_state(device);
-  indicator_power_device_get_object_path(device);
-  indicator_power_device_get_icon(device);
-  indicator_power_device_get_percentage(device);
-  indicator_power_device_get_time(device);
+  indicator_power_device_get_kind (device);
+  indicator_power_device_get_time (device);
+  indicator_power_device_get_icon (device);
+  indicator_power_device_get_state (device);
+  indicator_power_device_get_percentage (device);
+  indicator_power_device_get_object_path (device);
+
+  // test that these functions can handle being passed non-device GObjects
+  device = g_cancellable_new ();
+  indicator_power_device_get_kind (device);
+  indicator_power_device_get_time (device);
+  indicator_power_device_get_icon (device);
+  indicator_power_device_get_state (device);
+  indicator_power_device_get_percentage (device);
+  indicator_power_device_get_object_path (device);
+  g_object_unref (device);
 }
