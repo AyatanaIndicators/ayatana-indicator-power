@@ -35,8 +35,9 @@ G_BEGIN_DECLS
 #define IS_INDICATOR_POWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INDICATOR_POWER_TYPE))
 #define INDICATOR_POWER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), INDICATOR_POWER_TYPE, IndicatorPowerClass))
 
-typedef struct _IndicatorPowerClass    IndicatorPowerClass;
 typedef struct _IndicatorPower         IndicatorPower;
+typedef struct _IndicatorPowerClass    IndicatorPowerClass;
+typedef struct _IndicatorPowerPrivate  IndicatorPowerPrivate;
 
 struct _IndicatorPowerClass
 {
@@ -46,21 +47,7 @@ struct _IndicatorPowerClass
 struct _IndicatorPower
 {
   IndicatorObject parent_instance;
-
-  GtkMenu   *menu;
-
-  GtkLabel *label;
-  GtkImage *status_image;
-  gchar    *accessible_desc;
-
-  GCancellable *proxy_cancel;
-  GDBusProxy   *proxy;
-  guint         watcher_id;
-
-  GVariant *devices;
-  GVariant *device;
-
-  GSettings *settings;
+  IndicatorPowerPrivate * priv;
 };
 
 GType indicator_power_get_type (void) G_GNUC_CONST;
