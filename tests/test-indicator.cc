@@ -72,8 +72,8 @@ class IndicatorTest : public ::testing::Test
 
     virtual void TearDown()
     {
-      g_clear_object (&battery_device);
-      g_clear_object (&ac_device);
+      g_object_unref (battery_device);
+      g_object_unref (ac_device);
     }
 };
 
