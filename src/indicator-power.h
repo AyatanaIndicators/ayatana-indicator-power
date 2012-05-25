@@ -26,6 +26,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
 
+#include "device.h"
+
 G_BEGIN_DECLS
 
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
@@ -51,5 +53,9 @@ struct _IndicatorPower
 };
 
 GType indicator_power_get_type (void) G_GNUC_CONST;
+
+void indicator_power_set_devices (IndicatorPower         * power,
+                                  IndicatorPowerDevice  ** devices,
+                                  gsize                    deviceCount);
 
 G_END_DECLS

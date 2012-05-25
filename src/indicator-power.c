@@ -31,6 +31,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* upower */
 #include <libupower-glib/upower.h>
 
+#include "device.h"
 #include "indicator-power.h"
 
 #define ICON_POLICY_KEY "icon-policy"
@@ -60,8 +61,8 @@ struct _IndicatorPowerPrivate
   GDBusProxy   *proxy;
   guint         watcher_id;
 
-  GVariant *devices;
-  GVariant *device;
+  GSList * devices;
+  IndicatorPowerDevice * device;
 
   GSettings *settings;
 };
@@ -140,20 +141,21 @@ indicator_power_init (IndicatorPower *self)
 }
 
 static void
+dispose_devices (IndicatorPower * self)
+{
+  IndicatorPowerPrivate * priv = self->priv;
+
+  g_slist_free_full (priv->devices, g_object_unref);
+  priv->devices = NULL;
+  g_clear_object (&priv->device);
+}
+static void
 indicator_power_dispose (GObject *object)
 {
   IndicatorPower *self = INDICATOR_POWER(object);
   IndicatorPowerPrivate * priv = self->priv;
 
-  if (priv->devices != NULL) {
-    g_variant_unref (priv->devices);
-    priv->devices = NULL;
-  }
-
-  if (priv->device != NULL) {
-    g_variant_unref (priv->device);
-    priv->device = NULL;
-  }
+  dispose_devices (self);
 
   g_clear_object (&priv->proxy);
   g_clear_object (&priv->proxy_cancel);
@@ -533,99 +535,78 @@ get_device_icon (UpDeviceKind   kind,
 }
 
 
-static void
-menu_add_device (GtkMenu  *menu,
-                 GVariant *device)
+static gboolean
+menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
 {
-  UpDeviceKind kind;
-  UpDeviceState state;
-  GtkWidget *icon;
-  GtkWidget *item;
-  GtkWidget *details_label;
-  GtkWidget *grid;
-  GIcon *device_gicons;
-  const gchar *device_icon = NULL;
-  const gchar *object_path = NULL;
-  gdouble percentage;
-  guint64 time;
-  const gchar *device_name;
-  gchar *short_details = NULL;
-  gchar *details = NULL;
-  gchar *accessible_name = NULL;
-  AtkObject *atk_object;
-
-  if (device == NULL)
-    return;
-
-  g_variant_get (device,
-                 "(&su&sdut)",
-                 &object_path,
-                 &kind,
-                 &device_icon,
-                 &percentage,
-                 &state,
-                 &time);
-
-  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+  gboolean added = FALSE;
+  const UpDeviceKind kind = indicator_power_device_get_kind (device);
 
   if (kind == UP_DEVICE_KIND_LINE_POWER)
-    return;
+  {
+    GtkWidget *icon;
+    GtkWidget *item;
+    GtkWidget *details_label;
+    GtkWidget *grid;
+    GIcon *device_gicons;
+    const gchar *device_name;
+    gchar *short_details = NULL;
+    gchar *details = NULL;
+    gchar *accessible_name = NULL;
+    AtkObject *atk_object;
+    const time_t time = indicator_power_device_get_time (device);
+    const UpDeviceState state = indicator_power_device_get_state (device);
+    const gchar * device_icon = indicator_power_device_get_icon (device);
+    const gdouble percentage  = indicator_power_device_get_percentage (device);
 
-  /* Process the data */
-  device_gicons = get_device_icon (kind, state, time, device_icon);
-  icon = gtk_image_new_from_gicon (device_gicons,
-                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
-  g_clear_object (&device_gicons);
+    /* Process the data */
+    device_gicons = get_device_icon (kind, state, time, device_icon);
+    icon = gtk_image_new_from_gicon (device_gicons,
+                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
+    g_clear_object (&device_gicons);
 
-  device_name = device_kind_to_localised_string (kind);
+    device_name = device_kind_to_localised_string (kind);
 
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
+    build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
 
-  /* Create menu item */
-  item = gtk_image_menu_item_new ();
-  atk_object = gtk_widget_get_accessible(item);
-  if (atk_object != NULL)
-    atk_object_set_name (atk_object, accessible_name);
+    /* Create menu item */
+    item = gtk_image_menu_item_new ();
+    atk_object = gtk_widget_get_accessible(item);
+    if (atk_object != NULL)
+      atk_object_set_name (atk_object, accessible_name);
 
-  grid = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
-  gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
-  details_label = gtk_label_new (details);
-  gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
-  gtk_container_add (GTK_CONTAINER (item), grid);
-  gtk_widget_show (grid);
+    grid = gtk_grid_new ();
+    gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+    gtk_grid_attach (GTK_GRID (grid), icon, 0, 0, 1, 1);
+    details_label = gtk_label_new (details);
+    gtk_grid_attach_next_to (GTK_GRID (grid), details_label, icon, GTK_POS_RIGHT, 1, 1);
+    gtk_container_add (GTK_CONTAINER (item), grid);
+    gtk_widget_show (grid);
 
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    added = TRUE;
 
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (show_info_cb), NULL);
+    g_signal_connect (G_OBJECT (item), "activate",
+                      G_CALLBACK (show_info_cb), NULL);
 
-  g_free (short_details);
-  g_free (details);
-  g_free (accessible_name);
+    g_free (short_details);
+    g_free (details);
+    g_free (accessible_name);
+  }
+
+  return added;
 }
 
 static gsize
-menu_add_devices (GtkMenu  *menu,
-                  GVariant *devices)
+menu_add_devices (GtkMenu * menu, GSList * devices)
 {
-  gsize n_devices;
-  guint i;
+  GSList * l;
+  gsize n_added = 0;
 
-  if (devices == NULL)
-    return 0;
+  for (l=devices; l!=NULL; l=l->next)
+    if (menu_add_device (menu, l->data))
+      ++n_added;
 
-  n_devices = g_variant_n_children (devices);
-  g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
-
-  for (i = 0; i < n_devices; i++)
-    {
-      GVariant * device = g_variant_get_child_value (devices, i);
-      menu_add_device (menu, device);
-      g_variant_unref (device);
-    }
-
-  return n_devices;
+  return n_added;
 }
 
 static gboolean
@@ -680,39 +661,25 @@ build_menu (IndicatorPower *self)
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 }
 
-static GVariant *
-get_primary_device (GVariant *devices)
+static IndicatorPowerDevice*
+get_primary_device (GSList * devices)
 {
-  gint primary_device_charging_index = -1;
-  gint primary_device_discharging_index = -1;
-  gint primary_device_index = -1;
+  IndicatorPowerDevice * primary_device = NULL;
+  IndicatorPowerDevice * primary_device_charging = NULL;
+  IndicatorPowerDevice * primary_device_discharging = NULL;
   gboolean charging = FALSE;
   gboolean discharging = FALSE;
   guint64 min_discharging_time = G_MAXUINT64;
   guint64 max_charging_time = 0;
-  guint i;
+  GSList * l;
 
-  const gsize n_devices = devices ? g_variant_n_children (devices) : 0;
-  g_debug ("Num devices: '%" G_GSIZE_FORMAT "'\n", n_devices);
-
-  for (i = 0; i < n_devices; i++)
+  for (l=devices; l!=NULL; l=l->next)
     {
-      const gchar *object_path;
-      UpDeviceKind kind;
-      const gchar *device_icon;
-      gdouble percentage;
-      UpDeviceState state;
-      guint64 time = 0;
-
-      g_variant_get_child (devices, i, "(&su&sdut)",
-                           &object_path,
-                           &kind,
-                           &device_icon,
-                           &percentage,
-                           &state,
-                           &time);
-
-      g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
+      IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
+      const UpDeviceKind kind = indicator_power_device_get_kind (device);
+      const UpDeviceState state = indicator_power_device_get_state (device);
+      const gdouble percentage  = indicator_power_device_get_percentage (device);
+      const time_t time = indicator_power_device_get_time (device);
 
       /* Try to fix the case when we get a empty battery bay as a real battery */
       if (state == UP_DEVICE_STATE_UNKNOWN &&
@@ -729,7 +696,7 @@ get_primary_device (GVariant *devices)
           if (time < min_discharging_time)
             {
               min_discharging_time = time;
-              primary_device_discharging_index = i;
+              primary_device_discharging = device;
             }
         }
       else if (state == UP_DEVICE_STATE_CHARGING)
@@ -737,64 +704,49 @@ get_primary_device (GVariant *devices)
           charging = TRUE;
           if (time == 0) /* Battery broken */
             {
-              primary_device_charging_index = i;
+              primary_device_charging = device;
             }
           if (time > max_charging_time)
             {
               max_charging_time = time;
-              primary_device_charging_index = i;
+              primary_device_charging = device;
             }
         }
       else
         {
-          primary_device_index = i;
+          primary_device = device;
         }
     }
 
   if (discharging)
     {
-      primary_device_index = primary_device_discharging_index;
+      primary_device = primary_device_discharging;
     }
   else if (charging)
     {
-      primary_device_index = primary_device_charging_index;
+      primary_device = primary_device_charging;
     }
 
-  if (primary_device_index >= 0)
-    return g_variant_get_child_value (devices, primary_device_index);
+  if (primary_device != NULL)
+    g_object_ref (primary_device);
 
-  return NULL;
+  return primary_device;
 }
 
 static void
-put_primary_device (IndicatorPower *self,
-                    GVariant *device)
+put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 {
-  UpDeviceKind kind;
-  UpDeviceState state;
   GIcon *device_gicons;
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
-  const gchar *device_icon = NULL;
-  const gchar *object_path = NULL;
-  gdouble percentage;
-  guint64 time;
   const gchar *device_name;
   IndicatorPowerPrivate * priv = self->priv;
-
-  /* set the icon and text */
-  g_variant_get (device,
-                 "(&su&sdut)",
-                 &object_path,
-                 &kind,
-                 &device_icon,
-                 &percentage,
-                 &state,
-                 &time);
-
-  g_debug ("%s: got data from object %s", G_STRFUNC, object_path);
-
+  const time_t time = indicator_power_device_get_time (device);
+  const UpDeviceKind kind = indicator_power_device_get_kind (device);
+  const UpDeviceState state = indicator_power_device_get_state (device);
+  const gchar * device_icon = indicator_power_device_get_icon (device);
+  const gdouble percentage  = indicator_power_device_get_percentage (device);
   /* set icon */
   device_gicons = get_device_icon (kind, state, time, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
@@ -819,47 +771,75 @@ put_primary_device (IndicatorPower *self,
   g_free (accessible_name);
 }
 
-static void
-get_devices_cb (GObject      *source_object,
-                GAsyncResult *res,
-                gpointer      user_data)
+void
+indicator_power_set_devices (IndicatorPower         * self,
+                             IndicatorPowerDevice  ** devices,
+                             gsize                    device_count)
 {
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate * priv = self->priv;
-  GVariant *devices_container;
-  GError *error = NULL;
+  gsize i;
+  IndicatorPowerPrivate * priv;
 
+  g_return_if_fail (IS_INDICATOR_POWER(self));
+  priv = self->priv;
+
+  /* clear out the previous values */
+  dispose_devices (self);
+
+  /* get the new devices */
+  for (i=0; i<device_count; ++i)
+    priv->devices = g_slist_prepend (priv->devices, g_object_ref(devices[i]));
+  priv->devices = g_slist_reverse (priv->devices);
+
+  /* get the new primary device */
+  priv->device = get_primary_device (priv->devices);
+  if (priv->device)
+      put_primary_device (self, priv->device);
+  else
+      g_message ("Couldn't find primary device");
+
+  build_menu (self);
+  update_visibility (self);
+}
+
+static void
+get_devices_cb (GObject      * source_object,
+                GAsyncResult * res,
+                gpointer       user_data)
+{
+  GError *error;
+  int device_count;
+  IndicatorPowerDevice ** devices;
+  GVariant * devices_container;
+  IndicatorPower *self = INDICATOR_POWER (user_data);
+
+  /* build an array of IndicatorPowerDevices from the DBus response */
+  error = NULL;
   devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
   if (devices_container == NULL)
     {
       g_message ("Couldn't get devices: %s\n", error->message);
       g_error_free (error);
     }
-  else /* update 'devices' */
+  else
     {
-      if (priv->devices != NULL)
-        g_variant_unref (priv->devices);
-      priv->devices = g_variant_get_child_value (devices_container, 0);
+      gsize i;
+      GVariant * devices_variant = g_variant_get_child_value (devices_container, 0);
+      device_count = devices_variant ? g_variant_n_children (devices_variant) : 0;
+      devices = g_new0 (IndicatorPowerDevice*, device_count);
 
+      for (i=0; i<device_count; i++)
+        {
+          GVariant * v = g_variant_get_child_value (devices_variant, i);
+          devices[i] = indicator_power_device_new_from_variant (v);
+          g_variant_unref (v);
+        }
+
+      g_variant_unref (devices_variant);
       g_variant_unref (devices_container);
-
-      if (priv->device != NULL)
-        g_variant_unref (priv->device);
-      priv->device = get_primary_device (priv->devices);
-
-      if (priv->device == NULL)
-        {
-          g_message ("Couldn't find primary device");
-        }
-      else
-        {
-          put_primary_device (self, priv->device);
-        }
     }
 
-  build_menu (self);
-
-  update_visibility (self);
+  indicator_power_set_devices (self, devices, device_count);
+  g_free (devices);
 }
 
 static void
@@ -1017,28 +997,22 @@ get_name_hint (IndicatorObject *io)
 ***/
 
 static void
-count_batteries(GVariant *devices, int *total, int *inuse)
+count_batteries (GSList * devices, int *total, int *inuse)
 {
-  const int n_devices = devices ? g_variant_n_children (devices) : 0;
+  GSList * l;
 
-  int i;
-  for (i=0; i<n_devices; i++)
+  for (l=devices; l!=NULL; l=l->next)
     {
-      GVariant * device = g_variant_get_child_value (devices, i);
+      const IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
 
-      UpDeviceKind kind;
-      g_variant_get_child (device, 1, "u", &kind);
-      if (kind == UP_DEVICE_KIND_BATTERY)
+      if (indicator_power_device_get_kind(device) == UP_DEVICE_KIND_BATTERY)
         {
           ++*total;
 
-          UpDeviceState state;
-          g_variant_get_child (device, 4, "u", &state);
+          const UpDeviceState state = indicator_power_device_get_state (device);
           if ((state == UP_DEVICE_STATE_CHARGING) || (state == UP_DEVICE_STATE_DISCHARGING))
             ++*inuse;
         }
-
-      g_variant_unref (device);
     }
 
     g_debug("count_batteries found %d batteries (%d are charging/discharging)", *total, *inuse);
