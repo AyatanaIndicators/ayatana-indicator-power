@@ -145,9 +145,9 @@ dispose_devices (IndicatorPower * self)
 {
   IndicatorPowerPrivate * priv = self->priv;
 
+  g_clear_object (&priv->device);
   g_slist_free_full (priv->devices, g_object_unref);
   priv->devices = NULL;
-  g_clear_object (&priv->device);
 }
 static void
 indicator_power_dispose (GObject *object)
@@ -748,8 +748,6 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
   const gchar * device_icon = indicator_power_device_get_icon (device);
   const gdouble percentage  = indicator_power_device_get_percentage (device);
 
-g_message ("new primary device: %s", indicator_power_device_get_object_path(device));
-
   /* set icon */
   device_gicons = get_device_icon (kind, state, time, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
@@ -780,26 +778,30 @@ indicator_power_set_devices (IndicatorPower         * self,
                              gsize                    device_count)
 {
   gsize i;
+  GSList * new_devices;
   IndicatorPowerPrivate * priv;
 
   g_return_if_fail (IS_INDICATOR_POWER(self));
   priv = self->priv;
 
-  /* clear out the previous values */
+  /* make a reff'ed list of the new devices */
+  new_devices = NULL;
+  for (i=0; i<device_count; ++i)
+    new_devices = g_slist_prepend (new_devices, g_object_ref(devices[i]));
+  new_devices = g_slist_reverse (new_devices);
+
+  /* clear out the old devices */
   dispose_devices (self);
 
-  /* get the new devices */
-  for (i=0; i<device_count; ++i)
-    priv->devices = g_slist_prepend (priv->devices, g_object_ref(devices[i]));
-  priv->devices = g_slist_reverse (priv->devices);
-
-  /* get the new primary device */
+  /* add the new ones */
+  priv->devices = new_devices;
   priv->device = get_primary_device (priv->devices);
-  if (priv->device)
+
+  /* and update ourselves based on this new data */
+  if (priv->device != NULL)
       put_primary_device (self, priv->device);
   else
       g_message ("Couldn't find primary device");
-
   build_menu (self);
   update_visibility (self);
 }
