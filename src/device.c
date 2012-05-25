@@ -173,10 +173,6 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
 		case PROP_TIME:
 			g_value_set_uint64 (value, priv->time);
 			break;
-
-		default:
-                	G_OBJECT_WARN_INVALID_PROPERTY_ID (o, prop_id, pspec);
-			break;
 	}
 }
 
@@ -212,10 +208,6 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 
 		case PROP_TIME:
 			priv->time = g_value_get_uint64(value);
-			break;
-
-		default:
-                	G_OBJECT_WARN_INVALID_PROPERTY_ID (o, prop_id, pspec);
 			break;
 	}
 }
