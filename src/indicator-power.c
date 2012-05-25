@@ -541,7 +541,7 @@ menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
   gboolean added = FALSE;
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
 
-  if (kind == UP_DEVICE_KIND_LINE_POWER)
+  if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
     GtkWidget *icon;
     GtkWidget *item;
