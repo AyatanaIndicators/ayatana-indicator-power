@@ -747,6 +747,9 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
   const UpDeviceState state = indicator_power_device_get_state (device);
   const gchar * device_icon = indicator_power_device_get_icon (device);
   const gdouble percentage  = indicator_power_device_get_percentage (device);
+
+g_message ("new primary device: %s", indicator_power_device_get_object_path(device));
+
   /* set icon */
   device_gicons = get_device_icon (kind, state, time, device_icon);
   gtk_image_set_from_gicon (priv->status_image,
@@ -807,9 +810,9 @@ get_devices_cb (GObject      * source_object,
                 gpointer       user_data)
 {
   GError *error;
-  int device_count;
-  IndicatorPowerDevice ** devices;
+  int device_count = 0;
   GVariant * devices_container;
+  IndicatorPowerDevice ** devices = NULL;
   IndicatorPower *self = INDICATOR_POWER (user_data);
 
   /* build an array of IndicatorPowerDevices from the DBus response */
