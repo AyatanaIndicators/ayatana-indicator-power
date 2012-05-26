@@ -98,3 +98,38 @@ TEST_F(IndicatorTest, SetDevices)
  
   g_object_unref (power);
 }
+
+TEST_F(IndicatorTest, DischargingStrings)
+{
+  IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
+
+  // give the indicator a discharging battery with 1 hour of life left
+  g_object_set (battery_device,
+                INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
+                NULL);
+  indicator_power_set_devices (power, &battery_device, 1);
+
+  GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
+  ASSERT_EQ (g_list_length(entries), 1); 
+  IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
+  ASSERT_STREQ(entry->accessible_desc, "Battery (1 hour left (50%))");
+  ASSERT_STREQ(entry->name_hint, "indicator-power");
+  g_list_free (entries);
+
+  // give the indicator a discharging battery with over 12 hours of life left
+  g_object_set (battery_device,
+                INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                INDICATOR_POWER_DEVICE_TIME, guint64(60*60*12 + 1),
+                NULL);
+  indicator_power_set_devices (power, &battery_device, 1);
+  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
+  ASSERT_EQ (g_list_length(entries), 1); 
+  entry = static_cast<IndicatorObjectEntry*>(entries->data);
+  g_list_free (entries);
+
+  // cleanup
+  g_object_unref (power);
+}
