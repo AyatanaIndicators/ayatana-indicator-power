@@ -102,6 +102,20 @@ indicator_power_dbus_listener_init (IndicatorPowerDbusListener *self)
 }
 
 static void
+set_indicator (IndicatorPowerDbusListener * self, GObject * ipower)
+{
+	IndicatorPowerDbusListenerPrivate * priv = self->priv;
+
+	if (priv->ipower != NULL)
+		g_object_remove_weak_pointer (G_OBJECT(priv->ipower), (gpointer*)&priv->ipower);
+
+	priv->ipower = INDICATOR_POWER(ipower);
+
+	if (priv->ipower != NULL)
+		g_object_add_weak_pointer (G_OBJECT(priv->ipower), (gpointer*)&priv->ipower);
+};
+
+static void
 indicator_power_dbus_listener_dispose (GObject *object)
 {
 	IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(object);
@@ -109,7 +123,8 @@ indicator_power_dbus_listener_dispose (GObject *object)
 
 	g_clear_object (&priv->proxy);
 	g_clear_object (&priv->proxy_cancel);
-	g_clear_object (&priv->ipower);
+
+	set_indicator (self, NULL);
 
 	G_OBJECT_CLASS (indicator_power_dbus_listener_parent_class)->dispose (object);
 }
@@ -142,12 +157,11 @@ static void
 set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * pspec)
 {
         IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(o);
-        IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
         switch (prop_id)
 	{
 		case PROP_INDICATOR:
-			priv->ipower = g_value_dup_object (value);
+			set_indicator (self, g_value_get_object(value));
 			break;
 	}
 }
