@@ -33,7 +33,7 @@ struct _IndicatorPowerDbusListenerPrivate
 {
 	IndicatorPower * ipower;
 
-	GCancellable * proxy_cancel;
+	GCancellable * cancellable;
 	GDBusProxy * proxy;
 	guint watcher_id;
 };
@@ -85,18 +85,21 @@ indicator_power_dbus_listener_init (IndicatorPowerDbusListener *self)
 {
 	IndicatorPowerDbusListenerPrivate * priv;
 
-        priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_POWER_DBUS_LISTENER_TYPE,
-                                            IndicatorPowerDbusListenerPrivate);
-        priv->ipower = NULL;
+	priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+	                                    INDICATOR_POWER_DBUS_LISTENER_TYPE,
+	                                    IndicatorPowerDbusListenerPrivate);
 
-        priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                             DBUS_SERVICE,
-                                             G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                             gsd_appeared_callback,
-                                             NULL,
-                                             self,
-                                             NULL);
+	priv->ipower = NULL;
+
+	priv->cancellable = g_cancellable_new ();
+
+	priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+	                                     DBUS_SERVICE,
+	                                     G_BUS_NAME_WATCHER_FLAGS_NONE,
+	                                     gsd_appeared_callback,
+	                                     NULL,
+	                                     self,
+	                                     NULL);
 
 	self->priv = priv;
 }
@@ -122,7 +125,7 @@ indicator_power_dbus_listener_dispose (GObject *object)
 	IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
 	g_clear_object (&priv->proxy);
-	g_clear_object (&priv->proxy_cancel);
+	g_clear_object (&priv->cancellable);
 
 	set_indicator (self, NULL);
 
@@ -224,7 +227,7 @@ request_device_list (IndicatorPowerDbusListener * self)
 	                   NULL,
 	                   G_DBUS_CALL_FLAGS_NONE,
 	                   -1,
-	                   self->priv->proxy_cancel,
+	                   self->priv->cancellable,
 	                   get_devices_cb,
 	                   self);
 }
@@ -249,7 +252,6 @@ service_proxy_cb (GObject      *object,
         IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
 	priv->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
-	g_clear_object (&priv->proxy_cancel);
 
 	if (error != NULL) {
 		g_error ("Error creating proxy: %s", error->message);
@@ -276,15 +278,13 @@ gsd_appeared_callback (GDBusConnection *connection,
         IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(user_data);
         IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
-	priv->proxy_cancel = g_cancellable_new ();
-
 	g_dbus_proxy_new (connection,
 	                  G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
 	                  NULL,
 	                  name,
 	                  POWER_DBUS_PATH,
 	                  POWER_DBUS_INTERFACE,
-	                  priv->proxy_cancel,
+	                  priv->cancellable,
 	                  service_proxy_cb,
 	                  self);
 }
