@@ -59,8 +59,10 @@ struct _IndicatorPowerPrivate
 };
 
 
+/* LCOV_EXCL_START */
 INDICATOR_SET_VERSION
 INDICATOR_SET_TYPE (INDICATOR_POWER_TYPE)
+/* LCOV_EXCL_STOP */
 
 /* Prototypes */
 static void             indicator_power_dispose         (GObject *object);
@@ -81,7 +83,9 @@ static void             on_entry_added                  (IndicatorObject * io, I
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 */
 
+/* LCOV_EXCL_START */
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
+/* LCOV_EXCL_STOP */
 
 static void
 indicator_power_class_init (IndicatorPowerClass *klass)
@@ -767,7 +771,9 @@ indicator_power_set_devices (IndicatorPower         * self,
   GSList * new_devices;
   IndicatorPowerPrivate * priv;
 
+/* LCOV_EXCL_START */
   g_return_if_fail (IS_INDICATOR_POWER(self));
+/* LCOV_EXCL_STOP */
   priv = self->priv;
 
   /* make a reff'ed list of the new devices */

@@ -55,7 +55,9 @@ static void indicator_power_device_finalize   (GObject *object);
 static void set_property (GObject*, guint prop_id, const GValue*, GParamSpec* );
 static void get_property (GObject*, guint prop_id,       GValue*, GParamSpec* );
 
+/* LCOV_EXCL_START */
 G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT);
+/* LCOV_EXCL_STOP */
 
 static void
 indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
@@ -219,7 +221,9 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 UpDeviceKind
 indicator_power_device_get_kind  (const IndicatorPowerDevice * device)
 {
+	/* LCOV_EXCL_START */
 	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->kind;
 }
@@ -227,7 +231,9 @@ indicator_power_device_get_kind  (const IndicatorPowerDevice * device)
 UpDeviceState
 indicator_power_device_get_state (const IndicatorPowerDevice * device)
 {
+	/* LCOV_EXCL_START */
 	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_STATE_UNKNOWN);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->state;
 }
@@ -235,7 +241,9 @@ indicator_power_device_get_state (const IndicatorPowerDevice * device)
 const gchar *
 indicator_power_device_get_object_path (const IndicatorPowerDevice * device)
 {
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+	/* LCOV_EXCL_START */
+	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->object_path;
 }
@@ -243,7 +251,9 @@ indicator_power_device_get_object_path (const IndicatorPowerDevice * device)
 const gchar *
 indicator_power_device_get_icon (const IndicatorPowerDevice * device)
 {
+	/* LCOV_EXCL_START */
 	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->icon;
 }
@@ -251,7 +261,9 @@ indicator_power_device_get_icon (const IndicatorPowerDevice * device)
 gdouble
 indicator_power_device_get_percentage (const IndicatorPowerDevice * device)
 {
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+	/* LCOV_EXCL_START */
+	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), 0.0);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->percentage;
 }
@@ -259,7 +271,9 @@ indicator_power_device_get_percentage (const IndicatorPowerDevice * device)
 time_t
 indicator_power_device_get_time (const IndicatorPowerDevice * device)
 {
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+	/* LCOV_EXCL_START */
+	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), (time_t)0);
+	/* LCOV_EXCL_STOP */
 
         return device->priv->time;
 }
