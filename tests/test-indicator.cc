@@ -19,6 +19,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <gtest/gtest.h>
 
+#include "dbus-listener.h"
 #include "device.h"
 #include "indicator-power.h"
 
@@ -230,3 +231,19 @@ TEST_F(IndicatorTest, AvoidChargingBatteriesWithZeroSecondsLeft)
   g_object_unref (bad_battery_device);
 }
 
+TEST_F(IndicatorTest, DbusListenerGetProperty)
+{
+  IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
+  GObject * dbus_listener = G_OBJECT(g_object_new (INDICATOR_POWER_DBUS_LISTENER_TYPE,
+      INDICATOR_POWER_DBUS_LISTENER_INDICATOR, power,
+      NULL));
+  GObject * indicator = NULL;
+  g_object_get (dbus_listener,
+      INDICATOR_POWER_DBUS_LISTENER_INDICATOR, &indicator,
+      NULL);
+  ASSERT_EQ(INDICATOR_POWER(indicator), power);
+
+  // cleanup
+  g_object_unref (dbus_listener);
+  g_object_unref (power);
+}
