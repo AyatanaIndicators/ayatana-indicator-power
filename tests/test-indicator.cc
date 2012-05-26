@@ -115,6 +115,15 @@ TEST_F(IndicatorTest, DischargingStrings)
 {
   IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
 
+  // give the indicator a discharging battery with 30 minutes of life left
+  g_object_set (battery_device,
+                INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                INDICATOR_POWER_DEVICE_TIME, guint64(60*30),
+                NULL);
+  indicator_power_set_devices (power, &battery_device, 1); 
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (30 minutes left (50%))");
+
   // give the indicator a discharging battery with 1 hour of life left
   g_object_set (battery_device,
                 INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
