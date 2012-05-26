@@ -75,6 +75,16 @@ class IndicatorTest : public ::testing::Test
       g_object_unref (battery_device);
       g_object_unref (ac_device);
     }
+
+    const char* GetAccessibleDesc (IndicatorPower * power) const
+    {
+      GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
+      g_assert (g_list_length(entries) == 1); 
+      IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
+      const char * ret = entry->accessible_desc;
+      g_list_free (entries);
+      return ret;
+    }
 };
 
 /***
@@ -109,13 +119,8 @@ TEST_F(IndicatorTest, DischargingStrings)
                 INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                 INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                 NULL);
-  indicator_power_set_devices (power, &battery_device, 1);
-  GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ(entry->accessible_desc, "Battery (1 hour left (50%))");
-  ASSERT_STREQ(entry->name_hint, "indicator-power");
-  g_list_free (entries);
+  indicator_power_set_devices (power, &battery_device, 1); 
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (1 hour left (50%))");
 
   // give the indicator a discharging battery with 2 hours of life left
   g_object_set (battery_device,
@@ -123,33 +128,21 @@ TEST_F(IndicatorTest, DischargingStrings)
                 INDICATOR_POWER_DEVICE_TIME, guint64(60*60*2),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery (2 hours left (100%))");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (2 hours left (100%))");
 
   // give the indicator a discharging battery with over 12 hours of life left
   g_object_set (battery_device,
                 INDICATOR_POWER_DEVICE_TIME, guint64(60*60*12 + 1),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery");
 
   // give the indicator a discharging battery with 29 seconds left
   g_object_set (battery_device,
                 INDICATOR_POWER_DEVICE_TIME, guint64(29),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery (Unknown time left (100%))");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (Unknown time left (100%))");
 
   // what happens if the time estimate isn't available
   g_object_set (battery_device,
@@ -157,11 +150,7 @@ TEST_F(IndicatorTest, DischargingStrings)
                 INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery (50%)");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (50%)");
 
   // what happens if the time estimate AND percentage isn't available
   g_object_set (battery_device,
@@ -169,11 +158,7 @@ TEST_F(IndicatorTest, DischargingStrings)
                 INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery (not present)");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (not present)");
 
   // cleanup
   g_object_unref (power);
@@ -190,22 +175,14 @@ TEST_F(IndicatorTest, ChargingStrings)
                 INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ(entry->accessible_desc, "Battery (1 hour to charge (50%))");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (1 hour to charge (50%))");
 
   // give the indicator a discharging battery with 2 hours of life left
   g_object_set (battery_device,
                 INDICATOR_POWER_DEVICE_TIME, guint64(60*60*2),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ (entry->accessible_desc, "Battery (2 hours to charge (50%))");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (2 hours to charge (50%))");
 
   // cleanup
   g_object_unref (power);
@@ -222,12 +199,33 @@ TEST_F(IndicatorTest, ChargedStrings)
                 INDICATOR_POWER_DEVICE_TIME, guint64(0),
                 NULL);
   indicator_power_set_devices (power, &battery_device, 1);
-  GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-  ASSERT_EQ (g_list_length(entries), 1); 
-  IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
-  ASSERT_STREQ(entry->accessible_desc, "Battery (charged)");
-  g_list_free (entries);
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (charged)");
 
   // cleanup
   g_object_unref (power);
 }
+
+TEST_F(IndicatorTest, AvoidChargingBatteriesWithZeroSecondsLeft)
+{
+  IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
+
+  g_object_set (battery_device,
+                INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
+                INDICATOR_POWER_DEVICE_PERCENTAGE, 100.0,
+                INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                NULL);
+  IndicatorPowerDevice * bad_battery_device  = indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/battery_BAT0",
+    UP_DEVICE_KIND_BATTERY,
+    ". GThemedIcon battery-good-symbolic gpm-battery-060 battery-good ",
+    53, UP_DEVICE_STATE_CHARGING, 0);
+
+  IndicatorPowerDevice * devices[] = { battery_device, bad_battery_device };
+  indicator_power_set_devices (power, devices, G_N_ELEMENTS(devices));
+  ASSERT_STREQ (GetAccessibleDesc(power), "Battery (53%)");
+
+  // cleanup
+  g_object_unref (power);
+  g_object_unref (bad_battery_device);
+}
+
