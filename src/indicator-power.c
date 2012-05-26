@@ -20,7 +20,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+ #include "config.h"
 #endif
 
 /* GStuff */
@@ -28,20 +28,13 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
-/* upower */
-#include <libupower-glib/upower.h>
-
+#include "dbus-listener.h"
 #include "device.h"
 #include "indicator-power.h"
 
 #define ICON_POLICY_KEY "icon-policy"
 
 #define DEFAULT_ICON   "gpm-battery-missing"
-
-#define DBUS_SERVICE                "org.gnome.SettingsDaemon"
-#define DBUS_PATH                   "/org/gnome/SettingsDaemon"
-#define POWER_DBUS_PATH             DBUS_PATH "/Power"
-#define POWER_DBUS_INTERFACE        "org.gnome.SettingsDaemon.Power"
 
 enum {
   POWER_INDICATOR_ICON_POLICY_PRESENT,
@@ -57,9 +50,7 @@ struct _IndicatorPowerPrivate
   GtkImage *status_image;
   gchar    *accessible_desc;
 
-  GCancellable *proxy_cancel;
-  GDBusProxy   *proxy;
-  guint         watcher_id;
+  IndicatorPowerDbusListener * dbus_listener;
 
   GSList * devices;
   IndicatorPowerDevice * device;
@@ -86,7 +77,9 @@ static gboolean         should_be_visible               (IndicatorPower * self);
 
 static void             on_entry_added                  (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data);
 
+/*
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
+*/
 
 G_DEFINE_TYPE (IndicatorPower, indicator_power, INDICATOR_OBJECT_TYPE);
 
@@ -119,14 +112,9 @@ indicator_power_init (IndicatorPower *self)
 
   priv->accessible_desc = NULL;
 
-  priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                       DBUS_SERVICE,
-                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                       gsd_appeared_callback,
-                                       NULL,
-                                       self,
-                                       NULL);
-
+  priv->dbus_listener = g_object_new (INDICATOR_POWER_DBUS_LISTENER_TYPE,
+                                      INDICATOR_POWER_DBUS_LISTENER_INDICATOR, self,
+                                      NULL);
   priv->settings = g_settings_new ("com.canonical.indicator.power");
   g_signal_connect_swapped (priv->settings, "changed::" ICON_POLICY_KEY,
                             G_CALLBACK(update_visibility), self);
@@ -157,9 +145,7 @@ indicator_power_dispose (GObject *object)
 
   dispose_devices (self);
 
-  g_clear_object (&priv->proxy);
-  g_clear_object (&priv->proxy_cancel);
-
+  g_clear_object (&priv->dbus_listener);
   g_clear_object (&priv->settings);
 
   G_OBJECT_CLASS (indicator_power_parent_class)->dispose (object);
@@ -807,134 +793,11 @@ indicator_power_set_devices (IndicatorPower         * self,
 }
 
 static void
-get_devices_cb (GObject      * source_object,
-                GAsyncResult * res,
-                gpointer       user_data)
-{
-  GError *error;
-  int device_count = 0;
-  GVariant * devices_container;
-  IndicatorPowerDevice ** devices = NULL;
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-
-  /* build an array of IndicatorPowerDevices from the DBus response */
-  error = NULL;
-  devices_container = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object), res, &error);
-  if (devices_container == NULL)
-    {
-      g_message ("Couldn't get devices: %s\n", error->message);
-      g_error_free (error);
-    }
-  else
-    {
-      gsize i;
-      GVariant * devices_variant = g_variant_get_child_value (devices_container, 0);
-      device_count = devices_variant ? g_variant_n_children (devices_variant) : 0;
-      devices = g_new0 (IndicatorPowerDevice*, device_count);
-
-      for (i=0; i<device_count; i++)
-        {
-          GVariant * v = g_variant_get_child_value (devices_variant, i);
-          devices[i] = indicator_power_device_new_from_variant (v);
-          g_variant_unref (v);
-        }
-
-      g_variant_unref (devices_variant);
-      g_variant_unref (devices_container);
-    }
-
-  indicator_power_set_devices (self, devices, device_count);
-  g_free (devices);
-}
-
-static void
 update_visibility (IndicatorPower * self)
 {
   indicator_object_set_visible (INDICATOR_OBJECT (self),
                                 should_be_visible (self));
 }
-
-static void
-receive_properties_changed (GDBusProxy *proxy                  G_GNUC_UNUSED,
-                            GVariant   *changed_properties     G_GNUC_UNUSED,
-                            GStrv       invalidated_properties G_GNUC_UNUSED,
-                            gpointer    user_data)
-{
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate * priv = self->priv;
-
-  /* it's time to refresh our device list */
-  g_dbus_proxy_call (priv->proxy,
-                     "GetDevices",
-                     NULL,
-                     G_DBUS_CALL_FLAGS_NONE,
-                     -1,
-                     priv->proxy_cancel,
-                     get_devices_cb,
-                     user_data);
-}
-
-static void
-service_proxy_cb (GObject      *object,
-                  GAsyncResult *res,
-                  gpointer      user_data)
-{
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate * priv = self->priv;
-  GError *error = NULL;
-
-  priv->proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
-
-  g_clear_object (&priv->proxy_cancel);
-
-  if (error != NULL)
-    {
-      g_error ("Error creating proxy: %s", error->message);
-      g_error_free (error);
-
-      return;
-    }
-
-  /* we want to change the primary device changes */
-  g_signal_connect (priv->proxy,
-                    "g-properties-changed",
-                    G_CALLBACK (receive_properties_changed),
-                    user_data);
-
-  /* get the initial state */
-  g_dbus_proxy_call (priv->proxy,
-                     "GetDevices",
-                     NULL,
-                     G_DBUS_CALL_FLAGS_NONE,
-                     -1,
-                     priv->proxy_cancel,
-                     get_devices_cb,
-                     user_data);
-}
-
-static void
-gsd_appeared_callback (GDBusConnection *connection,
-                       const gchar     *name,
-                       const gchar     *name_owner,
-                       gpointer         user_data)
-{
-  IndicatorPower *self = INDICATOR_POWER (user_data);
-  IndicatorPowerPrivate * priv = self->priv;
-
-  priv->proxy_cancel = g_cancellable_new ();
-
-  g_dbus_proxy_new (connection,
-                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                    NULL,
-                    name,
-                    POWER_DBUS_PATH,
-                    POWER_DBUS_INTERFACE,
-                    priv->proxy_cancel,
-                    service_proxy_cb,
-                    self);
-}
-
-
 
 
 /* Grabs the label. Creates it if it doesn't

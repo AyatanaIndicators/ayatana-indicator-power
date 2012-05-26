@@ -8,11 +8,14 @@ powerlibdir = $(INDICATORDIR)
 powerlib_LTLIBRARIES = libpower.la
 
 libpower_la_SOURCES = \
+        dbus-listener.c \
         device.c \
         indicator-power.c
 
 noinst_HEADERS = \
-        device.h
+        dbus-listener.h \
+        device.h \
+        indicator-power.h
 
 libpower_la_CFLAGS = \
         $(UPOWER_CFLAGS) \
