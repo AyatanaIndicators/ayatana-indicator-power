@@ -96,6 +96,7 @@ TEST_F(IndicatorTest, GObjectNew)
   GObject * o = G_OBJECT (g_object_new (INDICATOR_POWER_TYPE, NULL));
   ASSERT_TRUE (o != NULL);
   ASSERT_TRUE (IS_INDICATOR_POWER(o));
+  g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
   g_object_unref (o);
 }
 
