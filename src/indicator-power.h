@@ -55,7 +55,6 @@ struct _IndicatorPower
 GType indicator_power_get_type (void) G_GNUC_CONST;
 
 void indicator_power_set_devices (IndicatorPower         * power,
-                                  IndicatorPowerDevice  ** devices,
-                                  gsize                    deviceCount);
+                                  GSList                 * devices);
 
 G_END_DECLS

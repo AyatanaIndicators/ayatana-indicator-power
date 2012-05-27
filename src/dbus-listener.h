@@ -41,7 +41,8 @@ typedef struct _IndicatorPowerDbusListener IndicatorPowerDbusListener;
 typedef struct _IndicatorPowerDbusListenerClass IndicatorPowerDbusListenerClass;
 typedef struct _IndicatorPowerDbusListenerPrivate IndicatorPowerDbusListenerPrivate;
 
-#define INDICATOR_POWER_DBUS_LISTENER_INDICATOR  "indicator-power-dbus-listener-indicator"
+/* signals */
+#define INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED  "indicator-power-dbus-listener-devices-enumerated"
 
 /**
  * IndicatorPowerDbusListenerClass:
@@ -50,6 +51,8 @@ typedef struct _IndicatorPowerDbusListenerPrivate IndicatorPowerDbusListenerPriv
 struct _IndicatorPowerDbusListenerClass
 {
 	GObjectClass parent_class;
+
+	void (* devices_enumerated) (IndicatorPowerDbusListener*, GSList * devices);
 };
 
 /**

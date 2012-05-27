@@ -116,9 +116,10 @@ indicator_power_init (IndicatorPower *self)
 
   priv->accessible_desc = NULL;
 
-  priv->dbus_listener = g_object_new (INDICATOR_POWER_DBUS_LISTENER_TYPE,
-                                      INDICATOR_POWER_DBUS_LISTENER_INDICATOR, self,
-                                      NULL);
+  priv->dbus_listener = g_object_new (INDICATOR_POWER_DBUS_LISTENER_TYPE, NULL);
+  g_signal_connect_swapped (priv->dbus_listener, INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED,
+                            G_CALLBACK(indicator_power_set_devices), self);
+
   priv->settings = g_settings_new ("com.canonical.indicator.power");
   g_signal_connect_swapped (priv->settings, "changed::" ICON_POLICY_KEY,
                             G_CALLBACK(update_visibility), self);
@@ -763,33 +764,22 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 }
 
 void
-indicator_power_set_devices (IndicatorPower         * self,
-                             IndicatorPowerDevice  ** devices,
-                             gsize                    device_count)
+indicator_power_set_devices (IndicatorPower * self, GSList * devices)
 {
-  gsize i;
-  GSList * new_devices;
   IndicatorPowerPrivate * priv;
 
-/* LCOV_EXCL_START */
+  /* LCOV_EXCL_START */
   g_return_if_fail (IS_INDICATOR_POWER(self));
-/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_STOP */
   priv = self->priv;
 
-  /* make a reff'ed list of the new devices */
-  new_devices = NULL;
-  for (i=0; i<device_count; ++i)
-    new_devices = g_slist_prepend (new_devices, g_object_ref(devices[i]));
-  new_devices = g_slist_reverse (new_devices);
-
-  /* clear out the old devices */
+  /* update our devices & primary device */
+  g_slist_foreach (devices, (GFunc)g_object_ref, NULL);
   dispose_devices (self);
-
-  /* add the new ones */
-  priv->devices = new_devices;
+  priv->devices = g_slist_copy (devices);
   priv->device = get_primary_device (priv->devices);
 
-  /* and update ourselves based on this new data */
+  /* and our menus/visibility from the new device list */
   if (priv->device != NULL)
       put_primary_device (self, priv->device);
   else

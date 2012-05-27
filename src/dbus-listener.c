@@ -22,7 +22,7 @@ License along with this library. If not, see
 */
 
 #include "dbus-listener.h"
-#include "indicator-power.h"
+#include "device.h"
 
 #define DBUS_SERVICE          "org.gnome.SettingsDaemon"
 #define DBUS_PATH             "/org/gnome/SettingsDaemon"
@@ -31,8 +31,6 @@ License along with this library. If not, see
 
 struct _IndicatorPowerDbusListenerPrivate
 {
-	IndicatorPower * ipower;
-
 	GCancellable * cancellable;
 	GDBusProxy * proxy;
 	guint watcher_id;
@@ -40,20 +38,19 @@ struct _IndicatorPowerDbusListenerPrivate
 
 #define INDICATOR_POWER_DBUS_LISTENER_GET_PRIVATE(o) (INDICATOR_POWER_DBUS_LISTENER(o)->priv)
 
-/* Properties */
-/* Enum for the properties so that they can be quickly found and looked up. */
+/* Signals */
 enum {
-	PROP_0,
-	PROP_INDICATOR
+	SIGNAL_DEVICES,
+	SIGNAL_LAST
 };
+static guint signals[SIGNAL_LAST] = { 0 };
+
 
 /* GObject stuff */
 static void indicator_power_dbus_listener_class_init (IndicatorPowerDbusListenerClass *klass);
 static void indicator_power_dbus_listener_init       (IndicatorPowerDbusListener *self);
 static void indicator_power_dbus_listener_dispose    (GObject *object);
 static void indicator_power_dbus_listener_finalize   (GObject *object);
-static void set_property (GObject*, guint prop_id, const GValue*, GParamSpec* );
-static void get_property (GObject*, guint prop_id,       GValue*, GParamSpec* );
 
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
@@ -62,21 +59,21 @@ G_DEFINE_TYPE (IndicatorPowerDbusListener, indicator_power_dbus_listener, G_TYPE
 static void
 indicator_power_dbus_listener_class_init (IndicatorPowerDbusListenerClass *klass)
 {
-	GParamSpec * pspec;
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	g_type_class_add_private (klass, sizeof (IndicatorPowerDbusListenerPrivate));
 
+	/* methods */
 	object_class->dispose = indicator_power_dbus_listener_dispose;
 	object_class->finalize = indicator_power_dbus_listener_finalize;
-	object_class->set_property = set_property;
-	object_class->get_property = get_property;
 
-	pspec = g_param_spec_object (INDICATOR_POWER_DBUS_LISTENER_INDICATOR,
-                                     "indicator",
-                                     "The IndicatorPower to notify when power changes are received",
-                                     INDICATOR_POWER_TYPE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_INDICATOR, pspec);
+	/* signals */
+	signals[SIGNAL_DEVICES] = g_signal_new (INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED,
+	                                        G_TYPE_FROM_CLASS(klass), 0,
+	                                        G_STRUCT_OFFSET (IndicatorPowerDbusListenerClass, devices_enumerated),
+	                                        NULL, NULL,
+	                                        g_cclosure_marshal_VOID__POINTER,
+	                                        G_TYPE_NONE, 1, G_TYPE_POINTER, G_TYPE_NONE);
 }
 
 /* Initialize an instance */
@@ -88,8 +85,6 @@ indicator_power_dbus_listener_init (IndicatorPowerDbusListener *self)
 	priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
 	                                    INDICATOR_POWER_DBUS_LISTENER_TYPE,
 	                                    IndicatorPowerDbusListenerPrivate);
-
-	priv->ipower = NULL;
 
 	priv->cancellable = g_cancellable_new ();
 
@@ -105,20 +100,6 @@ indicator_power_dbus_listener_init (IndicatorPowerDbusListener *self)
 }
 
 static void
-set_indicator (IndicatorPowerDbusListener * self, GObject * ipower)
-{
-	IndicatorPowerDbusListenerPrivate * priv = self->priv;
-
-	if (priv->ipower != NULL)
-		g_object_remove_weak_pointer (G_OBJECT(priv->ipower), (gpointer*)&priv->ipower);
-
-	priv->ipower = INDICATOR_POWER(ipower);
-
-	if (priv->ipower != NULL)
-		g_object_add_weak_pointer (G_OBJECT(priv->ipower), (gpointer*)&priv->ipower);
-};
-
-static void
 indicator_power_dbus_listener_dispose (GObject *object)
 {
 	IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(object);
@@ -126,8 +107,6 @@ indicator_power_dbus_listener_dispose (GObject *object)
 
 	g_clear_object (&priv->proxy);
 	g_clear_object (&priv->cancellable);
-
-	set_indicator (self, NULL);
 
 	G_OBJECT_CLASS (indicator_power_dbus_listener_parent_class)->dispose (object);
 }
@@ -143,47 +122,14 @@ indicator_power_dbus_listener_finalize (GObject *object)
 ***/
 
 static void
-get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
-{
-        IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(o);
-        IndicatorPowerDbusListenerPrivate * priv = self->priv;
-
-        switch (prop_id)
-	{
-		case PROP_INDICATOR:
-			g_value_set_object (value, priv->ipower);
-			break;
-	}
-}
-
-static void
-set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * pspec)
-{
-        IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER(o);
-
-        switch (prop_id)
-	{
-		case PROP_INDICATOR:
-			set_indicator (self, g_value_get_object(value));
-			break;
-	}
-}
-
-/***
-****
-***/
-
-static void
 get_devices_cb (GObject      * source_object,
                 GAsyncResult * res,
                 gpointer       user_data)
 {
 	GError *error;
-	int device_count = 0;
+	GSList * devices = NULL;
 	GVariant * devices_container;
-	IndicatorPowerDevice ** devices = NULL;
 	IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER (user_data);
-        IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
 	/* build an array of IndicatorPowerDevices from the DBus response */
 	error = NULL;
@@ -197,26 +143,24 @@ get_devices_cb (GObject      * source_object,
 	{
 		gsize i;
 		GVariant * devices_variant = g_variant_get_child_value (devices_container, 0);
-		device_count = devices_variant ? g_variant_n_children (devices_variant) : 0;
-		devices = g_new0 (IndicatorPowerDevice*, device_count);
+		const int device_count = devices_variant ? g_variant_n_children (devices_variant) : 0;
 
 		for (i=0; i<device_count; i++)
 		{
 			GVariant * v = g_variant_get_child_value (devices_variant, i);
-			devices[i] = indicator_power_device_new_from_variant (v);
+			devices = g_slist_prepend (devices, indicator_power_device_new_from_variant (v));
 			g_variant_unref (v);
 		}
+		devices = g_slist_reverse (devices);
 
 		g_variant_unref (devices_variant);
 		g_variant_unref (devices_container);
 	}
 
-	if (priv->ipower != NULL)
-	{
-		indicator_power_set_devices (priv->ipower, devices, device_count);
-	}
+	g_signal_emit (self, signals[SIGNAL_DEVICES], (GQuark)0, devices);
 
-	g_free (devices);
+	g_slist_free_full (devices, g_object_unref);
+	
 }
 
 static void
