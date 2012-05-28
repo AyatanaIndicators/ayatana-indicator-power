@@ -24,11 +24,6 @@ License along with this library. If not, see
 #include "dbus-listener.h"
 #include "device.h"
 
-#define DBUS_SERVICE          "org.gnome.SettingsDaemon"
-#define DBUS_PATH             "/org/gnome/SettingsDaemon"
-#define POWER_DBUS_PATH       DBUS_PATH "/Power"
-#define POWER_DBUS_INTERFACE  "org.gnome.SettingsDaemon.Power"
-
 struct _IndicatorPowerDbusListenerPrivate
 {
 	GCancellable * cancellable;
@@ -89,7 +84,7 @@ indicator_power_dbus_listener_init (IndicatorPowerDbusListener *self)
 	priv->cancellable = g_cancellable_new ();
 
 	priv->watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
-	                                     DBUS_SERVICE,
+	                                     GSD_SERVICE,
 	                                     G_BUS_NAME_WATCHER_FLAGS_NONE,
 	                                     gsd_appeared_callback,
 	                                     NULL,
@@ -226,8 +221,8 @@ gsd_appeared_callback (GDBusConnection *connection,
 	                  G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
 	                  NULL,
 	                  name,
-	                  POWER_DBUS_PATH,
-	                  POWER_DBUS_INTERFACE,
+	                  GSD_POWER_DBUS_PATH,
+	                  GSD_POWER_DBUS_INTERFACE,
 	                  priv->cancellable,
 	                  service_proxy_cb,
 	                  self);

@@ -41,6 +41,11 @@ typedef struct _IndicatorPowerDbusListener IndicatorPowerDbusListener;
 typedef struct _IndicatorPowerDbusListenerClass IndicatorPowerDbusListenerClass;
 typedef struct _IndicatorPowerDbusListenerPrivate IndicatorPowerDbusListenerPrivate;
 
+#define GSD_SERVICE               "org.gnome.SettingsDaemon"
+#define GSD_PATH                  "/org/gnome/SettingsDaemon"
+#define GSD_POWER_DBUS_INTERFACE  GSD_SERVICE ".Power"
+#define GSD_POWER_DBUS_PATH       GSD_PATH "/Power"
+
 /* signals */
 #define INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED  "indicator-power-dbus-listener-devices-enumerated"
 
