@@ -132,12 +132,8 @@ indicator_power_device_finalize (GObject *object)
 	IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(object);
 	IndicatorPowerDevicePrivate * priv = self->priv;
 
-	//g_clear_pointer (&priv->object_path, g_free);
-	//g_clear_pointer (&priv->icon, g_free);
-	g_free (priv->object_path);
-	priv->object_path = NULL;
-	g_free (priv->icon);
-	priv->icon = NULL;
+	g_clear_pointer (&priv->object_path, g_free);
+	g_clear_pointer (&priv->icon, g_free);
 }
 
 /***
