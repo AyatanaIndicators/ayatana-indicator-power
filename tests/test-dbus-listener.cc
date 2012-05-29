@@ -306,3 +306,65 @@ TEST_F(DbusListenerTest, GSDReturnsError)
   g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
   g_object_unref (o); 
 }
+
+/* This test emits a PropertiesChanged signal and confirms that
+   the dbus listener asks for a fresh set of devices as a result. */
+TEST_F(DbusListenerTest, GSDPropChanged)
+{
+  gsd_power_error_string = g_strdup ("no devices for you lol");
+
+  // create an i-power dbus listener to watch for GSD
+  ASSERT_EQ (g_slist_length(devices), 0);
+  GObject * o = G_OBJECT (g_object_new (INDICATOR_POWER_DBUS_LISTENER_TYPE, NULL));
+  ASSERT_TRUE (INDICATOR_IS_POWER_DBUS_LISTENER(o));
+  g_signal_connect(o, INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED,
+                   G_CALLBACK(on_devices_enumerated), this);
+  g_main_loop_run (mainloop);
+  // test the devices should have gotten
+  ASSERT_EQ (g_slist_length(devices), 0);
+
+  // build a GetDevices retval that shows an AC line and a discharging battery
+  g_clear_pointer (&gsd_power_error_string, g_free);
+  GVariantBuilder * builder = g_variant_builder_new (G_VARIANT_TYPE("a(susdut)"));
+  g_variant_builder_add (builder, "(susdut)",
+                         "/org/freedesktop/UPower/devices/line_power_AC",
+                         UP_DEVICE_KIND_LINE_POWER,
+                         ". GThemedIcon ac-adapter-symbolic ac-adapter ",
+                         0.0,
+                         UP_DEVICE_STATE_UNKNOWN,
+                         0);
+  g_variant_builder_add (builder, "(susdut)",
+                         "/org/freedesktop/UPower/devices/battery_BAT0",
+                         UP_DEVICE_KIND_BATTERY,
+                         ". GThemedIcon battery-good-symbolic gpm-battery-060 battery-good ",
+                         52.871712,
+                         UP_DEVICE_STATE_DISCHARGING,
+                         8834);
+  GVariant * value = g_variant_builder_end (builder);
+  get_devices_retval = g_variant_new_tuple (&value, 1);
+  g_variant_builder_unref (builder);
+
+  // tell the listener that some property changed
+  GVariantBuilder props_builder;
+  g_variant_builder_init (&props_builder, G_VARIANT_TYPE ("a{sv}"));
+  GVariant * props_changed = g_variant_new ("(s@a{sv}@as)", GSD_POWER_DBUS_INTERFACE,
+    g_variant_builder_end (&props_builder),
+    g_variant_new_strv (NULL, 0));
+  g_variant_ref_sink (props_changed);
+  GError * error = NULL;
+  g_dbus_connection_emit_signal (connection,
+                                 NULL,
+                                 GSD_POWER_DBUS_PATH,
+                                 "org.freedesktop.DBus.Properties",
+                                 "PropertiesChanged",
+                                 props_changed,
+                                 &error);
+  ASSERT_TRUE(error == NULL);
+
+  // give i-power's dbus listener a chance to ask for a fresh device list
+  g_main_loop_run (mainloop);
+  ASSERT_EQ (g_slist_length(devices), 2);
+
+  // cleanup
+  g_object_unref (o); 
+}

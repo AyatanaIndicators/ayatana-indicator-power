@@ -127,6 +127,7 @@ get_devices_cb (GObject      * source_object,
 	GSList * devices = NULL;
 	GVariant * devices_container;
 	IndicatorPowerDbusListener * self = INDICATOR_POWER_DBUS_LISTENER (user_data);
+g_message ("%s", G_STRLOC);
 
 	/* build an array of IndicatorPowerDevices from the DBus response */
 	error = NULL;
@@ -163,6 +164,7 @@ get_devices_cb (GObject      * source_object,
 static void
 request_device_list (IndicatorPowerDbusListener * self)
 {
+g_message ("calling GetDevices... self %p priv %p proxy %p", self, self->priv, self->priv->proxy);
 	g_dbus_proxy_call (self->priv->proxy,
 	                   "GetDevices",
 	                   NULL,
@@ -179,6 +181,8 @@ receive_properties_changed (GDBusProxy *proxy                  G_GNUC_UNUSED,
                             GStrv       invalidated_properties G_GNUC_UNUSED,
                             gpointer    user_data)
 {
+g_message ("properties changed: %p %p %p %p", proxy, changed_properties, invalidated_properties, user_data);
+g_message ("hey someone told me the properties changed");
 	request_device_list (INDICATOR_POWER_DBUS_LISTENER(user_data));
 }
 
@@ -200,6 +204,7 @@ service_proxy_cb (GObject      *object,
 		return;
 	}
 
+g_message ("registering for g-properties-changed callback");
 	/* we want to change the primary device changes */
 	g_signal_connect (priv->proxy,
 	                  "g-properties-changed",
