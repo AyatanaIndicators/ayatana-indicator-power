@@ -49,7 +49,9 @@ static void indicator_power_dbus_listener_finalize   (GObject *object);
 
 static void gsd_appeared_callback (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 
+/* LCOV_EXCL_START */
 G_DEFINE_TYPE (IndicatorPowerDbusListener, indicator_power_dbus_listener, G_TYPE_OBJECT);
+/* LCOV_EXCL_STOP */
 
 static void
 indicator_power_dbus_listener_class_init (IndicatorPowerDbusListenerClass *klass)
