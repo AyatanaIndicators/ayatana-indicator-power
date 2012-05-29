@@ -766,12 +766,11 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 void
 indicator_power_set_devices (IndicatorPower * self, GSList * devices)
 {
-  IndicatorPowerPrivate * priv;
-
   /* LCOV_EXCL_START */
   g_return_if_fail (IS_INDICATOR_POWER(self));
   /* LCOV_EXCL_STOP */
-  priv = self->priv;
+
+  IndicatorPowerPrivate * priv = self->priv;
 
   /* update our devices & primary device */
   g_slist_foreach (devices, (GFunc)g_object_ref, NULL);
