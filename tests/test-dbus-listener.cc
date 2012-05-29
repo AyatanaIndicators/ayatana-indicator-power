@@ -235,6 +235,7 @@ TEST_F(DbusListenerTest, GnomeSettingsDaemon)
   ASSERT_STREQ ("/org/freedesktop/UPower/devices/battery_BAT0", indicator_power_device_get_object_path(device));
 
   // cleanup
+  g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
   g_object_unref (o); 
   g_dbus_connection_unregister_object (connection, registration_id);
   g_bus_unown_name (name_ownership_id);

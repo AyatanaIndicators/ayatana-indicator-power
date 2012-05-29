@@ -252,3 +252,64 @@ TEST_F(IndicatorTest, AvoidChargingBatteriesWithZeroSecondsLeft)
   g_object_unref (power);
   g_object_unref (bad_battery_device);
 }
+
+TEST_F(IndicatorTest, OtherDevices)
+{
+  IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
+
+  g_object_ref (battery_device);
+  GSList * devices = g_slist_append (NULL, battery_device);
+
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/mouse", UP_DEVICE_KIND_MOUSE,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/ups", UP_DEVICE_KIND_UPS,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/keyboard", UP_DEVICE_KIND_KEYBOARD,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/pda", UP_DEVICE_KIND_PDA,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/phone", UP_DEVICE_KIND_PHONE,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/monitor", UP_DEVICE_KIND_MONITOR,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/media_player", UP_DEVICE_KIND_MEDIA_PLAYER,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/tablet", UP_DEVICE_KIND_TABLET,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/computer", UP_DEVICE_KIND_COMPUTER,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+  devices = g_slist_append (devices, indicator_power_device_new (
+    "/org/freedesktop/UPower/devices/unknown", UP_DEVICE_KIND_UNKNOWN,
+    "unused", 0, UP_DEVICE_STATE_UNKNOWN, 0));
+
+  indicator_power_set_devices (power, devices);
+
+  // FIXME: this tests to confirm the code doesn't crash,
+  // but further tests would be helpful
+
+  // cleanup
+  g_slist_free_full (devices, g_object_unref);
+  g_object_unref (power);
+}
+
+TEST_F(IndicatorTest, NoDevices)
+{
+  IndicatorPower * power = INDICATOR_POWER(g_object_new (INDICATOR_POWER_TYPE, NULL));
+
+  indicator_power_set_devices (power, NULL);
+
+  // FIXME: this tests to confirm the code doesn't crash,
+  // but further tests would be helpful
+
+  // cleanup
+  g_object_unref (power);
+}
