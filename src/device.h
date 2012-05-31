@@ -94,6 +94,11 @@ time_t        indicator_power_device_get_time        (const IndicatorPowerDevice
 GStrv         indicator_power_device_get_icon_names  (const IndicatorPowerDevice * device);
 GIcon       * indicator_power_device_get_gicon       (const IndicatorPowerDevice * device);
 
+void          indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
+                                                       gchar ** short_details,
+                                                       gchar ** details,
+                                                       gchar ** accessible_name);
+
 
 
 

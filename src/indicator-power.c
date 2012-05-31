@@ -202,190 +202,6 @@ show_preferences_cb (GtkMenuItem *item,
   spawn_command_line_async ("gnome-control-center power");
 }
 
-static void
-get_timestring (guint64   time_secs,
-                gchar   **short_timestring,
-                gchar   **detailed_timestring)
-{
-  gint  hours;
-  gint  minutes;
-
-  /* Add 0.5 to do rounding */
-  minutes = (int) ( ( time_secs / 60.0 ) + 0.5 );
-
-  if (minutes == 0)
-    {
-      *short_timestring = g_strdup (_("Unknown time"));
-      *detailed_timestring = g_strdup (_("Unknown time"));
-
-      return;
-    }
-
-  if (minutes < 60)
-    {
-      *short_timestring = g_strdup_printf ("0:%.2i", minutes);
-      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
-                                              "%i minutes",
-                                              minutes), minutes);
-      return;
-    }
-
-  hours = minutes / 60;
-  minutes = minutes % 60;
-
-  *short_timestring = g_strdup_printf ("%i:%.2i", hours, minutes);
-
-  if (minutes == 0)
-    {
-      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
-                                              "%i hour",
-                                              "%i hours",
-                                              hours), hours);
-    }
-  else
-    {
-      /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-       * Swap order with "%2$s %2$i %1$s %1$i if needed */
-      *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
-                                              hours, g_dngettext (GETTEXT_PACKAGE, "hour", "hours", hours),
-                                              minutes, g_dngettext (GETTEXT_PACKAGE, "minute", "minutes", minutes));
-    }
-}
-
-static const gchar *
-device_kind_to_localised_string (UpDeviceKind kind)
-{
-  const gchar *text = NULL;
-
-  switch (kind) {
-    case UP_DEVICE_KIND_LINE_POWER:
-      /* TRANSLATORS: system power cord */
-      text = _("AC adapter");
-      break;
-    case UP_DEVICE_KIND_BATTERY:
-      /* TRANSLATORS: laptop primary battery */
-      text = _("Battery");
-      break;
-    case UP_DEVICE_KIND_UPS:
-      /* TRANSLATORS: battery-backed AC power source */
-      text = _("UPS");
-      break;
-    case UP_DEVICE_KIND_MONITOR:
-      /* TRANSLATORS: a monitor is a device to measure voltage and current */
-      text = _("Monitor");
-      break;
-    case UP_DEVICE_KIND_MOUSE:
-      /* TRANSLATORS: wireless mice with internal batteries */
-      text = _("Mouse");
-      break;
-    case UP_DEVICE_KIND_KEYBOARD:
-      /* TRANSLATORS: wireless keyboard with internal battery */
-      text = _("Keyboard");
-      break;
-    case UP_DEVICE_KIND_PDA:
-      /* TRANSLATORS: portable device */
-      text = _("PDA");
-      break;
-    case UP_DEVICE_KIND_PHONE:
-      /* TRANSLATORS: cell phone (mobile...) */
-      text = _("Cell phone");
-      break;
-    case UP_DEVICE_KIND_MEDIA_PLAYER:
-      /* TRANSLATORS: media player, mp3 etc */
-      text = _("Media player");
-      break;
-    case UP_DEVICE_KIND_TABLET:
-      /* TRANSLATORS: tablet device */
-      text = _("Tablet");
-      break;
-    case UP_DEVICE_KIND_COMPUTER:
-      /* TRANSLATORS: tablet device */
-      text = _("Computer");
-      break;
-    default:
-      g_warning ("enum unrecognised: %i", kind);
-      text = up_device_kind_to_string (kind);
-    }
-
-  return text;
-}
-
-static void
-build_device_time_details (const gchar    *device_name,
-                           guint64         time,
-                           UpDeviceState   state,
-                           gdouble         percentage,
-                           gchar         **short_details,
-                           gchar         **details,
-                           gchar         **accessible_name)
-{
-  gchar *short_timestring = NULL;
-  gchar *detailed_timestring = NULL;
-
-  if (time > 0)
-    {
-      get_timestring (time,
-                      &short_timestring,
-                      &detailed_timestring);
-
-      if (state == UP_DEVICE_STATE_CHARGING)
-        {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
-                                              device_name, detailed_timestring, percentage);
-          *details = g_strdup_printf (_("%s (%s to charge)"),
-                                      device_name, short_timestring);
-          *short_details = g_strdup_printf ("(%s)", short_timestring);
-        }
-      else if (state == UP_DEVICE_STATE_DISCHARGING)
-        {
-          *short_details = g_strdup_printf ("%s", short_timestring);
-
-          if (time > 43200) /* 12 hours */
-            {
-              *accessible_name = g_strdup_printf (_("%s"), device_name);
-              *details = g_strdup_printf (_("%s"), device_name);
-            }
-          else
-            {
-              /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-              *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
-                                                  device_name, detailed_timestring, percentage);
-              *details = g_strdup_printf (_("%s (%s left)"),
-                                          device_name, short_timestring);
-            }
-        }
-
-      g_free (short_timestring);
-      g_free (detailed_timestring);
-    }
-  else
-    {
-      if (state == UP_DEVICE_STATE_FULLY_CHARGED)
-        {
-          *details = g_strdup_printf (_("%s (charged)"), device_name);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup ("");
-        }
-      else if (percentage > 0)
-        {
-          /* TRANSLATORS: %2 is a percentage value. Note: this string is only
-           * used when we don't have a time value */
-          *details = g_strdup_printf (_("%s (%.0lf%%)"),
-                                      device_name, percentage);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup_printf (_("(%.0lf%%)"),
-                                            percentage);
-        }
-      else
-        {
-          *details = g_strdup_printf (_("%s (not present)"), device_name);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup (_("(not present)"));
-        }
-    }
-}
-
 /* ensure that the entry is using self's accessible description */
 static void
 refresh_entry_accessible_desc (IndicatorPower * self, IndicatorObjectEntry * entry)
@@ -444,23 +260,17 @@ menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
     GtkWidget *details_label;
     GtkWidget *grid;
     GIcon *device_gicon;
-    const gchar *device_name;
     gchar *short_details = NULL;
     gchar *details = NULL;
     gchar *accessible_name = NULL;
     AtkObject *atk_object;
-    const time_t time = indicator_power_device_get_time (device);
-    const UpDeviceState state = indicator_power_device_get_state (device);
-    const gdouble percentage  = indicator_power_device_get_percentage (device);
 
     /* Process the data */
     device_gicon = indicator_power_device_get_gicon (device);
     icon = gtk_image_new_from_gicon (device_gicon, GTK_ICON_SIZE_SMALL_TOOLBAR);
     g_clear_object (&device_gicon);
 
-    device_name = device_kind_to_localised_string (kind);
-
-    build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
+    indicator_power_device_get_time_details (device, &short_details, &details, &accessible_name);
 
     /* Create menu item */
     item = gtk_image_menu_item_new ();
@@ -634,12 +444,7 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
-  const gchar *device_name;
   IndicatorPowerPrivate * priv = self->priv;
-  const time_t time = indicator_power_device_get_time (device);
-  const UpDeviceKind kind = indicator_power_device_get_kind (device);
-  const UpDeviceState state = indicator_power_device_get_state (device);
-  const gdouble percentage  = indicator_power_device_get_percentage (device);
 
   /* set icon */
   device_gicon = indicator_power_device_get_gicon (device);
@@ -649,10 +454,10 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 
 
   /* get the device name */
-  device_name = device_kind_to_localised_string (kind);
+  //device_name = device_kind_to_localised_string (kind);
 
   /* get the description */
-  build_device_time_details (device_name, time, state, percentage, &short_details, &details, &accessible_name);
+  indicator_power_device_get_time_details (device, &short_details, &details, &accessible_name);
 
   gtk_label_set_label (GTK_LABEL (priv->label),
                        short_details);

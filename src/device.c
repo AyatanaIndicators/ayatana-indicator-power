@@ -21,6 +21,12 @@ License along with this library. If not, see
 <http://www.gnu.org/licenses/>.
 */
 
+#ifdef HAVE_CONFIG_H
+ #include "config.h"
+#endif
+
+#include <glib/gi18n.h>
+
 #include "device.h"
 
 struct _IndicatorPowerDevicePrivate
@@ -391,6 +397,195 @@ indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
   return icon;
 }
 
+/***
+****
+***/
+
+static void
+get_timestring (guint64   time_secs,
+                gchar   **short_timestring,
+                gchar   **detailed_timestring)
+{
+  gint  hours;
+  gint  minutes;
+
+  /* Add 0.5 to do rounding */
+  minutes = (int) ( ( time_secs / 60.0 ) + 0.5 );
+
+  if (minutes == 0)
+    {
+      *short_timestring = g_strdup (_("Unknown time"));
+      *detailed_timestring = g_strdup (_("Unknown time"));
+
+      return;
+    }
+
+  if (minutes < 60)
+    {
+      *short_timestring = g_strdup_printf ("0:%.2i", minutes);
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
+                                              "%i minutes",
+                                              minutes), minutes);
+      return;
+    }
+
+  hours = minutes / 60;
+  minutes = minutes % 60;
+
+  *short_timestring = g_strdup_printf ("%i:%.2i", hours, minutes);
+
+  if (minutes == 0)
+    {
+      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
+                                              "%i hour",
+                                              "%i hours",
+                                              hours), hours);
+    }
+  else
+    {
+      /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+       * Swap order with "%2$s %2$i %1$s %1$i if needed */
+      *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
+                                              hours, g_dngettext (GETTEXT_PACKAGE, "hour", "hours", hours),
+                                              minutes, g_dngettext (GETTEXT_PACKAGE, "minute", "minutes", minutes));
+    }
+}
+
+static const gchar *
+device_kind_to_localised_string (UpDeviceKind kind)
+{
+  const gchar *text = NULL;
+
+  switch (kind) {
+    case UP_DEVICE_KIND_LINE_POWER:
+      /* TRANSLATORS: system power cord */
+      text = _("AC adapter");
+      break;
+    case UP_DEVICE_KIND_BATTERY:
+      /* TRANSLATORS: laptop primary battery */
+      text = _("Battery");
+      break;
+    case UP_DEVICE_KIND_UPS:
+      /* TRANSLATORS: battery-backed AC power source */
+      text = _("UPS");
+      break;
+    case UP_DEVICE_KIND_MONITOR:
+      /* TRANSLATORS: a monitor is a device to measure voltage and current */
+      text = _("Monitor");
+      break;
+    case UP_DEVICE_KIND_MOUSE:
+      /* TRANSLATORS: wireless mice with internal batteries */
+      text = _("Mouse");
+      break;
+    case UP_DEVICE_KIND_KEYBOARD:
+      /* TRANSLATORS: wireless keyboard with internal battery */
+      text = _("Keyboard");
+      break;
+    case UP_DEVICE_KIND_PDA:
+      /* TRANSLATORS: portable device */
+      text = _("PDA");
+      break;
+    case UP_DEVICE_KIND_PHONE:
+      /* TRANSLATORS: cell phone (mobile...) */
+      text = _("Cell phone");
+      break;
+    case UP_DEVICE_KIND_MEDIA_PLAYER:
+      /* TRANSLATORS: media player, mp3 etc */
+      text = _("Media player");
+      break;
+    case UP_DEVICE_KIND_TABLET:
+      /* TRANSLATORS: tablet device */
+      text = _("Tablet");
+      break;
+    case UP_DEVICE_KIND_COMPUTER:
+      /* TRANSLATORS: tablet device */
+      text = _("Computer");
+      break;
+    default:
+      g_warning ("enum unrecognised: %i", kind);
+      text = up_device_kind_to_string (kind);
+    }
+
+  return text;
+}
+
+void
+indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
+                                         gchar ** short_details,
+                                         gchar ** details,
+                                         gchar ** accessible_name)
+{
+  const time_t time = indicator_power_device_get_time (device);
+  const UpDeviceState   state = indicator_power_device_get_state (device);
+  const gdouble percentage = indicator_power_device_get_percentage (device);
+  const gchar * device_name = device_kind_to_localised_string (indicator_power_device_get_kind(device));
+
+  gchar *short_timestring = NULL;
+  gchar *detailed_timestring = NULL;
+
+  if (time > 0)
+    {
+      get_timestring (time,
+                      &short_timestring,
+                      &detailed_timestring);
+
+      if (state == UP_DEVICE_STATE_CHARGING)
+        {
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
+                                              device_name, detailed_timestring, percentage);
+          *details = g_strdup_printf (_("%s (%s to charge)"),
+                                      device_name, short_timestring);
+          *short_details = g_strdup_printf ("(%s)", short_timestring);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          *short_details = g_strdup_printf ("%s", short_timestring);
+
+          if (time > 43200) /* 12 hours */
+            {
+              *accessible_name = g_strdup_printf (_("%s"), device_name);
+              *details = g_strdup_printf (_("%s"), device_name);
+            }
+          else
+            {
+              /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+              *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
+                                                  device_name, detailed_timestring, percentage);
+              *details = g_strdup_printf (_("%s (%s left)"),
+                                          device_name, short_timestring);
+            }
+        }
+
+      g_free (short_timestring);
+      g_free (detailed_timestring);
+    }
+  else
+    {
+      if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+        {
+          *details = g_strdup_printf (_("%s (charged)"), device_name);
+          *accessible_name = g_strdup (*details);
+          *short_details = g_strdup ("");
+        }
+      else if (percentage > 0)
+        {
+          /* TRANSLATORS: %2 is a percentage value. Note: this string is only
+           * used when we don't have a time value */
+          *details = g_strdup_printf (_("%s (%.0lf%%)"),
+                                      device_name, percentage);
+          *accessible_name = g_strdup (*details);
+          *short_details = g_strdup_printf (_("(%.0lf%%)"),
+                                            percentage);
+        }
+      else
+        {
+          *details = g_strdup_printf (_("%s (not present)"), device_name);
+          *accessible_name = g_strdup (*details);
+          *short_details = g_strdup (_("(not present)"));
+        }
+    }
+}
 
 /***
 ****  Instantiation
