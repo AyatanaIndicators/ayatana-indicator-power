@@ -520,11 +520,11 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
   const gdouble percentage = indicator_power_device_get_percentage (device);
   const gchar * device_name = device_kind_to_localised_string (indicator_power_device_get_kind(device));
 
-  gchar *short_timestring = NULL;
-  gchar *detailed_timestring = NULL;
-
   if (time > 0)
     {
+      gchar *short_timestring = NULL;
+      gchar *detailed_timestring = NULL;
+
       get_timestring (time,
                       &short_timestring,
                       &detailed_timestring);
