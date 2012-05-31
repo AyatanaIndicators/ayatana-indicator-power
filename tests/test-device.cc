@@ -111,13 +111,6 @@ TEST_F(DeviceTest, Properties)
   ASSERT_STREQ (str, "/object/path");
   g_free (str);
 
-  // ICON
-  key = INDICATOR_POWER_DEVICE_ICON;
-  g_object_set (o, key, "something", NULL);
-  g_object_get (o, key, &str, NULL);
-  ASSERT_STREQ (str, "something");
-  g_free (str);
-
   // PERCENTAGE
   key = INDICATOR_POWER_DEVICE_PERCENTAGE;
   g_object_set (o, key, 50.0, NULL);
@@ -140,7 +133,6 @@ TEST_F(DeviceTest, New)
 
   IndicatorPowerDevice * device = indicator_power_device_new ("/object/path",
                                                               UP_DEVICE_KIND_BATTERY,
-                                                              "icon",
                                                               50.0,
                                                               UP_DEVICE_STATE_CHARGING,
                                                               30);
@@ -149,7 +141,6 @@ TEST_F(DeviceTest, New)
   ASSERT_EQ (indicator_power_device_get_kind(device), UP_DEVICE_KIND_BATTERY);
   ASSERT_EQ (indicator_power_device_get_state(device), UP_DEVICE_STATE_CHARGING);
   ASSERT_STREQ (indicator_power_device_get_object_path(device), "/object/path");
-  ASSERT_STREQ (indicator_power_device_get_icon(device), "icon");
   ASSERT_EQ ((int)indicator_power_device_get_percentage(device), 50);
   ASSERT_EQ (indicator_power_device_get_time(device), 30);
 
@@ -175,7 +166,6 @@ TEST_F(DeviceTest, NewFromVariant)
   ASSERT_EQ (indicator_power_device_get_kind(device), UP_DEVICE_KIND_BATTERY);
   ASSERT_EQ (indicator_power_device_get_state(device), UP_DEVICE_STATE_CHARGING);
   ASSERT_STREQ (indicator_power_device_get_object_path(device), "/object/path");
-  ASSERT_STREQ (indicator_power_device_get_icon(device), "icon");
   ASSERT_EQ ((int)indicator_power_device_get_percentage(device), 50);
   ASSERT_EQ (indicator_power_device_get_time(device), 30);
 
@@ -192,7 +182,6 @@ TEST_F(DeviceTest, BadAccessors)
   IndicatorPowerDevice * device = NULL;
   indicator_power_device_get_kind (device);
   indicator_power_device_get_time (device);
-  indicator_power_device_get_icon (device);
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);
@@ -201,7 +190,6 @@ TEST_F(DeviceTest, BadAccessors)
   device = reinterpret_cast<IndicatorPowerDevice*>(g_cancellable_new ());
   indicator_power_device_get_kind (device);
   indicator_power_device_get_time (device);
-  indicator_power_device_get_icon (device);
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);

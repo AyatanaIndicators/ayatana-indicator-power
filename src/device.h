@@ -43,7 +43,6 @@ typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
 #define INDICATOR_POWER_DEVICE_KIND         "indicator-power-device-kind"
 #define INDICATOR_POWER_DEVICE_STATE        "indicator-power-device-state"
 #define INDICATOR_POWER_DEVICE_OBJECT_PATH  "indicator-power-device-object-path"
-#define INDICATOR_POWER_DEVICE_ICON         "indicator-power-device-icon"
 #define INDICATOR_POWER_DEVICE_PERCENTAGE   "indicator-power-device-percentage"
 #define INDICATOR_POWER_DEVICE_TIME         "indicator-power-device-time"
 
@@ -75,7 +74,6 @@ GType indicator_power_device_get_type (void);
 
 IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
                                                   UpDeviceKind     kind,
-                                                  const gchar    * icon,
                                                   gdouble          percentage,
                                                   UpDeviceState    state,
                                                   time_t           time);
@@ -90,7 +88,6 @@ IndicatorPowerDevice* indicator_power_device_new_from_variant (GVariant * varian
 UpDeviceKind  indicator_power_device_get_kind        (const IndicatorPowerDevice * device);
 UpDeviceState indicator_power_device_get_state       (const IndicatorPowerDevice * device);
 const gchar * indicator_power_device_get_object_path (const IndicatorPowerDevice * device);
-const gchar * indicator_power_device_get_icon        (const IndicatorPowerDevice * device);
 gdouble       indicator_power_device_get_percentage  (const IndicatorPowerDevice * device);
 time_t        indicator_power_device_get_time        (const IndicatorPowerDevice * device);
 

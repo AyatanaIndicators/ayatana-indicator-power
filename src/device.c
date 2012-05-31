@@ -28,7 +28,6 @@ struct _IndicatorPowerDevicePrivate
 	UpDeviceKind kind;
 	UpDeviceState state;
 	gchar * object_path;
-	gchar * icon;
 	gdouble percentage;
 	time_t time;
 };
@@ -86,10 +85,6 @@ indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
 			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 	g_object_class_install_property (object_class, PROP_OBJECT_PATH, pspec);
 
-	pspec = g_param_spec_string (INDICATOR_POWER_DEVICE_ICON, "icon", "The device's icon", NULL,
-			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_ICON, pspec);
-
 	pspec = g_param_spec_double (INDICATOR_POWER_DEVICE_PERCENTAGE, "percentage", "percent charged",
                                      0.0, 100.0, 0.0,
 			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
@@ -113,7 +108,6 @@ indicator_power_device_init (IndicatorPowerDevice *self)
         priv->kind = UP_DEVICE_KIND_UNKNOWN;
         priv->state = UP_DEVICE_STATE_UNKNOWN;
         priv->object_path = NULL;
-        priv->icon = NULL;
         priv->percentage = 0.0;
         priv->time = 0;
 
@@ -133,7 +127,6 @@ indicator_power_device_finalize (GObject *object)
 	IndicatorPowerDevicePrivate * priv = self->priv;
 
 	g_clear_pointer (&priv->object_path, g_free);
-	g_clear_pointer (&priv->icon, g_free);
 }
 
 /***
@@ -158,10 +151,6 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
 
 		case PROP_OBJECT_PATH:
 			g_value_set_string (value, priv->object_path);
-			break;
-
-		case PROP_ICON:
-			g_value_set_string (value, priv->icon);
 			break;
 
 		case PROP_PERCENTAGE:
@@ -193,11 +182,6 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 		case PROP_OBJECT_PATH:
 			g_free (priv->object_path);
 			priv->object_path = g_value_dup_string (value);
-			break;
-
-		case PROP_ICON:
-			g_free (priv->icon);
-			priv->icon = g_value_dup_string (value);
 			break;
 
 		case PROP_PERCENTAGE:
@@ -242,16 +226,6 @@ indicator_power_device_get_object_path (const IndicatorPowerDevice * device)
 	/* LCOV_EXCL_STOP */
 
         return device->priv->object_path;
-}
-
-const gchar *
-indicator_power_device_get_icon (const IndicatorPowerDevice * device)
-{
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
-	/* LCOV_EXCL_STOP */
-
-        return device->priv->icon;
 }
 
 gdouble
@@ -418,103 +392,6 @@ indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
 }
 
 
-
-#if 0
-static const gchar *
-get_icon_percentage_for_status (const gchar *status)
-{
-
-  if (g_strcmp0 (status, "caution") == 0)
-    return "000";
-  else if (g_strcmp0 (status, "low") == 0)
-    return "040";
-  else if (g_strcmp0 (status, "good") == 0)
-    return "080";
-  else
-    return "100";
-}
-
-static GIcon*
-build_battery_icon (UpDeviceState  state,
-                    gchar         *suffix_str)
-{
-  GIcon *gicon;
-
-  GString *filename;
-  gchar **iconnames;
-
-  filename = g_string_new (NULL);
-
-  if (state == UP_DEVICE_STATE_FULLY_CHARGED)
-    {
-      g_string_append (filename, "battery-charged;");
-      g_string_append (filename, "battery-full-charged-symbolic;");
-      g_string_append (filename, "battery-full-charged;");
-      g_string_append (filename, "gpm-battery-charged;");
-      g_string_append (filename, "gpm-battery-100-charging;");
-    }
-  else if (state == UP_DEVICE_STATE_CHARGING)
-    {
-      g_string_append (filename, "battery-000-charging;");
-      g_string_append (filename, "battery-caution-charging-symbolic;");
-      g_string_append (filename, "battery-caution-charging;");
-      g_string_append (filename, "gpm-battery-000-charging;");
-    }
-  else if (state == UP_DEVICE_STATE_DISCHARGING)
-    {
-      const gchar *percentage = get_icon_percentage_for_status (suffix_str);
-      g_string_append_printf (filename, "battery-%s;", suffix_str);
-      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
-      g_string_append_printf (filename, "battery-%s;", percentage);
-      g_string_append_printf (filename, "gpm-battery-%s;", percentage);
-    }
-
-  iconnames = g_strsplit (filename->str, ";", -1);
-  gicon = g_themed_icon_new_from_names (iconnames, -1);
-
-  g_strfreev (iconnames);
-  g_string_free (filename, TRUE);
-
-  return gicon;
-}
-
-static GIcon*
-get_device_icon (UpDeviceKind   kind,
-                 UpDeviceState  state,
-                 guint64        time_sec,
-                 const gchar   *device_icon)
-{
-  GIcon *gicon = NULL;
-
-  if (kind == UP_DEVICE_KIND_BATTERY &&
-      (state == UP_DEVICE_STATE_FULLY_CHARGED ||
-       state == UP_DEVICE_STATE_CHARGING ||
-       state == UP_DEVICE_STATE_DISCHARGING))
-    {
-      if (state == UP_DEVICE_STATE_FULLY_CHARGED ||
-          state == UP_DEVICE_STATE_CHARGING)
-        {
-          gicon = build_battery_icon (state, NULL);
-        }
-      else if (state == UP_DEVICE_STATE_DISCHARGING)
-        {
-          if ((time_sec > 60 * 30) && /* more than 30 minutes left */
-              (g_strrstr (device_icon, "000") ||
-               g_strrstr (device_icon, "020") ||
-               g_strrstr (device_icon, "caution"))) /* the icon is red */
-            {
-              gicon = build_battery_icon (state, "low");
-            }
-        }
-    }
-
-  if (gicon == NULL)
-    gicon = g_icon_new_for_string (device_icon, NULL);
-
-  return gicon;
-}
-#endif
-
 /***
 ****  Instantiation
 ***/
@@ -522,7 +399,6 @@ get_device_icon (UpDeviceKind   kind,
 IndicatorPowerDevice *
 indicator_power_device_new (const gchar * object_path,
                             UpDeviceKind  kind,
-                            const gchar * icon_path,
                             gdouble percentage,
                             UpDeviceState state,
                             time_t timestamp)
@@ -531,7 +407,6 @@ indicator_power_device_new (const gchar * object_path,
 	                            INDICATOR_POWER_DEVICE_KIND, kind,
 	                            INDICATOR_POWER_DEVICE_STATE, state,
 	                            INDICATOR_POWER_DEVICE_OBJECT_PATH, object_path,
-	                            INDICATOR_POWER_DEVICE_ICON, icon_path,
 	                            INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
 	                            INDICATOR_POWER_DEVICE_TIME, (guint64)timestamp,
 	                            NULL);
@@ -558,7 +433,6 @@ indicator_power_device_new_from_variant (GVariant * v)
 
 	return indicator_power_device_new (object_path,
 	                                   kind,
-	                                   icon,
 	                                   percentage,
 	                                   state,
 	                                   time);
