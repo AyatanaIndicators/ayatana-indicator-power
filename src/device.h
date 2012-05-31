@@ -94,6 +94,11 @@ const gchar * indicator_power_device_get_icon        (const IndicatorPowerDevice
 gdouble       indicator_power_device_get_percentage  (const IndicatorPowerDevice * device);
 time_t        indicator_power_device_get_time        (const IndicatorPowerDevice * device);
 
+GStrv         indicator_power_device_get_icon_names  (const IndicatorPowerDevice * device);
+GIcon       * indicator_power_device_get_gicon       (const IndicatorPowerDevice * device);
+
+
+
 
 G_END_DECLS
 

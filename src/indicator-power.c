@@ -431,101 +431,6 @@ set_accessible_desc (IndicatorPower *self, const gchar *desc)
   }
 }
 
-static const gchar *
-get_icon_percentage_for_status (const gchar *status)
-{
-
-  if (g_strcmp0 (status, "caution") == 0)
-    return "000";
-  else if (g_strcmp0 (status, "low") == 0)
-    return "040";
-  else if (g_strcmp0 (status, "good") == 0)
-    return "080";
-  else
-    return "100";
-}
-
-static GIcon*
-build_battery_icon (UpDeviceState  state,
-                    gchar         *suffix_str)
-{
-  GIcon *gicon;
-
-  GString *filename;
-  gchar **iconnames;
-
-  filename = g_string_new (NULL);
-
-  if (state == UP_DEVICE_STATE_FULLY_CHARGED)
-    {
-      g_string_append (filename, "battery-charged;");
-      g_string_append (filename, "battery-full-charged-symbolic;");
-      g_string_append (filename, "battery-full-charged;");
-      g_string_append (filename, "gpm-battery-charged;");
-      g_string_append (filename, "gpm-battery-100-charging;");
-    }
-  else if (state == UP_DEVICE_STATE_CHARGING)
-    {
-      g_string_append (filename, "battery-000-charging;");
-      g_string_append (filename, "battery-caution-charging-symbolic;");
-      g_string_append (filename, "battery-caution-charging;");
-      g_string_append (filename, "gpm-battery-000-charging;");
-    }
-  else if (state == UP_DEVICE_STATE_DISCHARGING)
-    {
-      const gchar *percentage = get_icon_percentage_for_status (suffix_str);
-      g_string_append_printf (filename, "battery-%s;", suffix_str);
-      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
-      g_string_append_printf (filename, "battery-%s;", percentage);
-      g_string_append_printf (filename, "gpm-battery-%s;", percentage);
-    }
-
-  iconnames = g_strsplit (filename->str, ";", -1);
-  gicon = g_themed_icon_new_from_names (iconnames, -1);
-
-  g_strfreev (iconnames);
-  g_string_free (filename, TRUE);
-
-  return gicon;
-}
-
-static GIcon*
-get_device_icon (UpDeviceKind   kind,
-                 UpDeviceState  state,
-                 guint64        time_sec,
-                 const gchar   *device_icon)
-{
-  GIcon *gicon = NULL;
-
-  if (kind == UP_DEVICE_KIND_BATTERY &&
-      (state == UP_DEVICE_STATE_FULLY_CHARGED ||
-       state == UP_DEVICE_STATE_CHARGING ||
-       state == UP_DEVICE_STATE_DISCHARGING))
-    {
-      if (state == UP_DEVICE_STATE_FULLY_CHARGED ||
-          state == UP_DEVICE_STATE_CHARGING)
-        {
-          gicon = build_battery_icon (state, NULL);
-        }
-      else if (state == UP_DEVICE_STATE_DISCHARGING)
-        {
-          if ((time_sec > 60 * 30) && /* more than 30 minutes left */
-              (g_strrstr (device_icon, "000") ||
-               g_strrstr (device_icon, "020") ||
-               g_strrstr (device_icon, "caution"))) /* the icon is red */
-            {
-              gicon = build_battery_icon (state, "low");
-            }
-        }
-    }
-
-  if (gicon == NULL)
-    gicon = g_icon_new_for_string (device_icon, NULL);
-
-  return gicon;
-}
-
-
 static gboolean
 menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
 {
@@ -538,7 +443,7 @@ menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
     GtkWidget *item;
     GtkWidget *details_label;
     GtkWidget *grid;
-    GIcon *device_gicons;
+    GIcon *device_gicon;
     const gchar *device_name;
     gchar *short_details = NULL;
     gchar *details = NULL;
@@ -546,14 +451,12 @@ menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
     AtkObject *atk_object;
     const time_t time = indicator_power_device_get_time (device);
     const UpDeviceState state = indicator_power_device_get_state (device);
-    const gchar * device_icon = indicator_power_device_get_icon (device);
     const gdouble percentage  = indicator_power_device_get_percentage (device);
 
     /* Process the data */
-    device_gicons = get_device_icon (kind, state, time, device_icon);
-    icon = gtk_image_new_from_gicon (device_gicons,
-                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
-    g_clear_object (&device_gicons);
+    device_gicon = indicator_power_device_get_gicon (device);
+    icon = gtk_image_new_from_gicon (device_gicon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    g_clear_object (&device_gicon);
 
     device_name = device_kind_to_localised_string (kind);
 
@@ -727,7 +630,7 @@ get_primary_device (GSList * devices)
 static void
 put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 {
-  GIcon *device_gicons;
+  GIcon *device_gicon;
   gchar *short_details = NULL;
   gchar *details = NULL;
   gchar *accessible_name = NULL;
@@ -736,15 +639,12 @@ put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
   const time_t time = indicator_power_device_get_time (device);
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
-  const gchar * device_icon = indicator_power_device_get_icon (device);
   const gdouble percentage  = indicator_power_device_get_percentage (device);
 
   /* set icon */
-  device_gicons = get_device_icon (kind, state, time, device_icon);
-  gtk_image_set_from_gicon (priv->status_image,
-                            device_gicons,
-                            GTK_ICON_SIZE_LARGE_TOOLBAR);
-  g_clear_object (&device_gicons);
+  device_gicon = indicator_power_device_get_gicon (device);
+  gtk_image_set_from_gicon (priv->status_image, device_gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_clear_object (&device_gicon);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
 

@@ -211,7 +211,7 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 }
 
 /***
-****
+****  Accessors
 ***/
 
 UpDeviceKind
@@ -276,6 +276,247 @@ indicator_power_device_get_time (const IndicatorPowerDevice * device)
 
 /***
 ****
+****
+***/
+
+/* taken from GSD's power plugin, (c) Richard Hughes and licensed GPL >=2 */
+static const gchar *
+gpm_upower_get_device_icon_suffix (gdouble percentage)
+{
+        if (percentage < 10) return "caution";
+        if (percentage < 30) return "low";
+        if (percentage < 60) return "good";
+        return "full";
+}
+
+/* taken from GSD's power plugin, (c) Richard Hughes and licensed GPL >=2 */
+static const gchar *
+gpm_upower_get_device_icon_index (gdouble percentage)
+{
+        if (percentage < 10) return "000";
+        if (percentage < 30) return "020";
+        if (percentage < 50) return "040";
+        if (percentage < 70) return "060";
+        if (percentage < 90) return "080";
+        return "100";
+}
+
+/**
+  indicator_power_device_get_icon_names:
+  @device: #IndicatorPowerDevice to generate the icon names from
+
+  Based on GSD's power plugin, (c) Richard Hughes and licensed GPL >= 2.
+  It differs in these ways:
+
+  (1) all charging batteries use the same icon regardless of progress:
+  <https://bugs.launchpad.net/indicator-power/+bug/824629/comments/7>
+
+  (2) discharging batteries are keyed off of time left, rather than
+  percentage left, s.t. <= 30 minutes remaining gives the 'caution' icon.
+  <https://bugs.launchpad.net/indicator-power/+bug/743823>
+
+  Return value: (array zero-terminated=1) (transfer full):
+  a GStrv of icon names suitable for passing to g_themed_icon_new_from_names().
+  Free with g_strfreev() when done.
+*/
+GStrv
+indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
+{
+  char ** ret = NULL;
+  const gchar *suffix_str;
+  const gchar *index_str;
+
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+  /* LCOV_EXCL_STOP */
+
+  gdouble percentage = indicator_power_device_get_percentage (device);
+  const UpDeviceKind kind = indicator_power_device_get_kind (device);
+  const UpDeviceState state = indicator_power_device_get_state (device);
+  const char * kind_str = kind_str = up_device_kind_to_string (kind);
+
+  /* get correct icon prefix */
+  GString * filename = g_string_new (NULL);
+
+  /* get the icon from some simple rules */
+  if (kind == UP_DEVICE_KIND_LINE_POWER) {
+    g_string_append (filename, "ac-adapter-symbolic;");
+    g_string_append (filename, "ac-adapter;");
+  } else if (kind == UP_DEVICE_KIND_MONITOR) {
+    g_string_append (filename, "gpm-monitor-symbolic;");
+    g_string_append (filename, "gpm-monitor;");
+  } else switch (state) {
+    case UP_DEVICE_STATE_EMPTY:
+      g_string_append (filename, "battery-empty-symbolic;");
+      g_string_append_printf (filename, "gpm-%s-empty;", kind_str);
+      g_string_append_printf (filename, "gpm-%s-000;", kind_str);
+      g_string_append (filename, "battery-empty;");
+      break;
+    case UP_DEVICE_STATE_FULLY_CHARGED:
+      g_string_append (filename, "battery-full-charged-symbolic;");
+      g_string_append (filename, "battery-full-charging-symbolic;");
+      g_string_append_printf (filename, "gpm-%s-full;", kind_str);
+      g_string_append_printf (filename, "gpm-%s-100;", kind_str);
+      g_string_append (filename, "battery-full-charged;");
+      g_string_append (filename, "battery-full-charging;");
+      break;
+    case UP_DEVICE_STATE_CHARGING:
+    case UP_DEVICE_STATE_PENDING_CHARGE:
+      /* When charging, always use the same icon regardless of percentage.
+         <http://bugs.launchpad.net/indicator-power/+bug/824629> */
+      percentage = 0;
+
+      suffix_str = gpm_upower_get_device_icon_suffix (percentage);
+      index_str = gpm_upower_get_device_icon_index (percentage);
+      g_string_append_printf (filename, "battery-%s-charging-symbolic;", suffix_str);
+      g_string_append_printf (filename, "gpm-%s-%s-charging;", kind_str, index_str);
+      g_string_append_printf (filename, "battery-%s-charging;", suffix_str);
+      break;
+    case UP_DEVICE_STATE_DISCHARGING:
+    case UP_DEVICE_STATE_PENDING_DISCHARGE: {
+      /* Don't show the caution/red icons unless we have <=30 min left.
+         <https://bugs.launchpad.net/indicator-power/+bug/743823>
+         Themes use the caution color when the percentage is 0% or 20%,
+         so if we have >30 min left, use 30% as the icon's percentage floor */
+      if (indicator_power_device_get_time (device) > (30*60))
+        percentage = MAX(percentage, 30);
+
+      suffix_str = gpm_upower_get_device_icon_suffix (percentage);
+      index_str = gpm_upower_get_device_icon_index (percentage);
+      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+      g_string_append_printf (filename, "gpm-%s-%s;", kind_str, index_str);
+      g_string_append_printf (filename, "battery-%s;", suffix_str);
+      break;
+    }
+    default:
+      g_string_append (filename, "battery-missing-symbolic;");
+      g_string_append (filename, "gpm-battery-missing;");
+      g_string_append (filename, "battery-missing;");
+    }
+
+    ret = g_strsplit (filename->str, ";", -1);
+    g_string_free (filename, TRUE);
+    return ret;
+}
+
+/**
+  indicator_power_device_get_gicon:
+  @device: #IndicatorPowerDevice to generate the icon names from
+
+  A convenience function to call g_themed_icon_new_from_names()
+  with the names returned by indicator_power_device_get_icon_names()
+
+  Return value: (transfer full): A themed GIcon
+*/
+GIcon *
+indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
+{
+  GStrv names = indicator_power_device_get_icon_names (device);
+  GIcon * icon = g_themed_icon_new_from_names (names, -1);
+  g_strfreev (names);
+  return icon;
+}
+
+
+
+#if 0
+static const gchar *
+get_icon_percentage_for_status (const gchar *status)
+{
+
+  if (g_strcmp0 (status, "caution") == 0)
+    return "000";
+  else if (g_strcmp0 (status, "low") == 0)
+    return "040";
+  else if (g_strcmp0 (status, "good") == 0)
+    return "080";
+  else
+    return "100";
+}
+
+static GIcon*
+build_battery_icon (UpDeviceState  state,
+                    gchar         *suffix_str)
+{
+  GIcon *gicon;
+
+  GString *filename;
+  gchar **iconnames;
+
+  filename = g_string_new (NULL);
+
+  if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+    {
+      g_string_append (filename, "battery-charged;");
+      g_string_append (filename, "battery-full-charged-symbolic;");
+      g_string_append (filename, "battery-full-charged;");
+      g_string_append (filename, "gpm-battery-charged;");
+      g_string_append (filename, "gpm-battery-100-charging;");
+    }
+  else if (state == UP_DEVICE_STATE_CHARGING)
+    {
+      g_string_append (filename, "battery-000-charging;");
+      g_string_append (filename, "battery-caution-charging-symbolic;");
+      g_string_append (filename, "battery-caution-charging;");
+      g_string_append (filename, "gpm-battery-000-charging;");
+    }
+  else if (state == UP_DEVICE_STATE_DISCHARGING)
+    {
+      const gchar *percentage = get_icon_percentage_for_status (suffix_str);
+      g_string_append_printf (filename, "battery-%s;", suffix_str);
+      g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+      g_string_append_printf (filename, "battery-%s;", percentage);
+      g_string_append_printf (filename, "gpm-battery-%s;", percentage);
+    }
+
+  iconnames = g_strsplit (filename->str, ";", -1);
+  gicon = g_themed_icon_new_from_names (iconnames, -1);
+
+  g_strfreev (iconnames);
+  g_string_free (filename, TRUE);
+
+  return gicon;
+}
+
+static GIcon*
+get_device_icon (UpDeviceKind   kind,
+                 UpDeviceState  state,
+                 guint64        time_sec,
+                 const gchar   *device_icon)
+{
+  GIcon *gicon = NULL;
+
+  if (kind == UP_DEVICE_KIND_BATTERY &&
+      (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+       state == UP_DEVICE_STATE_CHARGING ||
+       state == UP_DEVICE_STATE_DISCHARGING))
+    {
+      if (state == UP_DEVICE_STATE_FULLY_CHARGED ||
+          state == UP_DEVICE_STATE_CHARGING)
+        {
+          gicon = build_battery_icon (state, NULL);
+        }
+      else if (state == UP_DEVICE_STATE_DISCHARGING)
+        {
+          if ((time_sec > 60 * 30) && /* more than 30 minutes left */
+              (g_strrstr (device_icon, "000") ||
+               g_strrstr (device_icon, "020") ||
+               g_strrstr (device_icon, "caution"))) /* the icon is red */
+            {
+              gicon = build_battery_icon (state, "low");
+            }
+        }
+    }
+
+  if (gicon == NULL)
+    gicon = g_icon_new_for_string (device_icon, NULL);
+
+  return gicon;
+}
+#endif
+
+/***
+****  Instantiation
 ***/
 
 IndicatorPowerDevice *

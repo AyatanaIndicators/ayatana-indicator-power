@@ -34,11 +34,37 @@ namespace
   }
 }
 
+class DeviceTest : public ::testing::Test
+{
+  protected:
+
+    virtual void SetUp()
+    {
+      ensure_glib_initialized ();
+    }
+
+    virtual void TearDown()
+    {
+    }
+
+  protected:
+
+    void check_icon_names (const IndicatorPowerDevice * device, const char * expected)
+    {
+      char ** names = indicator_power_device_get_icon_names (device);
+      char * str = g_strjoinv (";", names);
+      ASSERT_STREQ (expected, str);
+      g_free (str);
+      g_strfreev (names);
+    }
+};
+
+
 /***
 ****
 ***/
 
-TEST(DeviceTest, GObjectNew)
+TEST_F(DeviceTest, GObjectNew)
 {
   ensure_glib_initialized ();
 
@@ -49,7 +75,7 @@ TEST(DeviceTest, GObjectNew)
   g_object_unref (o);
 }
 
-TEST(DeviceTest, Properties)
+TEST_F(DeviceTest, Properties)
 {
   int i;
   gdouble d;
@@ -108,7 +134,7 @@ TEST(DeviceTest, Properties)
   g_object_unref (o);
 }
 
-TEST(DeviceTest, New)
+TEST_F(DeviceTest, New)
 {
   ensure_glib_initialized ();
 
@@ -131,7 +157,7 @@ TEST(DeviceTest, New)
   g_object_unref (device);
 }
 
-TEST(DeviceTest, NewFromVariant)
+TEST_F(DeviceTest, NewFromVariant)
 {
   ensure_glib_initialized ();
 
@@ -158,7 +184,7 @@ TEST(DeviceTest, NewFromVariant)
   g_variant_unref (variant);
 }
 
-TEST(DeviceTest, BadAccessors)
+TEST_F(DeviceTest, BadAccessors)
 {
   ensure_glib_initialized ();
 
@@ -181,3 +207,168 @@ TEST(DeviceTest, BadAccessors)
   indicator_power_device_get_object_path (device);
   g_object_unref (device);
 }
+
+/***
+****
+***/
+
+TEST_F(DeviceTest, IconNames)
+{
+  IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
+  GObject * o = G_OBJECT(device);
+
+  /* power */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
+                   NULL);
+  check_icon_names (device, "ac-adapter-symbolic;"
+                            "ac-adapter;");
+
+  /* monitor */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_MONITOR,
+                   NULL);
+  check_icon_names (device, "gpm-monitor-symbolic;"
+                            "gpm-monitor;");
+
+  /* empty battery */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
+                   NULL);
+  check_icon_names (device, "battery-empty-symbolic;"
+                            "gpm-battery-empty;"
+                            "gpm-battery-000;"
+                            "battery-empty;");
+
+  /* charged battery */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
+                   NULL);
+  check_icon_names (device, "battery-full-charged-symbolic;battery-full-charging-symbolic;"
+                            "gpm-battery-full;gpm-battery-100;"
+                            "battery-full-charged;battery-full-charging;");
+
+  /* charging battery, 95% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
+                   NULL);
+  check_icon_names (device, "battery-caution-charging-symbolic;"
+                            "gpm-battery-000-charging;"
+                            "battery-caution-charging;");
+
+  /* charging battery, 85% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
+                   NULL);
+  check_icon_names (device, "battery-caution-charging-symbolic;"
+                            "gpm-battery-000-charging;"
+                            "battery-caution-charging;");
+
+  /* charging battery, 50% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   NULL);
+  check_icon_names (device, "battery-caution-charging-symbolic;"
+                            "gpm-battery-000-charging;"
+                            "battery-caution-charging;");
+
+  /* charging battery, 25% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                   NULL);
+  check_icon_names (device, "battery-caution-charging-symbolic;"
+                            "gpm-battery-000-charging;"
+                            "battery-caution-charging;");
+
+  /* charging battery, 5% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                   NULL);
+  check_icon_names (device, "battery-caution-charging-symbolic;"
+                            "gpm-battery-000-charging;"
+                            "battery-caution-charging;");
+
+
+  /* discharging battery, 95% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
+                   NULL);
+  check_icon_names (device, "battery-full-symbolic;"
+                            "gpm-battery-100;"
+                            "battery-full;");
+
+  /* discharging battery, 85% */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
+                   NULL);
+  check_icon_names (device, "battery-full-symbolic;"
+                            "gpm-battery-080;"
+                            "battery-full;");
+
+  /* discharging battery, 50% -- 1 hour left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                   NULL);
+  check_icon_names (device, "battery-good-symbolic;"
+                            "gpm-battery-060;"
+                            "battery-good;");
+
+  /* discharging battery, 25% -- 1 hour left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                   NULL);
+  check_icon_names (device, "battery-good-symbolic;"
+                            "gpm-battery-040;"
+                            "battery-good;");
+
+  /* discharging battery, 25% -- 15 minutes left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                   NULL);
+  check_icon_names (device, "battery-low-symbolic;"
+                            "gpm-battery-020;"
+                            "battery-low;");
+
+  /* discharging battery, 5% -- 1 hour left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                   NULL);
+  check_icon_names (device, "battery-good-symbolic;"
+                            "gpm-battery-040;"
+                            "battery-good;");
+
+  /* discharging battery, 5% -- 15 minutes left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                   NULL);
+  check_icon_names (device, "battery-caution-symbolic;"
+                            "gpm-battery-000;"
+                            "battery-caution;");
+
+  /* state unknown */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
+                   NULL);
+  check_icon_names (device, "battery-missing-symbolic;"
+                            "gpm-battery-missing;"
+                            "battery-missing;");
+
+  /* cleanup */
+  g_object_unref(o);
+}
+
