@@ -541,14 +541,14 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
         {
           *accessible_name = g_strdup_printf (_("%s"), device_name);
           *details = g_strdup_printf (_("%s"), device_name);
-          *short_details = g_strdup_printf ("%s", short_timestring);
+          *short_details = g_strdup (short_timestring);
         }
       else
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
           *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"), device_name, detailed_timestring, percentage);
           *details = g_strdup_printf (_("%s (%s left)"), device_name, short_timestring);
-          *short_details = g_strdup_printf ("%s", short_timestring);
+          *short_details = g_strdup (short_timestring);
         }
 
       g_free (short_timestring);
