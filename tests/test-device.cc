@@ -57,6 +57,25 @@ class DeviceTest : public ::testing::Test
       g_free (str);
       g_strfreev (names);
     }
+
+    void check_strings (const IndicatorPowerDevice * device,
+                        const char * expected_timestring,
+                        const char * expected_details,
+                        const char * expected_accessible)
+    {
+      char * timestring = NULL;
+      char * details = NULL;
+      char * accessible = NULL;
+
+      indicator_power_device_get_time_details (device, &timestring, &details, &accessible);
+      EXPECT_STREQ (expected_timestring, timestring);
+      EXPECT_STREQ (expected_details, details);
+      EXPECT_STREQ (expected_accessible, accessible);
+
+      g_free (accessible);
+      g_free (details);
+      g_free (timestring);
+    }
 };
 
 
@@ -346,8 +365,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-symbolic;"
                             "gpm-battery-000;"
-                            "battery-caution;");
-
+                            "battery-caution;"); 
   /* state unknown */
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
@@ -360,3 +378,70 @@ TEST_F(DeviceTest, IconNames)
   g_object_unref(o);
 }
 
+
+TEST_F(DeviceTest, Labels)
+{
+  // set our language so that i18n won't break these tests
+  char * real_lang = g_strdup(g_getenv ("LANG"));
+  g_setenv ("LANG", "en_US.UTF-8", TRUE);
+
+  IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
+  GObject * o = G_OBJECT(device);
+
+  /* charging */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(60*61),
+                   NULL);
+  check_strings (device, "(1:01)",
+                         "Battery (1:01 to charge)",
+                         "Battery (1 hour 1 minute to charge (50%))");
+
+  /* discharging, < 12 hours left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(60*61),
+                   NULL);
+  check_strings (device, "1:01",
+                         "Battery (1:01 left)",
+                         "Battery (1 hour 1 minute left (50%))");
+
+  /* discharging, > 12 hours left */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(60*60*13),
+                   NULL);
+  check_strings (device, "13:00", "Battery", "Battery");
+
+  /* fully charged */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 100.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                   NULL);
+  check_strings (device, "", "Battery (charged)", "Battery (charged)");
+
+  /* percentage but no time estimate */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                   NULL);
+  check_strings (device, "(50%)", "Battery (50%)", "Battery (50%)");
+
+  /* no percentage, no time estimate */
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                   NULL);
+  check_strings (device, "(not present)", "Battery (not present)", "Battery (not present)");
+
+  /* cleanup */
+  g_object_unref(o);
+  g_setenv ("LANG", real_lang, TRUE);
+  g_free (real_lang);
+}
