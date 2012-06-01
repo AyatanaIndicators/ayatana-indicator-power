@@ -55,9 +55,9 @@ typedef struct _IndicatorPowerDbusListenerPrivate IndicatorPowerDbusListenerPriv
  */
 struct _IndicatorPowerDbusListenerClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 
-	void (* devices_enumerated) (IndicatorPowerDbusListener*, GSList * devices);
+  void (* devices_enumerated) (IndicatorPowerDbusListener*, GSList * devices);
 };
 
 /**
@@ -67,8 +67,8 @@ struct _IndicatorPowerDbusListenerClass
 */
 struct _IndicatorPowerDbusListener
 {
-	GObject parent;
-	IndicatorPowerDbusListenerPrivate * priv;
+  GObject parent;
+  IndicatorPowerDbusListenerPrivate * priv;
 };
 
 /***
