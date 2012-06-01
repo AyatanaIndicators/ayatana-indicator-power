@@ -224,6 +224,9 @@ TEST_F(DeviceTest, IconNames)
   IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   GObject * o = G_OBJECT(device);
 
+  /* bad arguments */
+  ASSERT_TRUE (indicator_power_device_get_icon_names (NULL) == NULL);
+
   /* power */
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
                    NULL);

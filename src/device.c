@@ -307,7 +307,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   const gchar *index_str;
 
   /* LCOV_EXCL_START */
-  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
   /* LCOV_EXCL_STOP */
 
   gdouble percentage = indicator_power_device_get_percentage (device);
