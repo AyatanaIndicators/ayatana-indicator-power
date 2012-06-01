@@ -518,7 +518,8 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
   const time_t time = indicator_power_device_get_time (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
   const gdouble percentage = indicator_power_device_get_percentage (device);
-  const gchar * device_name = device_kind_to_localised_string (indicator_power_device_get_kind(device));
+  const UpDeviceKind kind = indicator_power_device_get_kind (device);
+  const gchar * device_name = device_kind_to_localised_string (kind);
 
   if (time > 0)
     {
@@ -566,6 +567,12 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
       *details = g_strdup_printf (_("%s (%.0lf%%)"), device_name, percentage);
       *accessible_name = g_strdup (*details);
       *short_details = g_strdup_printf (_("(%.0lf%%)"), percentage);
+    }
+  else if (kind == UP_DEVICE_KIND_LINE_POWER)
+    {
+      *details         = g_strdup (device_name);
+      *accessible_name = g_strdup (device_name);
+      *short_details   = g_strdup (device_name);
     }
   else
     {
