@@ -459,7 +459,7 @@ device_kind_to_localised_string (UpDeviceKind kind)
   switch (kind) {
     case UP_DEVICE_KIND_LINE_POWER:
       /* TRANSLATORS: system power cord */
-      text = _("AC adapter");
+      text = _("AC Adapter");
       break;
     case UP_DEVICE_KIND_BATTERY:
       /* TRANSLATORS: laptop primary battery */
