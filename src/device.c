@@ -516,7 +516,7 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
                                          gchar ** accessible_name)
 {
   const time_t time = indicator_power_device_get_time (device);
-  const UpDeviceState   state = indicator_power_device_get_state (device);
+  const UpDeviceState state = indicator_power_device_get_state (device);
   const gdouble percentage = indicator_power_device_get_percentage (device);
   const gchar * device_name = device_kind_to_localised_string (indicator_power_device_get_kind(device));
 
@@ -532,58 +532,46 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
       if (state == UP_DEVICE_STATE_CHARGING)
         {
           /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"),
-                                              device_name, detailed_timestring, percentage);
-          *details = g_strdup_printf (_("%s (%s to charge)"),
-                                      device_name, short_timestring);
+          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"), device_name, detailed_timestring, percentage);
+          *details = g_strdup_printf (_("%s (%s to charge)"), device_name, short_timestring);
           *short_details = g_strdup_printf ("(%s)", short_timestring);
         }
-      else if (state == UP_DEVICE_STATE_DISCHARGING)
+      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time > (60*60*12)))
         {
+          *accessible_name = g_strdup_printf (_("%s"), device_name);
+          *details = g_strdup_printf (_("%s"), device_name);
           *short_details = g_strdup_printf ("%s", short_timestring);
-
-          if (time > 43200) /* 12 hours */
-            {
-              *accessible_name = g_strdup_printf (_("%s"), device_name);
-              *details = g_strdup_printf (_("%s"), device_name);
-            }
-          else
-            {
-              /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-              *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"),
-                                                  device_name, detailed_timestring, percentage);
-              *details = g_strdup_printf (_("%s (%s left)"),
-                                          device_name, short_timestring);
-            }
+        }
+      else
+        {
+          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
+          *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"), device_name, detailed_timestring, percentage);
+          *details = g_strdup_printf (_("%s (%s left)"), device_name, short_timestring);
+          *short_details = g_strdup_printf ("%s", short_timestring);
         }
 
       g_free (short_timestring);
       g_free (detailed_timestring);
     }
+  else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+    {
+      *details = g_strdup_printf (_("%s (charged)"), device_name);
+      *accessible_name = g_strdup (*details);
+      *short_details = g_strdup ("");
+    }
+  else if (percentage > 0)
+    {
+      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
+       * used when we don't have a time value */
+      *details = g_strdup_printf (_("%s (%.0lf%%)"), device_name, percentage);
+      *accessible_name = g_strdup (*details);
+      *short_details = g_strdup_printf (_("(%.0lf%%)"), percentage);
+    }
   else
     {
-      if (state == UP_DEVICE_STATE_FULLY_CHARGED)
-        {
-          *details = g_strdup_printf (_("%s (charged)"), device_name);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup ("");
-        }
-      else if (percentage > 0)
-        {
-          /* TRANSLATORS: %2 is a percentage value. Note: this string is only
-           * used when we don't have a time value */
-          *details = g_strdup_printf (_("%s (%.0lf%%)"),
-                                      device_name, percentage);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup_printf (_("(%.0lf%%)"),
-                                            percentage);
-        }
-      else
-        {
-          *details = g_strdup_printf (_("%s (not present)"), device_name);
-          *accessible_name = g_strdup (*details);
-          *short_details = g_strdup (_("(not present)"));
-        }
+      *details = g_strdup_printf (_("%s (not present)"), device_name);
+      *accessible_name = g_strdup (*details);
+      *short_details = g_strdup (_("(not present)"));
     }
 }
 
