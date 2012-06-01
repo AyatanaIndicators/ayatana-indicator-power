@@ -31,11 +31,11 @@ License along with this library. If not, see
 
 struct _IndicatorPowerDevicePrivate
 {
-	UpDeviceKind kind;
-	UpDeviceState state;
-	gchar * object_path;
-	gdouble percentage;
-	time_t time;
+  UpDeviceKind kind;
+  UpDeviceState state;
+  gchar * object_path;
+  gdouble percentage;
+  time_t time;
 };
 
 #define INDICATOR_POWER_DEVICE_GET_PRIVATE(o) (INDICATOR_POWER_DEVICE(o)->priv)
@@ -43,13 +43,13 @@ struct _IndicatorPowerDevicePrivate
 /* Properties */
 /* Enum for the properties so that they can be quickly found and looked up. */
 enum {
-	PROP_0,
-	PROP_KIND,
-	PROP_STATE,
-	PROP_OBJECT_PATH,
-	PROP_ICON,
-	PROP_PERCENTAGE,
-	PROP_TIME
+  PROP_0,
+  PROP_KIND,
+  PROP_STATE,
+  PROP_OBJECT_PATH,
+  PROP_ICON,
+  PROP_PERCENTAGE,
+  PROP_TIME
 };
 
 /* GObject stuff */
@@ -67,72 +67,71 @@ G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT);
 static void
 indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
 {
-	GParamSpec * pspec;
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GParamSpec * pspec;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (klass, sizeof (IndicatorPowerDevicePrivate));
+  g_type_class_add_private (klass, sizeof (IndicatorPowerDevicePrivate));
 
-	object_class->dispose = indicator_power_device_dispose;
-	object_class->finalize = indicator_power_device_finalize;
-	object_class->set_property = set_property;
-	object_class->get_property = get_property;
+  object_class->dispose = indicator_power_device_dispose;
+  object_class->finalize = indicator_power_device_finalize;
+  object_class->set_property = set_property;
+  object_class->get_property = get_property;
 
-	pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_KIND, "kind", "The device's UpDeviceKind",
-                                  UP_DEVICE_KIND_UNKNOWN, UP_DEVICE_KIND_LAST, UP_DEVICE_KIND_UNKNOWN,
-			          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_KIND, pspec);
+  pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_KIND, "kind", "The device's UpDeviceKind",
+                            UP_DEVICE_KIND_UNKNOWN, UP_DEVICE_KIND_LAST, UP_DEVICE_KIND_UNKNOWN,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_KIND, pspec);
 
-	pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_STATE, "state", "The device's UpDeviceState",
-                                  UP_DEVICE_STATE_UNKNOWN, UP_DEVICE_STATE_LAST, UP_DEVICE_STATE_UNKNOWN,
-			          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_STATE, pspec);
+  pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_STATE, "state", "The device's UpDeviceState",
+                            UP_DEVICE_STATE_UNKNOWN, UP_DEVICE_STATE_LAST, UP_DEVICE_STATE_UNKNOWN,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_STATE, pspec);
 
-	pspec = g_param_spec_string (INDICATOR_POWER_DEVICE_OBJECT_PATH, "object path", "The device's DBus object path", NULL,
-			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_OBJECT_PATH, pspec);
+  pspec = g_param_spec_string (INDICATOR_POWER_DEVICE_OBJECT_PATH, "object path", "The device's DBus object path", NULL,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_OBJECT_PATH, pspec);
 
-	pspec = g_param_spec_double (INDICATOR_POWER_DEVICE_PERCENTAGE, "percentage", "percent charged",
-                                     0.0, 100.0, 0.0,
-			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_PERCENTAGE, pspec);
+  pspec = g_param_spec_double (INDICATOR_POWER_DEVICE_PERCENTAGE, "percentage", "percent charged",
+                               0.0, 100.0, 0.0,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_PERCENTAGE, pspec);
 
-	pspec = g_param_spec_uint64 (INDICATOR_POWER_DEVICE_TIME, "time", "time left",
-                                     0, G_MAXUINT64, 0,
-			             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class, PROP_TIME, pspec);
+  pspec = g_param_spec_uint64 (INDICATOR_POWER_DEVICE_TIME, "time", "time left",
+                               0, G_MAXUINT64, 0,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_TIME, pspec);
 }
 
 /* Initialize an instance */
 static void
 indicator_power_device_init (IndicatorPowerDevice *self)
 {
-	IndicatorPowerDevicePrivate * priv;
+  IndicatorPowerDevicePrivate * priv;
 
-        priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_POWER_DEVICE_TYPE,
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (self, INDICATOR_POWER_DEVICE_TYPE,
                                             IndicatorPowerDevicePrivate);
-        priv->kind = UP_DEVICE_KIND_UNKNOWN;
-        priv->state = UP_DEVICE_STATE_UNKNOWN;
-        priv->object_path = NULL;
-        priv->percentage = 0.0;
-        priv->time = 0;
+  priv->kind = UP_DEVICE_KIND_UNKNOWN;
+  priv->state = UP_DEVICE_STATE_UNKNOWN;
+  priv->object_path = NULL;
+  priv->percentage = 0.0;
+  priv->time = 0;
 
-	self->priv = priv;
+  self->priv = priv;
 }
 
 static void
 indicator_power_device_dispose (GObject *object)
 {
-	G_OBJECT_CLASS (indicator_power_device_parent_class)->dispose (object);
+  G_OBJECT_CLASS (indicator_power_device_parent_class)->dispose (object);
 }
 
 static void
 indicator_power_device_finalize (GObject *object)
 {
-	IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(object);
-	IndicatorPowerDevicePrivate * priv = self->priv;
+  IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(object);
+  IndicatorPowerDevicePrivate * priv = self->priv;
 
-	g_clear_pointer (&priv->object_path, g_free);
+  g_clear_pointer (&priv->object_path, g_free);
 }
 
 /***
@@ -142,62 +141,62 @@ indicator_power_device_finalize (GObject *object)
 static void
 get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
 {
-        IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(o);
-        IndicatorPowerDevicePrivate * priv = self->priv;
+  IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(o);
+  IndicatorPowerDevicePrivate * priv = self->priv;
 
-        switch (prop_id)
-	{
-		case PROP_KIND:
-			g_value_set_int (value, priv->kind);
-			break;
+  switch (prop_id)
+    {
+      case PROP_KIND:
+        g_value_set_int (value, priv->kind);
+        break;
 
-		case PROP_STATE:
-			g_value_set_int (value, priv->state);
-			break;
+      case PROP_STATE:
+        g_value_set_int (value, priv->state);
+        break;
 
-		case PROP_OBJECT_PATH:
-			g_value_set_string (value, priv->object_path);
-			break;
+      case PROP_OBJECT_PATH:
+        g_value_set_string (value, priv->object_path);
+        break;
 
-		case PROP_PERCENTAGE:
-			g_value_set_double (value, priv->percentage);
-			break;
+      case PROP_PERCENTAGE:
+        g_value_set_double (value, priv->percentage);
+        break;
 
-		case PROP_TIME:
-			g_value_set_uint64 (value, priv->time);
-			break;
-	}
+      case PROP_TIME:
+        g_value_set_uint64 (value, priv->time);
+        break;
+    }
 }
 
 static void
 set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * pspec)
 {
-        IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(o);
-        IndicatorPowerDevicePrivate * priv = self->priv;
+  IndicatorPowerDevice * self = INDICATOR_POWER_DEVICE(o);
+  IndicatorPowerDevicePrivate * priv = self->priv;
 
-        switch (prop_id)
-	{
-		case PROP_KIND:
-			priv->kind = g_value_get_int (value);
-			break;
+  switch (prop_id)
+    {
+      case PROP_KIND:
+        priv->kind = g_value_get_int (value);
+        break;
 
-		case PROP_STATE:
-			priv->state = g_value_get_int (value);
-			break;
+      case PROP_STATE:
+        priv->state = g_value_get_int (value);
+        break;
 
-		case PROP_OBJECT_PATH:
-			g_free (priv->object_path);
-			priv->object_path = g_value_dup_string (value);
-			break;
+      case PROP_OBJECT_PATH:
+        g_free (priv->object_path);
+        priv->object_path = g_value_dup_string (value);
+        break;
 
-		case PROP_PERCENTAGE:
-			priv->percentage = g_value_get_double (value);
-			break;
+      case PROP_PERCENTAGE:
+        priv->percentage = g_value_get_double (value);
+        break;
 
-		case PROP_TIME:
-			priv->time = g_value_get_uint64(value);
-			break;
-	}
+      case PROP_TIME:
+        priv->time = g_value_get_uint64(value);
+        break;
+    }
 }
 
 /***
@@ -207,51 +206,51 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 UpDeviceKind
 indicator_power_device_get_kind  (const IndicatorPowerDevice * device)
 {
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
-	/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_KIND_UNKNOWN);
+  /* LCOV_EXCL_STOP */
 
-        return device->priv->kind;
+  return device->priv->kind;
 }
 
 UpDeviceState
 indicator_power_device_get_state (const IndicatorPowerDevice * device)
 {
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_STATE_UNKNOWN);
-	/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), UP_DEVICE_STATE_UNKNOWN);
+  /* LCOV_EXCL_STOP */
 
-        return device->priv->state;
+  return device->priv->state;
 }
 
 const gchar *
 indicator_power_device_get_object_path (const IndicatorPowerDevice * device)
 {
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
-	/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
+  /* LCOV_EXCL_STOP */
 
-        return device->priv->object_path;
+  return device->priv->object_path;
 }
 
 gdouble
 indicator_power_device_get_percentage (const IndicatorPowerDevice * device)
 {
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), 0.0);
-	/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), 0.0);
+  /* LCOV_EXCL_STOP */
 
-        return device->priv->percentage;
+  return device->priv->percentage;
 }
 
 time_t
 indicator_power_device_get_time (const IndicatorPowerDevice * device)
 {
-	/* LCOV_EXCL_START */
-	g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), (time_t)0);
-	/* LCOV_EXCL_STOP */
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), (time_t)0);
+  /* LCOV_EXCL_STOP */
 
-        return device->priv->time;
+  return device->priv->time;
 }
 
 /***
@@ -263,46 +262,49 @@ indicator_power_device_get_time (const IndicatorPowerDevice * device)
 static const gchar *
 gpm_upower_get_device_icon_suffix (gdouble percentage)
 {
-        if (percentage < 10) return "caution";
-        if (percentage < 30) return "low";
-        if (percentage < 60) return "good";
-        return "full";
+  if (percentage < 10) return "caution";
+  if (percentage < 30) return "low";
+  if (percentage < 60) return "good";
+  return "full";
 }
 
 /* taken from GSD's power plugin, (c) Richard Hughes and licensed GPL >=2 */
 static const gchar *
 gpm_upower_get_device_icon_index (gdouble percentage)
 {
-        if (percentage < 10) return "000";
-        if (percentage < 30) return "020";
-        if (percentage < 50) return "040";
-        if (percentage < 70) return "060";
-        if (percentage < 90) return "080";
-        return "100";
+  if (percentage < 10) return "000";
+  if (percentage < 30) return "020";
+  if (percentage < 50) return "040";
+  if (percentage < 70) return "060";
+  if (percentage < 90) return "080";
+  return "100";
 }
 
 /**
   indicator_power_device_get_icon_names:
-  @device: #IndicatorPowerDevice to generate the icon names from
+  @device: #IndicatorPowerDevice from which to generate the icon names
 
   Based on GSD's power plugin, (c) Richard Hughes and licensed GPL >= 2.
   It differs in these ways:
 
-  (1) all charging batteries use the same icon regardless of progress:
+  1. All charging batteries use the same icon regardless of progress.
   <https://bugs.launchpad.net/indicator-power/+bug/824629/comments/7>
 
-  (2) discharging batteries are keyed off of time left, rather than
-  percentage left, s.t. <= 30 minutes remaining gives the 'caution' icon.
+  2. For discharging batteries, we decide whether or not to use the 'caution'
+  icon based on whether or not we have <= 30 minutes remaining, rather than
+  looking at the battery's percentage left.
   <https://bugs.launchpad.net/indicator-power/+bug/743823>
 
+  See also #indicator_power_device_get_gicon.
+
   Return value: (array zero-terminated=1) (transfer full):
-  a GStrv of icon names suitable for passing to g_themed_icon_new_from_names().
+  A GStrv of icon names suitable for passing to g_themed_icon_new_from_names().
   Free with g_strfreev() when done.
 */
 GStrv
 indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 {
-  char ** ret = NULL;
+  gchar ** ret = NULL;
   const gchar *suffix_str;
   const gchar *index_str;
 
@@ -313,7 +315,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   gdouble percentage = indicator_power_device_get_percentage (device);
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
-  const char * kind_str = kind_str = up_device_kind_to_string (kind);
+  const gchar * kind_str = kind_str = up_device_kind_to_string (kind);
 
   /* get correct icon prefix */
   GString * filename = g_string_new (NULL);
@@ -602,37 +604,37 @@ indicator_power_device_new (const gchar * object_path,
                             UpDeviceState state,
                             time_t timestamp)
 {
-	GObject * o = g_object_new (INDICATOR_POWER_DEVICE_TYPE,
-	                            INDICATOR_POWER_DEVICE_KIND, kind,
-	                            INDICATOR_POWER_DEVICE_STATE, state,
-	                            INDICATOR_POWER_DEVICE_OBJECT_PATH, object_path,
-	                            INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
-	                            INDICATOR_POWER_DEVICE_TIME, (guint64)timestamp,
-	                            NULL);
-	return INDICATOR_POWER_DEVICE(o);
+  GObject * o = g_object_new (INDICATOR_POWER_DEVICE_TYPE,
+    INDICATOR_POWER_DEVICE_KIND, kind,
+    INDICATOR_POWER_DEVICE_STATE, state,
+    INDICATOR_POWER_DEVICE_OBJECT_PATH, object_path,
+    INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
+    INDICATOR_POWER_DEVICE_TIME, (guint64)timestamp,
+    NULL);
+  return INDICATOR_POWER_DEVICE(o);
 }
 
 IndicatorPowerDevice *
 indicator_power_device_new_from_variant (GVariant * v)
 {
-	UpDeviceKind kind = UP_DEVICE_KIND_UNKNOWN;
-	UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
-	const gchar * icon = NULL;
-	const gchar * object_path = NULL;
-	gdouble percentage = 0;
-	guint64 time = 0;
+  UpDeviceKind kind = UP_DEVICE_KIND_UNKNOWN;
+  UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
+  const gchar * icon = NULL;
+  const gchar * object_path = NULL;
+  gdouble percentage = 0;
+  guint64 time = 0;
 
-	g_variant_get (v, "(&su&sdut)",
-	               &object_path,
-	               &kind,
-	               &icon,
-	               &percentage,
-	               &state,
-	               &time);
+  g_variant_get (v, "(&su&sdut)",
+                 &object_path,
+                 &kind,
+                 &icon,
+                 &percentage,
+                 &state,
+                 &time);
 
-	return indicator_power_device_new (object_path,
-	                                   kind,
-	                                   percentage,
-	                                   state,
-	                                   time);
+  return indicator_power_device_new (object_path,
+                                     kind,
+                                     percentage,
+                                     state,
+                                     time);
 }

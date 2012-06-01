@@ -52,7 +52,7 @@ typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
  */
 struct _IndicatorPowerDeviceClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 /**
@@ -62,8 +62,8 @@ struct _IndicatorPowerDeviceClass
 */
 struct _IndicatorPowerDevice
 {
-	GObject parent;
-	IndicatorPowerDevicePrivate * priv;
+  GObject parent;
+  IndicatorPowerDevicePrivate * priv;
 };
 
 /***
