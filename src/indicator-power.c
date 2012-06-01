@@ -440,32 +440,24 @@ get_primary_device (GSList * devices)
 static void
 put_primary_device (IndicatorPower *self, IndicatorPowerDevice *device)
 {
-  GIcon *device_gicon;
-  gchar *short_details = NULL;
-  gchar *details = NULL;
-  gchar *accessible_name = NULL;
   IndicatorPowerPrivate * priv = self->priv;
 
   /* set icon */
-  device_gicon = indicator_power_device_get_gicon (device);
+  GIcon * device_gicon = indicator_power_device_get_gicon (device);
   gtk_image_set_from_gicon (priv->status_image, device_gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
   g_clear_object (&device_gicon);
   gtk_widget_show (GTK_WIDGET (priv->status_image));
 
-
-  /* get the device name */
-  //device_name = device_kind_to_localised_string (kind);
-
   /* get the description */
+  gchar * short_details;
+  gchar * details;
+  gchar * accessible_name;
   indicator_power_device_get_time_details (device, &short_details, &details, &accessible_name);
-
-  gtk_label_set_label (GTK_LABEL (priv->label),
-                       short_details);
+  gtk_label_set_label (GTK_LABEL (priv->label), short_details);
   set_accessible_desc (self, accessible_name);
-
-  g_free (short_details);
-  g_free (details);
   g_free (accessible_name);
+  g_free (details);
+  g_free (short_details);
 }
 
 void
