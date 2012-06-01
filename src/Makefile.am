@@ -1,3 +1,4 @@
+CLEANFILES =
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 ###################
@@ -11,6 +12,8 @@ libpower_la_SOURCES = \
         dbus-listener.c \
         device.c \
         indicator-power.c
+
+CLEANFILES += .libs/*.gcda .libs/*.gcno *.gcda *.gcno
 
 noinst_HEADERS = \
         dbus-listener.h \
