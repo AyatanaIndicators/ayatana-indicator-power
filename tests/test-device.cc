@@ -388,8 +388,20 @@ TEST_F(DeviceTest, Labels)
   char * real_lang = g_strdup(g_getenv ("LANG"));
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
+  /* bad args: NULL device */
+  check_strings (NULL, NULL, NULL, NULL);
+
+  /* bad args: a GObject that isn't a device */
+  GObject * o = G_OBJECT(g_cancellable_new());
+  check_strings ((IndicatorPowerDevice*)o, NULL, NULL, NULL);
+  g_object_unref (o);
+
+  /**
+  ***
+  **/
+ 
   IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
-  GObject * o = G_OBJECT(device);
+  o = G_OBJECT(device);
 
   /* charging */
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,

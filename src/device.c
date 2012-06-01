@@ -515,6 +515,15 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
                                          gchar ** details,
                                          gchar ** accessible_name)
 {
+  if (!INDICATOR_IS_POWER_DEVICE(device))
+    {
+      *short_details = NULL;
+      *details = NULL;
+      *accessible_name = NULL;
+      g_warning ("%s: %p is not an IndicatorPowerDevice", G_STRFUNC, device);
+      return;
+    }
+
   const time_t time = indicator_power_device_get_time (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
   const gdouble percentage = indicator_power_device_get_percentage (device);
