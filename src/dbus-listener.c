@@ -112,6 +112,12 @@ indicator_power_dbus_listener_dispose (GObject *object)
   g_clear_object (&priv->proxy);
   g_clear_object (&priv->cancellable);
 
+  if (priv->watcher_id)
+    {
+      g_bus_unwatch_name (priv->watcher_id);
+      priv->watcher_id = 0;
+    }
+
   G_OBJECT_CLASS (indicator_power_dbus_listener_parent_class)->dispose (object);
 }
 
