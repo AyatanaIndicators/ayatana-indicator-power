@@ -77,9 +77,6 @@ struct _IndicatorPowerDbusListener
 
 GType indicator_power_dbus_listener_get_type (void);
 
-IndicatorPowerDbusListener* indicator_power_dbus_listener_new (void);
-
-
 G_END_DECLS
 
 #endif
