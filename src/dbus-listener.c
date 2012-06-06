@@ -64,13 +64,20 @@ indicator_power_dbus_listener_class_init (IndicatorPowerDbusListenerClass *klass
   object_class->dispose = indicator_power_dbus_listener_dispose;
   object_class->finalize = indicator_power_dbus_listener_finalize;
 
-  /* signals */
+  /**
+   * IndicatorPowerDbusListener::indicator-power-dbus-listener-devices-enumerated:
+   *
+   * @listener: the IndicatorPowerDbusListener
+   * @devices: a GSList of #IndicatorPowerDevice objects. (transfer none)
+   *
+   * This is emitted each time a new set of devices is enumerated over the bus.
+   */
   signals[SIGNAL_DEVICES] = g_signal_new (INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED,
                                           G_TYPE_FROM_CLASS(klass), 0,
                                           G_STRUCT_OFFSET (IndicatorPowerDbusListenerClass, devices_enumerated),
                                           NULL, NULL,
                                           g_cclosure_marshal_VOID__POINTER,
-                                          G_TYPE_NONE, 1, G_TYPE_POINTER, G_TYPE_NONE);
+                                          G_TYPE_NONE, 1, G_TYPE_POINTER);
 }
 
 /* Initialize an instance */
