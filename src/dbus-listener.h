@@ -47,7 +47,7 @@ typedef struct _IndicatorPowerDbusListenerPrivate IndicatorPowerDbusListenerPriv
 #define GSD_POWER_DBUS_PATH       GSD_PATH "/Power"
 
 /* signals */
-#define INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED  "indicator-power-dbus-listener-devices-enumerated"
+#define INDICATOR_POWER_DBUS_LISTENER_DEVICES_ENUMERATED  "devices-enumerated"
 
 /**
  * IndicatorPowerDbusListenerClass:

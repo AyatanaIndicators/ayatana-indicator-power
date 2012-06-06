@@ -65,7 +65,7 @@ indicator_power_dbus_listener_class_init (IndicatorPowerDbusListenerClass *klass
   object_class->finalize = indicator_power_dbus_listener_finalize;
 
   /**
-   * IndicatorPowerDbusListener::indicator-power-dbus-listener-devices-enumerated:
+   * IndicatorPowerDbusListener::devices-enumerated:
    *
    * @listener: the IndicatorPowerDbusListener
    * @devices: a GSList of #IndicatorPowerDevice objects. (transfer none)
