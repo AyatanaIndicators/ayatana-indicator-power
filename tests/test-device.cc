@@ -231,13 +231,13 @@ TEST_F(DeviceTest, IconNames)
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
                    NULL);
   check_icon_names (device, "ac-adapter-symbolic;"
-                            "ac-adapter;");
+                            "ac-adapter");
 
   // monitor
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_MONITOR,
                    NULL);
   check_icon_names (device, "gpm-monitor-symbolic;"
-                            "gpm-monitor;");
+                            "gpm-monitor");
 
   // empty battery
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -246,7 +246,7 @@ TEST_F(DeviceTest, IconNames)
   check_icon_names (device, "battery-empty-symbolic;"
                             "gpm-battery-empty;"
                             "gpm-battery-000;"
-                            "battery-empty;");
+                            "battery-empty");
 
   // charged battery
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -254,7 +254,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-full-charged-symbolic;battery-full-charging-symbolic;"
                             "gpm-battery-full;gpm-battery-100;"
-                            "battery-full-charged;battery-full-charging;");
+                            "battery-full-charged;battery-full-charging");
 
   // charging battery, 95%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -263,7 +263,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-charging-symbolic;"
                             "gpm-battery-000-charging;"
-                            "battery-caution-charging;");
+                            "battery-caution-charging");
 
   // charging battery, 85%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -272,7 +272,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-charging-symbolic;"
                             "gpm-battery-000-charging;"
-                            "battery-caution-charging;");
+                            "battery-caution-charging");
 
   // charging battery, 50%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -281,7 +281,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-charging-symbolic;"
                             "gpm-battery-000-charging;"
-                            "battery-caution-charging;");
+                            "battery-caution-charging");
 
   // charging battery, 25%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -290,7 +290,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-charging-symbolic;"
                             "gpm-battery-000-charging;"
-                            "battery-caution-charging;");
+                            "battery-caution-charging");
 
   // charging battery, 5%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -299,7 +299,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-charging-symbolic;"
                             "gpm-battery-000-charging;"
-                            "battery-caution-charging;");
+                            "battery-caution-charging");
 
 
   // discharging battery, 95%
@@ -309,7 +309,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-full-symbolic;"
                             "gpm-battery-100;"
-                            "battery-full;");
+                            "battery-full");
 
   // discharging battery, 85%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -318,7 +318,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-full-symbolic;"
                             "gpm-battery-080;"
-                            "battery-full;");
+                            "battery-full");
 
   // discharging battery, 50% -- 1 hour left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -328,7 +328,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-good-symbolic;"
                             "gpm-battery-060;"
-                            "battery-good;");
+                            "battery-good");
 
   // discharging battery, 25% -- 1 hour left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -338,7 +338,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-good-symbolic;"
                             "gpm-battery-040;"
-                            "battery-good;");
+                            "battery-good");
 
   // discharging battery, 25% -- 15 minutes left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -348,7 +348,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-low-symbolic;"
                             "gpm-battery-020;"
-                            "battery-low;");
+                            "battery-low");
 
   // discharging battery, 5% -- 1 hour left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -358,7 +358,7 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-good-symbolic;"
                             "gpm-battery-040;"
-                            "battery-good;");
+                            "battery-good");
 
   // discharging battery, 5% -- 15 minutes left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -368,14 +368,14 @@ TEST_F(DeviceTest, IconNames)
                    NULL);
   check_icon_names (device, "battery-caution-symbolic;"
                             "gpm-battery-000;"
-                            "battery-caution;"); 
+                            "battery-caution"); 
   // state unknown
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
                    NULL);
   check_icon_names (device, "battery-missing-symbolic;"
                             "gpm-battery-missing;"
-                            "battery-missing;");
+                            "battery-missing");
 
   // cleanup
   g_object_unref(o);
