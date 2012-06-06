@@ -26,8 +26,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libindicator/indicator.h>
 #include <libindicator/indicator-object.h>
 
-#include "device.h"
-
 G_BEGIN_DECLS
 
 #define INDICATOR_POWER_TYPE            (indicator_power_get_type ())
