@@ -47,10 +47,12 @@ enum {
   PROP_KIND,
   PROP_STATE,
   PROP_OBJECT_PATH,
-  PROP_ICON,
   PROP_PERCENTAGE,
-  PROP_TIME
+  PROP_TIME,
+  N_PROPERTIES
 };
+
+static GParamSpec * properties[N_PROPERTIES];
 
 /* GObject stuff */
 static void indicator_power_device_class_init (IndicatorPowerDeviceClass *klass);
@@ -67,7 +69,6 @@ G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT);
 static void
 indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
 {
-  GParamSpec * pspec;
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   g_type_class_add_private (klass, sizeof (IndicatorPowerDevicePrivate));
@@ -77,29 +78,41 @@ indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
   object_class->set_property = set_property;
   object_class->get_property = get_property;
 
-  pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_KIND, "kind", "The device's UpDeviceKind",
-                            UP_DEVICE_KIND_UNKNOWN, UP_DEVICE_KIND_LAST, UP_DEVICE_KIND_UNKNOWN,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_KIND, pspec);
+  properties[PROP_KIND] = g_param_spec_int (INDICATOR_POWER_DEVICE_KIND,
+                                            "kind",
+                                            "The device's UpDeviceKind",
+                                            UP_DEVICE_KIND_UNKNOWN, UP_DEVICE_KIND_LAST,
+                                            UP_DEVICE_KIND_UNKNOWN,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  pspec = g_param_spec_int (INDICATOR_POWER_DEVICE_STATE, "state", "The device's UpDeviceState",
-                            UP_DEVICE_STATE_UNKNOWN, UP_DEVICE_STATE_LAST, UP_DEVICE_STATE_UNKNOWN,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_STATE, pspec);
+  properties[PROP_STATE] = g_param_spec_int (INDICATOR_POWER_DEVICE_STATE,
+                                             "state",
+                                             "The device's UpDeviceState",
+                                             UP_DEVICE_STATE_UNKNOWN, UP_DEVICE_STATE_LAST,
+                                             UP_DEVICE_STATE_UNKNOWN,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  pspec = g_param_spec_string (INDICATOR_POWER_DEVICE_OBJECT_PATH, "object path", "The device's DBus object path", NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_OBJECT_PATH, pspec);
+  properties[PROP_OBJECT_PATH] = g_param_spec_string (INDICATOR_POWER_DEVICE_OBJECT_PATH,
+                                                      "object path",
+                                                      "The device's DBus object path",
+                                                      NULL,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  pspec = g_param_spec_double (INDICATOR_POWER_DEVICE_PERCENTAGE, "percentage", "percent charged",
-                               0.0, 100.0, 0.0,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_PERCENTAGE, pspec);
+  properties[PROP_PERCENTAGE] = g_param_spec_double (INDICATOR_POWER_DEVICE_PERCENTAGE,
+                                                     "percentage",
+                                                     "percent charged",
+                                                     0.0, 100.0,
+                                                     0.0,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  pspec = g_param_spec_uint64 (INDICATOR_POWER_DEVICE_TIME, "time", "time left",
-                               0, G_MAXUINT64, 0,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_TIME, pspec);
+  properties[PROP_TIME] = g_param_spec_uint64 (INDICATOR_POWER_DEVICE_TIME,
+                                               "time",
+                                               "time left",
+                                               0, G_MAXUINT64,
+                                               0,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
 /* Initialize an instance */
