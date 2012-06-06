@@ -110,7 +110,12 @@ indicator_power_dbus_listener_dispose (GObject *object)
   IndicatorPowerDbusListenerPrivate * priv = self->priv;
 
   g_clear_object (&priv->proxy);
-  g_clear_object (&priv->cancellable);
+
+  if (priv->cancellable != NULL)
+    {
+      g_cancellable_cancel (priv->cancellable);
+      g_clear_object (&priv->cancellable);
+    }
 
   if (priv->watcher_id)
     {
