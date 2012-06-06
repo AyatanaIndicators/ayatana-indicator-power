@@ -10,15 +10,13 @@ powerlib_LTLIBRARIES = libpower.la
 
 libpower_la_SOURCES = \
         dbus-listener.c \
+        dbus-listener.h \
         device.c \
+        device.h \
+        indicator-power.h \
         indicator-power.c
 
 CLEANFILES += .libs/*.gcda .libs/*.gcno *.gcda *.gcno
-
-noinst_HEADERS = \
-        dbus-listener.h \
-        device.h \
-        indicator-power.h
 
 libpower_la_CFLAGS = \
         $(UPOWER_CFLAGS) \
