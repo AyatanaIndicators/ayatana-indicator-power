@@ -40,11 +40,11 @@ typedef struct _IndicatorPowerDevice IndicatorPowerDevice;
 typedef struct _IndicatorPowerDeviceClass IndicatorPowerDeviceClass;
 typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
 
-#define INDICATOR_POWER_DEVICE_KIND         "indicator-power-device-kind"
-#define INDICATOR_POWER_DEVICE_STATE        "indicator-power-device-state"
-#define INDICATOR_POWER_DEVICE_OBJECT_PATH  "indicator-power-device-object-path"
-#define INDICATOR_POWER_DEVICE_PERCENTAGE   "indicator-power-device-percentage"
-#define INDICATOR_POWER_DEVICE_TIME         "indicator-power-device-time"
+#define INDICATOR_POWER_DEVICE_KIND         "kind"
+#define INDICATOR_POWER_DEVICE_STATE        "state"
+#define INDICATOR_POWER_DEVICE_OBJECT_PATH  "object-path"
+#define INDICATOR_POWER_DEVICE_PERCENTAGE   "percentage"
+#define INDICATOR_POWER_DEVICE_TIME         "time"
 
 /**
  * IndicatorPowerDeviceClass:
