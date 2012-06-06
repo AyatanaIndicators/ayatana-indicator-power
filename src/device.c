@@ -318,7 +318,7 @@ gpm_upower_get_device_icon_index (gdouble percentage)
   looking at the battery's percentage left.
   <https://bugs.launchpad.net/indicator-power/+bug/743823>
 
-  See also #indicator_power_device_get_gicon.
+  See also indicator_power_device_get_gicon().
 
   Return value: (array zero-terminated=1) (transfer full):
   A GStrv of icon names suitable for passing to g_themed_icon_new_from_names().
