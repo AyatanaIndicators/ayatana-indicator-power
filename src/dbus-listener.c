@@ -154,7 +154,7 @@ get_devices_cb (GObject      * source_object,
       gsize i;
       GVariant * devices_variant = g_variant_get_child_value (devices_container, 0);
       const int device_count = devices_variant ? g_variant_n_children (devices_variant) : 0;
-      
+
       for (i=0; i<device_count; i++)
         {
           GVariant * v = g_variant_get_child_value (devices_variant, i);
