@@ -145,6 +145,8 @@ indicator_power_device_finalize (GObject *object)
   IndicatorPowerDevicePrivate * priv = self->priv;
 
   g_clear_pointer (&priv->object_path, g_free);
+
+  G_OBJECT_CLASS (indicator_power_device_parent_class)->finalize (object);
 }
 
 /***
