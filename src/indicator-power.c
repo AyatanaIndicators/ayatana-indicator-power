@@ -181,25 +181,10 @@ spawn_command_line_async (const char * command)
 }
 
 static void
-show_info_cb (GtkMenuItem *item,
-              gpointer     data)
-{
-  /*TODO: show the statistics of the specific device*/
-  spawn_command_line_async ("gnome-power-statistics");
-}
-
-static void
 option_toggled_cb (GtkCheckMenuItem *item, IndicatorPower * self)
 {
   gtk_widget_set_visible (GTK_WIDGET (self->priv->label),
                           gtk_check_menu_item_get_active(item));
-}
-
-static void
-show_preferences_cb (GtkMenuItem *item,
-                     gpointer     data)
-{
-  spawn_command_line_async ("gnome-control-center power");
 }
 
 /* ensure that the entry is using self's accessible description */
@@ -289,8 +274,8 @@ menu_add_device (GtkMenu * menu, const IndicatorPowerDevice * device)
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     added = TRUE;
 
-    g_signal_connect (G_OBJECT (item), "activate",
-                      G_CALLBACK (show_info_cb), NULL);
+    g_signal_connect_swapped (G_OBJECT (item), "activate",
+                              G_CALLBACK (spawn_command_line_async), "gnome-power-statistics");
 
     g_free (short_details);
     g_free (details);
@@ -356,8 +341,8 @@ build_menu (IndicatorPower *self)
     item = gtk_image_menu_item_new_with_label (_("Power Settings…"));
     image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-    g_signal_connect (G_OBJECT (item), "activate",
-                      G_CALLBACK (show_preferences_cb), NULL);
+    g_signal_connect_swapped (G_OBJECT (item), "activate",
+                              G_CALLBACK (spawn_command_line_async), "gnome-control-center power");
     gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
   }
 
