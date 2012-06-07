@@ -641,9 +641,7 @@ indicator_power_device_new (const gchar * object_path,
 IndicatorPowerDevice *
 indicator_power_device_new_from_variant (GVariant * v)
 {
-  g_return_val_if_fail (v != NULL, NULL);
-  g_return_val_if_fail (g_variant_type_is_tuple(g_variant_get_type(v)), NULL);
-  g_return_val_if_fail (g_variant_n_children(v) == 6, NULL);
+  g_return_val_if_fail (g_variant_is_of_type (v, G_VARIANT_TYPE("(susdut)")), NULL);
 
   UpDeviceKind kind = UP_DEVICE_KIND_UNKNOWN;
   UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
