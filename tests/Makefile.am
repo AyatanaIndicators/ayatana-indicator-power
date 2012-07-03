@@ -45,11 +45,11 @@ test_device_SOURCES = test-device.cc
 test_device_LDADD = $(TEST_LIBS)
 test_device_CPPFLAGS = $(TEST_CPPFLAGS)
 
-TESTS += test-dbus-listener
-check_PROGRAMS += test-dbus-listener
-test_dbus_listener_SOURCES = test-dbus-listener.cc
-test_dbus_listener_LDADD = $(TEST_LIBS)
-test_dbus_listener_CPPFLAGS = $(TEST_CPPFLAGS)
+#TESTS += test-dbus-listener
+#check_PROGRAMS += test-dbus-listener
+#test_dbus_listener_SOURCES = test-dbus-listener.cc
+#test_dbus_listener_LDADD = $(TEST_LIBS)
+#test_dbus_listener_CPPFLAGS = $(TEST_CPPFLAGS)
 
 TESTS += test-indicator
 check_PROGRAMS += test-indicator
