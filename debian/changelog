@@ -1,9 +1,9 @@
-indicator-power (12.10.0-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (12.10.0-0ubuntu1) quantal; urgency=low
 
   * New upstream release.
   * debian/control: updated glib requirement
 
- -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 11 Jul 2012 21:39:52 +0200
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 11 Jul 2012 21:46:39 +0200
 
 indicator-power (2.0-0ubuntu1) precise; urgency=low
 
