@@ -1,2 +1,4 @@
 data/com.canonical.indicator.power.gschema.xml.in
+src/device.c
+src/dbus-listener.c
 src/indicator-power.c
