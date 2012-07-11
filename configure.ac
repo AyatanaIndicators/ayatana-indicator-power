@@ -11,7 +11,7 @@ AC_CONFIG_SRCDIR([configure.ac])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.11 -Wall foreign subdir-objects dist-xz])
+AM_INIT_AUTOMAKE([1.11 -Wall foreign dist-xz])
 AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
@@ -19,6 +19,7 @@ AM_SILENT_RULES([yes])
 # Check for programs
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_CXX
 
 # Initialize libtool
 LT_PREREQ([2.2.6])
@@ -46,6 +47,26 @@ PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION])
 # GSETTINGS
 ###########################
 GLIB_GSETTINGS
+
+###########################
+# Google Test framework
+###########################
+
+AC_ARG_ENABLE([tests],
+    [AS_HELP_STRING([--disable-tests], [Disable test scripts and tools (default=auto)])],
+    [enable_tests=${enableval}],
+    [enable_tests=auto])
+if test "x$enable_tests" != "xno"; then
+    m4_include([m4/gtest.m4])
+    CHECK_GTEST
+    CHECK_XORG_GTEST
+    if test "x$enable_tests" = "xauto"; then
+        enable_tests=${have_gtest}
+    elif test "x$enable_tests" = "xyes" && test "x$have_gtest" != "xyes"; then
+        AC_MSG_ERROR([tests were requested but gtest is not installed.])
+    fi
+fi
+AM_CONDITIONAL([BUILD_TESTS],[test "x$enable_tests" = "xyes"])
 
 ###########################
 # gcov coverage reporting
@@ -119,6 +140,8 @@ AC_CONFIG_FILES([
 Makefile
 po/Makefile.in
 data/Makefile
+src/Makefile
+tests/Makefile
 ])
 AC_OUTPUT
 
@@ -132,5 +155,7 @@ Power Indicator Configuration:
 
 	Prefix:        $prefix
 	Local Install: $with_localinstall
+	Unit Tests:    $enable_tests
 	gcov:          $use_gcov
+
 ])
