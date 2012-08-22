@@ -1,3 +1,9 @@
+indicator-power (12.10.1-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 22 Aug 2012 11:28:48 +0200
+
 indicator-power (12.10.0-0ubuntu1) quantal; urgency=low
 
   * New upstream release.
