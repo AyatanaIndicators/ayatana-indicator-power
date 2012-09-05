@@ -252,9 +252,12 @@ TEST_F(DeviceTest, IconNames)
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
                    NULL);
-  check_icon_names (device, "battery-full-charged-symbolic;battery-full-charging-symbolic;"
-                            "gpm-battery-full;gpm-battery-100;"
-                            "battery-full-charged;battery-full-charging");
+  check_icon_names (device, "battery-full-charged-symbolic;"
+                            "battery-full-charging-symbolic;"
+                            "gpm-battery-full;"
+                            "gpm-battery-100;"
+                            "battery-full-charged;"
+                            "battery-full-charging");
 
   // charging battery, 95%
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
