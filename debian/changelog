@@ -1,3 +1,10 @@
+indicator-power (12.10.1-0ubuntu2) UNRELEASED; urgency=low
+
+  * Cherry-pick:
+    - Ensure the power indicator string translations are loaded. Thanks lars
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 20 Sep 2012 11:03:45 +0200
+
 indicator-power (12.10.1-0ubuntu1) quantal; urgency=low
 
   * New upstream release.

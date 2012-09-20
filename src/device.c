@@ -25,7 +25,7 @@ License along with this library. If not, see
  #include "config.h"
 #endif
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include "device.h"
 
