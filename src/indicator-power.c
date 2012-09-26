@@ -508,6 +508,7 @@ get_image (IndicatorObject *io)
     gicon = g_themed_icon_new (DEFAULT_ICON);
     priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
+    g_object_unref (gicon);
   }
 
   return priv->status_image;
