@@ -310,8 +310,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                    NULL);
-  check_icon_names (device, "battery-full-symbolic;"
+  check_icon_names (device, "battery-100;"
                             "gpm-battery-100;"
+                            "battery-full-symbolic;"
                             "battery-full");
 
   // discharging battery, 85%
@@ -319,8 +320,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
                    NULL);
-  check_icon_names (device, "battery-full-symbolic;"
+  check_icon_names (device, "battery-080;"
                             "gpm-battery-080;"
+                            "battery-full-symbolic;"
                             "battery-full");
 
   // discharging battery, 50% -- 1 hour left
@@ -329,8 +331,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                    INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-  check_icon_names (device, "battery-good-symbolic;"
+  check_icon_names (device, "battery-060;"
                             "gpm-battery-060;"
+                            "battery-good-symbolic;"
                             "battery-good");
 
   // discharging battery, 25% -- 1 hour left
@@ -339,8 +342,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                    INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-  check_icon_names (device, "battery-good-symbolic;"
+  check_icon_names (device, "battery-040;"
                             "gpm-battery-040;"
+                            "battery-good-symbolic;"
                             "battery-good");
 
   // discharging battery, 25% -- 15 minutes left
@@ -349,8 +353,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                    INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
                    NULL);
-  check_icon_names (device, "battery-low-symbolic;"
+  check_icon_names (device, "battery-020;"
                             "gpm-battery-020;"
+                            "battery-low-symbolic;"
                             "battery-low");
 
   // discharging battery, 5% -- 1 hour left
@@ -359,8 +364,9 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                    INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-  check_icon_names (device, "battery-good-symbolic;"
+  check_icon_names (device, "battery-040;"
                             "gpm-battery-040;"
+                            "battery-good-symbolic;"
                             "battery-good");
 
   // discharging battery, 5% -- 15 minutes left
@@ -369,9 +375,11 @@ TEST_F(DeviceTest, IconNames)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                    INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
                    NULL);
-  check_icon_names (device, "battery-caution-symbolic;"
+  check_icon_names (device, "battery-000;"
                             "gpm-battery-000;"
+                            "battery-caution-symbolic;"
                             "battery-caution"); 
+
   // state unknown
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 

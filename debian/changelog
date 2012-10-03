@@ -1,3 +1,12 @@
+indicator-power (12.10.2-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    - Show a more accurate view of discharging batteries (LP: #1054146)
+    - Fix a GIcon memory leak
+    - In device.c, include gi18n-lib.h instead of gi18n.h
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 03 Oct 2012 21:25:20 +0200
+
 indicator-power (12.10.1-0ubuntu2) quantal; urgency=low
 
   * Cherry-pick:
