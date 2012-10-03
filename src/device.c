@@ -25,7 +25,7 @@ License along with this library. If not, see
  #include "config.h"
 #endif
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include "device.h"
 
@@ -390,8 +390,9 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_device_icon_index (percentage);
-        g_ptr_array_add (names, g_strdup_printf ("battery-%s-symbolic", suffix_str));
+        g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str));
+        g_ptr_array_add (names, g_strdup_printf ("battery-%s-symbolic", suffix_str));
         g_ptr_array_add (names, g_strdup_printf ("battery-%s", suffix_str));
         break;
 

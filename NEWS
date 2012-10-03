@@ -1,0 +1,11 @@
+12.10.2
+ - Show a more accurate view of discharging batteries (LP: #1054146)
+ - Fix a GIcon memory leak
+ - In device.c, include gi18n-lib.h instead of gi18n.h
+
+12.10.1
+ - Update our glib version dependency (LP: #1023533)
+
+12.10.0
+ - Refactored the device icon/text code for better test coverage
+
