@@ -239,154 +239,205 @@ TEST_F(DeviceTest, IconNames)
   check_icon_names (device, "gpm-monitor-symbolic;"
                             "gpm-monitor");
 
-  // empty battery
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
-                   NULL);
-  check_icon_names (device, "battery-empty-symbolic;"
-                            "gpm-battery-empty;"
-                            "gpm-battery-000;"
-                            "battery-empty");
+  // devices that hold a charge
+  struct {
+    int kind;
+    const gchar * kind_str;
+  } devices[] = {
+    { UP_DEVICE_KIND_BATTERY, "battery" },
+    { UP_DEVICE_KIND_UPS, "ups" },
+    { UP_DEVICE_KIND_MOUSE, "mouse" },
+    { UP_DEVICE_KIND_KEYBOARD, "keyboard" },
+    { UP_DEVICE_KIND_PHONE, "phone" }
+  };
 
-  // charged battery
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
-                   NULL);
-  check_icon_names (device, "battery-full-charged-symbolic;"
-                            "battery-full-charging-symbolic;"
-                            "gpm-battery-full;"
-                            "gpm-battery-100;"
-                            "battery-full-charged;"
-                            "battery-full-charging");
+  GString * expected = g_string_new (NULL);
+  for (int i=0, n=G_N_ELEMENTS(devices); i<n; i++)
+    {
+      const int kind = devices[i].kind;
+      const gchar * kind_str = devices[i].kind_str;
 
-  // charging battery, 95%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
-                   NULL);
-  check_icon_names (device, "battery-caution-charging-symbolic;"
-                            "gpm-battery-000-charging;"
-                            "battery-caution-charging");
+      // empty
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
+                       NULL);
+ 
+      g_string_append_printf (expected, "%s-empty-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-empty;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000;", kind_str);
+      g_string_append_printf (expected, "%s-empty", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // charging battery, 85%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
-                   NULL);
-  check_icon_names (device, "battery-caution-charging-symbolic;"
-                            "gpm-battery-000-charging;"
-                            "battery-caution-charging");
+      // charged
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
+                       NULL);
+      g_string_append_printf (expected, "%s-full-charged-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-full;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-100;", kind_str);
+      g_string_append_printf (expected, "%s-full-charged;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // charging battery, 50%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
-                   NULL);
-  check_icon_names (device, "battery-caution-charging-symbolic;"
-                            "gpm-battery-000-charging;"
-                            "battery-caution-charging");
+      // charging, 95%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
+                       NULL);
 
-  // charging battery, 25%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
-                   NULL);
-  check_icon_names (device, "battery-caution-charging-symbolic;"
-                            "gpm-battery-000-charging;"
-                            "battery-caution-charging");
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // charging battery, 5%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
-                   NULL);
-  check_icon_names (device, "battery-caution-charging-symbolic;"
-                            "gpm-battery-000-charging;"
-                            "battery-caution-charging");
+      // charging, 85%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
+                       NULL);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
+      // charging, 50%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                       NULL);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 95%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
-                   NULL);
-  check_icon_names (device, "battery-100;"
-                            "gpm-battery-100;"
-                            "battery-full-symbolic;"
-                            "battery-full");
+      // charging, 25%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                       NULL);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 85%
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
-                   NULL);
-  check_icon_names (device, "battery-080;"
-                            "gpm-battery-080;"
-                            "battery-full-symbolic;"
-                            "battery-full");
+      // charging, 5%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                       NULL);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 50% -- 1 hour left
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
-                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+      // discharging, 95%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                    NULL);
-  check_icon_names (device, "battery-060;"
-                            "gpm-battery-060;"
-                            "battery-good-symbolic;"
-                            "battery-good");
+      g_string_append_printf (expected, "%s-100;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-100;", kind_str);
+      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 25% -- 1 hour left
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
-                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
-                   NULL);
-  check_icon_names (device, "battery-040;"
-                            "gpm-battery-040;"
-                            "battery-good-symbolic;"
-                            "battery-good");
+      // discharging, 85%
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
+                       NULL);
+      g_string_append_printf (expected, "%s-080;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-080;", kind_str);
+      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 25% -- 15 minutes left
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
-                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
-                   NULL);
-  check_icon_names (device, "battery-020;"
-                            "gpm-battery-020;"
-                            "battery-low-symbolic;"
-                            "battery-low");
+      // discharging, 50% -- 1 hour left
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                       NULL);
+      g_string_append_printf (expected, "%s-060;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-060;", kind_str);
+      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 5% -- 1 hour left
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
-                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
-                   NULL);
-  check_icon_names (device, "battery-040;"
-                            "gpm-battery-040;"
-                            "battery-good-symbolic;"
-                            "battery-good");
+      // discharging, 25% -- 1 hour left
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                       NULL);
+      g_string_append_printf (expected, "%s-040;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
+      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // discharging battery, 5% -- 15 minutes left
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
-                   INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
-                   INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
-                   NULL);
-  check_icon_names (device, "battery-000;"
-                            "gpm-battery-000;"
-                            "battery-caution-symbolic;"
-                            "battery-caution"); 
+      // discharging, 25% -- 15 minutes left
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
+                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                       NULL);
+      g_string_append_printf (expected, "%s-020;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-020;", kind_str);
+      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
 
-  // state unknown
-  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
-                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
+      // discharging, 5% -- 1 hour left
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-  check_icon_names (device, "battery-missing-symbolic;"
-                            "gpm-battery-missing;"
-                            "battery-missing");
+      g_string_append_printf (expected, "%s-040;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
+      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
+
+      // discharging, 5% -- 15 minutes left
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                       INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
+                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                       NULL);
+      g_string_append_printf (expected, "%s-000;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000;", kind_str);
+      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
+
+      // state unknown
+      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
+                       NULL);
+      g_string_append_printf (expected, "%s-missing-symbolic;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-missing;", kind_str);
+      g_string_append_printf (expected, "%s-missing", kind_str);
+      check_icon_names (device, expected->str);
+      g_string_truncate (expected, 0);
+  }
+  g_string_free (expected, TRUE);
 
   // cleanup
   g_object_unref(o);
