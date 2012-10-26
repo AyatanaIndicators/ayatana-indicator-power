@@ -584,7 +584,7 @@ TEST_F(DeviceTest, ChoosePrimary)
   set_device_charge_state (b, UP_DEVICE_STATE_DISCHARGING, 100, 50.0);
   ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
 
-  /* Both are charging, have the same charge percentage, and differnt times left (to charge).
+  /* Both are charging, have the same charge percentage, and different times left (to charge).
    * Confirm that the one with the most time left is chosen. */
   set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,     49, 50.0);
   set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 50.0);
