@@ -399,11 +399,11 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
   state = UP_DEVICE_STATE_CHARGING;
   if (!ret && (((a_state == state) && a_time) || ((b_state == state) && b_time)))
     {
-      if (b_state != state) /* a is charging */
+      if (a_state != state) /* b is charging */
         {
           ret = 1;
         }
-      if (a_state != state) /* b is charging */
+      else if (b_state != state) /* b is charging */
         {
           ret = -1;
         }
