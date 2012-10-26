@@ -602,6 +602,22 @@ TEST_F(DeviceTest, ChoosePrimary)
   set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 49.0);
   ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
 
+  /* discharging always comes before charging */
+  set_device_charge_state (a, UP_DEVICE_STATE_DISCHARGING,  50, 50.0);
+  set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 50.0);
+  ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
+  set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,     50, 50.0);
+  set_device_charge_state (b, UP_DEVICE_STATE_DISCHARGING,  50, 50.0);
+  ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
+
+  /* charging always comes before charged */
+  set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,      50, 50.0);
+  set_device_charge_state (b, UP_DEVICE_STATE_FULLY_CHARGED, 50, 50.0);
+  ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
+  set_device_charge_state (a, UP_DEVICE_STATE_FULLY_CHARGED, 50, 50.0);
+  set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,      50, 50.0);
+  ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
+
   // cleanup
   g_slist_free_full (devices, g_object_unref);
 }
