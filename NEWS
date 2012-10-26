@@ -1,3 +1,8 @@
+12.10.3
+ - Show the proper icon for mice and ups devices. (LP: #1066208)
+ - Follow the spec when choosing the primary device (LP: #1071645)
+ - Fix minor memory leaks
+
 12.10.2
  - Show a more accurate view of discharging batteries (LP: #1054146)
  - Fix a GIcon memory leak
