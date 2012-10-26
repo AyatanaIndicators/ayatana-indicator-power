@@ -150,6 +150,8 @@ indicator_power_dispose (GObject *object)
 
   dispose_devices (self);
 
+  g_clear_object (&priv->label);
+  g_clear_object (&priv->status_image);
   g_clear_object (&priv->dbus_listener);
   g_clear_object (&priv->settings);
 
@@ -489,6 +491,7 @@ get_label (IndicatorObject *io)
     {
       /* Create the label if it doesn't exist already */
       priv->label = GTK_LABEL (gtk_label_new (""));
+      g_object_ref_sink (priv->label);
       gtk_widget_set_visible (GTK_WIDGET (priv->label), FALSE);
     }
 
@@ -508,6 +511,7 @@ get_image (IndicatorObject *io)
     gicon = g_themed_icon_new (DEFAULT_ICON);
     priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
+    g_object_ref_sink (priv->status_image);
     g_object_unref (gicon);
   }
 
