@@ -334,7 +334,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   gdouble percentage = indicator_power_device_get_percentage (device);
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
-  const gchar * kind_str = kind_str = up_device_kind_to_string (kind);
+  const gchar * kind_str = up_device_kind_to_string (kind);
 
   GPtrArray * names = g_ptr_array_new ();
 
@@ -351,19 +351,19 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   else switch (state)
     {
       case UP_DEVICE_STATE_EMPTY:
-        g_ptr_array_add (names, g_strdup("battery-empty-symbolic"));
+        g_ptr_array_add (names, g_strdup_printf("%s-empty-symbolic", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-empty", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-000", kind_str));
-        g_ptr_array_add (names, g_strdup("battery-empty"));
+        g_ptr_array_add (names, g_strdup_printf("%s-empty", kind_str));
         break;
 
       case UP_DEVICE_STATE_FULLY_CHARGED:
-        g_ptr_array_add (names, g_strdup("battery-full-charged-symbolic"));
-        g_ptr_array_add (names, g_strdup("battery-full-charging-symbolic"));
+        g_ptr_array_add (names, g_strdup_printf("%s-full-charged-symbolic", kind_str));
+        g_ptr_array_add (names, g_strdup_printf("%s-full-charging-symbolic", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-full", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-100", kind_str));
-        g_ptr_array_add (names, g_strdup("battery-full-charged"));
-        g_ptr_array_add (names, g_strdup("battery-full-charging"));
+        g_ptr_array_add (names, g_strdup_printf("%s-full-charged", kind_str));
+        g_ptr_array_add (names, g_strdup_printf("%s-full-charging", kind_str));
         break;
 
       case UP_DEVICE_STATE_CHARGING:
@@ -374,9 +374,9 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_device_icon_index (percentage);
-        g_ptr_array_add (names, g_strdup_printf ("battery-%s-charging-symbolic", suffix_str));
+        g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-symbolic", kind_str, suffix_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s-charging", kind_str, index_str));
-        g_ptr_array_add (names, g_strdup_printf ("battery-%s-charging", suffix_str));
+        g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, suffix_str));
         break;
 
       case UP_DEVICE_STATE_DISCHARGING:
@@ -392,14 +392,14 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
         index_str = get_device_icon_index (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str));
-        g_ptr_array_add (names, g_strdup_printf ("battery-%s-symbolic", suffix_str));
-        g_ptr_array_add (names, g_strdup_printf ("battery-%s", suffix_str));
+        g_ptr_array_add (names, g_strdup_printf ("%s-%s-symbolic", kind_str, suffix_str));
+        g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, suffix_str));
         break;
 
       default:
-        g_ptr_array_add (names, g_strdup("battery-missing-symbolic"));
-        g_ptr_array_add (names, g_strdup("gpm-battery-missing"));
-        g_ptr_array_add (names, g_strdup("battery-missing"));
+        g_ptr_array_add (names, g_strdup_printf("%s-missing-symbolic", kind_str));
+        g_ptr_array_add (names, g_strdup_printf("gpm-%s-missing", kind_str));
+        g_ptr_array_add (names, g_strdup_printf("%s-missing", kind_str));
     }
 
     g_ptr_array_add (names, NULL); /* terminates the strv */
@@ -527,6 +527,10 @@ device_kind_to_localised_string (UpDeviceKind kind)
     case UP_DEVICE_KIND_COMPUTER:
       /* TRANSLATORS: tablet device */
       text = _("Computer");
+      break;
+    case UP_DEVICE_KIND_UNKNOWN:
+      /* TRANSLATORS: unknown device */
+      text = _("Unknown");
       break;
     default:
       g_warning ("enum unrecognised: %i", kind);
