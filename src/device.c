@@ -529,7 +529,7 @@ device_kind_to_localised_string (UpDeviceKind kind)
       text = _("Computer");
       break;
     case UP_DEVICE_KIND_UNKNOWN:
-      /* TRANSLATORS: tablet device */
+      /* TRANSLATORS: unknown device */
       text = _("Unknown");
       break;
     default:
