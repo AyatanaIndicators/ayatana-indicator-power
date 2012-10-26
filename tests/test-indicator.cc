@@ -71,6 +71,8 @@ class IndicatorTest : public ::testing::Test
 
     virtual void TearDown()
     {
+      ASSERT_EQ (1, G_OBJECT(battery_device)->ref_count);
+      ASSERT_EQ (1, G_OBJECT(ac_device)->ref_count);
       g_object_unref (battery_device);
       g_object_unref (ac_device);
     }
