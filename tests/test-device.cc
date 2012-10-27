@@ -37,15 +37,40 @@ namespace
 
 class DeviceTest : public ::testing::Test
 {
+  private:
+
+    guint handler_id;
+
+    int log_count;
+
+    static void log_count_func (const gchar *log_domain,
+                                GLogLevelFlags log_level,
+                                const gchar *message,
+                                gpointer user_data)
+    {
+      reinterpret_cast<DeviceTest*>(user_data)->log_count++;
+    }
+
+  protected:
+
+    int expected_ipower_log_messages;
+
   protected:
 
     virtual void SetUp()
     {
+      const GLogLevelFlags flags = GLogLevelFlags(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_WARNING);
+      handler_id = g_log_set_handler ("Indicator-Power", flags, log_count_func, this);
+      expected_ipower_log_messages = 0;
+      log_count = 0;
+
       ensure_glib_initialized ();
     }
 
     virtual void TearDown()
     {
+      ASSERT_EQ (expected_ipower_log_messages, log_count);
+      g_log_remove_handler ("Indicator-Power", handler_id);
     }
 
   protected:
@@ -205,6 +230,7 @@ TEST_F(DeviceTest, BadAccessors)
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);
+  expected_ipower_log_messages += 5;
 
   // test that these functions can handle being passed non-device GObjects
   device = reinterpret_cast<IndicatorPowerDevice*>(g_cancellable_new ());
@@ -213,6 +239,8 @@ TEST_F(DeviceTest, BadAccessors)
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);
+  expected_ipower_log_messages += 5;
+
   g_object_unref (device);
 }
 
@@ -226,6 +254,7 @@ TEST_F(DeviceTest, IconNames)
   GObject * o = G_OBJECT(device);
 
   // bad arguments
+  expected_ipower_log_messages++;
   ASSERT_TRUE (indicator_power_device_get_icon_names (NULL) == NULL);
 
   // power
@@ -452,9 +481,11 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
   // bad args: NULL device
+  expected_ipower_log_messages++;
   check_strings (NULL, NULL, NULL, NULL);
 
   // bad args: a GObject that isn't a device
+  expected_ipower_log_messages++;
   GObject * o = G_OBJECT(g_cancellable_new());
   check_strings ((IndicatorPowerDevice*)o, NULL, NULL, NULL);
   g_object_unref (o);
