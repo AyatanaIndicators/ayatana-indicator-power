@@ -403,7 +403,7 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
         {
           ret = 1;
         }
-      else if (b_state != state) /* b is charging */
+      else if (b_state != state) /* a is charging */
         {
           ret = -1;
         }
