@@ -37,15 +37,40 @@ namespace
 
 class DeviceTest : public ::testing::Test
 {
+  private:
+
+    guint log_handler_id;
+
+    int log_count_ipower_actual;
+
+    static void log_count_func (const gchar *log_domain,
+                                GLogLevelFlags log_level,
+                                const gchar *message,
+                                gpointer user_data)
+    {
+      reinterpret_cast<DeviceTest*>(user_data)->log_count_ipower_actual++;
+    }
+
+  protected:
+
+    int log_count_ipower_expected;
+
   protected:
 
     virtual void SetUp()
     {
+      const GLogLevelFlags flags = GLogLevelFlags(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_WARNING);
+      log_handler_id = g_log_set_handler ("Indicator-Power", flags, log_count_func, this);
+      log_count_ipower_expected = 0;
+      log_count_ipower_actual = 0;
+
       ensure_glib_initialized ();
     }
 
     virtual void TearDown()
     {
+      ASSERT_EQ (log_count_ipower_expected, log_count_ipower_actual);
+      g_log_remove_handler ("Indicator-Power", log_handler_id);
     }
 
   protected:
@@ -205,6 +230,7 @@ TEST_F(DeviceTest, BadAccessors)
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);
+  log_count_ipower_expected += 5;
 
   // test that these functions can handle being passed non-device GObjects
   device = reinterpret_cast<IndicatorPowerDevice*>(g_cancellable_new ());
@@ -213,6 +239,8 @@ TEST_F(DeviceTest, BadAccessors)
   indicator_power_device_get_state (device);
   indicator_power_device_get_percentage (device);
   indicator_power_device_get_object_path (device);
+  log_count_ipower_expected += 5;
+
   g_object_unref (device);
 }
 
@@ -226,6 +254,7 @@ TEST_F(DeviceTest, IconNames)
   GObject * o = G_OBJECT(device);
 
   // bad arguments
+  log_count_ipower_expected++;
   ASSERT_TRUE (indicator_power_device_get_icon_names (NULL) == NULL);
 
   // power
@@ -452,9 +481,11 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
   // bad args: NULL device
+  log_count_ipower_expected++;
   check_strings (NULL, NULL, NULL, NULL);
 
   // bad args: a GObject that isn't a device
+  log_count_ipower_expected++;
   GObject * o = G_OBJECT(g_cancellable_new());
   check_strings ((IndicatorPowerDevice*)o, NULL, NULL, NULL);
   g_object_unref (o);
@@ -532,22 +563,12 @@ TEST_F(DeviceTest, Labels)
   g_free (real_lang);
 }
 
-static void
-set_device_charge_state (IndicatorPowerDevice * device, int state, int time, double pct)
-{
-  g_object_set (device, INDICATOR_POWER_DEVICE_STATE, state,
-                        INDICATOR_POWER_DEVICE_PERCENTAGE, pct,
-                        INDICATOR_POWER_DEVICE_TIME, guint64(time),
-                        NULL);
-}
-
-
 /* The menu title should tell you at a glance what you need to know most: what
    device will lose power soonest (and optionally when), or otherwise which
    device will take longest to charge (and optionally how long it will take). */
 TEST_F(DeviceTest, ChoosePrimary)
 {
-  GSList * devices;
+  GSList * device_list;
   IndicatorPowerDevice * a;
   IndicatorPowerDevice * b;
 
@@ -562,46 +583,49 @@ TEST_F(DeviceTest, ChoosePrimary)
                                   UP_DEVICE_STATE_DISCHARGING,
                                   0);
 
-  devices = NULL;
-  devices = g_slist_append (devices, a);
-  devices = g_slist_append (devices, b);
+  /* device states + time left to {discharge,charge} + % of charge left,
+     sorted in order of preference wrt the spec's criteria.
+     So tests[i] should be picked over any test with an index greater than i */
+  struct {
+    int state;
+    guint64 time;
+    double percentage;
+  } tests[] = {
+    { UP_DEVICE_STATE_DISCHARGING, 49, 50.0 },
+    { UP_DEVICE_STATE_DISCHARGING, 50, 50.0 },
+    { UP_DEVICE_STATE_DISCHARGING, 50, 100.0 },
+    { UP_DEVICE_STATE_DISCHARGING, 51, 50.0 },
+    { UP_DEVICE_STATE_CHARGING, 50, 50.0 },
+    { UP_DEVICE_STATE_CHARGING, 49, 50.0 },
+    { UP_DEVICE_STATE_CHARGING, 49, 100.0 },
+    { UP_DEVICE_STATE_CHARGING, 48, 50.0 },
+    { UP_DEVICE_STATE_FULLY_CHARGED, 0, 50.0 }
+  };
 
-  /* Both discharging, same charge %, different times left before empty.
-     Confirm that the one with less time is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_DISCHARGING,  99, 50.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_DISCHARGING, 100, 50.0);
-  ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
+  device_list = NULL;
+  device_list = g_slist_append (device_list, a);
+  device_list = g_slist_append (device_list, b);
 
-  /* Both discharging, different charge % and times left.
-     Confirm that the one with less time is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_DISCHARGING,  99, 50.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_DISCHARGING, 100, 49.0);
-  ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
+  for (int i=0, n=G_N_ELEMENTS(tests); i<n; i++)
+    {
+      for (int j=i+1; j<n; j++)
+        {
+          g_object_set (a, INDICATOR_POWER_DEVICE_STATE, tests[i].state,
+                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[i].time),
+                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[i].percentage,
+                           NULL);
+          g_object_set (b, INDICATOR_POWER_DEVICE_STATE, tests[j].state,
+                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[j].time),
+                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
+                           NULL);
+          ASSERT_EQ (a, indicator_power_choose_primary_device(device_list));
 
-  /* Both discharging, different charge %, same times left.
-     Confirm that the one with less charge is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_DISCHARGING, 100, 49.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_DISCHARGING, 100, 50.0);
-  ASSERT_EQ (a, indicator_power_choose_primary_device(devices));
-
-  /* Both are charging, have the same charge percentage, and different times left (to charge).
-   * Confirm that the one with the most time left is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,     49, 50.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 50.0);
-  ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
-
-  /* Both are charging, with different charges and time left.
-     Confirm that the one with the most time left is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,     49, 50.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 49.0);
-  ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
-
-  /* Both are charging, have the same time left, and different charges.
-   * Confirm that the one with less charge is chosen. */
-  set_device_charge_state (a, UP_DEVICE_STATE_CHARGING,     50, 50.0);
-  set_device_charge_state (b, UP_DEVICE_STATE_CHARGING,     50, 49.0);
-  ASSERT_EQ (b, indicator_power_choose_primary_device(devices));
-
+          /* reverse the list to check that list order doesn't matter */
+          device_list = g_slist_reverse (device_list);
+          ASSERT_EQ (a, indicator_power_choose_primary_device(device_list));
+        }
+    }
+    
   // cleanup
-  g_slist_free_full (devices, g_object_unref);
+  g_slist_free_full (device_list, g_object_unref);
 }
