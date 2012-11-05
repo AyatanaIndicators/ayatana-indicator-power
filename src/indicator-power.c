@@ -150,6 +150,8 @@ indicator_power_dispose (GObject *object)
 
   dispose_devices (self);
 
+  g_clear_object (&priv->label);
+  g_clear_object (&priv->status_image);
   g_clear_object (&priv->dbus_listener);
   g_clear_object (&priv->settings);
 
@@ -350,76 +352,95 @@ build_menu (IndicatorPower *self)
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 }
 
-static IndicatorPowerDevice*
-get_primary_device (GSList * devices)
+/* sort devices from most interesting to least interesting on this criteria:
+   1. discharging items from least time remaining until most time remaining
+   2. discharging items with an unknown time remaining
+   3. charging items from most time left to charge to least time left to charge
+   4. charging items with an unknown time remaining
+   5. everything else */
+static gint
+device_compare_func (gconstpointer ga, gconstpointer gb)
 {
-  IndicatorPowerDevice * primary_device = NULL;
-  IndicatorPowerDevice * primary_device_charging = NULL;
-  IndicatorPowerDevice * primary_device_discharging = NULL;
-  gboolean charging = FALSE;
-  gboolean discharging = FALSE;
-  guint64 min_discharging_time = G_MAXUINT64;
-  guint64 max_charging_time = 0;
-  GSList * l;
+  int ret;
+  int state;
+  const IndicatorPowerDevice * a = INDICATOR_POWER_DEVICE(ga);
+  const IndicatorPowerDevice * b = INDICATOR_POWER_DEVICE(gb);
+  const int a_state = indicator_power_device_get_state (a);
+  const int b_state = indicator_power_device_get_state (b);
+  const gdouble a_percentage = indicator_power_device_get_percentage (a);
+  const gdouble b_percentage = indicator_power_device_get_percentage (b);
+  const time_t a_time = indicator_power_device_get_time (a);
+  const time_t b_time = indicator_power_device_get_time (b);
 
-  for (l=devices; l!=NULL; l=l->next)
+  ret = 0;
+
+  state = UP_DEVICE_STATE_DISCHARGING;
+  if (!ret && ((a_state == state) || (b_state == state)))
     {
-      IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
-      const UpDeviceKind kind = indicator_power_device_get_kind (device);
-      const UpDeviceState state = indicator_power_device_get_state (device);
-      const gdouble percentage  = indicator_power_device_get_percentage (device);
-      const time_t time = indicator_power_device_get_time (device);
-
-      /* Try to fix the case when we get a empty battery bay as a real battery */
-      if (state == UP_DEVICE_STATE_UNKNOWN &&
-          percentage == 0)
-        continue;
-
-      /* not battery */
-      if (kind != UP_DEVICE_KIND_BATTERY)
-        continue;
-
-      if (state == UP_DEVICE_STATE_DISCHARGING)
+      if (a_state != state) /* b is discharging */
         {
-          discharging = TRUE;
-          if (time < min_discharging_time)
-            {
-              min_discharging_time = time;
-              primary_device_discharging = device;
-            }
+          ret = 1;
         }
-      else if (state == UP_DEVICE_STATE_CHARGING)
+      else if (b_state != state) /* a is discharging */
         {
-          charging = TRUE;
-          if (time == 0) /* Battery broken */
-            {
-              primary_device_charging = device;
-            }
-          if (time > max_charging_time)
-            {
-              max_charging_time = time;
-              primary_device_charging = device;
-            }
+          ret = -1;
         }
-      else
+      else /* both are discharging; least-time-left goes first */
         {
-          primary_device = device;
+          if (!a_time || !b_time) /* known time always trumps unknown time */
+            ret = a_time ? -1 : 1;
+          else if (a_time != b_time)
+            ret = a_time < b_time ? -1 : 1;
+          else
+            ret = a_percentage < b_percentage ? -1 : 1;
         }
     }
 
-  if (discharging)
+  state = UP_DEVICE_STATE_CHARGING;
+  if (!ret && (((a_state == state) && a_time) || ((b_state == state) && b_time)))
     {
-      primary_device = primary_device_discharging;
-    }
-  else if (charging)
-    {
-      primary_device = primary_device_charging;
+      if (a_state != state) /* b is charging */
+        {
+          ret = 1;
+        }
+      else if (b_state != state) /* a is charging */
+        {
+          ret = -1;
+        }
+      else /* both are discharging; most-time-to-charge goes first */
+        {
+          if (!a_time || !b_time) /* known time always trumps unknown time */
+            ret = a_time ? -1 : 1;
+          else if (a_time != b_time)
+            ret = a_time > b_time ? -1 : 1;
+          else
+            ret = a_percentage < b_percentage ? -1 : 1;
+        }
     }
 
-  if (primary_device != NULL)
-    g_object_ref (primary_device);
+  if (!ret)
+    ret = a_state - b_state;
 
-  return primary_device;
+  return ret;
+}
+
+IndicatorPowerDevice *
+indicator_power_choose_primary_device (GSList * devices)
+{
+  IndicatorPowerDevice * primary = NULL;
+
+  if (devices != NULL)
+    {
+      GSList * tmp;
+
+      tmp = g_slist_copy (devices);
+      tmp = g_slist_sort (tmp, device_compare_func);
+      primary = g_object_ref (tmp->data);
+
+      g_slist_free (tmp);
+    }
+
+  return primary;
 }
 
 static void
@@ -458,7 +479,7 @@ indicator_power_set_devices (IndicatorPower * self, GSList * devices)
   g_slist_foreach (devices, (GFunc)g_object_ref, NULL);
   dispose_devices (self);
   priv->devices = g_slist_copy (devices);
-  priv->device = get_primary_device (priv->devices);
+  priv->device = indicator_power_choose_primary_device (devices);
 
   /* and our menus/visibility from the new device list */
   if (priv->device != NULL)
@@ -489,6 +510,7 @@ get_label (IndicatorObject *io)
     {
       /* Create the label if it doesn't exist already */
       priv->label = GTK_LABEL (gtk_label_new (""));
+      g_object_ref_sink (priv->label);
       gtk_widget_set_visible (GTK_WIDGET (priv->label), FALSE);
     }
 
@@ -508,6 +530,7 @@ get_image (IndicatorObject *io)
     gicon = g_themed_icon_new (DEFAULT_ICON);
     priv->status_image = GTK_IMAGE (gtk_image_new_from_gicon (gicon,
                                                               GTK_ICON_SIZE_LARGE_TOOLBAR));
+    g_object_ref_sink (priv->status_image);
     g_object_unref (gicon);
   }
 
