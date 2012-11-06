@@ -352,13 +352,38 @@ build_menu (IndicatorPower *self)
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 }
 
+/* the higher the weight, the more interesting the device */
+static int
+get_device_kind_weight (const IndicatorPowerDevice * device)
+{
+  UpDeviceKind kind;
+  static gboolean initialized = FALSE;
+  static int weights[UP_DEVICE_KIND_LAST];
+
+  kind = indicator_power_device_get_kind (device);
+  g_return_val_if_fail (0<=kind && kind<UP_DEVICE_KIND_LAST, 0);
+
+  if (G_UNLIKELY(!initialized))
+    {
+      int i;
+
+      initialized = TRUE;
+
+      for (i=0; i<UP_DEVICE_KIND_LAST; i++)
+        weights[i] = 1;
+      weights[UP_DEVICE_KIND_BATTERY] = 2;
+      weights[UP_DEVICE_KIND_LINE_POWER] = 0;
+    }
+
+  return weights[kind];
+}
+
 /* sort devices from most interesting to least interesting on this criteria:
    1. discharging items from least time remaining until most time remaining
    2. discharging items with an unknown time remaining
    3. charging items from most time left to charge to least time left to charge
    4. charging items with an unknown time remaining
-   5. everything except line-power, because it's not interesting
-   6. line-power */
+   5. batteries, then non-line power, then line-power */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
 {
@@ -419,21 +444,18 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
         }
     }
 
-  if (!ret) /* make UP_DEVICE_KIND_LINE_POWER go last because it's not interesting */
+  if (!ret) /* neither device is charging nor discharging... */
     {
-      const UpDeviceKind a_kind = indicator_power_device_get_kind (a);
-      const UpDeviceKind b_kind = indicator_power_device_get_kind (b);
+      const int weight_a = get_device_kind_weight (a);
+      const int weight_b = get_device_kind_weight (b);
 
-      if ((a_kind == UP_DEVICE_KIND_LINE_POWER) || (b_kind == UP_DEVICE_KIND_LINE_POWER))
+      if (weight_a > weight_b)
         {
-          if (a_kind != UP_DEVICE_KIND_LINE_POWER) /* b is a line-power */
-            {
-              ret = -1;
-            }
-          else if (b_kind != UP_DEVICE_KIND_LINE_POWER) /* a is a line-power */
-            {
-              ret = 1;
-            }
+          ret = -1;
+        }
+      else if (weight_a < weight_b)
+        {
+          ret = 1;
         }
     }
 
