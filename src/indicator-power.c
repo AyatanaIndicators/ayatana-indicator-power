@@ -357,7 +357,8 @@ build_menu (IndicatorPower *self)
    2. discharging items with an unknown time remaining
    3. charging items from most time left to charge to least time left to charge
    4. charging items with an unknown time remaining
-   5. everything else */
+   5. everything except line-power, because it's not interesting
+   6. line-power */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
 {
@@ -415,6 +416,24 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
             ret = a_time > b_time ? -1 : 1;
           else
             ret = a_percentage < b_percentage ? -1 : 1;
+        }
+    }
+
+  if (!ret) /* make UP_DEVICE_KIND_LINE_POWER go last because it's not interesting */
+    {
+      const UpDeviceKind a_kind = indicator_power_device_get_kind (a);
+      const UpDeviceKind b_kind = indicator_power_device_get_kind (b);
+
+      if ((a_kind == UP_DEVICE_KIND_LINE_POWER) || (b_kind == UP_DEVICE_KIND_LINE_POWER))
+        {
+          if (a_kind != UP_DEVICE_KIND_LINE_POWER) /* b is a line-power */
+            {
+              ret = -1;
+            }
+          else if (b_kind != UP_DEVICE_KIND_LINE_POWER) /* a is a line-power */
+            {
+              ret = 1;
+            }
         }
     }
 
