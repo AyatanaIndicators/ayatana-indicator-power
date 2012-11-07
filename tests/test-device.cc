@@ -555,7 +555,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "AC Adapter", "AC Adapter", "AC Adapter");
+  check_strings (device, "", "AC Adapter", "AC Adapter");
 
   // cleanup
   g_object_unref(o);
