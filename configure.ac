@@ -7,11 +7,11 @@ AC_INIT([indicator-power],
 AC_PREREQ([2.64])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([configure.ac])
+AC_CONFIG_SRCDIR([src/device.c])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.11 -Wall foreign dist-xz])
+AM_INIT_AUTOMAKE([1.11 -Wall foreign dist-xz check-news])
 AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
