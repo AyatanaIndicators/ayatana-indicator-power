@@ -612,7 +612,7 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
     {
       *details         = g_strdup (device_name);
       *accessible_name = g_strdup (device_name);
-      *short_details   = g_strdup (device_name);
+      *short_details   = g_strdup ("");
     }
   else
     {
