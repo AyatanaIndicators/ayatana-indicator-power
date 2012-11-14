@@ -1,5 +1,5 @@
 AC_INIT([indicator-power],
-        [12.10.4],
+        [12.10.5],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])

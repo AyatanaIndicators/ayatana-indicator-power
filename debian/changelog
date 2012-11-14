@@ -1,3 +1,10 @@
+indicator-power (12.10.5-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release:
+    - Fix a device display bug introduced in 12.10.3 (LP: #1075192)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 14 Nov 2012 11:08:14 +0100
+
 indicator-power (12.10.4-0ubuntu1) raring; urgency=low
 
   * New upstream release.

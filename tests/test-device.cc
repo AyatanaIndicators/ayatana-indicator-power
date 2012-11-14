@@ -555,7 +555,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "AC Adapter", "AC Adapter", "AC Adapter");
+  check_strings (device, "", "AC Adapter", "AC Adapter");
 
   // cleanup
   g_object_unref(o);
@@ -587,19 +587,22 @@ TEST_F(DeviceTest, ChoosePrimary)
      sorted in order of preference wrt the spec's criteria.
      So tests[i] should be picked over any test with an index greater than i */
   struct {
+    int kind;
     int state;
     guint64 time;
     double percentage;
   } tests[] = {
-    { UP_DEVICE_STATE_DISCHARGING, 49, 50.0 },
-    { UP_DEVICE_STATE_DISCHARGING, 50, 50.0 },
-    { UP_DEVICE_STATE_DISCHARGING, 50, 100.0 },
-    { UP_DEVICE_STATE_DISCHARGING, 51, 50.0 },
-    { UP_DEVICE_STATE_CHARGING, 50, 50.0 },
-    { UP_DEVICE_STATE_CHARGING, 49, 50.0 },
-    { UP_DEVICE_STATE_CHARGING, 49, 100.0 },
-    { UP_DEVICE_STATE_CHARGING, 48, 50.0 },
-    { UP_DEVICE_STATE_FULLY_CHARGED, 0, 50.0 }
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   49,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50, 100.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   51,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      50,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49, 100.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      48,  50.0 },
+    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
+    { UP_DEVICE_KIND_KEYBOARD,   UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
+    { UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }
   };
 
   device_list = NULL;
@@ -610,11 +613,13 @@ TEST_F(DeviceTest, ChoosePrimary)
     {
       for (int j=i+1; j<n; j++)
         {
-          g_object_set (a, INDICATOR_POWER_DEVICE_STATE, tests[i].state,
+          g_object_set (a, INDICATOR_POWER_DEVICE_KIND, tests[i].kind,
+                           INDICATOR_POWER_DEVICE_STATE, tests[i].state,
                            INDICATOR_POWER_DEVICE_TIME, guint64(tests[i].time),
                            INDICATOR_POWER_DEVICE_PERCENTAGE, tests[i].percentage,
                            NULL);
-          g_object_set (b, INDICATOR_POWER_DEVICE_STATE, tests[j].state,
+          g_object_set (b, INDICATOR_POWER_DEVICE_KIND, tests[j].kind,
+                           INDICATOR_POWER_DEVICE_STATE, tests[j].state,
                            INDICATOR_POWER_DEVICE_TIME, guint64(tests[j].time),
                            INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
                            NULL);
