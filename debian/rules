@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@
+
+override_dh_install:
+	find debian/indicator-power -name \*.la -delete
+	find debian/indicator-power -name \*.a -delete
+	mkdir -p debian/indicator-power/usr/share/apport/package-hooks/
+	cp debian/source_indicator-power.py debian/indicator-power/usr/share/apport/package-hooks/
