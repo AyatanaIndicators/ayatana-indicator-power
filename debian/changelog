@@ -4,6 +4,7 @@ indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
     - Bump Build-Depends on debhelper to (>= 9).
     - Reorganize Build-Depends for clarity; build system b-deps first.
     - Use trailing commas for dep lists, as per other indicator packages.
+    - Update Vcs-Bzr and Vcs-Browser fields, add notice to uploaders.
   * debian/compat: bump to compat level 9.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 14 Nov 2012 13:55:03 -0500
