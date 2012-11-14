@@ -9,6 +9,7 @@ indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
   * debian/rules:
     - use the dh sequencer with --with autoreconf.
     - override dh_autoreconf to call autogen.sh from upstream.
+    - use DPKG_GENSYMBOLS_CHECK_LEVEL=4.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 14 Nov 2012 13:55:03 -0500
 
