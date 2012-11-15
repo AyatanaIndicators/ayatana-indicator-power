@@ -1,0 +1,259 @@
+indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
+
+  * debian/control:
+    - Bump Build-Depends on debhelper to (>= 9).
+    - Reorganize Build-Depends for clarity; build system b-deps first.
+    - Add autopoint to Build-Depends.
+    - Add libxorg-gtest-dev to Build-Depends for unit tests.
+    - Add libgtest-dev to Build-Depends for unit tests.
+    - Use trailing commas for dep lists, as per other indicator packages.
+    - Update Vcs-Bzr and Vcs-Browser fields, add notice to uploaders.
+  * debian/compat: bump to compat level 9.
+  * debian/rules:
+    - use the dh sequencer with --with autoreconf.
+    - override dh_autoreconf to call autogen.sh from upstream.
+    - use DPKG_GENSYMBOLS_CHECK_LEVEL=4.
+    - make sure we call dh_install --fail-missing in the dh_install override,
+      to be consistent with other indicator packages.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 14 Nov 2012 13:55:03 -0500
+
+indicator-power (12.10.5-0ubuntu1) raring; urgency=low
+
+  * New upstream release:
+    - Fix a device display bug introduced in 12.10.3 (LP: #1075192)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 14 Nov 2012 11:09:59 +0100
+
+indicator-power (12.10.4-0ubuntu1) raring; urgency=low
+
+  * New upstream release.
+    - Show the proper icon for mice and ups devices. (LP: #1066208)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 05 Nov 2012 12:41:37 +0100
+
+indicator-power (12.10.2-0ubuntu1) quantal; urgency=low
+
+  * New upstream release.
+    - Show a more accurate view of discharging batteries (LP: #1054146)
+    - Fix a GIcon memory leak
+    - In device.c, include gi18n-lib.h instead of gi18n.h
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 03 Oct 2012 21:26:58 +0200
+
+indicator-power (12.10.1-0ubuntu2) quantal; urgency=low
+
+  * Cherry-pick:
+    - Ensure the power indicator string translations are loaded. Thanks lars
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 20 Sep 2012 11:04:55 +0200
+
+indicator-power (12.10.1-0ubuntu1) quantal; urgency=low
+
+  * New upstream release.
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 22 Aug 2012 11:29:28 +0200
+
+indicator-power (12.10.0-0ubuntu1) quantal; urgency=low
+
+  * New upstream release.
+  * debian/control: updated glib requirement
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 11 Jul 2012 21:46:39 +0200
+
+indicator-power (2.0-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    * Make menu items accessible with Orca Screen reader (LP: #953176)
+    * Plug memory leaks when updating our icons
+
+ -- Charles Kerr <charles.kerr@canonical.com>  Wed, 11 Apr 2012 10:12:54 -0500
+
+indicator-power (1.93-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    * Fix for translatable strings not being extracted for i18n (LP: #957542)
+
+ -- Charles Kerr <charles.kerr@canonical.com>  Wed, 21 Mar 2012 12:47:31 -0500
+
+indicator-power (1.92-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 14 Mar 2012 19:43:58 +0100
+
+indicator-power (1.91-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    * Fix for the icon not changing when state changes (LP: #933466)
+    * Fix accessible descriptions (LP: #891932)
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 23 Feb 2012 00:35:31 -0600
+
+indicator-power (1.90-0ubuntu2) precise; urgency=low
+
+  * src/indicator-power.c
+    - cherry picked a fix for the icon not changing when state 
+      changes (LP: #933466)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 17 Feb 2012 10:41:52 -0500
+
+indicator-power (1.90-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    * Support for hiding of icon and settings for it as well (lp: #811769)
+    * Adding a name hint
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 14 Feb 2012 16:26:48 -0600
+
+indicator-power (0.10-0ubuntu2) precise; urgency=low
+
+  * no change rebuild for libindicator7
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 25 Jan 2012 09:58:07 -0500
+
+indicator-power (0.10-0ubuntu1) precise; urgency=low
+
+  * New upstream release.
+    - Use battery-with-a-plug when the batttery is fully charged but still 
+      on AC (LP: #865342)
+    - Only show a red icon when we have less than 30 minutes of battery 
+      remaining (LP: #743823)
+    - Fix icon creation for UP_DEVICE_STATE_CHARGING state
+    - support for old name icons
+    - Do not hardcode icon percentage when discharging
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 24 Oct 2011 11:07:54 -0400
+
+indicator-power (0.9-0ubuntu2) oneiric; urgency=low
+
+  * src/indicator-power.c
+    - Add a workaround to fix the case when we get a empty bay as a real 
+      battery. (LP: #863518)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Mon, 03 Oct 2011 10:35:48 -0400
+
+indicator-power (0.9-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Use correct dgettext and g_dngettext calls (LP: #846895)
+    - Ensure we use the same icon for all charge levels if we are in the 
+      charging status (LP: #824629)
+    - Fix gap when the power indicator is not show (LP: #842188)
+    - Do not show (charged) in menu title when fully charged (LP: #850011)
+    - Do not activate g-s-d, but just watch dbus for g-s-d to 
+      appear (LP: #854717)
+  * po/POTFILES.in
+    - Fixed gsettings schema filename
+  * debian/copyright
+    - Removed an extra line to make dep5 compliant
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 23 Sep 2011 13:03:13 -0400
+
+indicator-power (0.7-0ubuntu2) oneiric; urgency=low
+
+  * debian/control
+    - depend on gnome-settings-daemon instead of 
+      gnome-power-manager (LP: #833397)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 25 Aug 2011 09:13:55 -0400
+
+indicator-power (0.7-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Use gsettings to store the status of "Show time in Menu Bar" 
+      option (LP: #829853)
+    - Follow standard alignment of icons in menus (LP: #829697)
+    - Do not use a space before an ellipsis at the end of a string.
+  * debian/control
+    - Added build depends for libglib2.0-dev
+  * data/org.ubuntu.indicator-power.gschema.xml.in
+    - cherry pick typo fix from trunk
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 23 Aug 2011 12:44:58 -0400
+
+indicator-power (0.6-0ubuntu2) oneiric; urgency=low
+
+  * src/indicator-power.c
+    - cherry pick fix to prevent it from showing the icon on devices that
+      have no battery
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 12 Aug 2011 16:17:51 -0400
+
+indicator-power (0.6-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Show time left to use without brackets, time left to charge with 
+      brackets. (LP: #824629)
+    - Fix some memory leaks
+    - Don't show settings links when used in a greeter
+    - Use a string when the energy source is not present instead 
+      of 0%
+    - only batteries status icons are allowed in the menu title
+  * src/indicator-power.c
+    - cherry picked crasher fix
+  * debian/rules: 
+    - Don't autoreconf 
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 12 Aug 2011 09:57:47 -0400
+
+indicator-power (0.5-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Set GETTEXT_PACKAGE to generate proper templates
+    - Dropped support for gnome-power-manager
+  * debian/patches/fix_defines.patch
+    - removed, merged upstream
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 03 Aug 2011 09:30:18 -0400
+
+indicator-power (0.4-0ubuntu3) oneiric; urgency=low
+
+  * debian/control
+    - Added dh-autoreconf to build depends 
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 28 Jul 2011 15:02:03 -0400
+
+indicator-power (0.4-0ubuntu2) oneiric; urgency=low
+
+  * debian/patches/fix_defines.patch
+    - Use the HAVE_GSD defines so it works without gpm
+  * debian/rules
+    - added autoreconf
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 28 Jul 2011 12:59:33 -0400
+
+indicator-power (0.4-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Always select a device (LP: #810872)
+    - Use the dbus interface provided in g-s-d 3.1.4
+  * debian/control
+    - Added build depends for gnome-settings-daemon-dev >= 3.1.4 
+  * debian/source_indicator-power.py
+    - Install apport hook to collect upower -d output
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 26 Jul 2011 16:34:30 -0400
+
+indicator-power (0.3-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+    - Refine the text of the items in the menu to follow the specification
+    - Draw option checkbox as check, not radio
+    - Show the apropiate icon depending of the status of the devices
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 14 Jul 2011 11:04:23 -0400
+
+indicator-power (0.2-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+  * debian/control
+    - Bump build depends for libindicator to >- 0.3.90
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Jul 2011 09:59:26 -0400
+
+indicator-power (0.1-0ubuntu1) oneiric; urgency=low
+
+  * Initial package (LP: #807132)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 07 Jul 2011 13:12:21 -0400
