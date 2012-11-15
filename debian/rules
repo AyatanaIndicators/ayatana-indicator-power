@@ -15,5 +15,6 @@ override_dh_autoreconf:
 override_dh_install:
 	find debian/indicator-power -name \*.la -delete
 	find debian/indicator-power -name \*.a -delete
+	dh_install --fail-missing
 	mkdir -p debian/indicator-power/usr/share/apport/package-hooks/
 	cp debian/source_indicator-power.py debian/indicator-power/usr/share/apport/package-hooks/
