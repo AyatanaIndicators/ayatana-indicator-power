@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
+               autopoint,
                intltool,
                libgtk-3-dev,
                libglib2.0-dev (>= 2.33),
