@@ -1,3 +1,14 @@
+12.10.5
+ - Fix a device display bug introduced in 12.10.3 (LP: #1075192)
+
+12.10.4
+ - Fix primary device selection bug introduced in 12.10.3 (LP: #1071757)
+
+12.10.3
+ - Show the proper icon for mice and ups devices. (LP: #1066208)
+ - Follow the spec when choosing the primary device (LP: #1071645)
+ - Fix minor memory leaks
+
 12.10.2
  - Show a more accurate view of discharging batteries (LP: #1054146)
  - Fix a GIcon memory leak
