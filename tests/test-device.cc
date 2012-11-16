@@ -199,11 +199,11 @@ TEST_F(DeviceTest, NewFromVariant)
 
   GVariant * variant = g_variant_new ("(susdut)",
                                       "/object/path",
-                                      UP_DEVICE_KIND_BATTERY,
+                                      (guint32) UP_DEVICE_KIND_BATTERY,
                                       "icon",
-                                      50.0,
-                                      UP_DEVICE_STATE_CHARGING,
-                                      30);
+                                      (gdouble) 50.0,
+                                      (guint32) UP_DEVICE_STATE_CHARGING,
+                                      (guint64) 30);
   IndicatorPowerDevice * device = indicator_power_device_new_from_variant (variant);
   ASSERT_TRUE (variant != NULL);
   ASSERT_TRUE (device != NULL);
