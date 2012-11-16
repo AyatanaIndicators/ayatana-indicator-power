@@ -1,5 +1,6 @@
 indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
 
+  [ Mathieu Trudel-Lapierre ]
   * debian/control:
     - Bump Build-Depends on debhelper to (>= 9).
     - Reorganize Build-Depends for clarity; build system b-deps first.
@@ -15,6 +16,9 @@ indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
     - use DPKG_GENSYMBOLS_CHECK_LEVEL=4.
     - make sure we call dh_install --fail-missing in the dh_install override,
       to be consistent with other indicator packages.
+
+  [ Didier Roche ]
+  * Automatic snapshot from revision 155 (bootstrap)
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 14 Nov 2012 13:55:03 -0500
 
