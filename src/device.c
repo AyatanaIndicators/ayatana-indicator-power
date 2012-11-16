@@ -532,10 +532,6 @@ device_kind_to_localised_string (UpDeviceKind kind)
       /* TRANSLATORS: unknown device */
       text = _("Unknown");
       break;
-    case UP_DEVICE_KIND_UNKNOWN:
-      /* TRANSLATORS: unknown device */
-      text = _("Unknown");
-      break;
     default:
       g_warning ("enum unrecognised: %i", kind);
       text = up_device_kind_to_string (kind);
