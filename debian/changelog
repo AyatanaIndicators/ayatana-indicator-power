@@ -1,4 +1,4 @@
-indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
+indicator-power (12.10.6daily12.11.21.1-0ubuntu1) raring; urgency=low
 
   [ Mathieu Trudel-Lapierre ]
   * debian/control:
@@ -20,7 +20,14 @@ indicator-power (12.10.6-0ubuntu1) UNRELEASED; urgency=low
   [ Didier Roche ]
   * Automatic snapshot from revision 155 (bootstrap)
 
- -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 14 Nov 2012 13:55:03 -0500
+  [ Charles Kerr ]
+  * unit test "DeviceTest.NewFromVariant" fails on armhf / powerpc (LP:
+    #1079795)
+
+  [ Automatic PS uploader ]
+  * Automatic snapshot from revision 158
+
+ -- Automatic PS uploader <ps-jenkins@lists.canonical.com>  Wed, 21 Nov 2012 10:41:37 +0000
 
 indicator-power (12.10.5-0ubuntu1) raring; urgency=low
 
