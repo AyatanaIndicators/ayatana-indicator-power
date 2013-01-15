@@ -615,7 +615,8 @@ count_batteries (GSList * devices, int *total, int *inuse)
     {
       const IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
 
-      if (indicator_power_device_get_kind(device) == UP_DEVICE_KIND_BATTERY)
+      if (indicator_power_device_get_kind(device) == UP_DEVICE_KIND_BATTERY ||
+	  indicator_power_device_get_kind(device) == UP_DEVICE_KIND_UPS)
         {
           ++*total;
 
