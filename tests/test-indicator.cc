@@ -46,7 +46,6 @@ namespace
     if (G_UNLIKELY(!initialized))
     {
       initialized = true;
-      g_type_init();
       g_log_set_handler ("Gtk", (GLogLevelFlags)(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_WARNING), quiet_log_func, NULL);
       g_log_set_handler ("GLib-GObject", (GLogLevelFlags)(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_WARNING), quiet_log_func, NULL);
     }
