@@ -26,24 +26,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 ****
 ***/
 
-namespace
-{
-  void ensure_glib_initialized ()
-  {
-    static bool initialized = false;
-
-    if (G_UNLIKELY(!initialized))
-    {
-      initialized = true;
-      g_type_init();
-    }
-  }
-}
-
-/***
-****
-***/
-
 class DbusListenerTest : public ::testing::Test
 {
   protected:
@@ -138,7 +120,6 @@ class DbusListenerTest : public ::testing::Test
       gsd_power_error_string = NULL;
 
       // bring up the test bus
-      ensure_glib_initialized ();
       mainloop =  g_main_loop_new (NULL, FALSE);
       bus = g_test_dbus_new (G_TEST_DBUS_NONE);
       g_test_dbus_up (bus);

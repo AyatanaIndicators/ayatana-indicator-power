@@ -21,20 +21,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "device.h"
 #include "indicator-power.h"
 
-namespace
-{
-  void ensure_glib_initialized ()
-  {
-    static bool initialized = false;
-
-    if (G_UNLIKELY(!initialized))
-    {
-      initialized = true;
-      g_type_init();
-    }
-  }
-}
-
 class DeviceTest : public ::testing::Test
 {
   private:
@@ -63,8 +49,6 @@ class DeviceTest : public ::testing::Test
       log_handler_id = g_log_set_handler ("Indicator-Power", flags, log_count_func, this);
       log_count_ipower_expected = 0;
       log_count_ipower_actual = 0;
-
-      ensure_glib_initialized ();
     }
 
     virtual void TearDown()
@@ -111,8 +95,6 @@ class DeviceTest : public ::testing::Test
 
 TEST_F(DeviceTest, GObjectNew)
 {
-  ensure_glib_initialized ();
-
   GObject * o = G_OBJECT (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   ASSERT_TRUE (o != NULL);
   ASSERT_TRUE (INDICATOR_IS_POWER_DEVICE(o));
@@ -128,8 +110,6 @@ TEST_F(DeviceTest, Properties)
   gchar * str;
   guint64 u64;
   const gchar * key;
-
-  ensure_glib_initialized ();
 
   o = G_OBJECT (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   ASSERT_TRUE (o != NULL);
@@ -174,8 +154,6 @@ TEST_F(DeviceTest, Properties)
 
 TEST_F(DeviceTest, New)
 {
-  ensure_glib_initialized ();
-
   IndicatorPowerDevice * device = indicator_power_device_new ("/object/path",
                                                               UP_DEVICE_KIND_BATTERY,
                                                               50.0,
@@ -195,8 +173,6 @@ TEST_F(DeviceTest, New)
 
 TEST_F(DeviceTest, NewFromVariant)
 {
-  ensure_glib_initialized ();
-
   GVariant * variant = g_variant_new ("(susdut)",
                                       "/object/path",
                                       (guint32) UP_DEVICE_KIND_BATTERY,
@@ -221,8 +197,6 @@ TEST_F(DeviceTest, NewFromVariant)
 
 TEST_F(DeviceTest, BadAccessors)
 {
-  ensure_glib_initialized ();
-
   // test that these functions can handle being passed NULL pointers
   IndicatorPowerDevice * device = NULL;
   indicator_power_device_get_kind (device);
