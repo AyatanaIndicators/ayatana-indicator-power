@@ -1,3 +1,13 @@
+indicator-power (12.10.6daily13.01.17-0ubuntu1) raring; urgency=low
+
+  [ Charles Kerr ]
+  * g-p-m UPS power status does not show up in Unity (LP: #1007095)
+
+  [ Automatic PS uploader ]
+  * Automatic snapshot from revision 160
+
+ -- Automatic PS uploader <ps-jenkins@lists.canonical.com>  Thu, 17 Jan 2013 02:01:38 +0000
+
 indicator-power (12.10.6daily12.11.21.1-0ubuntu1) raring; urgency=low
 
   [ Mathieu Trudel-Lapierre ]
