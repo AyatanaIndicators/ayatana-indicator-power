@@ -1,3 +1,9 @@
+indicator-power (12.10.6daily13.01.25-0ubuntu1) raring; urgency=low
+
+  * Automatic snapshot from revision 164
+
+ -- Automatic PS uploader <ps-jenkins@lists.canonical.com>  Fri, 25 Jan 2013 02:01:11 +0000
+
 indicator-power (12.10.6daily13.01.18-0ubuntu1) raring; urgency=low
 
   * Automatic snapshot from revision 162
