@@ -27,6 +27,7 @@ TEST_LIBS = \
 	$(INDICATOR_LIBS) \
 	$(UPOWER_LIBS) \
         $(COVERAGE_LDFLAGS) \
+	$(XORG_GTEST_LDFLAGS) \
 	libgtest.a
 
 TEST_CPPFLAGS = \
