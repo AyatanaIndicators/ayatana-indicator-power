@@ -17,9 +17,10 @@ You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <gio/gio.h>
 #include <gtest/gtest.h>
 #include "device.h"
-#include "indicator-power.h"
+#include "service.h"
 
 class DeviceTest : public ::testing::Test
 {
@@ -597,11 +598,11 @@ TEST_F(DeviceTest, ChoosePrimary)
                            INDICATOR_POWER_DEVICE_TIME, guint64(tests[j].time),
                            INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
                            NULL);
-          ASSERT_EQ (a, indicator_power_choose_primary_device(device_list));
+          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
 
           /* reverse the list to check that list order doesn't matter */
           device_list = g_slist_reverse (device_list);
-          ASSERT_EQ (a, indicator_power_choose_primary_device(device_list));
+          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
         }
     }
     
