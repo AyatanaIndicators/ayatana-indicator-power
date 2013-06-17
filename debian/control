@@ -6,7 +6,6 @@ Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                autopoint,
                intltool,
-               libxorg-gtest-dev,
                libgtest-dev,
                libglib2.0-dev (>= 2.35.4),
 Standards-Version: 3.9.2
