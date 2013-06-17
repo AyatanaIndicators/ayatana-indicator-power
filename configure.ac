@@ -1,8 +1,9 @@
 AC_INIT([indicator-power],
-        [12.10.6],
+        [13.10.0],
         [http://bugs.launchpad.net/indicator-power],
         [indicator-power],
         [http://launchpad.net/indicator-power])
+AC_COPYRIGHT([Copyright 2011-2013 Canonical])
 
 AC_PREREQ([2.64])
 
@@ -29,25 +30,20 @@ LT_INIT
 ###########################
 # Dependencies
 ###########################
+
 GLIB_REQUIRED_VERSION=2.35.4
 GIO_REQUIRED_VERSION=2.26
-GTK_REQUIRED_VERSION=3.0
-INDICATOR_REQUIRED_VERSION=0.3.90
-UPOWER_REQUIRED_VERSION=0.9.5
+GIO_UNIX_REQUIRED_VERSION=2.26
 GSD_REQUIRED_VERSION=3.1.4
 
-PKG_CHECK_MODULES([UPOWER],[upower-glib >= UPOWER_REQUIRED_VERSION])
-
-PKG_CHECK_MODULES([INDICATOR],[glib-2.0 >= $GLIB_REQUIRED_VERSION
-                               gio-2.0 >= $GIO_REQUIRED_VERSION
-                               gtk+-3.0 >= $GTK_REQUIRED_VERSION
-                               indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION
-])
-PKG_CHECK_MODULES([GSD],[gnome-settings-daemon >= $GSD_REQUIRED_VERSION])
+PKG_CHECK_MODULES([SERVICE_DEPS],[glib-2.0 >= $GLIB_REQUIRED_VERSION
+                                  gio-2.0 >= $GIO_REQUIRED_VERSION
+                                  gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION])
 
 ###########################
 # GSETTINGS
 ###########################
+
 GLIB_GSETTINGS
 
 ###########################
@@ -126,13 +122,14 @@ AC_DEFUN([AC_DEFINE_PATH], [
 # Internationalization
 ###########################
 
-IT_PROG_INTLTOOL([0.41.0])
+IT_PROG_INTLTOOL([0.50.0])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
 AC_SUBST([GETTEXT_PACKAGE],[${PACKAGE_TARNAME}])
 AC_DEFINE([GETTEXT_PACKAGE],[PACKAGE_TARNAME],[Define to the gettext package name.])
+AC_DEFINE_PATH([GNOMELOCALEDIR],"${datadir}/locale",[locale directory])
 
 ###########################
 # Files
