@@ -1,0 +1,7 @@
+Short Term
+ - look for leaks by leaving running in valgrind
+ - fix broken tests
+ - install .indicator file
+
+Longer Term
+ - better coverage
