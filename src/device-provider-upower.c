@@ -35,7 +35,7 @@
 struct _IndicatorPowerDeviceProviderUPowerPriv
 {
   DbusUPower * upower_proxy;
-  GHashTable * devices;
+  GHashTable * devices; /* dbus object path --> IndicatorPowerDevice */
   GCancellable * cancellable;
   guint timer;
 };
@@ -67,7 +67,7 @@ G_DEFINE_TYPE_WITH_CODE (
  * triggers a device-removed signal, and also a device-changed as the
  * battery's state changes to 'discharging'.
  *
- * We use a small timer here to fold upower events into a single
+ * We use a small timer here to fold multiple upower events into a single
  * IndicatorPowerDeviceProvider devices-changed signal.
  */
 
@@ -111,6 +111,8 @@ on_upower_device_proxy_ready (GObject * o, GAsyncResult * res, gpointer gself)
     }
   else
     {
+      /* use this proxy's properties to update our own IndicatorPowerDevice */
+
       IndicatorPowerDevice * device;
       IndicatorPowerDeviceProviderUPower * self;
       priv_t * p;
@@ -295,8 +297,13 @@ my_dispose (GObject * o)
 
       p->timer = 0;
     }
-  
-  g_clear_object (&p->upower_proxy);
+
+  if (p->upower_proxy != NULL)
+    {
+      g_signal_handlers_disconnect_by_data (p->upower_proxy, self);
+
+      g_clear_object (&p->upower_proxy);
+    }
 
   g_clear_pointer (&p->devices, g_hash_table_destroy);
 
