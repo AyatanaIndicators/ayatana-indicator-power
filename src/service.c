@@ -50,10 +50,10 @@ enum
   PROP_0,
   PROP_REPLACE,
   PROP_DEVICE_PROVIDER,
-  PROP_LAST
+  LAST_PROP
 };
 
-static GParamSpec * properties[PROP_LAST];
+static GParamSpec * properties[LAST_PROP];
 
 enum
 {
@@ -118,30 +118,6 @@ struct _IndicatorPowerServicePrivate
 };
 
 typedef IndicatorPowerServicePrivate priv_t;
-
-/***
-****
-***/
-
-static void rebuild_now (IndicatorPowerService * self, guint section);
-
-static inline void
-rebuild_header_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_HEADER);
-}
-
-static inline void
-rebuild_devices_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_DEVICES);
-}
-
-static inline void
-rebuild_settings_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_SETTINGS);
-}
 
 /***
 ****
@@ -261,32 +237,6 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
     ret = a_state - b_state;
 
   return ret;
-}
-
-static void
-dispose_devices (IndicatorPowerService * self)
-{
-  priv_t * p = self->priv;
-
-  g_clear_object (&p->primary_device);
-  g_list_free_full (p->devices, g_object_unref);
-  p->devices = NULL;
-}
-
-static void
-on_devices_changed (IndicatorPowerService * self)
-{
-  priv_t * p = self->priv;
-
-  /* update the device list */
-  g_list_free_full (p->devices, (GDestroyNotify)g_object_unref);
-  p->devices = indicator_power_device_provider_get_devices (p->device_provider);
-
-  /* update the primary device */
-  g_clear_object (&p->primary_device);
-  p->primary_device = indicator_power_service_choose_primary_device (p->devices);
-
-  rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
 }
 
 /***
@@ -490,6 +440,7 @@ create_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 
 /***
 ****
+****  SECTION REBUILDING
 ****
 ***/
 
@@ -531,6 +482,24 @@ rebuild_now (IndicatorPowerService * self, guint sections)
     {
       rebuild_section (desktop->submenu, 1, create_settings_section (self));
     }
+}
+
+static inline void
+rebuild_header_now (IndicatorPowerService * self)
+{
+  rebuild_now (self, SECTION_HEADER);
+}
+
+static inline void
+rebuild_devices_section_now (IndicatorPowerService * self)
+{
+  rebuild_now (self, SECTION_DEVICES);
+}
+
+static inline void
+rebuild_settings_section_now (IndicatorPowerService * self)
+{
+  rebuild_now (self, SECTION_SETTINGS);
 }
 
 static void
@@ -617,6 +586,8 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
   execute_command ("gnome-power-statistics");
 }
 
+/* FIXME: use a GBinding to tie the gaction's state and the GSetting together? */
+
 static void
 set_show_time_flag (IndicatorPowerService * self, gboolean b)
 {
@@ -638,15 +609,18 @@ set_show_time_flag (IndicatorPowerService * self, gboolean b)
 static void
 on_show_time_setting_changed (GSettings * settings, gchar * key, gpointer gself)
 {
-  set_show_time_flag (gself, g_settings_get_boolean (settings, key));
+  set_show_time_flag (INDICATOR_POWER_SERVICE(gself),
+                      g_settings_get_boolean (settings, key));
 }
+
 static void
 on_show_time_action_state_changed (GAction    * action,
                                    GParamSpec * pspec   G_GNUC_UNUSED,
                                    gpointer     gself)
 {
   GVariant * v = g_action_get_state (action);
-  set_show_time_flag (gself, g_variant_get_boolean (v));
+  set_show_time_flag (INDICATOR_POWER_SERVICE(gself),
+                      g_variant_get_boolean (v));
   g_variant_unref (v);
 }
 
@@ -702,7 +676,7 @@ init_gactions (IndicatorPowerService * self)
 }
 
 /***
-****  GDBus
+****  GDBus Name Ownership & Menu / Action Exporting
 ***/
 
 static void
@@ -802,6 +776,26 @@ on_name_lost (GDBusConnection * connection G_GNUC_UNUSED,
   g_signal_emit (self, signals[SIGNAL_NAME_LOST], 0, NULL);
 }
 
+/***
+****  Events
+***/
+
+static void
+on_devices_changed (IndicatorPowerService * self)
+{
+  priv_t * p = self->priv;
+
+  /* update the device list */
+  g_list_free_full (p->devices, (GDestroyNotify)g_object_unref);
+  p->devices = indicator_power_device_provider_get_devices (p->device_provider);
+
+  /* update the primary device */
+  g_clear_object (&p->primary_device);
+  p->primary_device = indicator_power_service_choose_primary_device (p->devices);
+
+  rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
+}
+
 
 /***
 ****  GObject virtual functions
@@ -814,8 +808,8 @@ my_constructed (GObject * o)
   IndicatorPowerService * self = INDICATOR_POWER_SERVICE(o);
   priv_t * p = self->priv;
 
-  /* own the name in constructed() instead of init() so that
-     we'll know the value of the 'replace' property */
+  /* own the name here in constructed() instead of init()
+     so that we know the value of the 'replace' property */
   owner_flags = G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT;
   if (p->replace)
     owner_flags |= G_BUS_NAME_OWNER_FLAGS_REPLACE;
@@ -969,22 +963,21 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
 
   properties[PROP_0] = NULL;
 
-  properties[PROP_REPLACE] = g_param_spec_boolean ("replace",
-                                                   "Replace Service",
-                                                   "Replace existing service",
-                                                   FALSE,
-                                                   G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT_ONLY |
-                                                   G_PARAM_STATIC_STRINGS);
+  properties[PROP_REPLACE] = g_param_spec_boolean (
+    "replace",
+    "Replace Service",
+    "Replace existing service",
+    FALSE,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-  properties[PROP_DEVICE_PROVIDER] = g_param_spec_object ("device-provider",
-                                                          "Device Provider",
-                                                          "Source for power devices",
-                                                          G_TYPE_OBJECT,
-                                                          G_PARAM_READWRITE |
-                                                          G_PARAM_STATIC_STRINGS);
+  properties[PROP_DEVICE_PROVIDER] = g_param_spec_object (
+    "device-provider",
+    "Device Provider",
+    "Source for power devices",
+    G_TYPE_OBJECT,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, PROP_LAST, properties);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 /***
@@ -1016,10 +1009,14 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
   if (p->device_provider != NULL)
     {
       g_signal_handlers_disconnect_by_func (p->device_provider,
-                                            G_CALLBACK(on_devices_changed), self);
+                                            G_CALLBACK(on_devices_changed),
+                                            self);
       g_clear_object (&p->device_provider);
 
-      dispose_devices (self);
+      g_clear_object (&p->primary_device);
+
+      g_list_free_full (p->devices, g_object_unref);
+      p->devices = NULL;
     }
 
   if (dp != NULL)
