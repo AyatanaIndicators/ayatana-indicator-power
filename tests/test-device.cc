@@ -30,12 +30,12 @@ class DeviceTest : public ::testing::Test
 
     int log_count_ipower_actual;
 
-    static void log_count_func (const gchar *log_domain,
-                                GLogLevelFlags log_level,
-                                const gchar *message,
-                                gpointer user_data)
+    static void log_count_func (const gchar    * log_domain G_GNUC_UNUSED,
+                                GLogLevelFlags   log_level  G_GNUC_UNUSED,
+                                const gchar    * message    G_GNUC_UNUSED,
+                                gpointer         gself)
     {
-      reinterpret_cast<DeviceTest*>(user_data)->log_count_ipower_actual++;
+      reinterpret_cast<DeviceTest*>(gself)->log_count_ipower_actual++;
     }
 
   protected:
@@ -543,7 +543,7 @@ TEST_F(DeviceTest, Labels)
    device will take longest to charge (and optionally how long it will take). */
 TEST_F(DeviceTest, ChoosePrimary)
 {
-  GSList * device_list;
+  GList * device_list;
   IndicatorPowerDevice * a;
   IndicatorPowerDevice * b;
 
@@ -581,8 +581,8 @@ TEST_F(DeviceTest, ChoosePrimary)
   };
 
   device_list = NULL;
-  device_list = g_slist_append (device_list, a);
-  device_list = g_slist_append (device_list, b);
+  device_list = g_list_append (device_list, a);
+  device_list = g_list_append (device_list, b);
 
   for (int i=0, n=G_N_ELEMENTS(tests); i<n; i++)
     {
@@ -601,11 +601,11 @@ TEST_F(DeviceTest, ChoosePrimary)
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
 
           /* reverse the list to check that list order doesn't matter */
-          device_list = g_slist_reverse (device_list);
+          device_list = g_list_reverse (device_list);
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
         }
     }
     
   // cleanup
-  g_slist_free_full (device_list, g_object_unref);
+  g_list_free_full (device_list, g_object_unref);
 }
