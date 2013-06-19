@@ -89,18 +89,6 @@ AC_ARG_ENABLE([localinstall],
               [with_localinstall=$enableval],
               [with_localinstall=no])
 
-###########################
-# Indicator Info
-###########################
-
-AS_IF([test "x$with_localinstall" = "xyes"],
-      [INDICATORDIR="${libdir}/indicators3/2/"
-       INDICATORICONSDIR="${datadir}/indicator-applet/icons/"],
-      [INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator3-0.4`
-       INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator3-0.4`])
-AC_SUBST(INDICATORDIR)
-AC_SUBST(INDICATORICONSDIR)
-
 ##############################
 # Custom Junk
 ##############################
