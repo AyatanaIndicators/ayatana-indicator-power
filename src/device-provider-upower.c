@@ -305,7 +305,21 @@ my_dispose (GObject * o)
       g_clear_object (&p->upower_proxy);
     }
 
-  g_clear_pointer (&p->devices, g_hash_table_destroy);
+  g_hash_table_remove_all (p->devices);
+
+  G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
+}
+
+static void
+my_finalize (GObject * o)
+{
+  IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
+
+  self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(o);
+  p = self->priv;
+
+  g_hash_table_destroy (p->devices);
 
   G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
 }
@@ -320,6 +334,7 @@ indicator_power_device_provider_upower_class_init (IndicatorPowerDeviceProviderU
   GObjectClass * object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = my_dispose;
+  object_class->finalize = my_finalize;
 
   g_type_class_add_private (klass,
                             sizeof (IndicatorPowerDeviceProviderUPowerPriv));
