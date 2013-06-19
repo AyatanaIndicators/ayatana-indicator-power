@@ -1,0 +1,9 @@
+[Indicator Service]
+Name=indicator-power
+ObjectPath=/com/canonical/indicator/power
+
+[desktop]
+ObjectPath=/com/canonical/indicator/power/desktop
+
+[greeter]
+ObjectPath=/com/canonical/indicator/power/greeter

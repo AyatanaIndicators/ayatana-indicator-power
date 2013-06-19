@@ -26,6 +26,7 @@ License along with this library. If not, see
 #endif
 
 #include <glib/gi18n-lib.h>
+#include <gio/gio.h>
 
 #include "device.h"
 
@@ -301,6 +302,26 @@ get_device_icon_index (gdouble percentage)
   return "000";
 }
 
+static const char *
+device_kind_to_string (UpDeviceKind kind)
+{
+  switch (kind)
+    {
+      case UP_DEVICE_KIND_LINE_POWER: return "line-power";
+      case UP_DEVICE_KIND_BATTERY: return "battery";
+      case UP_DEVICE_KIND_UPS: return "ups";
+      case UP_DEVICE_KIND_MONITOR: return "monitor";
+      case UP_DEVICE_KIND_MOUSE: return "mouse";
+      case UP_DEVICE_KIND_KEYBOARD: return "keyboard";
+      case UP_DEVICE_KIND_PDA: return "pda";
+      case UP_DEVICE_KIND_PHONE: return "phone";
+      case UP_DEVICE_KIND_MEDIA_PLAYER: return "media-player";
+      case UP_DEVICE_KIND_TABLET: return "tablet";
+      case UP_DEVICE_KIND_COMPUTER: return "computer";
+      default: return "unknown";
+    }
+}
+
 /**
   indicator_power_device_get_icon_names:
   @device: #IndicatorPowerDevice from which to generate the icon names
@@ -334,7 +355,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   gdouble percentage = indicator_power_device_get_percentage (device);
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
-  const gchar * kind_str = up_device_kind_to_string (kind);
+  const gchar * kind_str = device_kind_to_string (kind);
 
   GPtrArray * names = g_ptr_array_new ();
 
@@ -534,7 +555,7 @@ device_kind_to_localised_string (UpDeviceKind kind)
       break;
     default:
       g_warning ("enum unrecognised: %i", kind);
-      text = up_device_kind_to_string (kind);
+      text = device_kind_to_string (kind);
     }
 
   return text;

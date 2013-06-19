@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.canonical.indicator.power
+Exec=@libexecdir@/indicator-power-service

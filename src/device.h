@@ -25,7 +25,6 @@ License along with this library. If not, see
 #define __INDICATOR_POWER_DEVICE_H__
 
 #include <glib-object.h>
-#include <libupower-glib/upower.h>
 
 G_BEGIN_DECLS
 
@@ -45,6 +44,38 @@ typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
 #define INDICATOR_POWER_DEVICE_OBJECT_PATH  "object-path"
 #define INDICATOR_POWER_DEVICE_PERCENTAGE   "percentage"
 #define INDICATOR_POWER_DEVICE_TIME         "time"
+
+typedef enum
+{
+  UP_DEVICE_KIND_UNKNOWN,
+  UP_DEVICE_KIND_LINE_POWER,
+  UP_DEVICE_KIND_BATTERY,
+  UP_DEVICE_KIND_UPS,
+  UP_DEVICE_KIND_MONITOR,
+  UP_DEVICE_KIND_MOUSE,
+  UP_DEVICE_KIND_KEYBOARD,
+  UP_DEVICE_KIND_PDA,
+  UP_DEVICE_KIND_PHONE,
+  UP_DEVICE_KIND_MEDIA_PLAYER,
+  UP_DEVICE_KIND_TABLET,
+  UP_DEVICE_KIND_COMPUTER,
+  UP_DEVICE_KIND_LAST
+}
+UpDeviceKind;
+
+typedef enum
+{
+  UP_DEVICE_STATE_UNKNOWN,
+  UP_DEVICE_STATE_CHARGING,
+  UP_DEVICE_STATE_DISCHARGING,
+  UP_DEVICE_STATE_EMPTY,
+  UP_DEVICE_STATE_FULLY_CHARGED,
+  UP_DEVICE_STATE_PENDING_CHARGE,
+  UP_DEVICE_STATE_PENDING_DISCHARGE,
+  UP_DEVICE_STATE_LAST
+}
+UpDeviceState;
+
 
 /**
  * IndicatorPowerDeviceClass:
