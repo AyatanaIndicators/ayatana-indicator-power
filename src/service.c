@@ -27,7 +27,7 @@
 #include "device-provider.h"
 #include "service.h"
 
-#define BUS_NAME "power.indicator"
+#define BUS_NAME "com.canonical.indicator.power"
 #define BUS_PATH "/com/canonical/indicator/power"
 
 #define SETTINGS_SHOW_TIME_S "show-time"
