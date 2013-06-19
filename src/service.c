@@ -48,7 +48,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 enum
 {
   PROP_0,
-  PROP_REPLACE,
   PROP_DEVICE_PROVIDER,
   LAST_PROP
 };
@@ -108,8 +107,6 @@ struct _IndicatorPowerServicePrivate
   GSimpleActionGroup * actions;
   GSimpleAction * header_action;
   GSimpleAction * show_time_action;
-
-  gboolean replace;
 
   IndicatorPowerDevice * primary_device;
   GList * devices; /* IndicatorPowerDevice */
@@ -802,29 +799,6 @@ on_devices_changed (IndicatorPowerService * self)
 ***/
 
 static void
-my_constructed (GObject * o)
-{
-  GBusNameOwnerFlags owner_flags;
-  IndicatorPowerService * self = INDICATOR_POWER_SERVICE(o);
-  priv_t * p = self->priv;
-
-  /* own the name here in constructed() instead of init()
-     so that we know the value of the 'replace' property */
-  owner_flags = G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT;
-  if (p->replace)
-    owner_flags |= G_BUS_NAME_OWNER_FLAGS_REPLACE;
-
-  p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
-                              BUS_NAME,
-                              owner_flags,
-                              on_bus_acquired,
-                              NULL,
-                              on_name_lost,
-                              self,
-                              NULL);
-}
-
-static void
 my_get_property (GObject     * o,
                   guint         property_id,
                   GValue      * value,
@@ -835,10 +809,6 @@ my_get_property (GObject     * o,
  
   switch (property_id)
     {
-      case PROP_REPLACE:
-        g_value_set_boolean (value, p->replace);
-        break;
-
       case PROP_DEVICE_PROVIDER:
         g_value_set_object (value, p->device_provider);
         break;
@@ -858,10 +828,6 @@ my_set_property (GObject       * o,
 
   switch (property_id)
     {
-      case PROP_REPLACE:
-        self->priv->replace = g_value_get_boolean (value);
-        break;
-
       case PROP_DEVICE_PROVIDER:
         indicator_power_service_set_device_provider (self, g_value_get_object (value));
         break;
@@ -938,6 +904,15 @@ indicator_power_service_init (IndicatorPowerService * self)
                             G_CALLBACK(rebuild_header_now), self);
   g_signal_connect (p->settings, "changed::" SETTINGS_SHOW_TIME_S,
                     G_CALLBACK(on_show_time_setting_changed), self);
+
+  p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
+                              BUS_NAME,
+                              G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT,
+                              on_bus_acquired,
+                              NULL,
+                              on_name_lost,
+                              self,
+                              NULL);
 }
 
 static void
@@ -946,7 +921,6 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
   GObjectClass * object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = my_dispose;
-  object_class->constructed = my_constructed;
   object_class->get_property = my_get_property;
   object_class->set_property = my_set_property;
 
@@ -963,13 +937,6 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
 
   properties[PROP_0] = NULL;
 
-  properties[PROP_REPLACE] = g_param_spec_boolean (
-    "replace",
-    "Replace Service",
-    "Replace existing service",
-    FALSE,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
-
   properties[PROP_DEVICE_PROVIDER] = g_param_spec_object (
     "device-provider",
     "Device Provider",
@@ -985,11 +952,9 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
 ***/
 
 IndicatorPowerService *
-indicator_power_service_new (gboolean replace,
-                             IndicatorPowerDeviceProvider * device_provider)
+indicator_power_service_new (IndicatorPowerDeviceProvider * device_provider)
 {
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_SERVICE,
-                              "replace", replace,
                               "device-provider", device_provider,
                               NULL);
 

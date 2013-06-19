@@ -64,8 +64,7 @@ struct _IndicatorPowerServiceClass
 
 GType indicator_power_service_get_type (void);
 
-IndicatorPowerService * indicator_power_service_new (gboolean replace,
-                                                     IndicatorPowerDeviceProvider * provider);
+IndicatorPowerService * indicator_power_service_new (IndicatorPowerDeviceProvider * provider);
 
 void indicator_power_service_set_device_provider (IndicatorPowerService        * self,
                                                   IndicatorPowerDeviceProvider * provider);
