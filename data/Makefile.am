@@ -1,10 +1,26 @@
+BUILT_SOURCES=
+CLEANFILES=
+EXTRA_DIST=
 
 #
 # the indicator bus file
 #
 
 indicatorsdir = $(prefix)/share/unity/indicators
-indicators_DATA = com.canonical.indicator.power
+dist_indicators_DATA = com.canonical.indicator.power
+
+#
+# the dbus service file
+#
+
+dbus_servicesdir = $(DBUSSERVICEDIR)
+dbus_services_DATA = indicator-power.service
+dbus_services_in = $(dbus_services_DATA:.service=.service.in)
+$(dbus_services_DATA): $(dbus_services_in)
+	$(AM_V_GEN) $(SED) -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+BUILT_SOURCES += $(dbus_services_DATA)
+CLEANFILES += $(dbus_services_DATA)
+EXTRA_DIST += $(dbus_services_in)
 
 #
 # the gettings
@@ -22,7 +38,7 @@ dist_noinst_DATA = \
 	com.canonical.indicator.power.gschema.xml \
 	$(gsettings_in_file)
 
-CLEANFILES = \
+CLEANFILES += \
 	$(gsettings_SCHEMAS)
 
 MAINTAINERCLEANFILES = \

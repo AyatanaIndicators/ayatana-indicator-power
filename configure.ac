@@ -89,6 +89,15 @@ AC_ARG_ENABLE([localinstall],
               [with_localinstall=$enableval],
               [with_localinstall=no])
 
+###########################
+# DBus Service Info
+###########################
+
+AS_IF([test "x$with_localinstall" = "xyes"],
+      [DBUSSERVICEDIR="${datadir}/dbus-1/services/"],
+      [DBUSSERVICEDIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`])
+AC_SUBST(DBUSSERVICEDIR)
+
 ##############################
 # Custom Junk
 ##############################
