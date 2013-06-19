@@ -89,7 +89,7 @@ static void
 emit_devices_changed_soon (IndicatorPowerDeviceProviderUPower * self)
 {
   if (self->priv->timer == 0)
-    self->priv->timer = g_timeout_add_seconds (1, on_timer, self);
+    self->priv->timer = g_timeout_add (333, on_timer, self);
 }
 
 /***
