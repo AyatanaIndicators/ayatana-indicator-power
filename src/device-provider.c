@@ -62,9 +62,18 @@ indicator_power_device_provider_default_init (IndicatorPowerDeviceProviderInterf
 GList *
 indicator_power_device_provider_get_devices (IndicatorPowerDeviceProvider * self)
 {
-  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE_PROVIDER (self), NULL);
+  GList * devices;
+  IndicatorPowerDeviceProviderInterface * iface;
 
-  return INDICATOR_POWER_DEVICE_PROVIDER_GET_INTERFACE (self)->get_devices (self);
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE_PROVIDER (self), NULL);
+  iface = INDICATOR_POWER_DEVICE_PROVIDER_GET_INTERFACE (self);
+
+  if (iface->get_devices != NULL)
+    devices = iface->get_devices (self);
+  else
+    devices = NULL;
+
+  return devices;
 }
 
 /**
