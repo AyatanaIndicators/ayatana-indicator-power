@@ -37,7 +37,12 @@ struct _IndicatorPowerDeviceProviderUPowerPriv
   DbusUPower * upower_proxy;
   GHashTable * devices; /* dbus object path --> IndicatorPowerDevice */
   GCancellable * cancellable;
-  guint timer;
+
+  /* a hashset of paths whose devices need to be refreshed */
+  GHashTable * queued_paths;
+
+  /* when this timer fires, the queued_paths will be refreshed */
+  guint queued_paths_timer;
 };
 
 typedef IndicatorPowerDeviceProviderUPowerPriv priv_t;
@@ -57,44 +62,14 @@ G_DEFINE_TYPE_WITH_CODE (
                          indicator_power_device_provider_interface_init));
 
 /***
-****  TIMER
-***/
-
-/*
- * Rebuilds are needed whenever upower devices are added, changed, or removed.
- * 
- * Events often come in batches. For example, unplugging a power cable
- * triggers a device-removed signal, and also a device-changed as the
- * battery's state changes to 'discharging'.
- *
- * We use a small timer here to fold multiple upower events into a single
- * IndicatorPowerDeviceProvider devices-changed signal.
- */
-
-static gboolean
-on_timer (gpointer gself)
-{
-  IndicatorPowerDeviceProvider * provider;
-  IndicatorPowerDeviceProviderUPower * provider_upower;
-
-  provider = INDICATOR_POWER_DEVICE_PROVIDER (gself);
-  indicator_power_device_provider_emit_devices_changed (provider);
-
-  provider_upower = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
-  provider_upower->priv->timer = 0;
-  return G_SOURCE_REMOVE;
-}
-
-static void
-emit_devices_changed_soon (IndicatorPowerDeviceProviderUPower * self)
-{
-  if (self->priv->timer == 0)
-    self->priv->timer = g_timeout_add (333, on_timer, self);
-}
-
-/***
 ****  UPOWER DBUS
 ***/
+
+static void
+emit_devices_changed (IndicatorPowerDeviceProviderUPower * self)
+{
+  indicator_power_device_provider_emit_devices_changed (INDICATOR_POWER_DEVICE_PROVIDER (self));
+}
 
 static void
 on_upower_device_proxy_ready (GObject * o, GAsyncResult * res, gpointer gself)
@@ -138,7 +113,7 @@ on_upower_device_proxy_ready (GObject * o, GAsyncResult * res, gpointer gself)
                            g_strdup (path),
                            g_object_ref (device));
 
-      emit_devices_changed_soon (self);
+      emit_devices_changed (self);
 
       g_object_unref (device);
       g_object_unref (tmp);
@@ -157,6 +132,61 @@ update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
                                  on_upower_device_proxy_ready,
                                  self);
 }
+
+/*
+ * UPower doesn't seem to be sending PropertyChanged signals.
+ *
+ * Instead, it's got a DIY mechanism for notification: a DeviceChanged signal
+ * that doesn't tell us which property changed, so to refresh we need to
+ * rebuild all the properties with a GetAll() call.
+ *
+ * To make things worse, these DeviceChanged signals come fast and furious
+ * in common situations like disconnecting a power cable.
+ *
+ * This code tries to reduce bus traffic by adding a timer to wait a small bit
+ * before rebuilding our proxy's properties. This helps to fold multiple
+ * DeviceChanged events into a single rebuild.
+ */
+
+/* rebuild all the proxies listed in our queued_paths hashset */
+static gboolean
+on_queued_paths_timer (gpointer gself)
+{
+  gpointer path;
+  GHashTableIter iter;
+  IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
+
+  self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
+  p = self->priv;
+
+  /* create new proxies for all the queued paths */
+  g_hash_table_iter_init (&iter, p->queued_paths);
+  while (g_hash_table_iter_next (&iter, &path, NULL))
+    update_device_from_object_path (self, path);
+
+  /* cleanup */
+  g_hash_table_remove_all (p->queued_paths);
+  p->queued_paths_timer = 0;
+  return G_SOURCE_REMOVE;
+}
+
+/* add the path to our queued_paths hashset and ensure the timer's running */
+static void
+refresh_device_soon (IndicatorPowerDeviceProviderUPower * self,
+                     const char                         * object_path)
+{
+  priv_t * p = self->priv;
+
+  g_hash_table_add (p->queued_paths, g_strdup (object_path));
+
+  if (p->queued_paths_timer == 0)
+    p->queued_paths_timer = g_timeout_add (500, on_queued_paths_timer, self);
+}
+
+/***
+****
+***/
 
 static void
 on_upower_device_enumerations_ready (GObject       * proxy,
@@ -182,18 +212,10 @@ on_upower_device_enumerations_ready (GObject       * proxy,
       guint i;
 
       for (i=0; object_paths && object_paths[i]; i++)
-        update_device_from_object_path (gself, object_paths[i]);
+        refresh_device_soon (gself, object_paths[i]);
 
       g_strfreev (object_paths);
     }
-}
-
-static void
-on_upower_device_added (DbusUPower * unused G_GNUC_UNUSED,
-                        const char * object_path,
-                        gpointer     gself)
-{
-  update_device_from_object_path (gself, object_path);
 }
 
 static void
@@ -201,7 +223,15 @@ on_upower_device_changed (DbusUPower * unused G_GNUC_UNUSED,
                           const char * object_path,
                           gpointer     gself)
 {
-  update_device_from_object_path (gself, object_path);
+  refresh_device_soon (gself, object_path);
+}
+
+static void
+on_upower_device_added (DbusUPower * unused G_GNUC_UNUSED,
+                        const char * object_path,
+                        gpointer     gself)
+{
+  refresh_device_soon (gself, object_path);
 }
 
 static void
@@ -213,7 +243,9 @@ on_upower_device_removed (DbusUPower * unused G_GNUC_UNUSED,
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
   g_hash_table_remove (self->priv->devices, object_path);
-  emit_devices_changed_soon (self);
+  g_hash_table_remove (self->priv->queued_paths, object_path);
+
+  emit_devices_changed (self);
 }
 
 static void
@@ -291,11 +323,11 @@ my_dispose (GObject * o)
       g_clear_object (&p->cancellable);
     }
 
-  if (p->timer != 0)
+  if (p->queued_paths_timer != 0)
     {
-      g_source_remove (p->timer);
+      g_source_remove (p->queued_paths_timer);
 
-      p->timer = 0;
+      p->queued_paths_timer = 0;
     }
 
   if (p->upower_proxy != NULL)
@@ -320,6 +352,7 @@ my_finalize (GObject * o)
   p = self->priv;
 
   g_hash_table_destroy (p->devices);
+  g_hash_table_destroy (p->queued_paths);
 
   G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
 }
@@ -363,6 +396,11 @@ indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower 
                                       g_str_equal,
                                       g_free,
                                       g_object_unref);
+
+  p->queued_paths = g_hash_table_new_full (g_str_hash,
+                                           g_str_equal,
+                                           g_free,
+                                           NULL);
 
   dbus_upower_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
                                  G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
