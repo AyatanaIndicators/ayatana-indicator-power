@@ -62,7 +62,7 @@ indicator_power_device_provider_default_init (IndicatorPowerDeviceProviderInterf
 GList *
 indicator_power_device_provider_get_devices (IndicatorPowerDeviceProvider * self)
 {
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE_PROVIDER (self));
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE_PROVIDER (self), NULL);
 
   return INDICATOR_POWER_DEVICE_PROVIDER_GET_INTERFACE (self)->get_devices (self);
 }
