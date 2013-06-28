@@ -79,26 +79,6 @@ AC_SUBST(COVERAGE_CFLAGS)
 AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
 
-###########################
-# Check to see if we're local
-###########################
-
-with_localinstall="no"
-AC_ARG_ENABLE([localinstall],
-              [AS_HELP_STRING([--enable-localinstall],
-                              [install all of the files localy instead of system directories (for distcheck)])],
-              [with_localinstall=$enableval],
-              [with_localinstall=no])
-
-###########################
-# DBus Service Info
-###########################
-
-AS_IF([test "x$with_localinstall" = "xyes"],
-      [DBUSSERVICEDIR="${datadir}/dbus-1/services/"],
-      [DBUSSERVICEDIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`])
-AC_SUBST(DBUSSERVICEDIR)
-
 ##############################
 # Custom Junk
 ##############################
@@ -150,7 +130,6 @@ AC_MSG_NOTICE([
 Power Indicator Configuration:
 
 	Prefix:        $prefix
-	Local Install: $with_localinstall
 	Unit Tests:    $enable_tests
 	gcov:          $use_gcov
 

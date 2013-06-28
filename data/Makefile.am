@@ -13,7 +13,7 @@ dist_indicators_DATA = com.canonical.indicator.power
 # the dbus service file
 #
 
-dbus_servicesdir = $(DBUSSERVICEDIR)
+dbus_servicesdir = $(datadir)/dbus-1/services
 dbus_services_DATA = indicator-power.service
 dbus_services_in = $(dbus_services_DATA:.service=.service.in)
 $(dbus_services_DATA): $(dbus_services_in)
