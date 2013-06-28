@@ -12,8 +12,6 @@ endif
 dist_noinst_SCRIPTS = \
 	autogen.sh
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-localinstall
-
 ############################################################
 
 dist-hook:
