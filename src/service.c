@@ -429,7 +429,7 @@ create_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
                  "indicator.show-time");
 
   g_menu_append (menu,
-                 _("Power Settings\342\200\246"),
+                 _("Power Settings…"),
                  "indicator.activate-settings");
 
   return G_MENU_MODEL (menu);
