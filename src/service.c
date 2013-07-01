@@ -71,7 +71,7 @@ enum
 static const char * const menu_names[N_PROFILES] =
 {
   "desktop",
-  "greeter"
+  "desktop_greeter"
 };
 
 enum
