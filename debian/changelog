@@ -1,3 +1,12 @@
+indicator-power (12.10.6+13.10.20130628-0ubuntu2) saucy; urgency=low
+
+  * Backport the fix from ~charlesk/indicator-power/remove-localinstall to
+    unbreak saucy, the configure code was broken and relying on dbus to
+    be installed to figure the path of the service, which was leading to
+    the files to not be installed on the buildds and the indicator to not start
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 28 Jun 2013 23:19:21 +0200
+
 indicator-power (12.10.6+13.10.20130628-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
