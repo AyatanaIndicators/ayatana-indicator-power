@@ -1,3 +1,15 @@
+indicator-power (12.10.6+13.10.20130702-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * similar to the i-datetime change, use the unicode ellipsis directly.
+  * don't rely on the dbus pkg-config variable to know where to install
+    .service files.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 173
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 02 Jul 2013 02:02:36 +0000
+
 indicator-power (12.10.6+13.10.20130628-0ubuntu2) saucy; urgency=low
 
   * Backport the fix from ~charlesk/indicator-power/remove-localinstall to
