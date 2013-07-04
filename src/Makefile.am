@@ -71,7 +71,7 @@ libindicatorpower_service_a_CFLAGS = $(SHARED_CFLAGS) -Wno-missing-field-initial
 ###
 ###
 
-libexec_PROGRAMS = indicator-power-service
+pkglibexec_PROGRAMS = indicator-power-service
 
 indicator_power_service_SOURCES = main.c
 

@@ -17,7 +17,7 @@ dbus_servicesdir = $(datadir)/dbus-1/services
 dbus_services_DATA = indicator-power.service
 dbus_services_in = $(dbus_services_DATA:.service=.service.in)
 $(dbus_services_DATA): $(dbus_services_in)
-	$(AM_V_GEN) $(SED) -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+	$(AM_V_GEN) $(SED) -e "s|\@pkglibexecdir\@|$(pkglibexecdir)|" $< > $@
 BUILT_SOURCES += $(dbus_services_DATA)
 CLEANFILES += $(dbus_services_DATA)
 EXTRA_DIST += $(dbus_services_in)
