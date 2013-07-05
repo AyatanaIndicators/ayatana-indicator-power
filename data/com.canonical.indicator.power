@@ -6,5 +6,5 @@ Position=40
 [desktop]
 ObjectPath=/com/canonical/indicator/power/desktop
 
-[greeter]
-ObjectPath=/com/canonical/indicator/power/greeter
+[desktop_greeter]
+ObjectPath=/com/canonical/indicator/power/desktop_greeter
