@@ -1,3 +1,14 @@
+indicator-power (12.10.6+13.10.20130708-0ubuntu1) saucy; urgency=low
+
+  [ Lars Uebernickel ]
+  * indicator file: rename greeter to desktop_greeter.
+  * Put service into libexecir.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 179
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 08 Jul 2013 02:01:53 +0000
+
 indicator-power (12.10.6+13.10.20130703.1-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
