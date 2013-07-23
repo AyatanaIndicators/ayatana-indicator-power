@@ -64,7 +64,7 @@ enum
 enum
 {
   PROFILE_DESKTOP,
-  PROFILE_GREETER,
+  PROFILE_DESKTOP_GREETER,
   N_PROFILES
 };
 
@@ -401,7 +401,7 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
 
 static GMenuModel *
-create_devices_section (IndicatorPowerService * self)
+create_desktop_devices_section (IndicatorPowerService * self)
 {
   GList * l;
   GMenu * menu = g_menu_new ();
@@ -459,7 +459,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 {
   priv_t * p = self->priv;
   struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
-  struct ProfileMenuInfo * greeter = &p->menus[PROFILE_GREETER];
+  struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
   if (p->conn == NULL) /* we haven't built the menus yet */
     return;
@@ -471,8 +471,8 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_DEVICES)
     {
-      rebuild_section (desktop->submenu, 0, create_devices_section (self));
-      rebuild_section (greeter->submenu, 0, create_devices_section (self));
+      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self));
+      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -514,12 +514,12 @@ create_menu (IndicatorPowerService * self, int profile)
 
   if (profile == PROFILE_DESKTOP)
     {
-      sections[n++] = create_devices_section (self);
+      sections[n++] = create_desktop_devices_section (self);
       sections[n++] = create_settings_section (self);
     }
-  else if (profile == PROFILE_GREETER)
+  else if (profile == PROFILE_DESKTOP_GREETER)
     {
-      sections[n++] = create_devices_section (self);
+      sections[n++] = create_desktop_devices_section (self);
     }
 
   /* add sections to the submenu */
