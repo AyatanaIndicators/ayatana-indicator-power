@@ -3,6 +3,9 @@ Name=indicator-power
 ObjectPath=/com/canonical/indicator/power
 Position=40
 
+[phone]
+ObjectPath=/com/canonical/indicator/power/phone
+
 [desktop]
 ObjectPath=/com/canonical/indicator/power/desktop
 
