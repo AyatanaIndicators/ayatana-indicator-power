@@ -704,6 +704,7 @@ init_gactions (IndicatorPowerService * self)
 
   /* add the power-level action */
   a = g_simple_action_new_stateful ("battery-level", NULL, g_variant_new_uint32(0));
+  g_simple_action_set_enabled (a, FALSE);
   g_simple_action_group_insert (p->actions, G_ACTION(a));
   p->battery_level_action = a;
 
