@@ -63,6 +63,7 @@ enum
 
 enum
 {
+  PROFILE_PHONE,
   PROFILE_DESKTOP,
   PROFILE_DESKTOP_GREETER,
   N_PROFILES
@@ -70,6 +71,7 @@ enum
 
 static const char * const menu_names[N_PROFILES] =
 {
+  "phone",
   "desktop",
   "desktop_greeter"
 };
@@ -107,6 +109,7 @@ struct _IndicatorPowerServicePrivate
   GSimpleActionGroup * actions;
   GSimpleAction * header_action;
   GSimpleAction * show_time_action;
+  GSimpleAction * battery_level_action;
 
   IndicatorPowerDevice * primary_device;
   GList * devices; /* IndicatorPowerDevice */
@@ -412,6 +415,25 @@ create_desktop_devices_section (IndicatorPowerService * self)
   return G_MENU_MODEL (menu);
 }
 
+/* https://wiki.ubuntu.com/Power#Phone
+ * The spec also discusses including an item for any connected bluetooth
+ * headset, but bluez doesn't appear to support Battery Level at this time */
+static GMenuModel *
+create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
+{
+  GMenu * menu;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+
+  item = g_menu_item_new (_("Charge level"), "indicator.battery-level");
+  g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.indicator.progress");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  return G_MENU_MODEL (menu);
+}
+
 
 /***
 ****
@@ -420,7 +442,7 @@ create_desktop_devices_section (IndicatorPowerService * self)
 ***/
 
 static GMenuModel *
-create_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
+create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 {
   GMenu * menu = g_menu_new ();
 
@@ -430,6 +452,18 @@ create_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 
   g_menu_append (menu,
                  _("Power Settings…"),
+                 "indicator.activate-settings");
+
+  return G_MENU_MODEL (menu);
+}
+
+static GMenuModel *
+create_phone_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
+{
+  GMenu * menu = g_menu_new ();
+
+  g_menu_append (menu,
+                 _("Battery settings…"),
                  "indicator.activate-settings");
 
   return G_MENU_MODEL (menu);
@@ -477,7 +511,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_SETTINGS)
     {
-      rebuild_section (desktop->submenu, 1, create_settings_section (self));
+      rebuild_section (desktop->submenu, 1, create_desktop_settings_section (self));
     }
 }
 
@@ -512,14 +546,23 @@ create_menu (IndicatorPowerService * self, int profile)
   g_assert (0<=profile && profile<N_PROFILES);
   g_assert (self->priv->menus[profile].menu == NULL);
 
-  if (profile == PROFILE_DESKTOP)
+  /* build the sections */
+
+  switch (profile)
     {
-      sections[n++] = create_desktop_devices_section (self);
-      sections[n++] = create_settings_section (self);
-    }
-  else if (profile == PROFILE_DESKTOP_GREETER)
-    {
-      sections[n++] = create_desktop_devices_section (self);
+      case PROFILE_PHONE:
+        sections[n++] = create_phone_devices_section (self);
+        sections[n++] = create_phone_settings_section (self);
+        break;
+
+      case PROFILE_DESKTOP:
+        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_settings_section (self);
+        break;
+
+      case PROFILE_DESKTOP_GREETER:
+        sections[n++] = create_desktop_devices_section (self);
+        break;
     }
 
   /* add sections to the submenu */
@@ -572,6 +615,8 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
+  /* FIXME: unity8 settings */
+
   execute_command ("gnome-control-center power");
 }
 
@@ -656,6 +701,11 @@ init_gactions (IndicatorPowerService * self)
   a = g_simple_action_new_stateful ("_header", NULL, create_header_state (self));
   g_simple_action_group_insert (p->actions, G_ACTION(a));
   p->header_action = a;
+
+  /* add the power-level action */
+  a = g_simple_action_new_stateful ("battery-level", NULL, g_variant_new_uint32(0));
+  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  p->battery_level_action = a;
 
   /* add the show-time action */
   show_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
@@ -781,6 +831,7 @@ static void
 on_devices_changed (IndicatorPowerService * self)
 {
   priv_t * p = self->priv;
+  guint32 battery_level;
 
   /* update the device list */
   g_list_free_full (p->devices, (GDestroyNotify)g_object_unref);
@@ -789,6 +840,13 @@ on_devices_changed (IndicatorPowerService * self)
   /* update the primary device */
   g_clear_object (&p->primary_device);
   p->primary_device = indicator_power_service_choose_primary_device (p->devices);
+
+  /* update the battery-level action's state */
+  if (p->primary_device == NULL)
+    battery_level = 0;
+  else
+    battery_level = (int)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
+  g_simple_action_set_state (p->battery_level_action, g_variant_new_uint32 (battery_level));
 
   rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
 }
@@ -871,6 +929,7 @@ my_dispose (GObject * o)
       g_clear_object (&p->show_time_action);
     }
 
+  g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
   g_clear_object (&p->show_time_action);
   g_clear_object (&p->actions);
