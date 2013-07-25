@@ -1,3 +1,15 @@
+indicator-power (12.10.6+13.10.20130725-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Add a phone profile and menu.
+  * Set the battery-level action's 'sensitive' flag to false so that it
+    will not be clickable, as per the phone spec.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 182
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 25 Jul 2013 02:03:03 +0000
+
 indicator-power (12.10.6+13.10.20130708-0ubuntu1) saucy; urgency=low
 
   [ Lars Uebernickel ]
