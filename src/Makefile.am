@@ -55,7 +55,12 @@ libindicatorpower_upower_a_SOURCES = \
   device-provider-upower.c \
   device-provider-upower.h
 
-libindicatorpower_upower_a_CFLAGS = $(SHARED_CFLAGS) -Wno-unused-parameter
+libindicatorpower_upower_a_CFLAGS = \
+	$(SHARED_CFLAGS) \
+	-Wno-unused-parameter \
+	$(COVERAGE_CFLAGS)
+
+libindciatorpower_upower_a_LDFLAGS = $(COVERAGE_LDFLAGS)
 
 libindicatorpower_service_a_SOURCES = \
   device-provider.c \
@@ -65,7 +70,12 @@ libindicatorpower_service_a_SOURCES = \
   service.c \
   service.h
 
-libindicatorpower_service_a_CFLAGS = $(SHARED_CFLAGS) -Wno-missing-field-initializers
+libindicatorpower_service_a_CFLAGS = \
+	$(SHARED_CFLAGS) \
+	-Wno-missing-field-initializers \
+	$(COVERAGE_CFLAGS)
+
+libindicatorpower_service_a_LDFLAGS = $(COVERAGE_LDFLAGS)
 
 ###
 ###
@@ -75,7 +85,9 @@ pkglibexec_PROGRAMS = indicator-power-service
 
 indicator_power_service_SOURCES = main.c
 
-indicator_power_service_CFLAGS = $(SHARED_CFLAGS)
+indicator_power_service_CFLAGS = \
+	$(SHARED_CFLAGS) \
+	$(COVERAGE_CFLAGS)
 
 indicator_power_service_LDADD = \
   libindicatorpower-upower.a \
@@ -84,5 +96,3 @@ indicator_power_service_LDADD = \
 
 indicator_power_service_LDFLAGS = \
   $(COVERAGE_LDFLAGS)
-
-
