@@ -63,6 +63,10 @@ libindicatorpower_upower_a_CFLAGS = \
 libindciatorpower_upower_a_LDFLAGS = $(COVERAGE_LDFLAGS)
 
 libindicatorpower_service_a_SOURCES = \
+  ib-brightness-control.c \
+  ib-brightness-control.h \
+  unity-menu-item.c \
+  unity-menu-item.h \
   device-provider.c \
   device-provider.h \
   device.c \

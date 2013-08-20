@@ -25,7 +25,9 @@
 
 #include "device.h"
 #include "device-provider.h"
+#include "ib-brightness-control.h"
 #include "service.h"
+#include "unity-menu-item.h"
 
 #define BUS_NAME "com.canonical.indicator.power"
 #define BUS_PATH "/com/canonical/indicator/power"
@@ -100,6 +102,8 @@ struct _IndicatorPowerServicePrivate
 
   GSettings * settings;
 
+  IbBrightnessControl * brightness_control;
+
   guint own_id;
   guint actions_export_id;
   GDBusConnection * conn;
@@ -110,6 +114,7 @@ struct _IndicatorPowerServicePrivate
   GSimpleAction * header_action;
   GSimpleAction * show_time_action;
   GSimpleAction * battery_level_action;
+  GSimpleAction * brightness_action;
 
   IndicatorPowerDevice * primary_device;
   GList * devices; /* IndicatorPowerDevice */
@@ -441,6 +446,43 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 ****
 ***/
 
+static GMenuItem *
+create_brightness_menuitem (IndicatorPowerService * self)
+{
+  priv_t * p = self->priv;
+  const int max_value = ib_brightness_control_get_max_value (p->brightness_control);
+  const int min_value = max_value * 0.05; /* 5% */
+  GIcon * icon;
+  GMenuItem * item;
+
+  icon = g_themed_icon_new_with_default_fallbacks ("display-brightness-symbolic");
+
+  item = unity_menu_item_slider_new (NULL,
+                                     "indicator.brightness",
+                                     (min_value <= 0 ? 1 : min_value),
+                                     max_value,
+                                     NULL,
+                                     g_icon_serialize (icon));
+
+  g_object_unref (icon);
+  return item;
+}
+
+static GVariant *
+action_state_for_brightness (IndicatorPowerService * self)
+{
+  priv_t * p = self->priv;
+  double value = ib_brightness_control_get_value (p->brightness_control);
+  return g_variant_new_double (value);
+}
+
+static void
+update_brightness_action_state (IndicatorPowerService * self)
+{
+  g_simple_action_set_state (self->priv->brightness_action,
+                             action_state_for_brightness (self));
+}
+
 static GMenuModel *
 create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 {
@@ -460,13 +502,19 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static GMenuModel *
 create_phone_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 {
-  GMenu * menu = g_menu_new ();
+  GMenu * section;
+  GMenuItem * item;
 
-  g_menu_append (menu,
-                 _("Battery settings…"),
-                 "indicator.activate-settings");
+  section = g_menu_new ();
 
-  return G_MENU_MODEL (menu);
+  item = create_brightness_menuitem (self);
+  g_menu_append_item (section, item);
+  update_brightness_action_state (self);
+  g_object_unref (item);
+
+  g_menu_append (section, _("Battery settings…"), "indicator.activate-settings");
+
+  return G_MENU_MODEL (section);
 }
 
 /***
@@ -492,6 +540,7 @@ static void
 rebuild_now (IndicatorPowerService * self, guint sections)
 {
   priv_t * p = self->priv;
+  struct ProfileMenuInfo * phone   = &p->menus[PROFILE_PHONE];
   struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
   struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
@@ -512,6 +561,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   if (sections & SECTION_SETTINGS)
     {
       rebuild_section (desktop->submenu, 1, create_desktop_settings_section (self));
+      rebuild_section (phone->submenu, 1, create_desktop_settings_section (self));
     }
 }
 
@@ -628,6 +678,19 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
   execute_command ("gnome-power-statistics");
 }
 
+static void
+on_brightness_change_requested (GSimpleAction * action      G_GNUC_UNUSED,
+                                GVariant      * parameter,
+                                gpointer        gself)
+{
+  const double value = g_variant_get_double (parameter);
+  IndicatorPowerService * self = INDICATOR_POWER_SERVICE (gself);
+
+  g_debug ("setting brightness value: %f", value);
+  ib_brightness_control_set_value (self->priv->brightness_control, (int)value);
+  update_brightness_action_state (self);
+}
+
 /* FIXME: use a GBinding to tie the gaction's state and the GSetting together? */
 
 static void
@@ -687,7 +750,7 @@ init_gactions (IndicatorPowerService * self)
 
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
-    { "activate-statistics", on_statistics_activated }
+    { "activate-statistics", on_statistics_activated },
   };
 
   p->actions = g_simple_action_group_new ();
@@ -707,6 +770,13 @@ init_gactions (IndicatorPowerService * self)
   g_simple_action_set_enabled (a, FALSE);
   g_simple_action_group_insert (p->actions, G_ACTION(a));
   p->battery_level_action = a;
+
+  /* add the brightness action */
+  a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));
+  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_signal_connect (a, "change-state", G_CALLBACK(on_brightness_change_requested), self);
+    //{ "brightness", NULL, G_TYPE_DOUBLE, "0.0", on_brightness_change_requested }
+  p->brightness_action = a;
 
   /* add the show-time action */
   show_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
@@ -930,12 +1000,15 @@ my_dispose (GObject * o)
       g_clear_object (&p->show_time_action);
     }
 
+  g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
   g_clear_object (&p->show_time_action);
   g_clear_object (&p->actions);
 
   g_clear_object (&p->conn);
+
+  g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
 
   indicator_power_service_set_device_provider (self, NULL);
 
@@ -957,6 +1030,8 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->cancellable = g_cancellable_new ();
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
+
+  p->brightness_control = ib_brightness_control_new ();
 
   init_gactions (self);
 
