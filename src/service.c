@@ -27,7 +27,6 @@
 #include "device-provider.h"
 #include "ib-brightness-control.h"
 #include "service.h"
-#include "unity-menu-item.h"
 
 #define BUS_NAME "com.canonical.indicator.power"
 #define BUS_PATH "/com/canonical/indicator/power"
@@ -446,25 +445,42 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 ****
 ***/
 
+static void
+get_brightness_range (IndicatorPowerService * self, gint * low, gint * high)
+{
+  const int max = ib_brightness_control_get_max_value (self->priv->brightness_control);
+  *low  = max * 0.05; /* 5% minimum -- don't let the screen go completely dark */
+  *high = max;
+}
+
+static gdouble
+brightness_to_percentage (IndicatorPowerService * self, int brightness)
+{
+  int lo, hi;
+  get_brightness_range (self,  &lo, &hi);
+  return (brightness-lo) / (double)(hi-lo);
+}
+
+static int
+percentage_to_brightness (IndicatorPowerService * self, double percentage)
+{
+  int lo, hi;
+  get_brightness_range (self,  &lo, &hi);
+  return (int)(lo + (percentage*(hi-lo)));
+}
+
 static GMenuItem *
 create_brightness_menuitem (IndicatorPowerService * self)
 {
-  priv_t * p = self->priv;
-  const int max_value = ib_brightness_control_get_max_value (p->brightness_control);
-  const int min_value = max_value * 0.05; /* 5% */
-  GIcon * icon;
+  int lo, hi;
   GMenuItem * item;
 
-  icon = g_themed_icon_new_with_default_fallbacks ("display-brightness-symbolic");
+  get_brightness_range (self,  &lo, &hi);
 
-  item = unity_menu_item_slider_new (NULL,
-                                     "indicator.brightness",
-                                     (min_value <= 0 ? 1 : min_value),
-                                     max_value,
-                                     NULL,
-                                     g_icon_serialize (icon));
-
-  g_object_unref (icon);
+  item = g_menu_item_new ("Brightness", "indicator.brightness");
+  g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.unity.slider");
+  g_menu_item_set_attribute (item, "min-value", "d", brightness_to_percentage (self, lo));
+  g_menu_item_set_attribute (item, "max-value", "d", brightness_to_percentage (self, hi));
   return item;
 }
 
@@ -472,8 +488,8 @@ static GVariant *
 action_state_for_brightness (IndicatorPowerService * self)
 {
   priv_t * p = self->priv;
-  double value = ib_brightness_control_get_value (p->brightness_control);
-  return g_variant_new_double (value);
+  const gint brightness = ib_brightness_control_get_value (p->brightness_control);
+  return g_variant_new_double (brightness_to_percentage (self, brightness));
 }
 
 static void
@@ -481,6 +497,18 @@ update_brightness_action_state (IndicatorPowerService * self)
 {
   g_simple_action_set_state (self->priv->brightness_action,
                              action_state_for_brightness (self));
+}
+
+static void
+on_brightness_change_requested (GSimpleAction * action      G_GNUC_UNUSED,
+                                GVariant      * parameter,
+                                gpointer        gself)
+{
+  IndicatorPowerService * self = INDICATOR_POWER_SERVICE (gself);
+  const gdouble percentage = g_variant_get_double (parameter);
+  const int brightness = percentage_to_brightness (self, percentage);
+  ib_brightness_control_set_value (self->priv->brightness_control, brightness);
+  update_brightness_action_state (self);
 }
 
 static GMenuModel *
@@ -676,19 +704,6 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
                          gpointer        gself  G_GNUC_UNUSED)
 {
   execute_command ("gnome-power-statistics");
-}
-
-static void
-on_brightness_change_requested (GSimpleAction * action      G_GNUC_UNUSED,
-                                GVariant      * parameter,
-                                gpointer        gself)
-{
-  const double value = g_variant_get_double (parameter);
-  IndicatorPowerService * self = INDICATOR_POWER_SERVICE (gself);
-
-  g_debug ("setting brightness value: %f", value);
-  ib_brightness_control_set_value (self->priv->brightness_control, (int)value);
-  update_brightness_action_state (self);
 }
 
 /* FIXME: use a GBinding to tie the gaction's state and the GSetting together? */
