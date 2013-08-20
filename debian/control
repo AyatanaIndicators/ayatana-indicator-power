@@ -7,7 +7,8 @@ Build-Depends: debhelper (>= 9),
                autopoint,
                intltool,
                libgtest-dev,
-               libglib2.0-dev (>= 2.35.4),
+               libglib2.0-dev (>= 2.36),
+               libgudev-1.0-dev,
                python,
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power

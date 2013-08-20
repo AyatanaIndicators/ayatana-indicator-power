@@ -35,11 +35,12 @@ LT_INIT
 GLIB_REQUIRED_VERSION=2.35.4
 GIO_REQUIRED_VERSION=2.26
 GIO_UNIX_REQUIRED_VERSION=2.26
-GSD_REQUIRED_VERSION=3.1.4
+GUDEV_REQUIRED_VERSION=204
 
 PKG_CHECK_MODULES([SERVICE_DEPS],[glib-2.0 >= $GLIB_REQUIRED_VERSION
                                   gio-2.0 >= $GIO_REQUIRED_VERSION
-                                  gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION])
+                                  gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION
+                                  gudev-1.0 >= $GUDEV_REQUIRED_VERSION])
 
 ###########################
 # GSETTINGS
