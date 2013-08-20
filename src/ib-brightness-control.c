@@ -18,6 +18,8 @@
  */
 
 #include <gudev/gudev.h>
+
+#include <errno.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
@@ -75,6 +77,7 @@ ib_brightness_control_set_value (IbBrightnessControl* self, gint value)
     gchar *filename;
     gchar *svalue;
     gint length;
+    gint err;
 
     if (self->path == NULL)
       return;
@@ -90,9 +93,12 @@ ib_brightness_control_set_value (IbBrightnessControl* self, gint value)
     svalue = g_strdup_printf ("%i", value);
     length = strlen (svalue);
 
+    err = errno;
+    errno = 0;
     if (write (fd, svalue, length) != length) {
-        g_warning ("Fail to write brightness information.");
+        g_warning ("Fail to write brightness information: %s", g_strerror(errno));
     }
+    errno = err;
 
     close (fd);
     g_free (svalue);
