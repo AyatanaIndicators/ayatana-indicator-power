@@ -765,7 +765,7 @@ init_gactions (IndicatorPowerService * self)
 
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
-    { "activate-statistics", on_statistics_activated },
+    { "activate-statistics", on_statistics_activated }
   };
 
   p->actions = g_simple_action_group_new ();
@@ -790,7 +790,6 @@ init_gactions (IndicatorPowerService * self)
   a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));
   g_simple_action_group_insert (p->actions, G_ACTION(a));
   g_signal_connect (a, "change-state", G_CALLBACK(on_brightness_change_requested), self);
-    //{ "brightness", NULL, G_TYPE_DOUBLE, "0.0", on_brightness_change_requested }
   p->brightness_action = a;
 
   /* add the show-time action */
