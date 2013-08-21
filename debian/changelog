@@ -1,3 +1,13 @@
+indicator-power (12.10.6+13.10.20130821-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Add a brightness slider to indicator-power's phone menu.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 186
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 21 Aug 2013 06:06:49 +0000
+
 indicator-power (12.10.6+13.10.20130808-0ubuntu1) saucy; urgency=low
 
   [ Allan LeSage ]
