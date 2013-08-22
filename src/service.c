@@ -33,6 +33,7 @@
 
 #define SETTINGS_SHOW_TIME_S "show-time"
 #define SETTINGS_ICON_POLICY_S "icon-policy"
+#define SETTINGS_SHOW_PERCENTAGE_S "show-percentage"
 
 G_DEFINE_TYPE (IndicatorPowerService,
                indicator_power_service,
