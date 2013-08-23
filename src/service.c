@@ -937,7 +937,7 @@ my_get_property (GObject     * o,
 {
   IndicatorPowerService * self = INDICATOR_POWER_SERVICE (o);
   priv_t * p = self->priv;
- 
+
   switch (property_id)
     {
       case PROP_DEVICE_PROVIDER:

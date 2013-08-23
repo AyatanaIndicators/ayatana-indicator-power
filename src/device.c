@@ -484,7 +484,7 @@ get_timestring (guint64   time_secs,
 
   if (minutes == 0)
     {
-      *accessible_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
+      *accessible_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
                                               "%i hour",
                                               "%i hours",
                                               hours), hours);

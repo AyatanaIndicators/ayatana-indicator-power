@@ -65,7 +65,7 @@ class IndicatorTest : public ::testing::Test
     virtual void SetUp()
     {
       ensure_glib_initialized ();
-         
+
       g_setenv( "GSETTINGS_SCHEMA_DIR", SCHEMA_DIR, TRUE);
 
       ac_device = indicator_power_device_new (
@@ -90,7 +90,7 @@ class IndicatorTest : public ::testing::Test
     const char* GetAccessibleDesc (IndicatorPower * power) const
     {
       GList * entries = indicator_object_get_entries (INDICATOR_OBJECT(power));
-      g_assert (g_list_length(entries) == 1); 
+      g_assert (g_list_length(entries) == 1);
       IndicatorObjectEntry * entry = static_cast<IndicatorObjectEntry*>(entries->data);
       const char * ret = entry->accessible_desc;
       g_list_free (entries);
@@ -120,7 +120,7 @@ TEST_F(IndicatorTest, SetDevices)
   devices = g_slist_append (devices, ac_device);
   devices = g_slist_append (devices, battery_device);
   indicator_power_set_devices (power, devices);
-  g_slist_free (devices); 
+  g_slist_free (devices);
 
   g_object_unref (power);
 }

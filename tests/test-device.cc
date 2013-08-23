@@ -4,16 +4,16 @@ Copyright 2012 Canonical Ltd.
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
 
-This program is free software: you can redistribute it and/or modify it 
-under the terms of the GNU General Public License version 3, as published 
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3, as published
 by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful, but 
-WITHOUT ANY WARRANTY; without even the implied warranties of 
-MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranties of
+MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along 
+You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -291,7 +291,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
                        NULL);
- 
+
       g_string_append_printf (expected, "%s-empty-symbolic;", kind_str);
       g_string_append_printf (expected, "gpm-%s-empty;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
@@ -459,7 +459,7 @@ TEST_F(DeviceTest, IconNames)
 
       // state unknown
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
-                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN,
                        NULL);
       g_string_append_printf (expected, "%s-missing-symbolic;", kind_str);
       g_string_append_printf (expected, "gpm-%s-missing;", kind_str);
@@ -495,7 +495,7 @@ TEST_F(DeviceTest, Labels)
   /**
   ***
   **/
- 
+
   IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   o = G_OBJECT(device);
 
@@ -531,7 +531,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_TIME, guint64(60*60*13),
                    NULL);
   check_label (device, "Battery");
-  check_header (device, "(50%)", 
+  check_header (device, "(50%)",
                         "",
                         "(50%)",
                         "Battery (50%)");
@@ -651,7 +651,7 @@ TEST_F(DeviceTest, ChoosePrimary)
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
         }
     }
-    
+
   // cleanup
   g_list_free_full (device_list, g_object_unref);
 }
