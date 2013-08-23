@@ -1,3 +1,21 @@
+indicator-power (12.10.6+13.10.20130823-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Updates the power indicator to match the spec changes at
+    <https://wiki.ubuntu.com/Power?action=diff&rev2=37&rev1=36>. This
+    patch is based from hloeung's nice patch, fixes a few edge cases,
+    adds unit tests for labels, headers, & accessible text for all
+    combinations of show time & show percentage, and cleans up the
+    bindings between GSettings and the checkbox actions. . (LP: #811777)
+  * Don't show the time remaining for a discharging battery if it
+    exceeds 24 hours because it's probably an erroneous time estimate.
+    (LP: #1216030)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 189
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 23 Aug 2013 18:07:29 +0000
+
 indicator-power (12.10.6+13.10.20130821-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
