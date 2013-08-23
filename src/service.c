@@ -113,6 +113,7 @@ struct _IndicatorPowerServicePrivate
   GSimpleActionGroup * actions;
   GSimpleAction * header_action;
   GSimpleAction * show_time_action;
+  GSimpleAction * show_percentage_action;
   GSimpleAction * battery_level_action;
   GSimpleAction * brightness_action;
 
@@ -319,16 +320,13 @@ create_header_state (IndicatorPowerService * self)
 
   if (p->primary_device != NULL)
     {
-      gchar * details;
-
-      indicator_power_device_get_time_details (p->primary_device,
-                                               &label,
-                                               &details,
-                                               &a11y);
+      indicator_power_device_get_header (p->primary_device,
+                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S),
+                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S),
+                                         &label,
+                                         &a11y);
 
       icon = indicator_power_device_get_gicon (p->primary_device);
-
-      g_free (details);
     }
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
@@ -338,9 +336,7 @@ create_header_state (IndicatorPowerService * self)
 
   if (label != NULL)
     {
-      if (g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S))
-        g_variant_builder_add (&b, "{sv}", "label",
-                               g_variant_new_string (label));
+      g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string (label));
 
       g_free (label);
     }
@@ -377,33 +373,24 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
   if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
-    char * brief;
+    GIcon * icon;
     char * label;
-    char * a11y;
     GMenuItem * menu_item;
-    GIcon * icon = indicator_power_device_get_gicon (device);
 
-    indicator_power_device_get_time_details (device,
-                                             &brief,
-                                             &label,
-                                             &a11y);
-
+    icon = indicator_power_device_get_gicon (device);
+    label = indicator_power_device_get_label (device);
     menu_item = g_menu_item_new (label, "indicator.activate-statistics");
 
     if (icon != NULL)
-      {
-        g_menu_item_set_attribute_value (menu_item,
-                                         G_MENU_ATTRIBUTE_ICON,
-                                         g_icon_serialize (icon));
-      }
+      g_menu_item_set_attribute_value (menu_item,
+                                       G_MENU_ATTRIBUTE_ICON,
+                                       g_icon_serialize (icon));
 
     g_menu_append_item (menu, menu_item);
     g_object_unref (menu_item);
 
     g_clear_object (&icon);
-    g_free (brief);
     g_free (label);
-    g_free (a11y);
   }
 }
 
@@ -520,6 +507,10 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
   g_menu_append (menu,
                  _("Show Time in Menu Bar"),
                  "indicator.show-time");
+
+  g_menu_append (menu,
+                 _("Show Percentage in Menu Bar"),
+                 "indicator.show-percentage");
 
   g_menu_append (menu,
                  _("Power Settings…"),
@@ -707,49 +698,15 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
   execute_command ("gnome-power-statistics");
 }
 
-/* FIXME: use a GBinding to tie the gaction's state and the GSetting together? */
-
-static void
-set_show_time_flag (IndicatorPowerService * self, gboolean b)
-{
-  GVariant * v;
-  priv_t * p = self->priv;
-
-  /* update the settings */
-  if (b != g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S))
-    g_settings_set_boolean (p->settings, SETTINGS_SHOW_TIME_S, b);
-
-  /* update the action state */
-  v = g_action_get_state (G_ACTION(p->show_time_action));
-  if (b != g_variant_get_boolean (v))
-    g_simple_action_set_state (p->show_time_action, g_variant_new_boolean (b));
-  g_variant_unref (v);
-
-  rebuild_header_now (self);
-}
-static void
-on_show_time_setting_changed (GSettings * settings, gchar * key, gpointer gself)
-{
-  set_show_time_flag (INDICATOR_POWER_SERVICE(gself),
-                      g_settings_get_boolean (settings, key));
-}
-
-static void
-on_show_time_action_state_changed (GAction    * action,
-                                   GParamSpec * pspec   G_GNUC_UNUSED,
-                                   gpointer     gself)
-{
-  GVariant * v = g_action_get_state (action);
-  set_show_time_flag (INDICATOR_POWER_SERVICE(gself),
-                      g_variant_get_boolean (v));
-  g_variant_unref (v);
-}
+/***
+****
+***/
 
 /* toggles the state */
 static void
-on_show_time_action_activated (GSimpleAction * simple,
-                               GVariant      * parameter G_GNUC_UNUSED,
-                               gpointer        unused    G_GNUC_UNUSED)
+on_toggle_action_activated (GSimpleAction * simple,
+                            GVariant      * parameter G_GNUC_UNUSED,
+                            gpointer        unused    G_GNUC_UNUSED)
 {
   GVariant * v = g_action_get_state (G_ACTION (simple));
   gboolean flag = g_variant_get_boolean (v);
@@ -757,11 +714,27 @@ on_show_time_action_activated (GSimpleAction * simple,
   g_variant_unref (v);
 }
 
+static gboolean
+settings_to_action_state (GValue    * value,
+                          GVariant  * variant,
+                          gpointer    user_data  G_GNUC_UNUSED)
+{
+  g_value_set_variant (value, variant);
+  return TRUE;
+}
+
+static GVariant *
+action_state_to_settings (const GValue       * value,
+                          const GVariantType * expected_type G_GNUC_UNUSED,
+                          gpointer             user_data     G_GNUC_UNUSED)
+{
+  return g_value_dup_variant (value);
+}
+
 static void
 init_gactions (IndicatorPowerService * self)
 {
   GSimpleAction * a;
-  gboolean show_time;
   priv_t * p = self->priv;
 
   GActionEntry entries[] = {
@@ -794,16 +767,30 @@ init_gactions (IndicatorPowerService * self)
   p->brightness_action = a;
 
   /* add the show-time action */
-  show_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
-  a = g_simple_action_new_stateful ("show-time",
-                                    NULL,
-                                    g_variant_new_boolean(show_time));
-  g_signal_connect (a, "activate",
-                    G_CALLBACK(on_show_time_action_activated), self);
-  g_signal_connect (a, "notify",
-                    G_CALLBACK(on_show_time_action_state_changed), self);
+  a = g_simple_action_new ("show-time", NULL);
+  g_settings_bind_with_mapping (p->settings, SETTINGS_SHOW_TIME_S,
+                                a, "state",
+                                G_SETTINGS_BIND_DEFAULT,
+                                settings_to_action_state,
+                                action_state_to_settings,
+                                NULL, NULL);
+  g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
+  g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
   g_simple_action_group_insert (p->actions, G_ACTION(a));
   p->show_time_action = a;
+
+  /* add the show-percentage action */
+  a = g_simple_action_new ("show-percentage", NULL);
+  g_settings_bind_with_mapping (p->settings, SETTINGS_SHOW_PERCENTAGE_S,
+                                a, "state",
+                                G_SETTINGS_BIND_DEFAULT,
+                                settings_to_action_state,
+                                action_state_to_settings,
+                                NULL, NULL);
+  g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
+  g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
+  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  p->show_percentage_action = a;
 
   rebuild_header_now (self);
 }
@@ -1015,10 +1002,16 @@ my_dispose (GObject * o)
       g_clear_object (&p->show_time_action);
     }
 
+  if (p->show_percentage_action != NULL)
+    {
+      g_signal_handlers_disconnect_by_data (p->show_percentage_action, self);
+
+      g_clear_object (&p->show_percentage_action);
+    }
+
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
-  g_clear_object (&p->show_time_action);
   g_clear_object (&p->actions);
 
   g_clear_object (&p->conn);
@@ -1052,8 +1045,8 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   g_signal_connect_swapped (p->settings, "changed::" SETTINGS_ICON_POLICY_S,
                             G_CALLBACK(rebuild_header_now), self);
-  g_signal_connect (p->settings, "changed::" SETTINGS_SHOW_TIME_S,
-                    G_CALLBACK(on_show_time_setting_changed), self);
+  //g_signal_connect (p->settings, "changed::" SETTINGS_SHOW_TIME_S,
+  //                  G_CALLBACK(on_show_time_setting_changed), self);
 
   p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
                               BUS_NAME,
