@@ -631,7 +631,7 @@ indicator_power_device_get_text (const IndicatorPowerDevice * device,
           g_string_printf (verbose_time, _("%s to charge"), readable_timestr);
           g_string_printf (accessible_time, _("%s to charge"), accessible_timestr);
         }
-      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time <= (60*60*12)))
+      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time <= (60*60*24)))
         {
           g_string_assign (terse_time, readable_timestr);
           g_string_printf (verbose_time, _("%s left"), readable_timestr);
@@ -639,7 +639,7 @@ indicator_power_device_get_text (const IndicatorPowerDevice * device,
         }
       else
         {
-          /* if there's more than 12 hours remaining, we don't show it */
+          /* if there's more than 24 hours remaining, we don't show it */
         }
 
       g_free (readable_timestr);
