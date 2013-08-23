@@ -523,12 +523,12 @@ TEST_F(DeviceTest, Labels)
                         "(50%)",
                         "Battery (1 hour 1 minute left, 50%)");
 
-  // discharging, > 12 hours left
-  // we don't show the clock time when > 12 hours dischargin
+  // discharging, > 24 hours left
+  // we don't show the clock time when > 24 hours discharging
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
-                   INDICATOR_POWER_DEVICE_TIME, guint64(60*60*13),
+                   INDICATOR_POWER_DEVICE_TIME, guint64(60*60*25),
                    NULL);
   check_label (device, "Battery");
   check_header (device, "(50%)",
