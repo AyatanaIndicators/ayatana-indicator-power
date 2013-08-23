@@ -449,6 +449,7 @@ indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
 ****
 ***/
 
+/* Format time remaining for reading ("H:MM") and speech ("H hours, MM minutes") */
 static void
 get_timestring (guint64   time_secs,
                 gchar   **readable_timestring,
@@ -590,12 +591,12 @@ join_strings (const char * name, const char * time, const char * percent)
 }
 
 static void
-indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
-                                         gboolean show_time_in_header,
-                                         gboolean show_percentage_in_header,
-                                         gchar ** header,
-                                         gchar ** label,
-                                         gchar ** a11y)
+indicator_power_device_get_text (const IndicatorPowerDevice * device,
+                                 gboolean show_time_in_header,
+                                 gboolean show_percentage_in_header,
+                                 gchar ** header,
+                                 gchar ** label,
+                                 gchar ** a11y)
 {
   if (!INDICATOR_IS_POWER_DEVICE(device))
     {
@@ -630,11 +631,15 @@ indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
           g_string_printf (verbose_time, _("%s to charge"), readable_timestr);
           g_string_printf (accessible_time, _("%s to charge"), accessible_timestr);
         }
-      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time < (60*60*12)))
+      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time <= (60*60*12)))
         {
           g_string_assign (terse_time, readable_timestr);
           g_string_printf (verbose_time, _("%s left"), readable_timestr);
           g_string_printf (accessible_time, _("%s left"), accessible_timestr);
+        }
+      else
+        {
+          /* if there's more than 12 hours remaining, we don't show it */
         }
 
       g_free (readable_timestr);
@@ -686,8 +691,8 @@ gchar *
 indicator_power_device_get_label (const IndicatorPowerDevice * device)
 {
   gchar * label = NULL;
-  indicator_power_device_get_time_details (device, FALSE, FALSE,
-                                           NULL, &label, NULL);
+  indicator_power_device_get_text (device, FALSE, FALSE,
+                                   NULL, &label, NULL);
   return label;
 }
 
@@ -698,8 +703,8 @@ indicator_power_device_get_header (const IndicatorPowerDevice * device,
                                    gchar                     ** header,
                                    gchar                     ** a11y)
 {
-  indicator_power_device_get_time_details (device, show_time, show_percentage,
-                                           header, NULL, a11y);
+  indicator_power_device_get_text (device, show_time, show_percentage,
+                                   header, NULL, a11y);
 }
 
 /***
