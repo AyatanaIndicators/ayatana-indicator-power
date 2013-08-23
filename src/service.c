@@ -1045,8 +1045,6 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   g_signal_connect_swapped (p->settings, "changed::" SETTINGS_ICON_POLICY_S,
                             G_CALLBACK(rebuild_header_now), self);
-  //g_signal_connect (p->settings, "changed::" SETTINGS_SHOW_TIME_S,
-  //                  G_CALLBACK(on_show_time_setting_changed), self);
 
   p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
                               BUS_NAME,
