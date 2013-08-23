@@ -751,18 +751,18 @@ init_gactions (IndicatorPowerService * self)
 
   /* add the header action */
   a = g_simple_action_new_stateful ("_header", NULL, create_header_state (self));
-  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->header_action = a;
 
   /* add the power-level action */
   a = g_simple_action_new_stateful ("battery-level", NULL, g_variant_new_uint32(0));
   g_simple_action_set_enabled (a, FALSE);
-  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->battery_level_action = a;
 
   /* add the brightness action */
   a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));
-  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   g_signal_connect (a, "change-state", G_CALLBACK(on_brightness_change_requested), self);
   p->brightness_action = a;
 
@@ -776,7 +776,7 @@ init_gactions (IndicatorPowerService * self)
                                 NULL, NULL);
   g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
   g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
-  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->show_time_action = a;
 
   /* add the show-percentage action */
@@ -789,7 +789,7 @@ init_gactions (IndicatorPowerService * self)
                                 NULL, NULL);
   g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
   g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
-  g_simple_action_group_insert (p->actions, G_ACTION(a));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->show_percentage_action = a;
 
   rebuild_header_now (self);
