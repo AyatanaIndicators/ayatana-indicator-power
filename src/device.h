@@ -116,21 +116,22 @@ IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
 IndicatorPowerDevice* indicator_power_device_new_from_variant (GVariant * variant);
 
 
-UpDeviceKind  indicator_power_device_get_kind        (const IndicatorPowerDevice * device);
-UpDeviceState indicator_power_device_get_state       (const IndicatorPowerDevice * device);
-const gchar * indicator_power_device_get_object_path (const IndicatorPowerDevice * device);
-gdouble       indicator_power_device_get_percentage  (const IndicatorPowerDevice * device);
-time_t        indicator_power_device_get_time        (const IndicatorPowerDevice * device);
+UpDeviceKind  indicator_power_device_get_kind         (const IndicatorPowerDevice * device);
+UpDeviceState indicator_power_device_get_state        (const IndicatorPowerDevice * device);
+const gchar * indicator_power_device_get_object_path  (const IndicatorPowerDevice * device);
+gdouble       indicator_power_device_get_percentage   (const IndicatorPowerDevice * device);
+time_t        indicator_power_device_get_time         (const IndicatorPowerDevice * device);
 
-GStrv         indicator_power_device_get_icon_names  (const IndicatorPowerDevice * device);
-GIcon       * indicator_power_device_get_gicon       (const IndicatorPowerDevice * device);
+GStrv         indicator_power_device_get_icon_names   (const IndicatorPowerDevice * device);
+GIcon       * indicator_power_device_get_gicon        (const IndicatorPowerDevice * device);
 
-void          indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
-                                                       gchar ** short_details,
-                                                       gchar ** details,
-                                                       gchar ** accessible_name);
+gchar       * indicator_power_device_get_label        (const IndicatorPowerDevice * device);
 
-
+void          indicator_power_device_get_header       (const IndicatorPowerDevice * device,
+                                                       gboolean                     show_time,
+                                                       gboolean                     show_percentage,
+                                                       gchar                     ** header,
+                                                       gchar                     ** a11y);
 
 
 G_END_DECLS

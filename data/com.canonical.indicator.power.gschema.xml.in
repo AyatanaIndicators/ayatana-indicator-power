@@ -10,6 +10,11 @@
       <_summary>Show time in Menu Bar</_summary>
       <_description>Whether or not to show the time in the menu bar.</_description>
     </key>
+    <key name="show-percentage" type="b">
+      <default>false</default>
+      <_summary>Show percentage in Menu Bar</_summary>
+      <_description>Whether or not to show the percentage in the menu bar.</_description>
+    </key>
     <key enum="icon-policy-enum" name="icon-policy">
       <default>"present"</default>
       <_summary>When to show the battery status in the menu bar.</_summary>

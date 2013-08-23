@@ -54,7 +54,7 @@ indicator_power_device_provider_default_init (IndicatorPowerDeviceProviderInterf
  * An easy way to free the list properly in one step is as follows:
  *
  *   g_slist_free_full (list, (GDestroyNotify)g_object_unref);
- * 
+ *
  * Return value: (element-type IndicatorPowerDevice)
  *               (transfer full):
  *               list of devices

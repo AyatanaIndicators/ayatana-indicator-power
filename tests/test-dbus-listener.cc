@@ -4,16 +4,16 @@ Copyright 2012 Canonical Ltd.
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
 
-This program is free software: you can redistribute it and/or modify it 
-under the terms of the GNU General Public License version 3, as published 
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3, as published
 by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful, but 
-WITHOUT ANY WARRANTY; without even the implied warranties of 
-MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranties of
+MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along 
+You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -40,7 +40,7 @@ class DbusListenerTest : public ::testing::Test
     int gsd_name_ownership_id;
     int gsd_power_registration_id;
     char * gsd_power_error_string;
-  
+
   protected:
 
     static void
@@ -234,7 +234,7 @@ TEST_F(DbusListenerTest, GSDHasPowerAndBattery)
 
   // cleanup
   g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
-  g_object_unref (o); 
+  g_object_unref (o);
 }
 
 TEST_F(DbusListenerTest, GSDHasNoDevices)
@@ -261,7 +261,7 @@ TEST_F(DbusListenerTest, GSDHasNoDevices)
 
   // cleanup
   g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
-  g_object_unref (o); 
+  g_object_unref (o);
 }
 
 TEST_F(DbusListenerTest, GSDReturnsError)
@@ -285,7 +285,7 @@ TEST_F(DbusListenerTest, GSDReturnsError)
 
   // cleanup
   g_object_run_dispose (o); // used to get coverage of both branches in the object's dispose func's g_clear_*() calls
-  g_object_unref (o); 
+  g_object_unref (o);
 }
 
 /* This test emits a PropertiesChanged signal and confirms that
@@ -347,5 +347,5 @@ TEST_F(DbusListenerTest, GSDPropChanged)
   ASSERT_EQ (g_slist_length(devices), 2);
 
   // cleanup
-  g_object_unref (o); 
+  g_object_unref (o);
 }

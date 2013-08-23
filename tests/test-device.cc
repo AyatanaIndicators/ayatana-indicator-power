@@ -4,16 +4,16 @@ Copyright 2012 Canonical Ltd.
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
 
-This program is free software: you can redistribute it and/or modify it 
-under the terms of the GNU General Public License version 3, as published 
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3, as published
 by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful, but 
-WITHOUT ANY WARRANTY; without even the implied warranties of 
-MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranties of
+MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along 
+You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -69,26 +69,51 @@ class DeviceTest : public ::testing::Test
       g_strfreev (names);
     }
 
-    void check_strings (const IndicatorPowerDevice * device,
-                        const char * expected_timestring,
-                        const char * expected_details,
-                        const char * expected_accessible)
+    void check_label (const IndicatorPowerDevice * device,
+                      const char * expected_label)
     {
-      char * timestring = NULL;
-      char * details = NULL;
-      char * accessible = NULL;
+      char * label;
 
-      indicator_power_device_get_time_details (device, &timestring, &details, &accessible);
-      EXPECT_STREQ (expected_timestring, timestring);
-      EXPECT_STREQ (expected_details, details);
-      EXPECT_STREQ (expected_accessible, accessible);
+      label = indicator_power_device_get_label (device);
+      EXPECT_STREQ (expected_label, label);
 
-      g_free (accessible);
-      g_free (details);
-      g_free (timestring);
+      g_free (label);
+    }
+
+    void check_header (const IndicatorPowerDevice * device,
+                       const char * expected_time_and_percent,
+                       const char * expected_time,
+                       const char * expected_percent,
+                       const char * expected_a11y)
+    {
+      char * label;
+      char * a11y;
+
+      indicator_power_device_get_header (device, true, true, &label, &a11y);
+      EXPECT_STREQ (expected_time_and_percent, label);
+      EXPECT_STREQ (expected_a11y, a11y);
+      g_free (label);
+      g_free (a11y);
+
+      indicator_power_device_get_header (device, true, false, &label, &a11y);
+      EXPECT_STREQ (expected_time, label);
+      EXPECT_STREQ (expected_a11y, a11y);
+      g_free (label);
+      g_free (a11y);
+
+      indicator_power_device_get_header (device, false, true, &label, &a11y);
+      EXPECT_STREQ (expected_percent, label);
+      EXPECT_STREQ (expected_a11y, a11y);
+      g_free (label);
+      g_free (a11y);
+
+      indicator_power_device_get_header (device, false, false, &label, &a11y);
+      ASSERT_TRUE (!label || !*label);
+      EXPECT_STREQ (expected_a11y, a11y);
+      g_free (label);
+      g_free (a11y);
     }
 };
-
 
 /***
 ****
@@ -266,7 +291,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
                        NULL);
- 
+
       g_string_append_printf (expected, "%s-empty-symbolic;", kind_str);
       g_string_append_printf (expected, "gpm-%s-empty;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
@@ -434,7 +459,7 @@ TEST_F(DeviceTest, IconNames)
 
       // state unknown
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
-                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN, 
+                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN,
                        NULL);
       g_string_append_printf (expected, "%s-missing-symbolic;", kind_str);
       g_string_append_printf (expected, "gpm-%s-missing;", kind_str);
@@ -456,19 +481,21 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
   // bad args: NULL device
-  log_count_ipower_expected++;
-  check_strings (NULL, NULL, NULL, NULL);
+  log_count_ipower_expected += 5;
+  check_label (NULL, NULL);
+  check_header (NULL, NULL, NULL, NULL, NULL);
 
   // bad args: a GObject that isn't a device
-  log_count_ipower_expected++;
+  log_count_ipower_expected += 5;
   GObject * o = G_OBJECT(g_cancellable_new());
-  check_strings ((IndicatorPowerDevice*)o, NULL, NULL, NULL);
+  check_label ((IndicatorPowerDevice*)o, NULL);
+  check_header (NULL, NULL, NULL, NULL, NULL);
   g_object_unref (o);
 
   /**
   ***
   **/
- 
+
   IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, NULL));
   o = G_OBJECT(device);
 
@@ -478,9 +505,11 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(60*61),
                    NULL);
-  check_strings (device, "(1:01)",
-                         "Battery (1:01 to charge)",
-                         "Battery (1 hour 1 minute to charge (50%))");
+  check_label (device, "Battery (1:01 to charge)");
+  check_header (device, "(1:01, 50%)",
+                        "(1:01)",
+                        "(50%)",
+                        "Battery (1 hour 1 minute to charge, 50%)");
 
   // discharging, < 12 hours left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -488,25 +517,36 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(60*61),
                    NULL);
-  check_strings (device, "1:01",
-                         "Battery (1:01 left)",
-                         "Battery (1 hour 1 minute left (50%))");
+  check_label (device, "Battery (1:01 left)");
+  check_header (device, "(1:01, 50%)",
+                        "(1:01)",
+                        "(50%)",
+                        "Battery (1 hour 1 minute left, 50%)");
 
   // discharging, > 12 hours left
+  // we don't show the clock time when > 12 hours dischargin
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(60*60*13),
                    NULL);
-  check_strings (device, "13:00", "Battery", "Battery");
+  check_label (device, "Battery");
+  check_header (device, "(50%)",
+                        "",
+                        "(50%)",
+                        "Battery (50%)");
 
-  // fully charged
+// fully charged
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
                    INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 100.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "", "Battery (charged)", "Battery (charged)");
+  check_label (device, "Battery (charged)");
+  check_header (device, "(100%)",
+                        "",
+                        "(100%)",
+                        "Battery (charged, 100%)");
 
   // percentage but no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -514,7 +554,11 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "(50%)", "Battery (50%)", "Battery (50%)");
+  check_label (device, "Battery (estimating…)");
+  check_header (device, "(estimating…, 50%)",
+                        "(estimating…)",
+                        "(50%)",
+                        "Battery (estimating…, 50%)");
 
   // no percentage, no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -522,7 +566,8 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "(not present)", "Battery (not present)", "Battery (not present)");
+  check_label (device, "Battery (not present)");
+  check_header (device, "", "", "", "Battery (not present)");
 
   // power line
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
@@ -530,7 +575,8 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_strings (device, "", "AC Adapter", "AC Adapter");
+  check_label (device, "AC Adapter");
+  check_header (device, "", "", "", "AC Adapter");
 
   // cleanup
   g_object_unref(o);
@@ -605,7 +651,7 @@ TEST_F(DeviceTest, ChoosePrimary)
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
         }
     }
-    
+
   // cleanup
   g_list_free_full (device_list, g_object_unref);
 }

@@ -449,10 +449,11 @@ indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
 ****
 ***/
 
+/* Format time remaining for reading ("H:MM") and speech ("H hours, MM minutes") */
 static void
 get_timestring (guint64   time_secs,
-                gchar   **short_timestring,
-                gchar   **detailed_timestring)
+                gchar   **readable_timestring,
+                gchar   **accessible_timestring)
 {
   gint  hours;
   gint  minutes;
@@ -462,16 +463,16 @@ get_timestring (guint64   time_secs,
 
   if (minutes == 0)
     {
-      *short_timestring = g_strdup (_("Unknown time"));
-      *detailed_timestring = g_strdup (_("Unknown time"));
+      *readable_timestring = g_strdup (_("Unknown time"));
+      *accessible_timestring = g_strdup (_("Unknown time"));
 
       return;
     }
 
   if (minutes < 60)
     {
-      *short_timestring = g_strdup_printf ("0:%.2i", minutes);
-      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
+      *readable_timestring = g_strdup_printf ("0:%.2i", minutes);
+      *accessible_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, "%i minute",
                                               "%i minutes",
                                               minutes), minutes);
       return;
@@ -480,11 +481,11 @@ get_timestring (guint64   time_secs,
   hours = minutes / 60;
   minutes = minutes % 60;
 
-  *short_timestring = g_strdup_printf ("%i:%.2i", hours, minutes);
+  *readable_timestring = g_strdup_printf ("%i:%.2i", hours, minutes);
 
   if (minutes == 0)
     {
-      *detailed_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE, 
+      *accessible_timestring = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
                                               "%i hour",
                                               "%i hours",
                                               hours), hours);
@@ -493,7 +494,7 @@ get_timestring (guint64   time_secs,
     {
       /* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
        * Swap order with "%2$s %2$i %1$s %1$i if needed */
-      *detailed_timestring = g_strdup_printf (_("%i %s %i %s"),
+      *accessible_timestring = g_strdup_printf (_("%i %s %i %s"),
                                               hours, g_dngettext (GETTEXT_PACKAGE, "hour", "hours", hours),
                                               minutes, g_dngettext (GETTEXT_PACKAGE, "minute", "minutes", minutes));
     }
@@ -561,86 +562,149 @@ device_kind_to_localised_string (UpDeviceKind kind)
   return text;
 }
 
-void
-indicator_power_device_get_time_details (const IndicatorPowerDevice * device,
-                                         gchar ** short_details,
-                                         gchar ** details,
-                                         gchar ** accessible_name)
+static char *
+join_strings (const char * name, const char * time, const char * percent)
+{
+  char * str;
+  const gboolean have_name = name && *name;
+  const gboolean have_time = time && *time;
+  const gboolean have_percent = percent && *percent;
+
+  if (have_name && have_time && have_percent)
+    str = g_strdup_printf (_("%s (%s, %s)"), name, time, percent);
+  else if (have_name && have_time)
+    str = g_strdup_printf (_("%s (%s)"), name, time);
+  else if (have_name && have_percent)
+    str = g_strdup_printf (_("%s (%s)"), name, percent);
+  else if (have_name)
+    str = g_strdup (name);
+  else if (have_time && have_percent)
+    str = g_strdup_printf (_("(%s, %s)"), time, percent);
+  else if (have_time)
+    str = g_strdup_printf (_("(%s)"), time);
+  else if (have_percent)
+    str = g_strdup_printf (_("(%s)"), percent);
+  else
+    str = g_strdup ("");
+
+  return str;
+}
+
+static void
+indicator_power_device_get_text (const IndicatorPowerDevice * device,
+                                 gboolean show_time_in_header,
+                                 gboolean show_percentage_in_header,
+                                 gchar ** header,
+                                 gchar ** label,
+                                 gchar ** a11y)
 {
   if (!INDICATOR_IS_POWER_DEVICE(device))
     {
-      *short_details = NULL;
-      *details = NULL;
-      *accessible_name = NULL;
+      if (a11y != NULL) *a11y = NULL;
+      if (label != NULL) *label = NULL;
+      if (header != NULL) *header = NULL;
       g_warning ("%s: %p is not an IndicatorPowerDevice", G_STRFUNC, device);
       return;
     }
 
   const time_t time = indicator_power_device_get_time (device);
   const UpDeviceState state = indicator_power_device_get_state (device);
-  const gdouble percentage = indicator_power_device_get_percentage (device);
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
   const gchar * device_name = device_kind_to_localised_string (kind);
+  const gdouble percentage = indicator_power_device_get_percentage (device);
+  char pctstr[32] = { '\0' };
+  g_snprintf (pctstr, sizeof(pctstr), "%.0lf%%", percentage);
+
+  GString * terse_time = g_string_new (NULL);
+  GString * verbose_time = g_string_new (NULL);
+  GString * accessible_time = g_string_new (NULL);
 
   if (time > 0)
     {
-      gchar *short_timestring = NULL;
-      gchar *detailed_timestring = NULL;
-
-      get_timestring (time,
-                      &short_timestring,
-                      &detailed_timestring);
+      char * readable_timestr = NULL;
+      char * accessible_timestr = NULL;
+      get_timestring (time, &readable_timestr, &accessible_timestr);
 
       if (state == UP_DEVICE_STATE_CHARGING)
         {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accessible_name = g_strdup_printf (_("%s (%s to charge (%.0lf%%))"), device_name, detailed_timestring, percentage);
-          *details = g_strdup_printf (_("%s (%s to charge)"), device_name, short_timestring);
-          *short_details = g_strdup_printf ("(%s)", short_timestring);
+          g_string_assign (terse_time, readable_timestr);
+          g_string_printf (verbose_time, _("%s to charge"), readable_timestr);
+          g_string_printf (accessible_time, _("%s to charge"), accessible_timestr);
         }
-      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time > (60*60*12)))
+      else if ((state == UP_DEVICE_STATE_DISCHARGING) && (time <= (60*60*12)))
         {
-          *accessible_name = g_strdup_printf (_("%s"), device_name);
-          *details = g_strdup_printf (_("%s"), device_name);
-          *short_details = g_strdup (short_timestring);
+          g_string_assign (terse_time, readable_timestr);
+          g_string_printf (verbose_time, _("%s left"), readable_timestr);
+          g_string_printf (accessible_time, _("%s left"), accessible_timestr);
         }
       else
         {
-          /* TRANSLATORS: %2 is a time string, e.g. "1 hour 5 minutes" */
-          *accessible_name = g_strdup_printf (_("%s (%s left (%.0lf%%))"), device_name, detailed_timestring, percentage);
-          *details = g_strdup_printf (_("%s (%s left)"), device_name, short_timestring);
-          *short_details = g_strdup (short_timestring);
+          /* if there's more than 12 hours remaining, we don't show it */
         }
 
-      g_free (short_timestring);
-      g_free (detailed_timestring);
+      g_free (readable_timestr);
+      g_free (accessible_timestr);
     }
   else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
-      *details = g_strdup_printf (_("%s (charged)"), device_name);
-      *accessible_name = g_strdup (*details);
-      *short_details = g_strdup ("");
+      g_string_assign (verbose_time,    _("charged"));
+      g_string_assign (accessible_time, _("charged"));
     }
   else if (percentage > 0)
     {
-      /* TRANSLATORS: %2 is a percentage value. Note: this string is only
-       * used when we don't have a time value */
-      *details = g_strdup_printf (_("%s (%.0lf%%)"), device_name, percentage);
-      *accessible_name = g_strdup (*details);
-      *short_details = g_strdup_printf (_("(%.0lf%%)"), percentage);
-    }
-  else if (kind == UP_DEVICE_KIND_LINE_POWER)
-    {
-      *details         = g_strdup (device_name);
-      *accessible_name = g_strdup (device_name);
-      *short_details   = g_strdup ("");
+      g_string_assign (terse_time,      _("estimating…"));
+      g_string_assign (verbose_time,    _("estimating…"));
+      g_string_assign (accessible_time, _("estimating…"));
     }
   else
     {
-      *details = g_strdup_printf (_("%s (not present)"), device_name);
-      *accessible_name = g_strdup (*details);
-      *short_details = g_strdup (_("(not present)"));
+      *pctstr = '\0';
+
+      if (kind != UP_DEVICE_KIND_LINE_POWER)
+        {
+          g_string_assign (verbose_time,    _("not present"));
+          g_string_assign (accessible_time, _("not present"));
+        }
     }
+
+  if (header != NULL)
+    *header = join_strings (NULL,
+                            show_time_in_header ? terse_time->str : "",
+                            show_percentage_in_header ? pctstr : "");
+
+  if (label != NULL)
+    *label  = join_strings (device_name,
+                            verbose_time->str,
+                            NULL);
+
+  if (a11y != NULL)
+    *a11y   = join_strings (device_name,
+                            accessible_time->str,
+                            pctstr);
+
+  g_string_free (terse_time, TRUE);
+  g_string_free (verbose_time, TRUE);
+  g_string_free (accessible_time, TRUE);
+}
+
+gchar *
+indicator_power_device_get_label (const IndicatorPowerDevice * device)
+{
+  gchar * label = NULL;
+  indicator_power_device_get_text (device, FALSE, FALSE,
+                                   NULL, &label, NULL);
+  return label;
+}
+
+void
+indicator_power_device_get_header (const IndicatorPowerDevice * device,
+                                   gboolean                     show_time,
+                                   gboolean                     show_percentage,
+                                   gchar                     ** header,
+                                   gchar                     ** a11y)
+{
+  indicator_power_device_get_text (device, show_time, show_percentage,
+                                   header, NULL, a11y);
 }
 
 /***
