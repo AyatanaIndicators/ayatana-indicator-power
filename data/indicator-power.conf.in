@@ -6,9 +6,6 @@ description "Indicator Power Backend"
 start on indicators-loaded or indicator-services-start
 stop on desktop-end or indicator-services-end
 
-env G_MESSAGES_DEBUG=all
-export G_MESSAGES_DEBUG
-
 respawn
 
 exec @pkglibexecdir@/indicator-power-service
