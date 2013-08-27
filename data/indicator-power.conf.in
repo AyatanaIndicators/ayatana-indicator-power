@@ -1,0 +1,14 @@
+description "Indicator Power Backend"
+
+# Want to move to indicator-services-[start|end], but that's not all
+# there yet.  Use the signals that exist today for now.
+
+start on indicators-loaded or indicator-services-start
+stop on desktop-end or indicator-services-end
+
+env G_MESSAGES_DEBUG=all
+export G_MESSAGES_DEBUG
+
+respawn
+
+exec @pkglibexecdir@/indicator-power-service
