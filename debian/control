@@ -9,6 +9,7 @@ Build-Depends: debhelper (>= 9),
                libgtest-dev,
                libglib2.0-dev (>= 2.36),
                libgudev-1.0-dev,
+               liburl-dispatcher1-dev,
                python,
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power
@@ -23,7 +24,7 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          upower,
-         gnome-control-center (>= 3.1),
+         gnome-control-center (>= 3.1) | ubuntu-system-settings,
 Recommends: indicator-applet (>= 0.2) | indicator-renderer,
 Description: Indicator showing power state.
  This indicator displays current power management information and gives 
