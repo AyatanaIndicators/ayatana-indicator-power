@@ -22,7 +22,6 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <url-dispatcher.h>
 
 #include "device.h"
 #include "device-provider.h"
@@ -533,7 +532,7 @@ create_phone_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
   update_brightness_action_state (self);
   g_object_unref (item);
 
-  g_menu_append (section, _("Battery settings…"), "indicator.activate-phone-settings");
+  g_menu_append (section, _("Battery settings…"), "indicator.activate-settings");
 
   return G_MENU_MODEL (section);
 }
@@ -686,6 +685,8 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
+  /* FIXME: unity8 settings */
+
   execute_command ("gnome-control-center power");
 }
 
@@ -695,14 +696,6 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
                          gpointer        gself  G_GNUC_UNUSED)
 {
   execute_command ("gnome-power-statistics");
-}
-
-static void
-on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
-                             GVariant      * param  G_GNUC_UNUSED,
-                             gpointer        gself  G_GNUC_UNUSED)
-{
-  url_dispatch_send("settings://system/battery", NULL, NULL);
 }
 
 /***
@@ -746,7 +739,6 @@ init_gactions (IndicatorPowerService * self)
 
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
-    { "activate-phone-settings", on_phone_settings_activated },
     { "activate-statistics", on_statistics_activated }
   };
 
