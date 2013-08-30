@@ -1,3 +1,22 @@
+indicator-power (12.10.6+13.10.20130830.2-0ubuntu1) saucy; urgency=low
+
+  [ Sebastien Bacher ]
+  * don't depends on gnome-control-center, recommends is enough, since
+    it's only required for the preferences menu item. Let ubuntu-system-
+    settings replace it as an alternative, that's needed on the touch
+    image.
+  * revert previous commit, liburl-dispatcher1 depends on upstart-app-
+    launch which is in universe, that's blocking indicators from
+    landing.
+
+  [ Ted Gould ]
+  * Make settings work on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 193
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 30 Aug 2013 10:07:38 +0000
+
 indicator-power (12.10.6+13.10.20130823-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
