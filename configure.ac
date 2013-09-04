@@ -40,7 +40,8 @@ GUDEV_REQUIRED_VERSION=204
 PKG_CHECK_MODULES([SERVICE_DEPS],[glib-2.0 >= $GLIB_REQUIRED_VERSION
                                   gio-2.0 >= $GIO_REQUIRED_VERSION
                                   gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION
-                                  gudev-1.0 >= $GUDEV_REQUIRED_VERSION])
+                                  gudev-1.0 >= $GUDEV_REQUIRED_VERSION
+                                  url-dispatcher-1])
 
 ###########################
 # GSETTINGS
