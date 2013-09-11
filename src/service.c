@@ -332,6 +332,8 @@ create_header_state (IndicatorPowerService * self)
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
+  g_variant_builder_add (&b, "{sv}", "title", g_variant_new_string (_("Battery")));
+
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
