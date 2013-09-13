@@ -1,3 +1,16 @@
+indicator-power (12.10.6+13.10.20130913-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Adds a title in the header's action state. (LP: #1223635)
+
+  [ Ted Gould ]
+  * Use URL Dispatcher for settings on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 196
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 13 Sep 2013 15:15:31 +0000
+
 indicator-power (12.10.6+13.10.20130830.2-0ubuntu1) saucy; urgency=low
 
   [ Sebastien Bacher ]
