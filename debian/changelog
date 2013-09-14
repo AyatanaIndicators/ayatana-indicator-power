@@ -1,3 +1,10 @@
+indicator-power (12.10.6+13.10.20130913-0ubuntu2) saucy; urgency=low
+
+  * Revert previous upload since this was bringing quite a few extra and
+    likely unwanted dependencies on Ubuntu desktop after FeatureFreeze.
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Fri, 13 Sep 2013 21:46:57 -0400
+
 indicator-power (12.10.6+13.10.20130913-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
