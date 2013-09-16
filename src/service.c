@@ -332,15 +332,13 @@ create_header_state (IndicatorPowerService * self)
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
+  g_variant_builder_add (&b, "{sv}", "title", g_variant_new_string (_("Battery")));
+
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
   if (label != NULL)
-    {
-      g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string (label));
-
-      g_free (label);
-    }
+    g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (label));
 
   if (icon != NULL)
     {
@@ -350,12 +348,7 @@ create_header_state (IndicatorPowerService * self)
     }
 
   if (a11y != NULL)
-    {
-      g_variant_builder_add (&b, "{sv}", "accessible-desc",
-                             g_variant_new_string (a11y));
-
-      g_free (a11y);
-    }
+    g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (a11y));
 
   return g_variant_builder_end (&b);
 }
