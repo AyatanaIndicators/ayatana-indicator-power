@@ -1,3 +1,10 @@
+indicator-power (12.10.6+13.10.20130913-0ubuntu3) UNRELEASED; urgency=low
+
+  * The dependency url-dispatcher was fixed to not pull in extra packages 
+    on the desktop images, fixing the issue that caused the previous revert.
+
+ -- Timo Jyrinki <timo-jyrinki@ubuntu.com>  Wed, 18 Sep 2013 12:52:51 +0300
+
 indicator-power (12.10.6+13.10.20130913-0ubuntu2) saucy; urgency=low
 
   * Revert previous upload since this was bringing quite a few extra and
