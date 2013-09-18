@@ -1,10 +1,17 @@
-indicator-power (12.10.6+13.10.20130913-0ubuntu3) UNRELEASED; urgency=low
+indicator-power (12.10.6+13.10.20130918.2-0ubuntu1) saucy; urgency=low
 
+  [ Timo Jyrinki ]
   * The dependency url-dispatcher was fixed to not pull in extra packages 
     on the desktop images, fixing the issue that caused the previous revert
     (FFe bug - LP: #1215980)
 
- -- Timo Jyrinki <timo-jyrinki@ubuntu.com>  Wed, 18 Sep 2013 12:52:51 +0300
+  [ Ted Gould ]
+  * Use URL dispatcher to show settings on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 201
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 18 Sep 2013 13:57:00 +0000
 
 indicator-power (12.10.6+13.10.20130913-0ubuntu2) saucy; urgency=low
 
