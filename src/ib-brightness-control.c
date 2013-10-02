@@ -52,7 +52,7 @@ ib_brightness_control_new (void)
                 (g_strcmp0 (device_type, "platform") == 0) ||
                 (g_strcmp0 (device_type, "raw") == 0)) {
                 path = g_strdup (g_udev_device_get_sysfs_path (device->data));
-                g_print ("found: %s\n", path);
+                g_debug ("found: %s", path);
                 break;
             }
         }
