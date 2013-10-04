@@ -695,7 +695,7 @@ on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                              GVariant      * param  G_GNUC_UNUSED,
                              gpointer        gself  G_GNUC_UNUSED)
 {
-  url_dispatch_send("settings://system/battery", NULL, NULL);
+  url_dispatch_send("settings:///system/battery", NULL, NULL);
 }
 
 /***
