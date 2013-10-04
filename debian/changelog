@@ -1,3 +1,16 @@
+indicator-power (12.10.6+13.10.20131004-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Revert bug #824629 code -- use the correct charge % when deciding
+    what icon to use. (LP: #1215520, #824629)
+  * Listen for the "Resuming" signal from upower to refresh devices when
+    resuming from suspend/hibernate. (LP: #1224931)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 204
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 04 Oct 2013 02:28:43 +0000
+
 indicator-power (12.10.6+13.10.20130918.2-0ubuntu1) saucy; urgency=low
 
   [ Timo Jyrinki ]
