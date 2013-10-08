@@ -1,3 +1,13 @@
+indicator-power (12.10.6+13.10.20131008-0ubuntu1) saucy; urgency=low
+
+  [ Ted Gould ]
+  * Adding an additional slash to the settings URL. (LP: #1231444)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 206
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 08 Oct 2013 02:34:01 +0000
+
 indicator-power (12.10.6+13.10.20131004-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
