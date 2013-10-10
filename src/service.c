@@ -463,6 +463,9 @@ create_brightness_menuitem (IndicatorPowerService * self)
   g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.unity.slider");
   g_menu_item_set_attribute (item, "min-value", "d", brightness_to_percentage (self, lo));
   g_menu_item_set_attribute (item, "max-value", "d", brightness_to_percentage (self, hi));
+  g_menu_item_set_attribute (item, "min-icon", "s", "torch-off" );
+  g_menu_item_set_attribute (item, "max-icon", "s", "torch-on" );
+
   return item;
 }
 
