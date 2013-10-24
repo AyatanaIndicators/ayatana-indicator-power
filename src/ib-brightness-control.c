@@ -126,6 +126,7 @@ ib_brightness_control_get_value_from_file (IbBrightnessControl *self, const gcha
         g_error_free (error);
     } else {
         value = atoi (svalue);
+        g_free (svalue);
     }
 
     g_free (filename);
