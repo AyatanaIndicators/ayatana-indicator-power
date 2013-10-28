@@ -11,3 +11,6 @@ ObjectPath=/com/canonical/indicator/power/desktop
 
 [desktop_greeter]
 ObjectPath=/com/canonical/indicator/power/desktop_greeter
+
+[phone_greeter]
+ObjectPath=/com/canonical/indicator/power/desktop_greeter
