@@ -249,6 +249,22 @@ on_upower_device_removed (DbusUPower * unused G_GNUC_UNUSED,
 }
 
 static void
+on_upower_resuming (DbusUPower * unused G_GNUC_UNUSED,
+                    gpointer     gself)
+{
+  IndicatorPowerDeviceProviderUPower * self;
+  GHashTableIter iter;
+  gpointer object_path;
+
+  self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
+
+  g_debug ("Resumed from hibernate/sleep; queueing all devices for a refresh");
+  g_hash_table_iter_init (&iter, self->priv->devices);
+  while (g_hash_table_iter_next (&iter, &object_path, NULL))
+    refresh_device_soon (self, object_path);
+}
+
+static void
 on_upower_proxy_ready (GObject        * source G_GNUC_UNUSED,
                        GAsyncResult   * res,
                        gpointer         gself)
@@ -272,6 +288,8 @@ on_upower_proxy_ready (GObject        * source G_GNUC_UNUSED,
       p = self->priv;
 
       p->upower_proxy = proxy;
+      g_signal_connect (proxy, "resuming",
+                        G_CALLBACK (on_upower_resuming), self);
       g_signal_connect (proxy, "device-changed",
                         G_CALLBACK (on_upower_device_changed), self);
       g_signal_connect (proxy, "device-added",

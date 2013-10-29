@@ -328,10 +328,7 @@ device_kind_to_string (UpDeviceKind kind)
 
   This function's logic differs from GSD's power plugin in some ways:
 
-  1. All charging batteries use the same icon regardless of progress.
-  <https://bugs.launchpad.net/indicator-power/+bug/824629/comments/7>
-
-  2. For discharging batteries, we decide whether or not to use the 'caution'
+  1. For discharging batteries, we decide whether or not to use the 'caution'
   icon based on whether or not we have <= 30 minutes remaining, rather than
   looking at the battery's percentage left.
   <https://bugs.launchpad.net/indicator-power/+bug/743823>
@@ -389,10 +386,6 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
       case UP_DEVICE_STATE_CHARGING:
       case UP_DEVICE_STATE_PENDING_CHARGE:
-        /* When charging, always use the same icon regardless of percentage.
-           <http://bugs.launchpad.net/indicator-power/+bug/824629> */
-        percentage = 0;
-
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_device_icon_index (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-symbolic", kind_str, suffix_str));

@@ -1,3 +1,96 @@
+indicator-power (12.10.6+14.04.20131029.1-0ubuntu1) trusty; urgency=low
+
+  [ Sebastien Bacher ]
+  * Don't leak the g_file_get_contents value, reported by valgrind .
+
+  [ Marcus Tomlinson ]
+  * Added torch icons to either end of brightness slider. (LP: #1227250)
+
+  [ Ted Gould ]
+  * Adding a phone_greeter profile.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 210
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 29 Oct 2013 10:31:03 +0000
+
+indicator-power (12.10.6+13.10.20131008-0ubuntu1) saucy; urgency=low
+
+  [ Ted Gould ]
+  * Adding an additional slash to the settings URL. (LP: #1231444)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 206
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 08 Oct 2013 02:34:01 +0000
+
+indicator-power (12.10.6+13.10.20131004-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Revert bug #824629 code -- use the correct charge % when deciding
+    what icon to use. (LP: #1215520, #824629)
+  * Listen for the "Resuming" signal from upower to refresh devices when
+    resuming from suspend/hibernate. (LP: #1224931)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 204
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 04 Oct 2013 02:28:43 +0000
+
+indicator-power (12.10.6+13.10.20130918.2-0ubuntu1) saucy; urgency=low
+
+  [ Timo Jyrinki ]
+  * The dependency url-dispatcher was fixed to not pull in extra packages 
+    on the desktop images, fixing the issue that caused the previous revert
+    (FFe bug - LP: #1215980)
+
+  [ Ted Gould ]
+  * Use URL dispatcher to show settings on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 201
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 18 Sep 2013 13:57:00 +0000
+
+indicator-power (12.10.6+13.10.20130913-0ubuntu2) saucy; urgency=low
+
+  * Revert previous upload since this was bringing quite a few extra and
+    likely unwanted dependencies on Ubuntu desktop after FeatureFreeze.
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Fri, 13 Sep 2013 21:46:57 -0400
+
+indicator-power (12.10.6+13.10.20130913-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Adds a title in the header's action state. (LP: #1223635)
+
+  [ Ted Gould ]
+  * Use URL Dispatcher for settings on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 196
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 13 Sep 2013 15:15:31 +0000
+
+indicator-power (12.10.6+13.10.20130830.2-0ubuntu1) saucy; urgency=low
+
+  [ Sebastien Bacher ]
+  * don't depends on gnome-control-center, recommends is enough, since
+    it's only required for the preferences menu item. Let ubuntu-system-
+    settings replace it as an alternative, that's needed on the touch
+    image.
+  * revert previous commit, liburl-dispatcher1 depends on upstart-app-
+    launch which is in universe, that's blocking indicators from
+    landing.
+
+  [ Ted Gould ]
+  * Make settings work on the phone.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 193
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 30 Aug 2013 10:07:38 +0000
+
 indicator-power (12.10.6+13.10.20130823-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
