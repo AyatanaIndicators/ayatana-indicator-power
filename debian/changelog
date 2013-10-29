@@ -1,3 +1,19 @@
+indicator-power (12.10.6+14.04.20131029.1-0ubuntu1) trusty; urgency=low
+
+  [ Sebastien Bacher ]
+  * Don't leak the g_file_get_contents value, reported by valgrind .
+
+  [ Marcus Tomlinson ]
+  * Added torch icons to either end of brightness slider. (LP: #1227250)
+
+  [ Ted Gould ]
+  * Adding a phone_greeter profile.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 210
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 29 Oct 2013 10:31:03 +0000
+
 indicator-power (12.10.6+13.10.20131008-0ubuntu1) saucy; urgency=low
 
   [ Ted Gould ]
