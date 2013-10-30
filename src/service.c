@@ -459,7 +459,7 @@ create_brightness_menuitem (IndicatorPowerService * self)
 
   get_brightness_range (self,  &lo, &hi);
 
-  item = g_menu_item_new ("Brightness", "indicator.brightness");
+  item = g_menu_item_new (NULL, "indicator.brightness");
   g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.unity.slider");
   g_menu_item_set_attribute (item, "min-value", "d", brightness_to_percentage (self, lo));
   g_menu_item_set_attribute (item, "max-value", "d", brightness_to_percentage (self, hi));
