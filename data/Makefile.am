@@ -10,17 +10,30 @@ indicatorsdir = $(prefix)/share/unity/indicators
 dist_indicators_DATA = com.canonical.indicator.power
 
 #
-# the dbus service file
+# the upstart job file
 #
 
-dbus_servicesdir = $(datadir)/dbus-1/services
-dbus_services_DATA = indicator-power.service
-dbus_services_in = $(dbus_services_DATA:.service=.service.in)
-$(dbus_services_DATA): $(dbus_services_in)
+upstart_jobsdir = $(datadir)/upstart/sessions
+upstart_jobs_DATA = indicator-power.conf
+upstart_jobs_in = $(upstart_jobs_DATA:.conf=.conf.in)
+$(upstart_jobs_DATA): $(upstart_jobs_in)
 	$(AM_V_GEN) $(SED) -e "s|\@pkglibexecdir\@|$(pkglibexecdir)|" $< > $@
-BUILT_SOURCES += $(dbus_services_DATA)
-CLEANFILES += $(dbus_services_DATA)
-EXTRA_DIST += $(dbus_services_in)
+BUILT_SOURCES += $(upstart_jobs_DATA)
+CLEANFILES += $(upstart_jobs_DATA)
+EXTRA_DIST += $(upstart_jobs_in)
+
+#
+# the xdg autostart job file
+#
+
+xdg_autostartdir = /etc/xdg/autostart
+xdg_autostart_DATA = indicator-power.desktop
+xdg_autostart_in = $(xdg_autostart_DATA:.desktop=.desktop.in)
+$(xdg_autostart_DATA): $(xdg_autostart_in)
+	$(AM_V_GEN) $(SED) -e "s|\@pkglibexecdir\@|$(pkglibexecdir)|" $< > $@
+BUILT_SOURCES += $(xdg_autostart_DATA)
+CLEANFILES += $(xdg_autostart_DATA)
+EXTRA_DIST += $(xdg_autostart_in)
 
 #
 # the gettings
