@@ -337,7 +337,7 @@ on_bus_ready (GObject * source_object G_GNUC_UNUSED,
   tmp = g_bus_get_finish (res, &error);
   if (error != NULL)
     {
-      if (error->domain != G_IO_ERROR || error->code != G_IO_ERROR_CANCELLED)
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("Error acquiring bus: %s", error->message);
       g_error_free (error);
     }
