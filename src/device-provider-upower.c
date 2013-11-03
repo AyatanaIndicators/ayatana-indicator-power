@@ -89,7 +89,7 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
   response = g_dbus_connection_call_finish (G_DBUS_CONNECTION(o), res, &error);
   if (error != NULL)
     {
-      if (error->domain != G_IO_ERROR || error->code != G_IO_ERROR_CANCELLED)
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("Error acquiring bus: %s", error->message);
       g_error_free (error);
     }
