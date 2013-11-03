@@ -90,7 +90,9 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
   if (error != NULL)
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("Error acquiring bus: %s", error->message);
+        g_warning ("Error getting properties for UPower device '%s': %s",
+                   data->path, error->message);
+
       g_error_free (error);
     }
   else
