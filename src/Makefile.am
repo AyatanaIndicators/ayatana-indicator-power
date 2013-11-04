@@ -27,31 +27,12 @@ EXTRA_DIST += org.freedesktop.UPower.xml
 
 ###
 ###
-
-upower_device_dbus_sources = \
-  dbus-upower-device.c \
-  dbus-upower-device.h
-
-$(upower_device_dbus_sources): org.freedesktop.UPower.Device.xml
-	$(AM_V_GEN) gdbus-codegen \
-	  --c-namespace Dbus \
-	  --interface-prefix org.freedesktop.UPower \
-	  --generate-c-code dbus-upower-device \
-          $^
-
-BUILT_SOURCES += $(upower_device_dbus_sources)
-CLEANFILES += $(upower_device_dbus_sources)
-EXTRA_DIST += org.freedesktop.UPower.Device.xml
-
-###
-###
 ###
 
 noinst_LIBRARIES = libindicatorpower-upower.a libindicatorpower-service.a
 
 libindicatorpower_upower_a_SOURCES = \
   $(upower_dbus_sources) \
-  $(upower_device_dbus_sources) \
   device-provider-upower.c \
   device-provider-upower.h
 

@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "dbus-upower.h"
-#include "dbus-upower-device.h"
 #include "device.h"
 #include "device-provider.h"
 #include "device-provider-upower.h"
@@ -34,6 +33,8 @@
 
 struct _IndicatorPowerDeviceProviderUPowerPriv
 {
+  GDBusConnection * bus;
+
   DbusUPower * upower_proxy;
   GHashTable * devices; /* dbus object path --> IndicatorPowerDevice */
   GCancellable * cancellable;
@@ -65,6 +66,12 @@ G_DEFINE_TYPE_WITH_CODE (
 ****  UPOWER DBUS
 ***/
 
+struct device_get_all_data
+{
+  char * path;
+  IndicatorPowerDeviceProviderUPower * self;
+};
+
 static void
 emit_devices_changed (IndicatorPowerDeviceProviderUPower * self)
 {
@@ -72,65 +79,97 @@ emit_devices_changed (IndicatorPowerDeviceProviderUPower * self)
 }
 
 static void
-on_upower_device_proxy_ready (GObject * o, GAsyncResult * res, gpointer gself)
+on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
 {
-  GError * err;
-  DbusDevice * tmp;
+  GError * error;
+  GVariant * response;
+  struct device_get_all_data * data = gdata;
 
-  err = NULL;
-  tmp = dbus_device_proxy_new_for_bus_finish (res, &err);
-  if (err != NULL)
+  error = NULL;
+  response = g_dbus_connection_call_finish (G_DBUS_CONNECTION(o), res, &error);
+  if (error != NULL)
     {
-      g_warning ("Unable to get UPower Device Proxy: %s", err->message);
-      g_error_free (err);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Error getting properties for UPower device '%s': %s",
+                   data->path, error->message);
+
+      g_error_free (error);
     }
   else
     {
-      /* use this proxy's properties to update our own IndicatorPowerDevice */
-
+      guint32 kind = 0;
+      guint32 state = 0;
+      gdouble percentage = 0;
+      gint64 time_to_empty = 0;
+      gint64 time_to_full = 0;
+      time_t time;
       IndicatorPowerDevice * device;
-      IndicatorPowerDeviceProviderUPower * self;
-      priv_t * p;
+      IndicatorPowerDeviceProviderUPowerPriv * p = data->self->priv;
+      GVariant * dict = g_variant_get_child_value (response, 0);
 
-      self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
-      p = self->priv;
+      g_variant_lookup (dict, "Type", "u", &kind);
+      g_variant_lookup (dict, "State", "u", &state);
+      g_variant_lookup (dict, "Percentage", "d", &percentage);
+      g_variant_lookup (dict, "TimeToEmpty", "x", &time_to_empty);
+      g_variant_lookup (dict, "TimeToFull", "x", &time_to_full);
+      time = time_to_empty ? time_to_empty : time_to_full;
 
-      const guint kind = dbus_device_get_type_ (tmp);
-      const gdouble percentage = dbus_device_get_percentage (tmp);
-      const guint state = dbus_device_get_state (tmp);
-      const gint64 time_to_empty = dbus_device_get_time_to_empty (tmp);
-      const gint64 time_to_full = dbus_device_get_time_to_full (tmp);
-      const time_t time = time_to_empty ? time_to_empty : time_to_full;
-      const char * path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (tmp));
+      if ((device = g_hash_table_lookup (p->devices, data->path)))
+        {
+          g_object_set (device, INDICATOR_POWER_DEVICE_KIND, (gint)kind,
+                                INDICATOR_POWER_DEVICE_STATE, (gint)state,
+                                INDICATOR_POWER_DEVICE_OBJECT_PATH, data->path,
+                                INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
+                                INDICATOR_POWER_DEVICE_TIME, (guint64)time,
+                                NULL);
+        }
+      else
+        {
+          device = indicator_power_device_new (data->path,
+                                               kind,
+                                               percentage,
+                                               state,
+                                               time);
 
-      device = indicator_power_device_new (path,
-                                           kind,
-                                           percentage,
-                                           state,
-                                           time);
+          g_hash_table_insert (p->devices,
+                               g_strdup (data->path),
+                               g_object_ref (device));
 
-      g_hash_table_insert (p->devices,
-                           g_strdup (path),
-                           g_object_ref (device));
+          g_object_unref (device);
+        }
 
-      emit_devices_changed (self);
-
-      g_object_unref (device);
-      g_object_unref (tmp);
+      emit_devices_changed (data->self);
+      g_variant_unref (dict);
+      g_variant_unref (response);
     }
+
+  g_free (data->path);
+  g_slice_free (struct device_get_all_data, data);
 }
 
 static void
 update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
                                 const char                         * path)
 {
-  dbus_device_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
-                                 G_DBUS_PROXY_FLAGS_NONE,
-                                 BUS_NAME,
-                                 path,
-                                 self->priv->cancellable,
-                                 on_upower_device_proxy_ready,
-                                 self);
+  priv_t * p = self->priv;
+  struct device_get_all_data * data;
+
+  data = g_slice_new (struct device_get_all_data);
+  data->path = g_strdup (path);
+  data->self = self;
+
+  g_dbus_connection_call (p->bus,
+                          BUS_NAME,
+                          path,
+                          "org.freedesktop.DBus.Properties",
+                          "GetAll",
+                          g_variant_new ("(s)", "org.freedesktop.UPower.Device"),
+                          G_VARIANT_TYPE("(a{sv})"),
+                          G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                          -1, /* default timeout */
+                          p->cancellable,
+                          on_device_properties_ready,
+                          data);
 }
 
 /*
@@ -273,7 +312,7 @@ on_upower_proxy_ready (GObject        * source G_GNUC_UNUSED,
   DbusUPower * proxy;
 
   err = NULL;
-  proxy = dbus_upower_proxy_new_for_bus_finish (res, &err);
+  proxy = dbus_upower_proxy_new_finish (res, &err);
   if (err != NULL)
     {
       g_warning ("Unable to get UPower proxy: %s", err->message);
@@ -301,6 +340,42 @@ on_upower_proxy_ready (GObject        * source G_GNUC_UNUSED,
                                           p->cancellable,
                                           on_upower_device_enumerations_ready,
                                           self);
+    }
+}
+
+static void
+on_bus_ready (GObject * source_object G_GNUC_UNUSED,
+              GAsyncResult * res,
+              gpointer gself)
+{
+  GError * error;
+  GDBusConnection * tmp;
+
+  error = NULL;
+  tmp = g_bus_get_finish (res, &error);
+  if (error != NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Error acquiring bus: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      IndicatorPowerDeviceProviderUPower * self;
+      priv_t * p;
+
+      self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
+      p = self->priv;
+
+      p->bus = tmp;
+
+      dbus_upower_proxy_new (p->bus,
+                             G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+                             BUS_NAME,
+                             BUS_PATH,
+                             p->cancellable,
+                             on_upower_proxy_ready,
+                             self);
     }
 }
 
@@ -356,6 +431,8 @@ my_dispose (GObject * o)
     }
 
   g_hash_table_remove_all (p->devices);
+
+  g_clear_object (&p->bus);
 
   G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
 }
@@ -420,13 +497,10 @@ indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower 
                                            g_free,
                                            NULL);
 
-  dbus_upower_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
-                                 G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
-                                 BUS_NAME,
-                                 BUS_PATH,
-                                 p->cancellable,
-                                 on_upower_proxy_ready,
-                                 self);
+  g_bus_get (G_BUS_TYPE_SYSTEM,
+             p->cancellable,
+             on_bus_ready,
+             self);
 }
 
 /***
