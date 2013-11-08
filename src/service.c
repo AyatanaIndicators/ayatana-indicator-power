@@ -342,7 +342,13 @@ create_header_state (IndicatorPowerService * self)
 
   if (icon != NULL)
     {
-      g_variant_builder_add (&b, "{sv}", "icon", g_icon_serialize (icon));
+      GVariant * v;
+
+      if ((v = g_icon_serialize (icon)))
+        {
+          g_variant_builder_add (&b, "{sv}", "icon", v);
+          g_variant_unref (v);
+        }
 
       g_object_unref (icon);
     }
@@ -367,24 +373,28 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
   if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
-    GIcon * icon;
     char * label;
-    GMenuItem * menu_item;
+    GMenuItem * item;
+    GIcon * icon;
 
-    icon = indicator_power_device_get_gicon (device);
     label = indicator_power_device_get_label (device);
-    menu_item = g_menu_item_new (label, "indicator.activate-statistics");
-
-    if (icon != NULL)
-      g_menu_item_set_attribute_value (menu_item,
-                                       G_MENU_ATTRIBUTE_ICON,
-                                       g_icon_serialize (icon));
-
-    g_menu_append_item (menu, menu_item);
-    g_object_unref (menu_item);
-
-    g_clear_object (&icon);
+    item = g_menu_item_new (label, "indicator.activate-statistics");
     g_free (label);
+
+    if ((icon = indicator_power_device_get_gicon (device)))
+      {
+        GVariant * v;
+        if ((v = g_icon_serialize (icon)))
+          {
+            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_ICON, v);
+            g_variant_unref (v);
+          }
+
+        g_object_unref (icon);
+      }
+
+    g_menu_append_item (menu, item);
+    g_object_unref (item);
   }
 }
 
