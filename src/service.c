@@ -369,11 +369,15 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
   {
     GIcon * icon;
     char * label;
+    char * action;
     GMenuItem * menu_item;
 
     icon = indicator_power_device_get_gicon (device);
     label = indicator_power_device_get_label (device);
-    menu_item = g_menu_item_new (label, "indicator.activate-statistics");
+    action = g_strconcat ("indicator.activate-statistics::",
+                         indicator_power_device_get_object_path (device), NULL);
+    menu_item = g_menu_item_new (label, action);
+    g_free (action);
 
     if (icon != NULL)
       g_menu_item_set_attribute_value (menu_item,
@@ -687,10 +691,13 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
 
 static void
 on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
-                         GVariant      * param  G_GNUC_UNUSED,
+                         GVariant      * param,
                          gpointer        gself  G_GNUC_UNUSED)
 {
-  execute_command ("gnome-power-statistics");
+  char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
+                           g_variant_get_string (param, NULL), NULL);
+  execute_command (cmd);
+  g_free (cmd);
 }
 
 static void
@@ -743,7 +750,7 @@ init_gactions (IndicatorPowerService * self)
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
     { "activate-phone-settings", on_phone_settings_activated },
-    { "activate-statistics", on_statistics_activated }
+    { "activate-statistics", on_statistics_activated, "s" }
   };
 
   p->actions = g_simple_action_group_new ();
