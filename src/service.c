@@ -113,8 +113,6 @@ struct _IndicatorPowerServicePrivate
 
   GSimpleActionGroup * actions;
   GSimpleAction * header_action;
-  GSimpleAction * show_time_action;
-  GSimpleAction * show_percentage_action;
   GSimpleAction * battery_level_action;
   GSimpleAction * brightness_action;
 
@@ -715,39 +713,12 @@ on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
 ****
 ***/
 
-/* toggles the state */
-static void
-on_toggle_action_activated (GSimpleAction * simple,
-                            GVariant      * parameter G_GNUC_UNUSED,
-                            gpointer        unused    G_GNUC_UNUSED)
-{
-  GVariant * v = g_action_get_state (G_ACTION (simple));
-  gboolean flag = g_variant_get_boolean (v);
-  g_simple_action_set_state (simple, g_variant_new_boolean (!flag));
-  g_variant_unref (v);
-}
-
-static gboolean
-settings_to_action_state (GValue    * value,
-                          GVariant  * variant,
-                          gpointer    user_data  G_GNUC_UNUSED)
-{
-  g_value_set_variant (value, variant);
-  return TRUE;
-}
-
-static GVariant *
-action_state_to_settings (const GValue       * value,
-                          const GVariantType * expected_type G_GNUC_UNUSED,
-                          gpointer             user_data     G_GNUC_UNUSED)
-{
-  return g_value_dup_variant (value);
-}
-
 static void
 init_gactions (IndicatorPowerService * self)
 {
   GSimpleAction * a;
+  GAction * show_time_action;
+  GAction * show_percentage_action;
   priv_t * p = self->priv;
 
   GActionEntry entries[] = {
@@ -781,32 +752,17 @@ init_gactions (IndicatorPowerService * self)
   p->brightness_action = a;
 
   /* add the show-time action */
-  a = g_simple_action_new ("show-time", NULL);
-  g_settings_bind_with_mapping (p->settings, SETTINGS_SHOW_TIME_S,
-                                a, "state",
-                                G_SETTINGS_BIND_DEFAULT,
-                                settings_to_action_state,
-                                action_state_to_settings,
-                                NULL, NULL);
-  g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
-  g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
-  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
-  p->show_time_action = a;
+  show_time_action = g_settings_create_action (p->settings, "show-time");
+  g_action_map_add_action (G_ACTION_MAP(p->actions), show_time_action);
 
   /* add the show-percentage action */
-  a = g_simple_action_new ("show-percentage", NULL);
-  g_settings_bind_with_mapping (p->settings, SETTINGS_SHOW_PERCENTAGE_S,
-                                a, "state",
-                                G_SETTINGS_BIND_DEFAULT,
-                                settings_to_action_state,
-                                action_state_to_settings,
-                                NULL, NULL);
-  g_signal_connect (a, "activate", G_CALLBACK(on_toggle_action_activated), self);
-  g_signal_connect_swapped (a, "notify", G_CALLBACK(rebuild_header_now), self);
-  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
-  p->show_percentage_action = a;
+  show_percentage_action = g_settings_create_action (p->settings, "show-percentage");
+  g_action_map_add_action (G_ACTION_MAP(p->actions), show_percentage_action);
 
   rebuild_header_now (self);
+
+  g_object_unref (show_time_action);
+  g_object_unref (show_percentage_action);
 }
 
 /***
@@ -1009,20 +965,6 @@ my_dispose (GObject * o)
       g_clear_object (&p->settings);
     }
 
-  if (p->show_time_action != NULL)
-    {
-      g_signal_handlers_disconnect_by_data (p->show_time_action, self);
-
-      g_clear_object (&p->show_time_action);
-    }
-
-  if (p->show_percentage_action != NULL)
-    {
-      g_signal_handlers_disconnect_by_data (p->show_percentage_action, self);
-
-      g_clear_object (&p->show_percentage_action);
-    }
-
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
@@ -1057,8 +999,7 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   init_gactions (self);
 
-  g_signal_connect_swapped (p->settings, "changed::" SETTINGS_ICON_POLICY_S,
-                            G_CALLBACK(rebuild_header_now), self);
+  g_signal_connect_swapped (p->settings, "changed", G_CALLBACK(rebuild_header_now), self);
 
   p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
                               BUS_NAME,
