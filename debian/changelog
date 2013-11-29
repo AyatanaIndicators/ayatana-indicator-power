@@ -1,3 +1,15 @@
+indicator-power (12.10.6+14.04.20131129-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * Use GSettingsActions instead of g_settings_bind This also fixes a
+    bug: the actions were created stateless, but assigned a state later.
+    (LP: #1255981)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 217
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 29 Nov 2013 18:36:27 +0000
+
 indicator-power (12.10.6+14.04.20131125-0ubuntu1) trusty; urgency=low
 
   [ Charles Kerr ]
