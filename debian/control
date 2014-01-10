@@ -24,7 +24,7 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          upower,
-Recommends: gnome-control-center (>= 3.1) | ubuntu-system-settings,
+Recommends: gnome-control-center (>= 3.1) | unity-control-center | ubuntu-system-settings,
             indicator-applet (>= 0.2) | indicator-renderer,
 Description: Indicator showing power state.
  This indicator displays current power management information and gives 
