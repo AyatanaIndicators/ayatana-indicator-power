@@ -692,7 +692,14 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
-  execute_command ("gnome-control-center power");
+  gchar *path;
+
+  path = g_find_program_in_path ("unity-control-center");
+  if (path != NULL)
+    execute_command ("unity-control-center power");
+  else
+    execute_command ("gnome-control-center power");
+  g_free (path);
 }
 
 static void
