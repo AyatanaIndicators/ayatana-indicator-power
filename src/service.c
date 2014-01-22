@@ -692,7 +692,11 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
-  if (!g_strcmp0 (g_getenv ("XDG_CURRENT_DESKTOP"), "Unity"))
+  if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
+    {
+      execute_command ("xfce4-power-manager-settings");
+    }
+  else
   {
     gchar *path;
 
@@ -704,8 +708,6 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
 
     g_free (path);
   }
-  else if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
-    execute_command ("xfce4-power-manager-settings");
 }
 
 static void
