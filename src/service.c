@@ -692,22 +692,29 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
-  if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
+  static const gchar *control_center_cmd = NULL;
+
+  if (control_center_cmd == NULL)
     {
-      execute_command ("xfce4-power-manager-settings");
+      if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
+        {
+          control_center_cmd = "xfce4-power-manager-settings";
+        }
+      else
+        {
+          gchar *path;
+
+          path = g_find_program_in_path ("unity-control-center");
+          if (path != NULL)
+            control_center_cmd = "unity-control-center power";
+          else
+            control_center_cmd = "gnome-control-center power";
+
+          g_free (path);
+        }
     }
-  else
-  {
-    gchar *path;
 
-    path = g_find_program_in_path ("unity-control-center");
-    if (path != NULL)
-      execute_command ("unity-control-center power");
-    else
-      execute_command ("gnome-control-center power");
-
-    g_free (path);
-  }
+  execute_command (control_center_cmd);
 }
 
 static void
