@@ -385,7 +385,6 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
         break;
 
       case UP_DEVICE_STATE_CHARGING:
-      case UP_DEVICE_STATE_PENDING_CHARGE:
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_device_icon_index (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-symbolic", kind_str, suffix_str));
@@ -393,6 +392,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, suffix_str));
         break;
 
+      case UP_DEVICE_STATE_PENDING_CHARGE:
       case UP_DEVICE_STATE_DISCHARGING:
       case UP_DEVICE_STATE_PENDING_DISCHARGE:
         /* Don't show the caution/red icons unless we have <=30 min left.
