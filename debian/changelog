@@ -1,3 +1,13 @@
+indicator-power (12.10.6+14.04.20140127-0ubuntu1) trusty; urgency=low
+
+  [ Ricardo Salveti de Araujo ]
+  * device.c: pending_charge means not charging.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 224
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 27 Jan 2014 13:17:49 +0000
+
 indicator-power (12.10.6+14.04.20140124-0ubuntu1) trusty; urgency=low
 
   [ Robert Ancell ]
