@@ -1,3 +1,13 @@
+indicator-power (12.10.6+14.04.20140207-0ubuntu1) trusty; urgency=low
+
+  [ Ted Gould ]
+  * Adding acceptance tests and merge review policies.
+
+  [ CI bot ]
+  * Adding acceptance tests and merge review policies
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 07 Feb 2014 16:32:36 +0000
+
 indicator-power (12.10.6+14.04.20140127-0ubuntu1) trusty; urgency=low
 
   [ Ricardo Salveti de Araujo ]
