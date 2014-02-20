@@ -2,6 +2,8 @@ BUILT_SOURCES=
 CLEANFILES=
 EXTRA_DIST=
 
+SUBDIRS = upstart
+
 #
 # the indicator bus file
 #
