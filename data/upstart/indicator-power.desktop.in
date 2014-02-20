@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Indicator Power
+Exec=@pkglibexecdir@/indicator-power-service
+OnlyShowIn=Unity;
+NoDisplay=true
+StartupNotify=false
+Terminal=false
+Hidden=true

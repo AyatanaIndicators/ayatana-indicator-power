@@ -118,6 +118,7 @@ AC_CONFIG_FILES([
 Makefile
 po/Makefile.in
 data/Makefile
+data/upstart/Makefile
 src/Makefile
 tests/Makefile
 ])
