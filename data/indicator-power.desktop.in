@@ -2,8 +2,7 @@
 Type=Application
 Name=Indicator Power
 Exec=@pkglibexecdir@/indicator-power-service
-NotShowIn=Unity;
+OnlyShowIn=Unity;
 NoDisplay=true
 StartupNotify=false
 Terminal=false
-
