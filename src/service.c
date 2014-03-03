@@ -27,6 +27,7 @@
 #include "device.h"
 #include "device-provider.h"
 #include "ib-brightness-control.h"
+#include "ib-brightness-powerd-control.h"
 #include "service.h"
 
 #define BUS_NAME "com.canonical.indicator.power"
@@ -104,6 +105,7 @@ struct _IndicatorPowerServicePrivate
   GSettings * settings;
 
   IbBrightnessControl * brightness_control;
+  IbBrightnessPowerdControl * brightness_powerd_control;
 
   guint own_id;
   guint actions_export_id;
@@ -440,7 +442,12 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static void
 get_brightness_range (IndicatorPowerService * self, gint * low, gint * high)
 {
-  const int max = ib_brightness_control_get_max_value (self->priv->brightness_control);
+  int max = 0;
+  if (self->priv->brightness_control) {
+    max = ib_brightness_control_get_max_value (self->priv->brightness_control);
+  } else {
+    max = ib_brightness_powerd_control_get_max_value (self->priv->brightness_powerd_control);
+  }
   *low  = max * 0.05; /* 5% minimum -- don't let the screen go completely dark */
   *high = max;
 }
@@ -483,7 +490,15 @@ static GVariant *
 action_state_for_brightness (IndicatorPowerService * self)
 {
   priv_t * p = self->priv;
-  const gint brightness = ib_brightness_control_get_value (p->brightness_control);
+  gint brightness = 0;
+  if (p->brightness_control)
+    {
+      brightness = ib_brightness_control_get_value (p->brightness_control);
+    }
+  else if (p->brightness_powerd_control)
+    {
+      brightness = ib_brightness_powerd_control_get_value (p->brightness_powerd_control);
+    }
   return g_variant_new_double (brightness_to_percentage (self, brightness));
 }
 
@@ -502,7 +517,16 @@ on_brightness_change_requested (GSimpleAction * action      G_GNUC_UNUSED,
   IndicatorPowerService * self = INDICATOR_POWER_SERVICE (gself);
   const gdouble percentage = g_variant_get_double (parameter);
   const int brightness = percentage_to_brightness (self, percentage);
-  ib_brightness_control_set_value (self->priv->brightness_control, brightness);
+
+  if (self->priv->brightness_control)
+    {
+      ib_brightness_control_set_value (self->priv->brightness_control, brightness);
+    }
+  else if (self->priv->brightness_powerd_control)
+    {
+      ib_brightness_powerd_control_set_value (self->priv->brightness_powerd_control, brightness);
+    }
+
   update_brightness_action_state (self);
 }
 
@@ -999,7 +1023,14 @@ my_dispose (GObject * o)
 
   g_clear_object (&p->conn);
 
-  g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
+  if (p->brightness_control)
+    {
+      g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
+    }
+  else if (p->brightness_powerd_control)
+    {
+      g_clear_pointer (&p->brightness_powerd_control, ib_brightness_powerd_control_free);
+    }
 
   indicator_power_service_set_device_provider (self, NULL);
 
@@ -1013,6 +1044,7 @@ my_dispose (GObject * o)
 static void
 indicator_power_service_init (IndicatorPowerService * self)
 {
+  GDBusProxy *powerd_proxy = NULL;
   priv_t * p = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             INDICATOR_TYPE_POWER_SERVICE,
                                             IndicatorPowerServicePrivate);
@@ -1022,7 +1054,18 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
 
-  p->brightness_control = ib_brightness_control_new ();
+  p->brightness_control = NULL;
+  p->brightness_powerd_control = NULL;
+
+  powerd_proxy = powerd_get_proxy();
+  if (powerd_proxy != NULL)
+    {
+      p->brightness_powerd_control = ib_brightness_powerd_control_new(powerd_proxy);
+    }
+  else
+    {
+      p->brightness_control = ib_brightness_control_new ();
+    }
 
   init_gactions (self);
 
