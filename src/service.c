@@ -442,12 +442,16 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static void
 get_brightness_range (IndicatorPowerService * self, gint * low, gint * high)
 {
+  priv_t * p = self->priv;
   int max = 0;
-  if (self->priv->brightness_control) {
-    max = ib_brightness_control_get_max_value (self->priv->brightness_control);
-  } else {
-    max = ib_brightness_powerd_control_get_max_value (self->priv->brightness_powerd_control);
-  }
+  if (p->brightness_control)
+    {
+      max = ib_brightness_control_get_max_value (self->priv->brightness_control);
+    }
+  else if (p->brightness_powerd_control)
+    {
+      max = ib_brightness_powerd_control_get_max_value (self->priv->brightness_powerd_control);
+    }
   *low  = max * 0.05; /* 5% minimum -- don't let the screen go completely dark */
   *high = max;
 }
@@ -1023,14 +1027,9 @@ my_dispose (GObject * o)
 
   g_clear_object (&p->conn);
 
-  if (p->brightness_control)
-    {
-      g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
-    }
-  else if (p->brightness_powerd_control)
-    {
-      g_clear_pointer (&p->brightness_powerd_control, ib_brightness_powerd_control_free);
-    }
+  // g_clear_pointer has NULL check inside.
+  g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
+  g_clear_pointer (&p->brightness_powerd_control, ib_brightness_powerd_control_free);
 
   indicator_power_service_set_device_provider (self, NULL);
 
@@ -1053,9 +1052,6 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->cancellable = g_cancellable_new ();
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
-
-  p->brightness_control = NULL;
-  p->brightness_powerd_control = NULL;
 
   powerd_proxy = powerd_get_proxy();
   if (powerd_proxy != NULL)

@@ -40,8 +40,8 @@ powerd_get_proxy(void)
                 &error);
 
     if (error != NULL) {
-        g_error_free (error);
         g_debug ("could not connect to powerd: %s", error->message);
+        g_error_free (error);
         return NULL;
     }
     return powerd_proxy;
@@ -109,11 +109,12 @@ static void ib_brightness_init(IbBrightnessPowerdControl *control)
 {
     gboolean ret = getBrightnessParams(control->powerd_proxy, &(control->min),
         &(control->max), &(control->dflt), &(control->ab_supported));
-    if (! ret) return;
-
-    ib_brightness_powerd_control_set_value(control, control->max);
+    if (! ret)
+        return;
 
     control->inited = TRUE;
+
+    ib_brightness_powerd_control_set_value(control, control->max * 8 / 10);
 }
 
 IbBrightnessPowerdControl*
@@ -134,8 +135,16 @@ void
 ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint value)
 {
     gboolean ret;
-    if (! self->inited) return;
-    if (value > self->max || value < self->min) return;
+    if (! self->inited)
+        return;
+    if (value > self->max)
+    {
+        value = self->max;
+    }
+    else if (value < self->min)
+    {
+        value = self->min;
+    }
     ret = setUserBrightness(self->powerd_proxy, value);
     if (ret)
     {
@@ -146,14 +155,16 @@ ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint va
 gint
 ib_brightness_powerd_control_get_value (IbBrightnessPowerdControl* self)
 {
-    if (! self->inited) return 0;
+    if (! self->inited)
+        return 0;
     return self->current;
 }
 
 gint
 ib_brightness_powerd_control_get_max_value (IbBrightnessPowerdControl* self)
 {
-    if (! self->inited) return 0;
+    if (! self->inited)
+        return 0;
     return self->max;
 }
 
