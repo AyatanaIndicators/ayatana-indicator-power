@@ -21,11 +21,19 @@
 #define __IB_BRIGHTNESS_POWERD_CONTROL_H__
 
 #include <gio/gio.h>
-GDBusProxy* powerd_get_proxy();
+
+typedef struct {
+    int max;
+    int min;
+    int dflt;
+    gboolean ab_supported;
+} brightness_params_t;
+
+GDBusProxy* powerd_get_proxy(brightness_params_t *);
 
 typedef struct _IbBrightnessPowerdControl IbBrightnessPowerdControl;
 
-IbBrightnessPowerdControl* ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy);
+IbBrightnessPowerdControl* ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t params);
 void                       ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint value);
 gint                       ib_brightness_powerd_control_get_value (IbBrightnessPowerdControl* self);
 gint                       ib_brightness_powerd_control_get_max_value (IbBrightnessPowerdControl* self);

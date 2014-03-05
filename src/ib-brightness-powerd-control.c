@@ -26,10 +26,18 @@
 
 #include "ib-brightness-powerd-control.h"
 
+static gboolean getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max,
+    int *dflt, gboolean *ab_supported);
+
 GDBusProxy*
-powerd_get_proxy(void)
+powerd_get_proxy(brightness_params_t *params)
 {
     GError *error = NULL;
+    gboolean ret;
+
+    if (params == NULL)
+        return NULL;
+
     GDBusProxy* powerd_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
                 G_DBUS_PROXY_FLAGS_NONE,
                 NULL,
@@ -39,11 +47,23 @@ powerd_get_proxy(void)
                 NULL,
                 &error);
 
-    if (error != NULL) {
+    if (error != NULL)
+    {
         g_debug ("could not connect to powerd: %s", error->message);
         g_error_free (error);
         return NULL;
     }
+
+    ret = getBrightnessParams(powerd_proxy, &(params->min), &(params->max),
+        &(params->dflt), &(params->ab_supported));
+
+    if (! ret)
+    {
+        g_debug ("can't get brightness parameters from powerd");
+        g_object_unref (powerd_proxy);
+        return NULL;
+    }
+    
     return powerd_proxy;
 }
 
@@ -58,7 +78,7 @@ getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max, int *dflt, gbo
             "getBrightnessParams",
             NULL,
             G_DBUS_CALL_FLAGS_NONE,
-            -1, NULL, &error);
+            400, NULL, &error); // timeout: 400 ms
     if (!ret) {
         g_warning("getBrightnessParams failed: %s", error->message);
         g_error_free(error);
@@ -92,8 +112,6 @@ static gboolean setUserBrightness(GDBusProxy* powerd_proxy, int brightness)
 
 struct _IbBrightnessPowerdControl
 {
-    gboolean inited;
-
     GDBusProxy *powerd_proxy;
 
     int min;
@@ -104,29 +122,20 @@ struct _IbBrightnessPowerdControl
     int current;
 };
 
-
-static void ib_brightness_init(IbBrightnessPowerdControl *control)
-{
-    gboolean ret = getBrightnessParams(control->powerd_proxy, &(control->min),
-        &(control->max), &(control->dflt), &(control->ab_supported));
-    if (! ret)
-        return;
-
-    control->inited = TRUE;
-
-    ib_brightness_powerd_control_set_value(control, control->max * 8 / 10);
-}
-
 IbBrightnessPowerdControl*
-ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy)
+ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t params)
 {
     IbBrightnessPowerdControl *control;
 
     control = g_new0 (IbBrightnessPowerdControl, 1);
-    control->inited = FALSE;
     control->powerd_proxy = powerd_proxy;
 
-    ib_brightness_init(control);
+    control->min = params.min;
+    control->max = params.max;
+    control->dflt = params.dflt;
+    control->ab_supported = params.ab_supported;
+
+    ib_brightness_powerd_control_set_value(control, control->max * 8 / 10);
 
     return control;
 }
@@ -135,8 +144,6 @@ void
 ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint value)
 {
     gboolean ret;
-    if (! self->inited)
-        return;
     if (value > self->max)
     {
         value = self->max;
@@ -155,16 +162,12 @@ ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint va
 gint
 ib_brightness_powerd_control_get_value (IbBrightnessPowerdControl* self)
 {
-    if (! self->inited)
-        return 0;
     return self->current;
 }
 
 gint
 ib_brightness_powerd_control_get_max_value (IbBrightnessPowerdControl* self)
 {
-    if (! self->inited)
-        return 0;
     return self->max;
 }
 
