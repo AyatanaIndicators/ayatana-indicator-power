@@ -232,7 +232,11 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
         break;
     }
 
-  /* update inestimable_at */
+  /**
+   * Check to see if the time-remaining value is estimable.
+   * When it first becomes inestimable, kick off a timer because
+   * we need to track that to generate the appropriate title text.
+   */
 
   const gboolean is_inestimable = (p->time == 0)
                                && (p->state != UP_DEVICE_STATE_FULLY_CHARGED)
@@ -601,7 +605,7 @@ get_expanded_time_remaining (const IndicatorPowerDevice * device,
   if (p->time && ((p->state == UP_DEVICE_STATE_CHARGING) || (p->state == UP_DEVICE_STATE_DISCHARGING)))
     {
       int minutes = p->time / 60;
-      int hours = minutes / 60;
+      const int hours = minutes / 60;
       minutes %= 60;
 
       if (p->state == UP_DEVICE_STATE_CHARGING)
@@ -642,12 +646,12 @@ get_accessible_time_remaining (const IndicatorPowerDevice * device,
   if (p->time && ((p->state == UP_DEVICE_STATE_CHARGING) || (p->state == UP_DEVICE_STATE_DISCHARGING)))
     {
       int minutes = p->time / 60;
-      int hours = minutes / 60;
+      const int hours = minutes / 60;
       minutes %= 60;
 
       if (p->state == UP_DEVICE_STATE_CHARGING)
         {
-          if (hours)
+          if (hours > 0)
             g_snprintf (str, size, _("%d %s %d %s to charge"),
                         hours, g_dngettext (NULL, "hour", "hours", hours),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
@@ -657,7 +661,7 @@ get_accessible_time_remaining (const IndicatorPowerDevice * device,
         }
       else // discharging
         {
-          if (hours)
+          if (hours > 0)
             g_snprintf (str, size, _("%d %s %d %s left"),
                         hours, g_dngettext (NULL, "hour", "hours", hours),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
@@ -767,14 +771,6 @@ indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device,
   get_menuitem_text (device, str, size, TRUE);
 }
 
-#if 0
-- If the time is relevant, the brackets should contain the time-remaining string for that component.
-+ If the time is relevant, the brackets should contain the brief time-remaining string for that component.
-
-- Regardless, the accessible name for the whole menu title should be the same as the accessible name for that thing’s component inside the menu itself. 
-+ The accessible name for the whole menu title should be the same as the except using the accessible time-remaining string instead of the brief time-remaining string.
-#endif
-
 /**
  * If the time is relevant and/or “Show Percentage in Menu Bar” is checked,
  * the icon should be followed by brackets.
@@ -804,12 +800,15 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
 
   p = device->priv;
 
+  // if we can't provide time-remaining, turn off the time flag
   if (want_time && !time_is_relevant (device))
     want_time = FALSE;
 
+  // if we can't provide percent, turn off the percent flag
   if (p->percentage < 0.01)
     want_percent = FALSE;
 
+  // try to build the time-remaining string
   if (want_time)
     {
       get_brief_time_remaining (device, tr, sizeof(tr));
