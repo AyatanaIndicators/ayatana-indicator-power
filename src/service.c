@@ -312,21 +312,7 @@ static GVariant *
 create_header_state (IndicatorPowerService * self)
 {
   GVariantBuilder b;
-  gchar * label = NULL;
-  gchar * a11y = NULL;
-  GIcon * icon = NULL;
-  priv_t * p = self->priv;
-
-  if (p->primary_device != NULL)
-    {
-      indicator_power_device_get_header (p->primary_device,
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S),
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S),
-                                         &label,
-                                         &a11y);
-
-      icon = indicator_power_device_get_gicon (p->primary_device);
-    }
+  const priv_t * const p = self->priv;
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
@@ -335,24 +321,42 @@ create_header_state (IndicatorPowerService * self)
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
-  if (label != NULL)
-    g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (label));
-
-  if (icon != NULL)
+  if (p->primary_device != NULL)
     {
-      GVariant * v;
+      char buf[128];
+      GIcon * icon;
+      const gboolean want_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
+      const gboolean want_percent = g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S);
 
-      if ((v = g_icon_serialize (icon)))
+      indicator_power_device_get_readable_title (p->primary_device,
+                                                 buf, sizeof(buf),
+                                                 want_time,
+                                                 want_percent);
+      if (*buf)
+        g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string (buf));
+
+
+      indicator_power_device_get_accessible_title (p->primary_device,
+                                                   buf, sizeof(buf),
+                                                   want_time,
+                                                   want_percent);
+      if (*buf)
+        g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_string (buf));
+
+
+      if ((icon = indicator_power_device_get_gicon (p->primary_device)))
         {
-          g_variant_builder_add (&b, "{sv}", "icon", v);
-          g_variant_unref (v);
+          GVariant * serialized_icon = g_icon_serialize (icon);
+
+          if (serialized_icon != NULL)
+            {
+              g_variant_builder_add (&b, "{sv}", "icon", serialized_icon);
+              g_variant_unref (serialized_icon);
+            }
+
+          g_object_unref (icon);
         }
-
-      g_object_unref (icon);
     }
-
-  if (a11y != NULL)
-    g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (a11y));
 
   return g_variant_builder_end (&b);
 }
@@ -371,27 +375,30 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
   if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
-    char * label;
+    char buf[128];
     GMenuItem * item;
     GIcon * icon;
 
-    label = indicator_power_device_get_label (device);
-    item = g_menu_item_new (label, "indicator.activate-statistics");
-    g_free (label);
-    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
-                                      indicator_power_device_get_object_path (device));
+    indicator_power_device_get_readable_text (device, buf, sizeof(buf));
+    item = g_menu_item_new (buf, "indicator.activate-statistics");
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
-        GVariant * v;
-        if ((v = g_icon_serialize (icon)))
+        GVariant * serialized_icon = g_icon_serialize (icon);
+
+        if (serialized_icon != NULL)
           {
-            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_ICON, v);
-            g_variant_unref (v);
+            g_menu_item_set_attribute_value (item,
+                                             G_MENU_ATTRIBUTE_ICON,
+                                             serialized_icon);
+            g_variant_unref (serialized_icon);
           }
 
         g_object_unref (icon);
       }
+
+    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
+                                      indicator_power_device_get_object_path (device));
 
     g_menu_append_item (menu, item);
     g_object_unref (item);

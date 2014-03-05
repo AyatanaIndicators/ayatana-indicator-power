@@ -72,12 +72,11 @@ class DeviceTest : public ::testing::Test
     void check_label (const IndicatorPowerDevice * device,
                       const char * expected_label)
     {
-      char * label;
-
-      label = indicator_power_device_get_label (device);
+      char label[128];
+      indicator_power_device_get_readable_text (device, label, sizeof(label));
+      if (expected_label == nullptr)
+        expected_label = "";
       EXPECT_STREQ (expected_label, label);
-
-      g_free (label);
     }
 
     void check_header (const IndicatorPowerDevice * device,
@@ -86,32 +85,23 @@ class DeviceTest : public ::testing::Test
                        const char * expected_percent,
                        const char * expected_a11y)
     {
-      char * label;
-      char * a11y;
+      char a11y[128];
+      char title[128];
 
-      indicator_power_device_get_header (device, true, true, &label, &a11y);
-      EXPECT_STREQ (expected_time_and_percent, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      indicator_power_device_get_readable_title (device, title, sizeof(title), true, true);
+      EXPECT_STREQ (expected_time_and_percent ? expected_time_and_percent : "", title);
 
-      indicator_power_device_get_header (device, true, false, &label, &a11y);
-      EXPECT_STREQ (expected_time, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      indicator_power_device_get_readable_title (device, title, sizeof(title), true, false);
+      EXPECT_STREQ (expected_time ? expected_time : "", title);
 
-      indicator_power_device_get_header (device, false, true, &label, &a11y);
-      EXPECT_STREQ (expected_percent, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      indicator_power_device_get_readable_title (device, title, sizeof(title), false, true);
+      EXPECT_STREQ (expected_percent ? expected_percent : "", title);
 
-      indicator_power_device_get_header (device, false, false, &label, &a11y);
-      ASSERT_TRUE (!label || !*label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      indicator_power_device_get_readable_title (device, title, sizeof(title), false, false);
+      EXPECT_STREQ ("", title);
+
+      indicator_power_device_get_accessible_title (device, a11y, sizeof(a11y), false, false);
+      EXPECT_STREQ (expected_a11y ? expected_a11y : "", a11y);
     }
 };
 
@@ -481,14 +471,16 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
   // bad args: NULL device
-  log_count_ipower_expected += 5;
+  log_count_ipower_expected++;
   check_label (NULL, NULL);
+  log_count_ipower_expected += 5;
   check_header (NULL, NULL, NULL, NULL, NULL);
 
   // bad args: a GObject that isn't a device
-  log_count_ipower_expected += 5;
   GObject * o = G_OBJECT(g_cancellable_new());
+  log_count_ipower_expected++;
   check_label ((IndicatorPowerDevice*)o, NULL);
+  log_count_ipower_expected += 5;
   check_header (NULL, NULL, NULL, NULL, NULL);
   g_object_unref (o);
 
@@ -509,7 +501,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(1:01, 50%)",
                         "(1:01)",
                         "(50%)",
-                        "Battery (1 hour 1 minute to charge, 50%)");
+                        "Battery (1 hour 1 minute to charge)");
 
   // discharging, < 12 hours left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -521,7 +513,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(1:01, 50%)",
                         "(1:01)",
                         "(50%)",
-                        "Battery (1 hour 1 minute left, 50%)");
+                        "Battery (1 hour 1 minute left)");
 
   // discharging, > 24 hours left
   // we don't show the clock time when > 24 hours discharging
@@ -534,7 +526,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(50%)",
                         "",
                         "(50%)",
-                        "Battery (50%)");
+                        "Battery");
 
 // fully charged
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -546,7 +538,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(100%)",
                         "",
                         "(100%)",
-                        "Battery (charged, 100%)");
+                        "Battery (charged)");
 
   // percentage but no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -558,7 +550,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(estimating…, 50%)",
                         "(estimating…)",
                         "(50%)",
-                        "Battery (estimating…, 50%)");
+                        "Battery (estimating…)");
 
   // no percentage, no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -566,8 +558,8 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_label (device, "Battery (not present)");
-  check_header (device, "", "", "", "Battery (not present)");
+  check_label (device, "Battery");
+  check_header (device, "", "", "", "Battery");
 
   // power line
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
@@ -583,6 +575,84 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", real_lang, TRUE);
   g_free (real_lang);
 }
+
+
+TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
+{
+  // set our language so that i18n won't break these tests
+  auto real_lang = g_strdup(g_getenv ("LANG"));
+  g_setenv ("LANG", "en_US.UTF-8", true);
+
+  // set up the main loop
+  auto loop = g_main_loop_new (nullptr, false);
+  auto loop_quit_sourcefunc = [](gpointer l){
+    g_main_loop_quit(static_cast<GMainLoop*>(l));
+    return G_SOURCE_REMOVE;
+  };
+
+  auto device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, nullptr));
+  auto o = G_OBJECT(device);
+
+  // percentage but no time estimate
+  auto timer = g_timer_new ();
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                   nullptr);
+
+  /*
+   * “estimating…” if the time remaining has been inestimable for
+   * less than 30 seconds; otherwise “unknown” if the time remaining
+   * has been inestimable for between 30 seconds and one minute;
+   * otherwise the empty string.
+   */
+  for (;;)
+    {
+      g_timeout_add_seconds (1, loop_quit_sourcefunc, loop);
+      g_main_loop_run (loop);
+
+      const auto elapsed = g_timer_elapsed (timer, nullptr);
+
+      if (elapsed < 30)
+        {
+          check_label (device, "Battery (estimating…)");
+          check_header (device, "(estimating…, 50%)",
+                                "(estimating…)",
+                                "(50%)",
+                                "Battery (estimating…)");
+        }
+      else if (elapsed < 60)
+        {
+          check_label (device, "Battery (unknown)");
+          check_header (device, "(unknown, 50%)",
+                                "(unknown)",
+                                "(50%)",
+                                "Battery (unknown)");
+        }
+      else if (elapsed < 80)
+        {
+          check_label (device, "Battery");
+          check_header (device, "(50%)",
+                                "",
+                                "(50%)",
+                                "Battery");
+        }
+      else
+        {
+          break;
+        }
+    }
+
+  g_main_loop_unref (loop);
+
+  // cleanup
+  g_timer_destroy (timer);
+  g_object_unref (o);
+  g_setenv ("LANG", real_lang, TRUE);
+  g_free (real_lang);
+}
+
 
 /* The menu title should tell you at a glance what you need to know most: what
    device will lose power soonest (and optionally when), or otherwise which
@@ -645,10 +715,12 @@ TEST_F(DeviceTest, ChoosePrimary)
                            INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
                            NULL);
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
+          g_object_unref (G_OBJECT(a));
 
           /* reverse the list to check that list order doesn't matter */
           device_list = g_list_reverse (device_list);
           ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
+          g_object_unref (G_OBJECT(a));
         }
     }
 
