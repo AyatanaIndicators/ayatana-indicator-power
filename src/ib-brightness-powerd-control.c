@@ -90,7 +90,7 @@ getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max, int *dflt, gbo
     return TRUE;
 }
 
-static gboolean setUserBrightness(GDBusProxy* powerd_proxy, int brightness)
+static gboolean setUserBrightness(GDBusProxy* powerd_proxy, GCancellable *gcancel, int brightness)
 {
     GVariant *ret = NULL;
     GError *error = NULL;
@@ -99,7 +99,7 @@ static gboolean setUserBrightness(GDBusProxy* powerd_proxy, int brightness)
             "setUserBrightness",
             g_variant_new("(i)", brightness),
             G_DBUS_CALL_FLAGS_NONE,
-            -1, NULL, &error);
+            -1, gcancel, &error);
     if (!ret) {
         g_warning("setUserBrightness failed: %s", error->message);
         g_error_free(error);
@@ -113,6 +113,7 @@ static gboolean setUserBrightness(GDBusProxy* powerd_proxy, int brightness)
 struct _IbBrightnessPowerdControl
 {
     GDBusProxy *powerd_proxy;
+    GCancellable *gcancel;
 
     int min;
     int max;
@@ -129,6 +130,7 @@ ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t 
 
     control = g_new0 (IbBrightnessPowerdControl, 1);
     control->powerd_proxy = powerd_proxy;
+    control->gcancel = g_cancellable_new();
 
     control->min = params.min;
     control->max = params.max;
@@ -152,7 +154,7 @@ ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint va
     {
         value = self->min;
     }
-    ret = setUserBrightness(self->powerd_proxy, value);
+    ret = setUserBrightness(self->powerd_proxy, self->gcancel, value);
     if (ret)
     {
         self->current = value;
@@ -174,6 +176,8 @@ ib_brightness_powerd_control_get_max_value (IbBrightnessPowerdControl* self)
 void
 ib_brightness_powerd_control_free (IbBrightnessPowerdControl *self)
 {
+    g_cancellable_cancel (self->gcancel);
+    g_object_unref (self->gcancel);
     g_object_unref (self->powerd_proxy);
     g_free (self);
 }
