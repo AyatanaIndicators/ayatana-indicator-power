@@ -1,3 +1,10 @@
+indicator-power (12.10.6+14.04.20140306-0ubuntu1) trusty; urgency=low
+
+  [ Simon Steinbeiß ]
+  * Add xfce4-powermanager as alternative recommend
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 06 Mar 2014 11:51:54 +0000
+
 indicator-power (12.10.6+14.04.20140207-0ubuntu1) trusty; urgency=low
 
   [ Ted Gould ]
