@@ -17,13 +17,6 @@
  *     Yuan-Chen Cheng <yc.cheng@canonical.com>
  */
 
-#include <gudev/gudev.h>
-
-#include <errno.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
-
 #include "ib-brightness-powerd-control.h"
 
 static gboolean getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max,
@@ -35,8 +28,7 @@ powerd_get_proxy(brightness_params_t *params)
     GError *error = NULL;
     gboolean ret;
 
-    if (params == NULL)
-        return NULL;
+    g_return_val_if_fail (params != NULL, NULL);
 
     GDBusProxy* powerd_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
                 G_DBUS_PROXY_FLAGS_NONE,
@@ -79,9 +71,16 @@ getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max, int *dflt, gbo
             NULL,
             G_DBUS_CALL_FLAGS_NONE,
             400, NULL, &error); // timeout: 400 ms
-    if (!ret) {
-        g_warning("getBrightnessParams failed: %s", error->message);
-        g_error_free(error);
+    if (!ret)
+    {
+        if (error != NULL)
+        {
+            if (!g_error_matches(error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
+            {
+                g_warning("getBrightnessParams from powerd failed: %s", error->message);
+            }
+            g_error_free(error);
+        }
         return FALSE;
     }
 
@@ -101,7 +100,7 @@ static gboolean setUserBrightness(GDBusProxy* powerd_proxy, GCancellable *gcance
             G_DBUS_CALL_FLAGS_NONE,
             -1, gcancel, &error);
     if (!ret) {
-        g_warning("setUserBrightness failed: %s", error->message);
+        g_warning("setUserBrightness via powerd failed: %s", error->message);
         g_error_free(error);
         return FALSE;
     } else {
@@ -117,7 +116,7 @@ struct _IbBrightnessPowerdControl
 
     int min;
     int max;
-    int dflt;
+    int dflt; // defalut value
     gboolean ab_supported;
 
     int current;
@@ -137,7 +136,11 @@ ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t 
     control->dflt = params.dflt;
     control->ab_supported = params.ab_supported;
 
-    ib_brightness_powerd_control_set_value(control, control->max * 8 / 10);
+    // XXX: set the brightness value is the only way to sync the brightness value with
+    // powerd, and we should set the user prefered / last set brightness value upon startup.
+    // Before we have code to store last set brightness value or other mechanism, we set
+    // it to default brightness that powerd proposed.
+    ib_brightness_powerd_control_set_value(control, control->dflt);
 
     return control;
 }
@@ -146,14 +149,8 @@ void
 ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint value)
 {
     gboolean ret;
-    if (value > self->max)
-    {
-        value = self->max;
-    }
-    else if (value < self->min)
-    {
-        value = self->min;
-    }
+
+    value = CLAMP(value, self->min, self->max);
     ret = setUserBrightness(self->powerd_proxy, self->gcancel, value);
     if (ret)
     {

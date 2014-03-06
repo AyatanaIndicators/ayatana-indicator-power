@@ -1043,8 +1043,8 @@ my_dispose (GObject * o)
 static void
 indicator_power_service_init (IndicatorPowerService * self)
 {
-  GDBusProxy *powerd_proxy = NULL;
-  brightness_params_t powerd_brigtness_params;
+  GDBusProxy *powerd_proxy;
+  brightness_params_t powerd_brightness_params;
   priv_t * p = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             INDICATOR_TYPE_POWER_SERVICE,
                                             IndicatorPowerServicePrivate);
@@ -1054,10 +1054,10 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
 
-  powerd_proxy = powerd_get_proxy(&powerd_brigtness_params);
+  powerd_proxy = powerd_get_proxy(&powerd_brightness_params);
   if (powerd_proxy != NULL)
     {
-      p->brightness_powerd_control = ib_brightness_powerd_control_new(powerd_proxy, powerd_brigtness_params);
+      p->brightness_powerd_control = ib_brightness_powerd_control_new(powerd_proxy, powerd_brightness_params);
     }
   else
     {
