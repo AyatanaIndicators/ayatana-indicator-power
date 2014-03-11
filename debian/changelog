@@ -1,3 +1,10 @@
+indicator-power (12.10.6+14.04.20140311-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * Add desktop_lockscreen profile
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 11 Mar 2014 18:33:10 +0000
+
 indicator-power (12.10.6+14.04.20140306-0ubuntu1) trusty; urgency=low
 
   [ Simon Steinbeiß ]
