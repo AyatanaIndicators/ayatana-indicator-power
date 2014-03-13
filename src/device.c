@@ -552,7 +552,7 @@ get_brief_time_remaining (const IndicatorPowerDevice * device)
   if (p->time > 0)
     {
       int minutes = p->time / 60;
-      int hours = minutes / 60;
+      const int hours = minutes / 60;
       minutes %= 60;
 
       str = g_strdup_printf("%0d:%02d", hours, minutes);
@@ -604,7 +604,7 @@ get_expanded_time_remaining (const IndicatorPowerDevice * device)
     }
   else
     {
-        str = get_brief_time_remaining (device);
+      str = get_brief_time_remaining (device);
     }
 
   return str;
