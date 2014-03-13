@@ -87,23 +87,35 @@ class DeviceTest : public ::testing::Test
       char * title = NULL;
 
       title = indicator_power_device_get_readable_title (device, true, true);
-      EXPECT_STREQ (expected_time_and_percent, title);
+      if (expected_time_and_percent)
+        EXPECT_STREQ (expected_time_and_percent, title);
+      else
+        EXPECT_EQ(NULL, title);
       g_free (title);
 
       title = indicator_power_device_get_readable_title (device, true, false);
-      EXPECT_STREQ (expected_time, title);
+      if (expected_time)
+        EXPECT_STREQ (expected_time, title);
+      else
+        EXPECT_EQ(NULL, title);
       g_free (title);
 
       title = indicator_power_device_get_readable_title (device, false, true);
-      EXPECT_STREQ (expected_percent, title);
+      if (expected_percent)
+        EXPECT_STREQ (expected_percent, title);
+      else
+        EXPECT_EQ(NULL, title);
       g_free (title);
 
       title = indicator_power_device_get_readable_title (device, false, false);
-      EXPECT_STREQ (NULL, title);
+      EXPECT_EQ(NULL, title);
       g_free (title);
 
       a11y = indicator_power_device_get_accessible_title (device, false, false);
-      EXPECT_STREQ (expected_a11y, a11y);
+      if (expected_a11y)
+        EXPECT_STREQ (expected_a11y, a11y);
+      else
+        EXPECT_EQ(NULL, a11y);
       g_free (a11y);
     }
 };
