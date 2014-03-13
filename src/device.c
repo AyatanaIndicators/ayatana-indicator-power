@@ -585,11 +585,7 @@ static char*
 get_expanded_time_remaining (const IndicatorPowerDevice * device)
 {
   char * str = NULL;
-  const IndicatorPowerDevicePrivate * p;
-
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
-
-  p = device->priv;
+  const IndicatorPowerDevicePrivate * p = device->priv;
 
   if (p->time && ((p->state == UP_DEVICE_STATE_CHARGING) || (p->state == UP_DEVICE_STATE_DISCHARGING)))
     {
@@ -624,11 +620,7 @@ static char *
 get_accessible_time_remaining (const IndicatorPowerDevice * device)
 {
   char * str = NULL;
-  const IndicatorPowerDevicePrivate * p;
-
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
-
-  p = device->priv;
+  const IndicatorPowerDevicePrivate * p = device->priv;
 
   if (p->time && ((p->state == UP_DEVICE_STATE_CHARGING) || (p->state == UP_DEVICE_STATE_DISCHARGING)))
     {
