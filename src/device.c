@@ -728,7 +728,7 @@ get_menuitem_text (const IndicatorPowerDevice * device,
 char *
 indicator_power_device_get_readable_text (const IndicatorPowerDevice * device)
 {
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
 
   return get_menuitem_text (device, FALSE);
 }
@@ -736,7 +736,7 @@ indicator_power_device_get_readable_text (const IndicatorPowerDevice * device)
 char *
 indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device)
 {
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
 
   return get_menuitem_text (device, TRUE);
 }
@@ -762,7 +762,7 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
   char * time_str = NULL;
   const IndicatorPowerDevicePrivate * p;
 
-  g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
 
   p = device->priv;
 
@@ -811,6 +811,8 @@ indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device
                                              gboolean                     want_time G_GNUC_UNUSED,
                                              gboolean                     want_percent G_GNUC_UNUSED)
 {
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
+
   return indicator_power_device_get_accessible_text (device);
 }
 
