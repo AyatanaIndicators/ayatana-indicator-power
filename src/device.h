@@ -126,23 +126,15 @@ GStrv         indicator_power_device_get_icon_names        (const IndicatorPower
 GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device);
 
 
-void          indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device,
-                                                            gchar                      * str,
-                                                            gulong                       size);
+char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device);
 
-void          indicator_power_device_get_accessible_text   (const IndicatorPowerDevice * device,
-                                                            gchar                      * str,
-                                                            gulong                       size);
+char        * indicator_power_device_get_accessible_text   (const IndicatorPowerDevice * device);
 
-void           indicator_power_device_get_readable_title   (const IndicatorPowerDevice * device,
-                                                            gchar                      * str,
-                                                            gulong                       size,
+char        * indicator_power_device_get_readable_title    (const IndicatorPowerDevice * device,
                                                             gboolean                     want_time,
                                                             gboolean                     want_percent);
 
-void           indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device,
-                                                            gchar                      * str,
-                                                            gulong                       size,
+char        * indicator_power_device_get_accessible_title  (const IndicatorPowerDevice * device,
                                                             gboolean                     want_time,
                                                             gboolean                     want_percent);
 

@@ -543,11 +543,10 @@ device_kind_to_localised_string (UpDeviceKind kind)
  *    between 30 seconds and one minute; otherwise
  *  * the empty string.
  */
-static void
-get_brief_time_remaining (const IndicatorPowerDevice * device,
-                          char                       * str,
-                          gulong                       size)
+static char *
+get_brief_time_remaining (const IndicatorPowerDevice * device)
 {
+  gchar * str = NULL;
   const IndicatorPowerDevicePrivate * p = device->priv;
 
   if (p->time > 0)
@@ -556,7 +555,7 @@ get_brief_time_remaining (const IndicatorPowerDevice * device,
       int hours = minutes / 60;
       minutes %= 60;
 
-      g_snprintf (str, size, "%0d:%02d", hours, minutes);
+      str = g_strdup_printf("%0d:%02d", hours, minutes);
     }
   else if (p->inestimable != NULL)
     {
@@ -564,21 +563,15 @@ get_brief_time_remaining (const IndicatorPowerDevice * device,
 
       if (elapsed < 30)
         {
-          g_snprintf (str, size, _("estimating…"));
+          str = g_strdup_printf (_("estimating…"));
         }
       else if (elapsed < 60)
         {
-          g_snprintf (str, size, _("unknown"));
-        }
-      else
-        {
-          *str = '\0';
+          str = g_strdup_printf (_("unknown"));
         }
     }
-  else
-    {
-      *str = '\0';
-    }
+
+  return str;
 }
 
 /**
@@ -588,16 +581,12 @@ get_brief_time_remaining (const IndicatorPowerDevice * device,
  *  * if the component is charging, it should be “H:MM to charge”
  *  * if the component is discharging, it should be “H:MM left”.
  */
-static void
-get_expanded_time_remaining (const IndicatorPowerDevice * device,
-                             char                       * str,
-                             gulong                       size)
+static char*
+get_expanded_time_remaining (const IndicatorPowerDevice * device)
 {
+  char * str = NULL;
   const IndicatorPowerDevicePrivate * p;
 
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (size > 0);
-  *str = '\0';
   g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
 
   p = device->priv;
@@ -610,35 +599,33 @@ get_expanded_time_remaining (const IndicatorPowerDevice * device,
 
       if (p->state == UP_DEVICE_STATE_CHARGING)
         {
-          g_snprintf (str, size, _("%0d:%02d to charge"), hours, minutes);
+          str = g_strdup_printf (_("%0d:%02d to charge"), hours, minutes);
         }
       else // discharging
         {
-          g_snprintf (str, size, _("%0d:%02d left"), hours, minutes);
+          str = g_strdup_printf (_("%0d:%02d left"), hours, minutes);
         }
     }
   else
     {
-        get_brief_time_remaining (device, str, size);
+        str = get_brief_time_remaining (device);
     }
+
+  return str;
 }
 
 /**
  * The '''accessible time-remaining string''' for a component
  * should be the same as the expanded time-remaining string,
  * except the H:MM time should be rendered as “''H'' hours ''M'' minutes”,
- * or just as “''M'' * minutes” if the time is less than one hour.
+ * or just as “''M'' minutes” if the time is less than one hour.
  */
-static void
-get_accessible_time_remaining (const IndicatorPowerDevice * device,
-                               char                       * str,
-                               gulong                       size)
+static char *
+get_accessible_time_remaining (const IndicatorPowerDevice * device)
 {
+  char * str = NULL;
   const IndicatorPowerDevicePrivate * p;
 
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (size > 0);
-  *str = '\0';
   g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
 
   p = device->priv;
@@ -652,28 +639,30 @@ get_accessible_time_remaining (const IndicatorPowerDevice * device,
       if (p->state == UP_DEVICE_STATE_CHARGING)
         {
           if (hours > 0)
-            g_snprintf (str, size, _("%d %s %d %s to charge"),
+            str = g_strdup_printf (_("%d %s %d %s to charge"),
                         hours, g_dngettext (NULL, "hour", "hours", hours),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
          else
-            g_snprintf (str, size, _("%d %s to charge"),
+            str = g_strdup_printf (_("%d %s to charge"),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
         }
       else // discharging
         {
           if (hours > 0)
-            g_snprintf (str, size, _("%d %s %d %s left"),
+            str = g_strdup_printf (_("%d %s %d %s left"),
                         hours, g_dngettext (NULL, "hour", "hours", hours),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
          else
-            g_snprintf (str, size, _("%d %s left"),
+            str = g_strdup_printf (_("%d %s left"),
                         minutes, g_dngettext (NULL, "minute", "minutes", minutes));
         }
     }
   else
     {
-        get_brief_time_remaining (device, str, size);
+      str = get_brief_time_remaining (device);
     }
+
+  return str;
 }
 
 /**
@@ -709,66 +698,55 @@ time_is_relevant (const IndicatorPowerDevice * device)
  * visible label, except with the accessible time-remaining string
  * instead of the expanded time-remaining string. 
  */
-static void
+static char *
 get_menuitem_text (const IndicatorPowerDevice * device,
-                   gchar                      * str,
-                   gulong                       size,
                    gboolean                     accessible)
 {
+  char * str = NULL;
   const IndicatorPowerDevicePrivate * p = device->priv;
   const char * kind_str = device_kind_to_localised_string (p->kind);
 
   if (p->state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
-      g_snprintf (str, size, _("%s (charged)"), kind_str);
+      str = g_strdup_printf (_("%s (charged)"), kind_str);
     }
   else
     {
-      char buf[64];
+      char * time_str = NULL;
 
       if (time_is_relevant (device))
         {
           if (accessible)
-            get_accessible_time_remaining (device, buf, sizeof(buf));
+            time_str = get_accessible_time_remaining (device);
           else
-            get_expanded_time_remaining (device, buf, sizeof(buf));
-        }
-      else
-        {
-          *buf = '\0';
+            time_str = get_expanded_time_remaining (device);
         }
 
-      if (*buf)
-        g_snprintf (str, size, _("%s (%s)"), kind_str, buf);
+      if (time_str && *time_str)
+        str = g_strdup_printf (_("%s (%s)"), kind_str, time_str);
       else
-        g_strlcpy (str, kind_str, size);
+        str = g_strdup (kind_str);
+
+      g_free (time_str);
     }
+
+  return str;
 }
 
-void
-indicator_power_device_get_readable_text (const IndicatorPowerDevice * device,
-                                          gchar                      * str,
-                                          gulong                       size)
+char *
+indicator_power_device_get_readable_text (const IndicatorPowerDevice * device)
 {
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (size > 0);
-  *str = '\0';
   g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
 
-  get_menuitem_text (device, str, size, FALSE);
+  return get_menuitem_text (device, FALSE);
 }
 
-void
-indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device,
-                                            gchar                      * str,
-                                            gulong                       size)
+char *
+indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device)
 {
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (size > 0);
-  *str = '\0';
   g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
 
-  get_menuitem_text (device, str, size, TRUE);
+  return get_menuitem_text (device, TRUE);
 }
 
 /**
@@ -783,19 +761,15 @@ indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device,
  *
  * If both conditions are true, the time and percentage should be separated by a space. 
  */
-void
+char*
 indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
-                                           gchar                      * str,
-                                           gulong                       size,
                                            gboolean                     want_time,
                                            gboolean                     want_percent)
 {
-  char tr[64];
+  char * str = NULL;
+  char * time_str = NULL;
   const IndicatorPowerDevicePrivate * p;
 
-  g_return_if_fail (str != NULL);
-  g_return_if_fail (size > 0);
-  *str = '\0';
   g_return_if_fail (INDICATOR_IS_POWER_DEVICE(device));
 
   p = device->priv;
@@ -811,42 +785,41 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
   // try to build the time-remaining string
   if (want_time)
     {
-      get_brief_time_remaining (device, tr, sizeof(tr));
-
-      if (!*tr)
-        want_time = FALSE;
+      time_str = get_brief_time_remaining (device);
+      want_time = time_str && *time_str;
     }
 
   if (want_time && want_percent)
     {
-      g_snprintf (str, size, _("(%s, %.0lf%%)"), tr, p->percentage);
+      str = g_strdup_printf (_("(%s, %.0lf%%)"), time_str, p->percentage);
     }
   else if (want_time)
     {
-      g_snprintf (str, size, _("(%s)"), tr);
+      str = g_strdup_printf (_("(%s)"), time_str);
     }
   else if (want_percent)
     {
-      g_snprintf (str, size, _("(%.0lf%%)"), p->percentage);
+      str = g_strdup_printf (_("(%.0lf%%)"), p->percentage);
     }
   else
     {
-      *str = '\0';
+      str = NULL;
     }
+
+  g_free (time_str);
+  return str;
 }
 
 /**
  * Regardless, the accessible name for the whole menu title should be the same
  * as the accessible name for that thing’s component inside the menu itself. 
  */
-void
+char *
 indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device,
-                                             gchar                      * str,
-                                             gulong                       size,
                                              gboolean                     want_time G_GNUC_UNUSED,
                                              gboolean                     want_percent G_GNUC_UNUSED)
 {
-  indicator_power_device_get_accessible_text (device, str, size);
+  return indicator_power_device_get_accessible_text (device);
 }
 
 /***

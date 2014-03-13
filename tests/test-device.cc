@@ -72,11 +72,9 @@ class DeviceTest : public ::testing::Test
     void check_label (const IndicatorPowerDevice * device,
                       const char * expected_label)
     {
-      char label[128];
-      indicator_power_device_get_readable_text (device, label, sizeof(label));
-      if (expected_label == nullptr)
-        expected_label = "";
+      char * label = indicator_power_device_get_readable_text (device);
       EXPECT_STREQ (expected_label, label);
+      g_free (label);
     }
 
     void check_header (const IndicatorPowerDevice * device,
@@ -85,23 +83,28 @@ class DeviceTest : public ::testing::Test
                        const char * expected_percent,
                        const char * expected_a11y)
     {
-      char a11y[128];
-      char title[128];
+      char * a11y = NULL;
+      char * title = NULL;
 
-      indicator_power_device_get_readable_title (device, title, sizeof(title), true, true);
-      EXPECT_STREQ (expected_time_and_percent ? expected_time_and_percent : "", title);
+      title = indicator_power_device_get_readable_title (device, true, true);
+      EXPECT_STREQ (expected_time_and_percent, title);
+      g_free (title);
 
-      indicator_power_device_get_readable_title (device, title, sizeof(title), true, false);
-      EXPECT_STREQ (expected_time ? expected_time : "", title);
+      title = indicator_power_device_get_readable_title (device, true, false);
+      EXPECT_STREQ (expected_time, title);
+      g_free (title);
 
-      indicator_power_device_get_readable_title (device, title, sizeof(title), false, true);
-      EXPECT_STREQ (expected_percent ? expected_percent : "", title);
+      title = indicator_power_device_get_readable_title (device, false, true);
+      EXPECT_STREQ (expected_percent, title);
+      g_free (title);
 
-      indicator_power_device_get_readable_title (device, title, sizeof(title), false, false);
-      EXPECT_STREQ ("", title);
+      title = indicator_power_device_get_readable_title (device, false, false);
+      EXPECT_STREQ (NULL, title);
+      g_free (title);
 
-      indicator_power_device_get_accessible_title (device, a11y, sizeof(a11y), false, false);
-      EXPECT_STREQ (expected_a11y ? expected_a11y : "", a11y);
+      a11y = indicator_power_device_get_accessible_title (device, false, false);
+      EXPECT_STREQ (expected_a11y, a11y);
+      g_free (a11y);
     }
 };
 
@@ -524,7 +527,7 @@ TEST_F(DeviceTest, Labels)
                    NULL);
   check_label (device, "Battery");
   check_header (device, "(50%)",
-                        "",
+                        NULL,
                         "(50%)",
                         "Battery");
 
@@ -536,7 +539,7 @@ TEST_F(DeviceTest, Labels)
                    NULL);
   check_label (device, "Battery (charged)");
   check_header (device, "(100%)",
-                        "",
+                        NULL,
                         "(100%)",
                         "Battery (charged)");
 
@@ -559,7 +562,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
   check_label (device, "Battery");
-  check_header (device, "", "", "", "Battery");
+  check_header (device, NULL, NULL, NULL, "Battery");
 
   // power line
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
@@ -568,7 +571,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
   check_label (device, "AC Adapter");
-  check_header (device, "", "", "", "AC Adapter");
+  check_header (device, NULL, NULL, NULL, "AC Adapter");
 
   // cleanup
   g_object_unref(o);
@@ -634,7 +637,7 @@ TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
         {
           check_label (device, "Battery");
           check_header (device, "(50%)",
-                                "",
+                                NULL,
                                 "(50%)",
                                 "Battery");
         }

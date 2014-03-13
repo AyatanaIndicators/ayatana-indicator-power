@@ -323,26 +323,32 @@ create_header_state (IndicatorPowerService * self)
 
   if (p->primary_device != NULL)
     {
-      char buf[128];
+      char * title;
       GIcon * icon;
       const gboolean want_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
       const gboolean want_percent = g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S);
 
-      indicator_power_device_get_readable_title (p->primary_device,
-                                                 buf, sizeof(buf),
-                                                 want_time,
-                                                 want_percent);
-      if (*buf)
-        g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string (buf));
+      title = indicator_power_device_get_readable_title (p->primary_device,
+                                                         want_time,
+                                                         want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
-
-      indicator_power_device_get_accessible_title (p->primary_device,
-                                                   buf, sizeof(buf),
-                                                   want_time,
-                                                   want_percent);
-      if (*buf)
-        g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_string (buf));
-
+      title = indicator_power_device_get_accessible_title (p->primary_device,
+                                                           want_time,
+                                                           want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
       if ((icon = indicator_power_device_get_gicon (p->primary_device)))
         {
@@ -375,12 +381,13 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
   if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
-    char buf[128];
+    char * label;
     GMenuItem * item;
     GIcon * icon;
 
-    indicator_power_device_get_readable_text (device, buf, sizeof(buf));
-    item = g_menu_item_new (buf, "indicator.activate-statistics");
+    label = indicator_power_device_get_readable_text (device);
+    item = g_menu_item_new (label, "indicator.activate-statistics");
+    g_free (label);
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
