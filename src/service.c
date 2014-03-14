@@ -312,21 +312,7 @@ static GVariant *
 create_header_state (IndicatorPowerService * self)
 {
   GVariantBuilder b;
-  gchar * label = NULL;
-  gchar * a11y = NULL;
-  GIcon * icon = NULL;
-  priv_t * p = self->priv;
-
-  if (p->primary_device != NULL)
-    {
-      indicator_power_device_get_header (p->primary_device,
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S),
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S),
-                                         &label,
-                                         &a11y);
-
-      icon = indicator_power_device_get_gicon (p->primary_device);
-    }
+  const priv_t * const p = self->priv;
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
@@ -335,24 +321,48 @@ create_header_state (IndicatorPowerService * self)
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
-  if (label != NULL)
-    g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (label));
-
-  if (icon != NULL)
+  if (p->primary_device != NULL)
     {
-      GVariant * v;
+      char * title;
+      GIcon * icon;
+      const gboolean want_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
+      const gboolean want_percent = g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S);
 
-      if ((v = g_icon_serialize (icon)))
+      title = indicator_power_device_get_readable_title (p->primary_device,
+                                                         want_time,
+                                                         want_percent);
+      if (title)
         {
-          g_variant_builder_add (&b, "{sv}", "icon", v);
-          g_variant_unref (v);
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (title));
+          else
+            g_free (title);
         }
 
-      g_object_unref (icon);
-    }
+      title = indicator_power_device_get_accessible_title (p->primary_device,
+                                                           want_time,
+                                                           want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
-  if (a11y != NULL)
-    g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (a11y));
+      if ((icon = indicator_power_device_get_gicon (p->primary_device)))
+        {
+          GVariant * serialized_icon = g_icon_serialize (icon);
+
+          if (serialized_icon != NULL)
+            {
+              g_variant_builder_add (&b, "{sv}", "icon", serialized_icon);
+              g_variant_unref (serialized_icon);
+            }
+
+          g_object_unref (icon);
+        }
+    }
 
   return g_variant_builder_end (&b);
 }
@@ -365,7 +375,7 @@ create_header_state (IndicatorPowerService * self)
 ***/
 
 static void
-append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
+append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int profile)
 {
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
 
@@ -375,22 +385,29 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
     GMenuItem * item;
     GIcon * icon;
 
-    label = indicator_power_device_get_label (device);
-    item = g_menu_item_new (label, "indicator.activate-statistics");
+    label = indicator_power_device_get_readable_text (device);
+    item = g_menu_item_new (label, NULL);
     g_free (label);
-    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
-                                      indicator_power_device_get_object_path (device));
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
-        GVariant * v;
-        if ((v = g_icon_serialize (icon)))
+        GVariant * serialized_icon = g_icon_serialize (icon);
+
+        if (serialized_icon != NULL)
           {
-            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_ICON, v);
-            g_variant_unref (v);
+            g_menu_item_set_attribute_value (item,
+                                             G_MENU_ATTRIBUTE_ICON,
+                                             serialized_icon);
+            g_variant_unref (serialized_icon);
           }
 
         g_object_unref (icon);
+      }
+
+    if (profile == PROFILE_DESKTOP)
+      {
+        g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
+                                          indicator_power_device_get_object_path (device));
       }
 
     g_menu_append_item (menu, item);
@@ -400,13 +417,13 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
 
 static GMenuModel *
-create_desktop_devices_section (IndicatorPowerService * self)
+create_desktop_devices_section (IndicatorPowerService * self, int profile)
 {
   GList * l;
   GMenu * menu = g_menu_new ();
 
   for (l=self->priv->devices; l!=NULL; l=l->next)
-    append_device_to_menu (menu, l->data);
+    append_device_to_menu (menu, l->data, profile);
 
   return G_MENU_MODEL (menu);
 }
@@ -581,8 +598,8 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_DEVICES)
     {
-      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self));
-      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self));
+      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP));
+      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -633,12 +650,12 @@ create_menu (IndicatorPowerService * self, int profile)
         break;
 
       case PROFILE_DESKTOP:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP);
         sections[n++] = create_desktop_settings_section (self);
         break;
 
       case PROFILE_DESKTOP_GREETER:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER);
         break;
     }
 

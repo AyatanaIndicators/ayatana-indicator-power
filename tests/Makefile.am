@@ -18,7 +18,7 @@ nodist_libgtest_a_SOURCES = \
   $(GTEST_SOURCE)/src/gtest-all.cc \
   $(GTEST_SOURCE)/src/gtest_main.cc
 
-AM_CPPFLAGS = $(GTEST_CPPFLAGS) -I${top_srcdir}/src -Wall -Werror
+AM_CPPFLAGS = $(GTEST_CPPFLAGS) -I${top_srcdir}/src -Wall -Werror -std=c++11
 AM_CXXFLAGS = $(GTEST_CXXFLAGS)
 
 ###
