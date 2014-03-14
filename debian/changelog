@@ -1,3 +1,13 @@
+indicator-power (12.10.6+14.04.20140314-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * Change the implementation of the title text / title accessible text
+    / menuitem text to follow the spec changes in
+    https://wiki.ubuntu.com/Power?action=diff&rev2=44&rev1=43#Title and
+    update the tests accordingly. (LP: #1234458)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 14 Mar 2014 14:14:07 +0000
+
 indicator-power (12.10.6+14.04.20140311-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
