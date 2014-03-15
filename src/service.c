@@ -717,6 +717,10 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
         {
           control_center_cmd = "xfce4-power-manager-settings";
         }
+      else if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "pantheon"))
+        {
+          control_center_cmd = "switchboard --open-plug system-pantheon-power";
+        }
       else
         {
           gchar *path;
