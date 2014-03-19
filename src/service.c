@@ -1125,6 +1125,129 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
     }
 }
 
+/* If a device has multiple batteries and uses only one of them at a time,
+   they should be presented as separate items inside the battery menu,
+   but everywhere else they should be aggregated (bug 880881).
+   Their percentages should be averaged. If any are discharging,
+   the aggregated time remaining should be the maximum of the times
+   for all those that are discharging, plus the sum of the times
+   for all those that are idle. Otherwise, the aggregated time remaining
+   should be the the maximum of the times for all those that are charging. */
+static IndicatorPowerDevice *
+create_totalled_battery_device (const GList * devices)
+{
+  const GList * l;
+  guint n_charged = 0;
+  guint n_charging = 0;
+  guint n_discharging = 0;
+  guint n_batteries = 0;
+  double sum_percent = 0;
+  time_t max_discharge_time = 0;
+  time_t max_charge_time = 0;
+  time_t sum_charged_time = 0;
+  IndicatorPowerDevice * device = NULL;
+
+  for (l=devices; l!=NULL; l=l->next)
+    {
+      const IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
+
+      if (indicator_power_device_get_kind(device) == UP_DEVICE_KIND_BATTERY)
+        {
+          const double percent = indicator_power_device_get_percentage (device);
+          const time_t t = indicator_power_device_get_time (device);
+          const UpDeviceState state = indicator_power_device_get_state (device);
+
+          ++n_batteries;
+
+          if (percent > 0.01)
+            sum_percent += percent;
+
+          if (state == UP_DEVICE_STATE_CHARGING)
+            {
+              ++n_charging;
+              max_charge_time = MAX(max_charge_time, t);
+            }
+          else if (state == UP_DEVICE_STATE_DISCHARGING)
+            {
+              ++n_discharging;
+              max_discharge_time = MAX(max_discharge_time, t);
+            }
+          else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+            {
+              ++n_charged;
+              sum_charged_time += t;
+            }
+        }
+    }
+
+  if (n_batteries > 1)
+    {
+      const double percent = sum_percent / n_batteries;
+      UpDeviceState state;
+      time_t time_left;
+
+      if (n_discharging > 0)
+        {
+          state = UP_DEVICE_STATE_DISCHARGING;
+          time_left = max_discharge_time + sum_charged_time;
+        }
+      else if (n_charging > 0)
+        {
+          state = UP_DEVICE_STATE_CHARGING;
+          time_left = max_charge_time;
+        }
+      else if (n_charged > 0)
+        {
+          state = UP_DEVICE_STATE_FULLY_CHARGED;
+          time_left = 0;
+        }
+      else
+        {
+          state = UP_DEVICE_STATE_UNKNOWN;
+          time_left = 0;
+        }
+
+      device = indicator_power_device_new (NULL,
+                                           UP_DEVICE_KIND_BATTERY,
+                                           percent,
+                                           state,
+                                           time_left);
+    }
+
+  return device;
+}
+
+/**
+ * If there are multiple UP_DEVICE_KIND_BATTERY devices in the list,
+ * they're merged into a new 'totalled' device representing the sum of them.
+ *
+ * Returns: (element-type IndicatorPowerDevice)(transfer full): a list of devices
+ */
+static GList*
+merge_batteries_together (GList * devices)
+{
+  GList * ret;
+  IndicatorPowerDevice * merged_device;
+
+  if ((merged_device = create_totalled_battery_device (devices)))
+    {
+      GList * l;
+
+      ret = g_list_append (NULL, merged_device);
+
+      for (l=devices; l!=NULL; l=l->next)
+        if (indicator_power_device_get_kind(INDICATOR_POWER_DEVICE(l->data)) != UP_DEVICE_KIND_BATTERY)
+          ret = g_list_append (ret, g_object_ref(l->data));
+    }
+  else /* not enough batteries to merge */
+    {
+      ret = g_list_copy (devices);
+      g_list_foreach (ret, (GFunc)g_object_ref, NULL);
+    }
+
+  return ret;
+}
+
 IndicatorPowerDevice *
 indicator_power_service_choose_primary_device (GList * devices)
 {
@@ -1132,13 +1255,10 @@ indicator_power_service_choose_primary_device (GList * devices)
 
   if (devices != NULL)
     {
-      GList * tmp;
-
-      tmp = g_list_copy (devices);
+      GList * tmp = merge_batteries_together (devices);
       tmp = g_list_sort (tmp, device_compare_func);
       primary = g_object_ref (tmp->data);
-
-      g_list_free (tmp);
+      g_list_free_full (tmp, (GDestroyNotify)g_object_unref);
     }
 
   return primary;
