@@ -323,26 +323,32 @@ create_header_state (IndicatorPowerService * self)
 
   if (p->primary_device != NULL)
     {
-      char buf[128];
+      char * title;
       GIcon * icon;
       const gboolean want_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
       const gboolean want_percent = g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S);
 
-      indicator_power_device_get_readable_title (p->primary_device,
-                                                 buf, sizeof(buf),
-                                                 want_time,
-                                                 want_percent);
-      if (*buf)
-        g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string (buf));
+      title = indicator_power_device_get_readable_title (p->primary_device,
+                                                         want_time,
+                                                         want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
-
-      indicator_power_device_get_accessible_title (p->primary_device,
-                                                   buf, sizeof(buf),
-                                                   want_time,
-                                                   want_percent);
-      if (*buf)
-        g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_string (buf));
-
+      title = indicator_power_device_get_accessible_title (p->primary_device,
+                                                           want_time,
+                                                           want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
       if ((icon = indicator_power_device_get_gicon (p->primary_device)))
         {
@@ -369,18 +375,19 @@ create_header_state (IndicatorPowerService * self)
 ***/
 
 static void
-append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
+append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int profile)
 {
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
 
   if (kind != UP_DEVICE_KIND_LINE_POWER)
   {
-    char buf[128];
+    char * label;
     GMenuItem * item;
     GIcon * icon;
 
-    indicator_power_device_get_readable_text (device, buf, sizeof(buf));
-    item = g_menu_item_new (buf, "indicator.activate-statistics");
+    label = indicator_power_device_get_readable_text (device);
+    item = g_menu_item_new (label, NULL);
+    g_free (label);
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
@@ -397,8 +404,11 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
         g_object_unref (icon);
       }
 
-    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
-                                      indicator_power_device_get_object_path (device));
+    if (profile == PROFILE_DESKTOP)
+      {
+        g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
+                                          indicator_power_device_get_object_path (device));
+      }
 
     g_menu_append_item (menu, item);
     g_object_unref (item);
@@ -407,13 +417,13 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
 
 static GMenuModel *
-create_desktop_devices_section (IndicatorPowerService * self)
+create_desktop_devices_section (IndicatorPowerService * self, int profile)
 {
   GList * l;
   GMenu * menu = g_menu_new ();
 
   for (l=self->priv->devices; l!=NULL; l=l->next)
-    append_device_to_menu (menu, l->data);
+    append_device_to_menu (menu, l->data, profile);
 
   return G_MENU_MODEL (menu);
 }
@@ -588,8 +598,8 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_DEVICES)
     {
-      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self));
-      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self));
+      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP));
+      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -640,12 +650,12 @@ create_menu (IndicatorPowerService * self, int profile)
         break;
 
       case PROFILE_DESKTOP:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP);
         sections[n++] = create_desktop_settings_section (self);
         break;
 
       case PROFILE_DESKTOP_GREETER:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER);
         break;
     }
 

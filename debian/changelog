@@ -1,3 +1,27 @@
+indicator-power (12.10.6+14.04.20140314-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * Change the implementation of the title text / title accessible text
+    / menuitem text to follow the spec changes in
+    https://wiki.ubuntu.com/Power?action=diff&rev2=44&rev1=43#Title and
+    update the tests accordingly. (LP: #1234458)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 14 Mar 2014 14:14:07 +0000
+
+indicator-power (12.10.6+14.04.20140311-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * Add desktop_lockscreen profile
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 11 Mar 2014 18:33:10 +0000
+
+indicator-power (12.10.6+14.04.20140306-0ubuntu1) trusty; urgency=low
+
+  [ Simon Steinbeiß ]
+  * Add xfce4-powermanager as alternative recommend
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 06 Mar 2014 11:51:54 +0000
+
 indicator-power (12.10.6+14.04.20140207-0ubuntu1) trusty; urgency=low
 
   [ Ted Gould ]
