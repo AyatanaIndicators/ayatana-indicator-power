@@ -610,10 +610,12 @@ get_expanded_time_remaining (const IndicatorPowerDevice * device,
 
       if (p->state == UP_DEVICE_STATE_CHARGING)
         {
+          /* TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge" */
           g_snprintf (str, size, _("%0d:%02d to charge"), hours, minutes);
         }
       else // discharging
         {
+          /* TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"*/
           g_snprintf (str, size, _("%0d:%02d left"), hours, minutes);
         }
     }
@@ -652,22 +654,38 @@ get_accessible_time_remaining (const IndicatorPowerDevice * device,
       if (p->state == UP_DEVICE_STATE_CHARGING)
         {
           if (hours > 0)
-            g_snprintf (str, size, _("%d %s %d %s to charge"),
-                        hours, g_dngettext (NULL, "hour", "hours", hours),
-                        minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+            {
+              /* TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
+                 Example: "1 hour 10 minutes to charge" */
+              g_snprintf (str, size, _("%d %s %d %s to charge"),
+                          hours, g_dngettext (NULL, "hour", "hours", hours),
+                          minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+           }
          else
-            g_snprintf (str, size, _("%d %s to charge"),
-                        minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+           {
+              /* TRANSLATORS: "Y (minute,minutes) to charge" the battery.
+                 Example: "59 minutes to charge" */
+              g_snprintf (str, size, _("%d %s to charge"),
+                          minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+           }
         }
       else // discharging
         {
           if (hours > 0)
-            g_snprintf (str, size, _("%d %s %d %s left"),
-                        hours, g_dngettext (NULL, "hour", "hours", hours),
-                        minutes, g_dngettext (NULL, "minute", "minutes", minutes));
-         else
-            g_snprintf (str, size, _("%d %s left"),
-                        minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+            {
+              /* TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
+                 Example: "1 hour 10 minutes left" */
+              g_snprintf (str, size, _("%d %s %d %s left"),
+                          hours, g_dngettext (NULL, "hour", "hours", hours),
+                          minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+            }
+          else
+            {
+              /* TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
+                 Example: "59 minutes left" */
+              g_snprintf (str, size, _("%d %s left"),
+                          minutes, g_dngettext (NULL, "minute", "minutes", minutes));
+            }
         }
     }
   else
@@ -720,6 +738,7 @@ get_menuitem_text (const IndicatorPowerDevice * device,
 
   if (p->state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
+      /* TRANSLATORS: example: "battery (charged)" */
       g_snprintf (str, size, _("%s (charged)"), kind_str);
     }
   else
@@ -739,9 +758,14 @@ get_menuitem_text (const IndicatorPowerDevice * device,
         }
 
       if (*buf)
-        g_snprintf (str, size, _("%s (%s)"), kind_str, buf);
+        {
+          /* TRANSLATORS: example: "battery (time remaining)" */
+          g_snprintf (str, size, _("%s (%s)"), kind_str, buf);
+        }
       else
-        g_strlcpy (str, kind_str, size);
+        {
+          g_strlcpy (str, kind_str, size);
+        }
     }
 }
 
@@ -819,14 +843,17 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
 
   if (want_time && want_percent)
     {
+      /* TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)" */
       g_snprintf (str, size, _("(%s, %.0lf%%)"), tr, p->percentage);
     }
   else if (want_time)
     {
+      /* TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)" */
       g_snprintf (str, size, _("(%s)"), tr);
     }
   else if (want_percent)
     {
+      /* TRANSLATORS: after the icon, a battery %. Example: "(33%)" */
       g_snprintf (str, size, _("(%.0lf%%)"), p->percentage);
     }
   else
