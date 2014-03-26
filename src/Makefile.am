@@ -46,6 +46,8 @@ libindciatorpower_upower_a_LDFLAGS = $(COVERAGE_LDFLAGS)
 libindicatorpower_service_a_SOURCES = \
   ib-brightness-control.c \
   ib-brightness-control.h \
+  ib-brightness-powerd-control.c \
+  ib-brightness-powerd-control.h \
   device-provider.c \
   device-provider.h \
   device.c \
