@@ -1,3 +1,10 @@
+indicator-power (12.10.6+14.04.20140326-0ubuntu1) trusty; urgency=low
+
+  [ Y.C cheng ]
+  * Set brightness via powerd if it exist (using dbus) (LP: #1287599)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 26 Mar 2014 18:50:46 +0000
+
 indicator-power (12.10.6+14.04.20140314-0ubuntu1) trusty; urgency=low
 
   [ Charles Kerr ]
