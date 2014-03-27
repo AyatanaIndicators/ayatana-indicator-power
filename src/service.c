@@ -389,6 +389,8 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int pr
     item = g_menu_item_new (label, NULL);
     g_free (label);
 
+    g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.indicator.basic");
+
     if ((icon = indicator_power_device_get_gicon (device)))
       {
         GVariant * serialized_icon = g_icon_serialize (icon);
