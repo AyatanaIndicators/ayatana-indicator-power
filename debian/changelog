@@ -1,3 +1,15 @@
+indicator-power (12.10.6+14.04.20140328-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * If there are two batteries detected, combine their percentages and
+    their time-remainings as per the revised spec. (LP: #880881)
+
+  [ Lars Uebernickel ]
+  * Use com.canonical.indicator.basic menu item for device items That
+    menu item can handle non-square icons. (LP: #1263228)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Mar 2014 16:10:45 +0000
+
 indicator-power (12.10.6+14.04.20140326-0ubuntu1) trusty; urgency=low
 
   [ Y.C cheng ]
