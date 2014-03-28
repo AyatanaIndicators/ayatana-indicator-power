@@ -25,6 +25,13 @@ AM_CXXFLAGS = $(GTEST_CXXFLAGS)
 ###  tests: indicator-power-device
 ###
 
+dear-reader-please-note-the-next-test-takes-90-seconds:
+	@echo "#!/bin/bash" > $@
+	@echo "exit 0" >> $@
+	@chmod +x $@
+TESTS += dear-reader-please-note-the-next-test-takes-90-seconds
+CLEANFILES += dear-reader-please-note-the-next-test-takes-90-seconds
+
 TEST_LIBS = $(COVERAGE_LDFLAGS) libgtest.a -lpthread
 TEST_CPPFLAGS = $(SERVICE_DEPS_CFLAGS) $(AM_CPPFLAGS)
 

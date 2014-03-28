@@ -19,6 +19,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <gio/gio.h>
 #include <gtest/gtest.h>
+#include <cmath> // ceil()
 #include "device.h"
 #include "service.h"
 
@@ -668,77 +669,106 @@ TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
   g_free (real_lang);
 }
 
-
-/* The menu title should tell you at a glance what you need to know most: what
-   device will lose power soonest (and optionally when), or otherwise which
-   device will take longest to charge (and optionally how long it will take). */
+/* If a device has multiple batteries and uses only one of them at a time,
+   they should be presented as separate items inside the battery menu,
+   but everywhere else they should be aggregated (bug 880881).
+   Their percentages should be averaged. If any are discharging,
+   the aggregated time remaining should be the maximum of the times
+   for all those that are discharging, plus the sum of the times
+   for all those that are idle. Otherwise, the aggregated time remaining
+   should be the the maximum of the times for all those that are charging. */
 TEST_F(DeviceTest, ChoosePrimary)
 {
-  GList * device_list;
-  IndicatorPowerDevice * a;
-  IndicatorPowerDevice * b;
-
-  a = indicator_power_device_new ("/org/freedesktop/UPower/devices/mouse",
-                                  UP_DEVICE_KIND_MOUSE,
-                                  0.0,
-                                  UP_DEVICE_STATE_DISCHARGING,
-                                  0);
-  b = indicator_power_device_new ("/org/freedesktop/UPower/devices/battery",
-                                  UP_DEVICE_KIND_BATTERY,
-                                  0.0,
-                                  UP_DEVICE_STATE_DISCHARGING,
-                                  0);
-
-  /* device states + time left to {discharge,charge} + % of charge left,
-     sorted in order of preference wrt the spec's criteria.
-     So tests[i] should be picked over any test with an index greater than i */
-  struct {
-    int kind;
-    int state;
+  struct Description
+  { 
+    const char * path;
+    UpDeviceKind kind;
+    UpDeviceState state;
     guint64 time;
     double percentage;
-  } tests[] = {
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   49,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50, 100.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   51,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      50,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49, 100.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      48,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
-    { UP_DEVICE_KIND_KEYBOARD,   UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
-    { UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }
   };
 
-  device_list = NULL;
-  device_list = g_list_append (device_list, a);
-  device_list = g_list_append (device_list, b);
+  const Description descriptions[] = {
+    { "/some/path/d0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   10,  60.0 }, // 0
+    { "/some/path/d1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 1
+    { "/some/path/d2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   30, 100.0 }, // 2
 
-  for (int i=0, n=G_N_ELEMENTS(tests); i<n; i++)
-    {
-      for (int j=i+1; j<n; j++)
-        {
-          g_object_set (a, INDICATOR_POWER_DEVICE_KIND, tests[i].kind,
-                           INDICATOR_POWER_DEVICE_STATE, tests[i].state,
-                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[i].time),
-                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[i].percentage,
-                           NULL);
-          g_object_set (b, INDICATOR_POWER_DEVICE_KIND, tests[j].kind,
-                           INDICATOR_POWER_DEVICE_STATE, tests[j].state,
-                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[j].time),
-                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
-                           NULL);
-          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
-          g_object_unref (G_OBJECT(a));
+    { "/some/path/c0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      10,  60.0 }, // 3
+    { "/some/path/c1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      20,  80.0 }, // 4
+    { "/some/path/c2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      30, 100.0 }, // 5
 
-          /* reverse the list to check that list order doesn't matter */
-          device_list = g_list_reverse (device_list);
-          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
-          g_object_unref (G_OBJECT(a));
-        }
-    }
+    { "/some/path/f0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 6
+    { "/some/path/m0", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 7
+    { "/some/path/m1", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 8
+    { "/some/path/pw", UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }  // 9
+  };
 
-  // cleanup
-  g_list_free_full (device_list, g_object_unref);
+  std::vector<IndicatorPowerDevice*> devices;
+  for(const auto& desc : descriptions)
+    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, desc.time));
+
+  const struct {
+    std::vector<int> device_indices;
+    Description expected;
+  } tests[] = {
+
+    { { 0 }, descriptions[0] }, // 1 discharging
+    { { 0, 1 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 20, 70.0 } }, // 2 discharging
+    { { 1, 2 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 90.0 } }, // 2 discharging
+    { { 0, 1, 2 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 80.0 } }, // 3 discharging
+
+    { { 3 }, descriptions[3] }, // 1 charging
+    { { 3, 4 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 20, 70.0 } }, // 2 charging
+    { { 4, 5 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 90.0 } }, // 2 charging
+    { { 3, 4, 5 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 80.0 } }, // 3 charging
+
+    { { 6 }, descriptions[6] }, // 1 charged
+    { { 6, 0 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 80.0 } }, // 1 charged, 1 discharging
+    { { 6, 3 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING,    10, 80.0 } }, // 1 charged, 1 charging
+    { { 6, 0, 3 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 73.3 } }, // 1 charged, 1 charging, 1 discharging
+
+    { { 0, 7 }, descriptions[0] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
+    { { 2, 7 }, descriptions[7] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
+
+    { { 0, 8 }, descriptions[0] }, // 1 discharging battery, 1 fully-charged mouse. pick the one that's discharging.
+    { { 6, 7 }, descriptions[7] }, // 1 discharging mouse, 1 fully-charged battery. pick the one that's discharging.
+
+    { { 0, 9 }, descriptions[0] }, // everything comes before power lines
+    { { 3, 9 }, descriptions[3] },
+    { { 7, 9 }, descriptions[7] }
+  };
+  
+  for(const auto& test : tests)
+  {
+    const auto& x = test.expected;
+
+    GList * device_glist = nullptr;
+    for(const auto& i : test.device_indices)
+      device_glist = g_list_append(device_glist, devices[i]);
+
+    auto primary = indicator_power_service_choose_primary_device(device_glist);
+    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
+    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
+    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
+    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
+    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    g_object_unref(primary);
+
+    // reverse the list and repeat the test
+    // to confirm that list order doesn't matter
+    device_glist = g_list_reverse (device_glist);
+    primary = indicator_power_service_choose_primary_device (device_glist);
+    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
+    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
+    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
+    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
+    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    g_object_unref(primary);
+
+    // cleanup
+    g_list_free(device_glist);
+  }
+
+  for (auto& device : devices)
+    g_object_unref (device);
 }
