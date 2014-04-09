@@ -24,8 +24,8 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          upower,
-Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | xfce4-power-manager,
-            indicator-applet (>= 0.2) | switchboard-plug-power | indicator-renderer,
+Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | switchboard-plug-power | xfce4-power-manager,
+            indicator-applet (>= 0.2) | indicator-renderer,
 Description: Indicator showing power state.
  This indicator displays current power management information and gives 
  the user a way to access power management preferences.
