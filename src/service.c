@@ -491,24 +491,6 @@ percentage_to_brightness (IndicatorPowerService * self, double percentage)
   return (int)(lo + (percentage*(hi-lo)));
 }
 
-static GMenuItem *
-create_brightness_menuitem (IndicatorPowerService * self)
-{
-  int lo, hi;
-  GMenuItem * item;
-
-  get_brightness_range (self,  &lo, &hi);
-
-  item = g_menu_item_new (NULL, "indicator.brightness");
-  g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.unity.slider");
-  g_menu_item_set_attribute (item, "min-value", "d", brightness_to_percentage (self, lo));
-  g_menu_item_set_attribute (item, "max-value", "d", brightness_to_percentage (self, hi));
-  g_menu_item_set_attribute (item, "min-icon", "s", "torch-off" );
-  g_menu_item_set_attribute (item, "max-icon", "s", "torch-on" );
-
-  return item;
-}
-
 static GVariant *
 action_state_for_brightness (IndicatorPowerService * self)
 {
@@ -574,18 +556,12 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 }
 
 static GMenuModel *
-create_phone_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
+create_phone_settings_section (IndicatorPowerService * self)
 {
   GMenu * section;
-  GMenuItem * item;
 
   section = g_menu_new ();
-
-  item = create_brightness_menuitem (self);
-  g_menu_append_item (section, item);
   update_brightness_action_state (self);
-  g_object_unref (item);
-
   g_menu_append (section, _("Battery settings…"), "indicator.activate-phone-settings");
 
   return G_MENU_MODEL (section);
