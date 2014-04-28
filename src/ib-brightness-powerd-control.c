@@ -19,8 +19,8 @@
 
 #include "ib-brightness-powerd-control.h"
 
-static gboolean getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max,
-    int *dflt, gboolean *ab_supported);
+static gboolean getBrightnessParams(GDBusProxy* powerd_proxy, int *dim, int *min,
+    int *max, int *dflt, gboolean *ab_supported);
 
 GDBusProxy*
 powerd_get_proxy(brightness_params_t *params)
@@ -46,8 +46,8 @@ powerd_get_proxy(brightness_params_t *params)
         return NULL;
     }
 
-    ret = getBrightnessParams(powerd_proxy, &(params->min), &(params->max),
-        &(params->dflt), &(params->ab_supported));
+    ret = getBrightnessParams(powerd_proxy, &(params->dim), &(params->min),
+        &(params->max), &(params->dflt), &(params->ab_supported));
 
     if (! ret)
     {
@@ -61,7 +61,7 @@ powerd_get_proxy(brightness_params_t *params)
 
 
 static gboolean
-getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max, int *dflt, gboolean *ab_supported)
+getBrightnessParams(GDBusProxy* powerd_proxy, int *dim, int *min, int *max, int *dflt, gboolean *ab_supported)
 {
     GVariant *ret = NULL;
     GError *error = NULL;
@@ -84,7 +84,7 @@ getBrightnessParams(GDBusProxy* powerd_proxy, int *min, int *max, int *dflt, gbo
         return FALSE;
     }
 
-    g_variant_get(ret, "((iiib))", min, max, dflt, ab_supported);
+    g_variant_get(ret, "((iiiib))", dim, min, max, dflt, ab_supported);
     g_variant_unref(ret);
     return TRUE;
 }
@@ -114,6 +114,7 @@ struct _IbBrightnessPowerdControl
     GDBusProxy *powerd_proxy;
     GCancellable *gcancel;
 
+    int dim;
     int min;
     int max;
     int dflt; // defalut value
@@ -131,6 +132,7 @@ ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t 
     control->powerd_proxy = powerd_proxy;
     control->gcancel = g_cancellable_new();
 
+    control->dim = params.dim;
     control->min = params.min;
     control->max = params.max;
     control->dflt = params.dflt;
