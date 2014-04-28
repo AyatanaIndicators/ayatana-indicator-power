@@ -23,8 +23,9 @@
 #include <gio/gio.h>
 
 typedef struct {
-    int max;
+    int dim;
     int min;
+    int max;
     int dflt;
     gboolean ab_supported;
 } brightness_params_t;
