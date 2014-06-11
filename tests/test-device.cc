@@ -324,8 +324,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                        NULL);
 
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-100-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100-charging;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -335,8 +336,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
                        NULL);
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-080-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080-charging;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -346,8 +348,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                        NULL);
-      g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-060-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060-charging;", kind_str);
+      g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-good-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -357,8 +360,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        NULL);
-      g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-020-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-020-charging;", kind_str);
+      g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-low-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -368,8 +372,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        NULL);
-      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-000-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
