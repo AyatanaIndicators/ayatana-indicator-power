@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9),
                libglib2.0-dev (>= 2.36),
                libgudev-1.0-dev,
                liburl-dispatcher1-dev,
-               python,
+               python:any,
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power
 # If you aren't a member of ~indicator-applet-developers but need to upload
