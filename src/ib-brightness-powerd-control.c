@@ -55,8 +55,26 @@ powerd_get_proxy(brightness_params_t *params)
         g_object_unref (powerd_proxy);
         return NULL;
     }
-    
-    return powerd_proxy;
+
+    g_object_unref (powerd_proxy);
+
+    GDBusProxy* uscreen_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+                G_DBUS_PROXY_FLAGS_NONE,
+                NULL,
+                "com.canonical.Unity.Screen",
+                "/com/canonical/Unity/Screen",
+                "com.canonical.Unity.Screen",
+                NULL,
+                &error);
+
+    if (error != NULL)
+    {
+        g_debug ("could not connect to unity screen: %s", error->message);
+        g_error_free (error);
+        return NULL;
+    }
+
+    return uscreen_proxy;
 }
 
 
