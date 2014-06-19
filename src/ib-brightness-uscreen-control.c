@@ -17,19 +17,20 @@
  *     Yuan-Chen Cheng <yc.cheng@canonical.com>
  */
 
-#include "ib-brightness-powerd-control.h"
+#include "ib-brightness-uscreen-control.h"
 
 static gboolean getBrightnessParams(GDBusProxy* powerd_proxy, int *dim, int *min,
     int *max, int *dflt, gboolean *ab_supported);
 
 GDBusProxy*
-powerd_get_proxy(brightness_params_t *params)
+uscreen_get_proxy(brightness_params_t *params)
 {
     GError *error = NULL;
     gboolean ret;
 
     g_return_val_if_fail (params != NULL, NULL);
 
+    /* For now we still need to obtain the brigthness params from powerd */
     GDBusProxy* powerd_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
                 G_DBUS_PROXY_FLAGS_NONE,
                 NULL,
@@ -56,7 +57,7 @@ powerd_get_proxy(brightness_params_t *params)
         return NULL;
     }
 
-    g_object_unref (powerd_proxy);
+    g_clear_object (&powerd_proxy);
 
     GDBusProxy* uscreen_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
                 G_DBUS_PROXY_FLAGS_NONE,
@@ -107,12 +108,12 @@ getBrightnessParams(GDBusProxy* powerd_proxy, int *dim, int *min, int *max, int 
     return TRUE;
 }
 
-static gboolean setUserBrightness(GDBusProxy* powerd_proxy, GCancellable *gcancel, int brightness)
+static gboolean setUserBrightness(GDBusProxy* uscreen_proxy, GCancellable *gcancel, int brightness)
 {
     GVariant *ret = NULL;
     GError *error = NULL;
 
-    ret = g_dbus_proxy_call_sync(powerd_proxy,
+    ret = g_dbus_proxy_call_sync(uscreen_proxy,
             "setUserBrightness",
             g_variant_new("(i)", brightness),
             G_DBUS_CALL_FLAGS_NONE,
@@ -127,9 +128,9 @@ static gboolean setUserBrightness(GDBusProxy* powerd_proxy, GCancellable *gcance
     }
 }
 
-struct _IbBrightnessPowerdControl
+struct _IbBrightnessUScreenControl
 {
-    GDBusProxy *powerd_proxy;
+    GDBusProxy *uscreen_proxy;
     GCancellable *gcancel;
 
     int dim;
@@ -141,13 +142,13 @@ struct _IbBrightnessPowerdControl
     int current;
 };
 
-IbBrightnessPowerdControl*
-ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t params)
+IbBrightnessUscreenControl*
+ib_brightness_uscreen_control_new (GDBusProxy* uscreen_proxy, brightness_params_t params)
 {
-    IbBrightnessPowerdControl *control;
+    IbBrightnessUscreenControl *control;
 
-    control = g_new0 (IbBrightnessPowerdControl, 1);
-    control->powerd_proxy = powerd_proxy;
+    control = g_new0 (IbBrightnessUscreenControl, 1);
+    control->uscreen_proxy = uscreen_proxy;
     control->gcancel = g_cancellable_new();
 
     control->dim = params.dim;
@@ -157,21 +158,21 @@ ib_brightness_powerd_control_new (GDBusProxy* powerd_proxy, brightness_params_t 
     control->ab_supported = params.ab_supported;
 
     // XXX: set the brightness value is the only way to sync the brightness value with
-    // powerd, and we should set the user prefered / last set brightness value upon startup.
+    // unity.screen, and we should set the user prefered / last set brightness value upon startup.
     // Before we have code to store last set brightness value or other mechanism, we set
     // it to default brightness that powerd proposed.
-    ib_brightness_powerd_control_set_value(control, control->dflt);
+    ib_brightness_uscreen_control_set_value(control, control->dflt);
 
     return control;
 }
 
 void
-ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint value)
+ib_brightness_uscreen_control_set_value (IbBrightnessUscreenControl* self, gint value)
 {
     gboolean ret;
 
     value = CLAMP(value, self->min, self->max);
-    ret = setUserBrightness(self->powerd_proxy, self->gcancel, value);
+    ret = setUserBrightness(self->uscreen_proxy, self->gcancel, value);
     if (ret)
     {
         self->current = value;
@@ -179,23 +180,23 @@ ib_brightness_powerd_control_set_value (IbBrightnessPowerdControl* self, gint va
 }
 
 gint
-ib_brightness_powerd_control_get_value (IbBrightnessPowerdControl* self)
+ib_brightness_uscreen_control_get_value (IbBrightnessUscreenControl* self)
 {
     return self->current;
 }
 
 gint
-ib_brightness_powerd_control_get_max_value (IbBrightnessPowerdControl* self)
+ib_brightness_uscreen_control_get_max_value (IbBrightnessUscreenControl* self)
 {
     return self->max;
 }
 
 void
-ib_brightness_powerd_control_free (IbBrightnessPowerdControl *self)
+ib_brightness_uscreen_control_free (IbBrightnessUscreenControl *self)
 {
     g_cancellable_cancel (self->gcancel);
     g_object_unref (self->gcancel);
-    g_object_unref (self->powerd_proxy);
+    g_object_unref (self->uscreen_proxy);
     g_free (self);
 }
 
