@@ -119,7 +119,7 @@ static gboolean setUserBrightness(GDBusProxy* uscreen_proxy, GCancellable *gcanc
             G_DBUS_CALL_FLAGS_NONE,
             -1, gcancel, &error);
     if (!ret) {
-        g_warning("setUserBrightness via powerd failed: %s", error->message);
+        g_warning("setUserBrightness via unity.screen failed: %s", error->message);
         g_error_free(error);
         return FALSE;
     } else {
