@@ -25,7 +25,7 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          upower,
          powerd,
-         unity-system-compositor
+         unity-system-compositor (>= 0.0.4),
 Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | xfce4-power-manager,
             indicator-applet (>= 0.2) | indicator-renderer,
 Description: Indicator showing power state.
