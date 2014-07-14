@@ -44,8 +44,6 @@ struct _IndicatorPowerDevicePrivate
   GTimer * inestimable;
 };
 
-#define INDICATOR_POWER_DEVICE_GET_PRIVATE(o) (INDICATOR_POWER_DEVICE(o)->priv)
-
 /* Properties */
 /* Enum for the properties so that they can be quickly found and looked up. */
 enum {
@@ -69,7 +67,7 @@ static void set_property (GObject*, guint prop_id, const GValue*, GParamSpec* );
 static void get_property (GObject*, guint prop_id,       GValue*, GParamSpec* );
 
 /* LCOV_EXCL_START */
-G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT);
+G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT)
 /* LCOV_EXCL_STOP */
 
 static void
@@ -189,7 +187,7 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
         break;
 
       case PROP_TIME:
-        g_value_set_uint64 (value, priv->time);
+        g_value_set_uint64 (value, (guint64)priv->time);
         break;
 
       default:
@@ -207,11 +205,11 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
   switch (prop_id)
     {
       case PROP_KIND:
-        p->kind = g_value_get_int (value);
+        p->kind = (UpDeviceKind) g_value_get_int (value);
         break;
 
       case PROP_STATE:
-        p->state = g_value_get_int (value);
+        p->state = (UpDeviceState) g_value_get_int (value);
         break;
 
       case PROP_OBJECT_PATH:
@@ -224,7 +222,7 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
         break;
 
       case PROP_TIME:
-        p->time = g_value_get_uint64(value);
+        p->time = (time_t) g_value_get_uint64(value);
         break;
 
       default:
@@ -627,8 +625,8 @@ get_accessible_time_remaining (const IndicatorPowerDevice * device)
 
   if (p->time && ((p->state == UP_DEVICE_STATE_CHARGING) || (p->state == UP_DEVICE_STATE_DISCHARGING)))
     {
-      int minutes = p->time / 60;
-      const int hours = minutes / 60;
+      guint minutes = (guint)p->time / 60u;
+      const guint hours = minutes / 60u;
       minutes %= 60;
 
       if (p->state == UP_DEVICE_STATE_CHARGING)
@@ -889,5 +887,5 @@ indicator_power_device_new_from_variant (GVariant * v)
                                      kind,
                                      percentage,
                                      state,
-                                     time);
+                                     (time_t)time);
 }

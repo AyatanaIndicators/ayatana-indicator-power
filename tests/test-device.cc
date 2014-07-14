@@ -710,10 +710,10 @@ TEST_F(DeviceTest, ChoosePrimary)
 
   std::vector<IndicatorPowerDevice*> devices;
   for(const auto& desc : descriptions)
-    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, desc.time));
+    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, (time_t)desc.time));
 
   const struct {
-    std::vector<int> device_indices;
+    std::vector<unsigned> device_indices;
     Description expected;
   } tests[] = {
 

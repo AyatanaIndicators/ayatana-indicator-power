@@ -76,7 +76,7 @@ ib_brightness_control_set_value (IbBrightnessControl* self, gint value)
     gint fd;
     gchar *filename;
     gchar *svalue;
-    gint length;
+    size_t length;
     gint err;
 
     if (self->path == NULL)
@@ -95,7 +95,7 @@ ib_brightness_control_set_value (IbBrightnessControl* self, gint value)
 
     err = errno;
     errno = 0;
-    if (write (fd, svalue, length) != length) {
+    if (write (fd, svalue, length) != (ssize_t)length) {
         g_warning ("Fail to write brightness information: %s", g_strerror(errno));
     }
     errno = err;
@@ -105,7 +105,7 @@ ib_brightness_control_set_value (IbBrightnessControl* self, gint value)
     g_free (filename);
 }
 
-gint
+static gint
 ib_brightness_control_get_value_from_file (IbBrightnessControl *self, const gchar *file)
 {
     GError *error;

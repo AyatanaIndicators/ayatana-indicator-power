@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <url-dispatcher.h>
@@ -471,7 +469,7 @@ get_brightness_range (IndicatorPowerService * self, gint * low, gint * high)
     {
       max = ib_brightness_uscreen_control_get_max_value (self->priv->brightness_uscreen_control);
     }
-  *low  = max * 0.05; /* 5% minimum -- don't let the screen go completely dark */
+  *low  = (gint)(max * 0.05); /* 5% minimum -- don't let the screen go completely dark */
   *high = max;
 }
 
@@ -619,18 +617,6 @@ static inline void
 rebuild_header_now (IndicatorPowerService * self)
 {
   rebuild_now (self, SECTION_HEADER);
-}
-
-static inline void
-rebuild_devices_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_DEVICES);
-}
-
-static inline void
-rebuild_settings_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_SETTINGS);
 }
 
 static void
@@ -938,7 +924,7 @@ on_devices_changed (IndicatorPowerService * self)
   if (p->primary_device == NULL)
     battery_level = 0;
   else
-    battery_level = (int)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
+    battery_level = (guint32)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
   g_simple_action_set_state (p->battery_level_action, g_variant_new_uint32 (battery_level));
 
   rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
@@ -1131,9 +1117,8 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
 
   if (p->device_provider != NULL)
     {
-      g_signal_handlers_disconnect_by_func (p->device_provider,
-                                            G_CALLBACK(on_devices_changed),
-                                            self);
+      g_signal_handlers_disconnect_by_data (p->device_provider, self);
+
       g_clear_object (&p->device_provider);
 
       g_clear_object (&p->primary_device);
@@ -1177,13 +1162,13 @@ create_totalled_battery_device (const GList * devices)
 
   for (l=devices; l!=NULL; l=l->next)
     {
-      const IndicatorPowerDevice * device = INDICATOR_POWER_DEVICE(l->data);
+      const IndicatorPowerDevice * walk = INDICATOR_POWER_DEVICE(l->data);
 
-      if (indicator_power_device_get_kind(device) == UP_DEVICE_KIND_BATTERY)
+      if (indicator_power_device_get_kind(walk) == UP_DEVICE_KIND_BATTERY)
         {
-          const double percent = indicator_power_device_get_percentage (device);
-          const time_t t = indicator_power_device_get_time (device);
-          const UpDeviceState state = indicator_power_device_get_state (device);
+          const double percent = indicator_power_device_get_percentage (walk);
+          const time_t t = indicator_power_device_get_time (walk);
+          const UpDeviceState state = indicator_power_device_get_state (walk);
 
           ++n_batteries;
 
