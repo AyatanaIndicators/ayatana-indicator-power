@@ -10,6 +10,7 @@ set(SERVICE_MANUAL_SOURCES
     ib-brightness-uscreen-control.c
     device-provider.c
     device.c
+    notifier.c
     service.c)
 
 # generated sources

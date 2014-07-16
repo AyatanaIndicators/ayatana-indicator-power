@@ -25,6 +25,7 @@
 
 #include "device.h"
 #include "device-provider-upower.h"
+#include "notifier.h"
 #include "service.h"
 
 /***
@@ -41,9 +42,10 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
-  GMainLoop * loop;
-  IndicatorPowerService * service;
   IndicatorPowerDeviceProvider * device_provider;
+  IndicatorPowerNotifier * notifier;
+  IndicatorPowerService * service;
+  GMainLoop * loop;
 
   /* boilerplate i18n */
   setlocale (LC_ALL, "");
@@ -52,6 +54,7 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 
   /* run */
   device_provider = indicator_power_device_provider_upower_new ();
+  notifier = indicator_power_notifier_new (device_provider);
   service = indicator_power_service_new (device_provider);
   loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (service, INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
@@ -59,8 +62,9 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   g_main_loop_run (loop);
 
   /* cleanup */
-  g_clear_object (&device_provider);
-  g_clear_object (&service);
   g_main_loop_unref (loop);
+  g_clear_object (&service);
+  g_clear_object (&notifier);
+  g_clear_object (&device_provider);
   return 0;
 }

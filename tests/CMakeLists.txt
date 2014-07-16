@@ -42,5 +42,7 @@ function(add_test_by_name name)
   add_dependencies (${TEST_NAME} libindicatorpowerservice)
   target_link_libraries (${TEST_NAME} indicatorpowerservice gtest ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS})
 endfunction()
+add_test_by_name(test-notify)
+add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
 add_test_by_name(test-device)
 
