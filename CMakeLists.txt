@@ -61,7 +61,6 @@ add_custom_target (cppcheck COMMAND cppcheck --enable=all -q --error-exitcode=2 
 ##  Actual building
 ##
 
-# those GActionEntry structs tickle -Wmissing-field-initializers
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Weverything -Wno-c++98-compat")
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-documentation") # gtk-doc != doxygen
