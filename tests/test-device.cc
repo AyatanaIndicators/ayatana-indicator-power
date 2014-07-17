@@ -713,7 +713,7 @@ TEST_F(DeviceTest, ChoosePrimary)
     devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, (time_t)desc.time));
 
   const struct {
-    std::vector<unsigned> device_indices;
+    std::vector<unsigned int> device_indices;
     Description expected;
   } tests[] = {
 
