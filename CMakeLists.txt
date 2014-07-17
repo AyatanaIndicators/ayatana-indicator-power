@@ -75,7 +75,6 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
 
 # testing & coverage
 if (${enable_tests})
-  pkg_check_modules (DBUSTEST REQUIRED dbustest-1>=14.04.0)
   set (GTEST_SOURCE_DIR /usr/src/gtest/src)
   set (GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/..)
   set (GTEST_LIBS -lpthread)
