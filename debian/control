@@ -2,9 +2,9 @@ Source: indicator-power
 Section: gnome
 Priority: optional
 Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-Build-Depends: debhelper (>= 9),
-               dh-autoreconf,
-               autopoint,
+Build-Depends: cmake,
+               debhelper (>= 9),
+               dh-translations,
                intltool,
                libgtest-dev,
                libglib2.0-dev (>= 2.36),

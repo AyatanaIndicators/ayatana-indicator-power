@@ -29,7 +29,7 @@ static guint signals[SIGNAL_LAST] = { 0 };
 
 G_DEFINE_INTERFACE (IndicatorPowerDeviceProvider,
                     indicator_power_device_provider,
-                    0);
+                    0)
 
 static void
 indicator_power_device_provider_default_init (IndicatorPowerDeviceProviderInterface * klass)
