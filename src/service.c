@@ -926,6 +926,12 @@ on_devices_changed (IndicatorPowerService * self)
   g_clear_object (&p->primary_device);
   p->primary_device = indicator_power_service_choose_primary_device (p->devices);
 
+  /* update the notifier's battery */
+  if ((p->primary_device != NULL) || (indicator_power_device_get_kind(p->primary_device) == UP_DEVICE_KIND_BATTERY))
+    indicator_power_notifier_set_battery (p->primary_device);
+  else
+    indicator_power_notifier_set_battery (NULL);
+
   /* update the battery-level action's state */
   if (p->primary_device == NULL)
     battery_level = 0;
@@ -1042,7 +1048,7 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
 
-  p->notifier = indicator_power_notifier_new (NULL);
+  p->notifier = indicator_power_notifier_new ();
 
   uscreen_proxy = uscreen_get_proxy(&brightness_params);
   if (uscreen_proxy != NULL)
@@ -1145,8 +1151,6 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
 
       on_devices_changed (self);
     }
-
-  indicator_power_notifier_set_device_provider (p->notifier, dp);
 }
 
 /* If a device has multiple batteries and uses only one of them at a time,

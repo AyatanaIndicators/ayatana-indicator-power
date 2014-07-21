@@ -24,7 +24,7 @@
 #include <glib-object.h>
 #include <gio/gio.h> /* GDBusConnection */
 
-#include "device-provider.h"
+#include "device.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +36,15 @@ G_BEGIN_DECLS
 typedef struct _IndicatorPowerNotifier         IndicatorPowerNotifier;
 typedef struct _IndicatorPowerNotifierClass    IndicatorPowerNotifierClass;
 typedef struct _IndicatorPowerNotifierPrivate  IndicatorPowerNotifierPrivate;
+
+typedef enum
+{
+  POWER_LEVEL_OK,
+  POWER_LEVEL_LOW,
+  POWER_LEVEL_VERY_LOW,
+  POWER_LEVEL_CRITICAL
+}
+PowerLevel;
 
 /**
  * The Indicator Power Notifier.
@@ -58,13 +67,13 @@ struct _IndicatorPowerNotifierClass
 
 GType indicator_power_notifier_get_type (void);
 
-IndicatorPowerNotifier * indicator_power_notifier_new (IndicatorPowerDeviceProvider * provider);
+IndicatorPowerNotifier * indicator_power_notifier_new (void);
 
 void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
                                        GDBusConnection         * connection);
 
-void indicator_power_notifier_set_device_provider (IndicatorPowerNotifier       * self,
-                                                   IndicatorPowerDeviceProvider * provider);
+void indicator_power_notifier_set_device (IndicatorPowerNotifier  * self,
+                                          IndicatorPowerDevice    * provider);
 
 
 G_END_DECLS
