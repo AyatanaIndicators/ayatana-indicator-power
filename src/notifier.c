@@ -264,8 +264,8 @@ my_dispose (GObject * o)
 
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
-  g_clear_pointer (&p->power_level_binding, g_binding_unbind);
-  g_clear_pointer (&p->is_warning_binding, g_binding_unbind);
+  g_clear_object (&p->power_level_binding);
+  g_clear_object (&p->is_warning_binding);
   g_clear_object (&p->dbus_battery);
   indicator_power_notifier_set_battery (self, NULL);
 
