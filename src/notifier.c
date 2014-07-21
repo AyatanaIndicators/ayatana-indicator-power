@@ -157,28 +157,23 @@ static void
 on_battery_property_changed (IndicatorPowerNotifier * self)
 {
   priv_t * p;
-  PowerLevel power_level;
 
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   g_return_if_fail(INDICATOR_IS_POWER_DEVICE(self->priv->battery));
 
   p = self->priv;
 
-  power_level = indicator_power_notifier_get_power_level (p->battery);
+  set_power_level_property (self,
+                            indicator_power_notifier_get_power_level (p->battery));
 
-  if (p->power_level != power_level)
+  if ((indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING) &&
+      (p->power_level != POWER_LEVEL_OK))
     {
-      set_power_level_property (self, power_level);
-
-      if ((power_level == POWER_LEVEL_OK) ||
-          (indicator_power_device_get_state(p->battery) != UP_DEVICE_STATE_DISCHARGING))
-        {
-          notification_clear (self);
-        }
-      else
-        {
-          notification_show (self);
-        }
+      notification_show (self);
+    }
+  else
+    {
+      notification_clear (self);
     }
 }
 
