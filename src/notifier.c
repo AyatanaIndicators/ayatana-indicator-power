@@ -43,9 +43,9 @@ enum
   LAST_PROP
 };
 
-#define BATTERY_NAME "battery"
-#define IS_WARNING_NAME "is-warning"
-#define POWER_LEVEL_NAME "power-level"
+#define PROP_BATTERY_NAME "battery"
+#define PROP_IS_WARNING_NAME "is-warning"
+#define PROP_POWER_LEVEL_NAME "power-level"
 
 static GParamSpec * properties[LAST_PROP];
 
@@ -101,7 +101,7 @@ on_notification_clicked(NotifyNotification * notify_notification G_GNUC_UNUSED,
                         char * action G_GNUC_UNUSED,
                         gpointer gself G_GNUC_UNUSED)
 {
-  /* no-op because notify_notification_add_action() doesn't like a NULL cb */
+  /* no-op; notify_notification_add_action() doesn't like NULL callbacks */
 }
 
 static void
@@ -110,6 +110,7 @@ notification_show(IndicatorPowerNotifier * self)
   priv_t * p;
   char * body;
   NotifyNotification * nn;
+  GError * error;
 
   notification_clear (self);
 
@@ -133,7 +134,7 @@ notification_show(IndicatorPowerNotifier * self)
   g_signal_connect_swapped(nn, "closed", G_CALLBACK(notification_clear), self);
 
   /* show the notification */
-  GError* error = NULL;
+  error = NULL;
   notify_notification_show(nn, &error);
   if (error != NULL)
     {
@@ -158,6 +159,7 @@ get_power_level (const IndicatorPowerDevice * device)
   static const double percent_critical = 2.0;
   static const double percent_very_low = 5.0;
   static const double percent_low = 10.0;
+
   const gdouble p = indicator_power_device_get_percentage(device);
   PowerLevel ret;
 
@@ -296,15 +298,15 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
   p->dbus_battery = dbus_battery_skeleton_new ();
 
   p->is_warning_binding = g_object_bind_property (self,
-                                                  IS_WARNING_NAME,
+                                                  PROP_IS_WARNING_NAME,
                                                   p->dbus_battery,
-                                                  IS_WARNING_NAME,
+                                                  PROP_IS_WARNING_NAME,
                                                   G_BINDING_SYNC_CREATE);
 
   p->power_level_binding = g_object_bind_property (self,
-                                                   POWER_LEVEL_NAME,
+                                                   PROP_POWER_LEVEL_NAME,
                                                    p->dbus_battery,
-                                                   POWER_LEVEL_NAME,
+                                                   PROP_POWER_LEVEL_NAME,
                                                    G_BINDING_SYNC_CREATE);
 
   klass = INDICATOR_POWER_NOTIFIER_GET_CLASS(self);
@@ -346,14 +348,14 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
   properties[PROP_0] = NULL;
 
   properties[PROP_BATTERY] = g_param_spec_object (
-    BATTERY_NAME,
+    PROP_BATTERY_NAME,
     "Battery",
     "The current battery",
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_POWER_LEVEL] = g_param_spec_int (
-    POWER_LEVEL_NAME,
+    PROP_POWER_LEVEL_NAME,
     "Power Level",
     "The battery's power level",
     POWER_LEVEL_OK,
@@ -362,7 +364,7 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
     G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_IS_WARNING] = g_param_spec_boolean (
-    IS_WARNING_NAME,
+    PROP_IS_WARNING_NAME,
     "Is Warning",
     "Whether or not we're currently warning the user about a low battery",
     FALSE,
@@ -433,6 +435,7 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
                                   GDBusConnection        * bus)
 {
   priv_t * p;
+  GDBusInterfaceSkeleton * skel;
 
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   g_return_if_fail((bus == NULL) || G_IS_DBUS_CONNECTION(bus));
@@ -442,12 +445,12 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
   if (p->bus == bus)
     return;
 
+  skel = G_DBUS_INTERFACE_SKELETON(p->dbus_battery);
+
   if (p->bus != NULL)
     {
-      if (p->dbus_battery != NULL)
-        {
-          g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON(p->dbus_battery));
-        }
+      if (skel != NULL)
+        g_dbus_interface_skeleton_unexport (skel);
 
       g_clear_object (&p->bus);
     }
@@ -459,7 +462,7 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
       p->bus = g_object_ref (bus);
 
       error = NULL;
-      g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(p->dbus_battery),
+      g_dbus_interface_skeleton_export(skel,
                                        bus,
                                        BUS_PATH"/Battery",
                                        &error);
