@@ -29,9 +29,10 @@
 G_BEGIN_DECLS
 
 /* standard GObject macros */
-#define INDICATOR_POWER_NOTIFIER(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), INDICATOR_TYPE_POWER_NOTIFIER, IndicatorPowerNotifier))
-#define INDICATOR_TYPE_POWER_NOTIFIER  (indicator_power_notifier_get_type())
-#define INDICATOR_IS_POWER_NOTIFIER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), INDICATOR_TYPE_POWER_NOTIFIER))
+#define INDICATOR_POWER_NOTIFIER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), INDICATOR_TYPE_POWER_NOTIFIER, IndicatorPowerNotifier))
+#define INDICATOR_TYPE_POWER_NOTIFIER         (indicator_power_notifier_get_type())
+#define INDICATOR_IS_POWER_NOTIFIER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), INDICATOR_TYPE_POWER_NOTIFIER))
+#define INDICATOR_POWER_NOTIFIER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o),  INDICATOR_TYPE_POWER_NOTIFIER, IndicatorPowerNotifierClass))
 
 typedef struct _IndicatorPowerNotifier         IndicatorPowerNotifier;
 typedef struct _IndicatorPowerNotifierClass    IndicatorPowerNotifierClass;
@@ -59,6 +60,10 @@ struct _IndicatorPowerNotifier
 struct _IndicatorPowerNotifierClass
 {
   GObjectClass parent_class;
+
+  /*< private >*/
+  gint instance_count;
+  gboolean interactive;
 };
 
 /***

@@ -53,8 +53,6 @@ static GParamSpec * properties[LAST_PROP];
 ***
 **/
 
-static int n_notifiers = 0;
-
 struct _IndicatorPowerNotifierPrivate
 {
   /* The battery we're currently watching.
@@ -110,22 +108,22 @@ static void
 notification_show(IndicatorPowerNotifier * self)
 {
   priv_t * p;
-  IndicatorPowerDevice * battery;
   char * body;
   NotifyNotification * nn;
 
   notification_clear (self);
 
+  /* only show clickable notifications if the Notify server supports them */
+  if (!INDICATOR_POWER_NOTIFIER_GET_CLASS(self)->interactive)
+    return;
+
   p = self->priv;
-  battery = p->battery;
-  g_return_if_fail (battery != NULL);
 
   /* create the notification */
-  body = g_strdup_printf(_("%d%% charge remaining"),
-                         (int)indicator_power_device_get_percentage(battery));
-  p->notify_notification = nn = notify_notification_new(_("Battery Low"),
-                                                        body,
-                                                        NULL);
+  body = g_strdup_printf(_("%.0f%% charge remaining"),
+                         indicator_power_device_get_percentage(p->battery));
+  nn = notify_notification_new(_("Battery Low"), body, NULL);
+  p->notify_notification = nn;
   notify_notification_set_hint(nn, "x-canonical-snap-decisions",
                                g_variant_new_boolean(TRUE));
   notify_notification_set_hint(nn, "x-canonical-private-button-tint",
@@ -272,9 +270,11 @@ my_dispose (GObject * o)
 }
 
 static void
-my_finalize (GObject * o G_GNUC_UNUSED)
+my_finalize (GObject * o)
 {
-  if (!--n_notifiers)
+  IndicatorPowerNotifierClass * klass = INDICATOR_POWER_NOTIFIER_GET_CLASS(o);
+
+  if (!--klass->instance_count)
     notify_uninit();
 }
 
@@ -285,9 +285,12 @@ my_finalize (GObject * o G_GNUC_UNUSED)
 static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
 {
-  priv_t * p = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_TYPE_POWER_NOTIFIER,
-                                            IndicatorPowerNotifierPrivate);
+  priv_t * p;
+  IndicatorPowerNotifierClass * klass;
+
+  p = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                   INDICATOR_TYPE_POWER_NOTIFIER,
+                                   IndicatorPowerNotifierPrivate);
   self->priv = p;
 
   p->dbus_battery = dbus_battery_skeleton_new ();
@@ -304,8 +307,28 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
                                                    POWER_LEVEL_NAME,
                                                    G_BINDING_SYNC_CREATE);
 
-  if (!n_notifiers++ && !notify_init("indicator-power-service"))
-    g_critical("Unable to initialize libnotify! Notifications might not be shown.");
+  klass = INDICATOR_POWER_NOTIFIER_GET_CLASS(self);
+
+  if (!klass->instance_count++)
+    {
+      if (!notify_init("indicator-power-service"))
+        {
+          g_critical("Unable to initialize libnotify! Notifications might not be shown.");
+        }
+      else
+        {
+          /* See if the notification server supports clickable actions... */
+          GList * caps;
+          GList * l;
+          klass->interactive = FALSE;
+          caps = notify_get_server_caps();
+          for (l=caps; l!=NULL && !klass->interactive; l=l->next)
+            if (!g_strcmp0 ("actions", (const char*)l->data))
+              klass->interactive = TRUE;
+          g_message ("%s klass->interactive is %d", G_STRLOC, (int)klass->interactive);
+          g_list_free_full (caps, g_free);
+        }
+    }
 }
 
 static void
@@ -346,6 +369,9 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
     G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  klass->instance_count = 0;
+  klass->interactive = FALSE;
 }
 
 /***
