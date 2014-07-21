@@ -80,6 +80,7 @@ void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
 void indicator_power_notifier_set_battery (IndicatorPowerNotifier  * self,
                                            IndicatorPowerDevice    * battery);
 
+PowerLevel indicator_power_notifier_get_power_level (IndicatorPowerDevice * battery);
 
 G_END_DECLS
 
