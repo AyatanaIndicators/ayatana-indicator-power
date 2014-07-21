@@ -1,3 +1,10 @@
+indicator-power (12.10.6+14.10.20140718-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Switch from automake/autoconf to CMake.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 18 Jul 2014 21:33:30 +0000
+
 indicator-power (12.10.6+14.10.20140624-0ubuntu1) utopic; urgency=low
 
   [ Alberto Aguirre ]

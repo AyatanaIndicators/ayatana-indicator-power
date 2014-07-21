@@ -62,7 +62,6 @@ add_custom_target (cppcheck COMMAND cppcheck --enable=all -q --error-exitcode=2 
 ##  Actual building
 ##
 
-# those GActionEntry structs tickle -Wmissing-field-initializers
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Weverything -Wno-c++98-compat")
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-documentation") # gtk-doc != doxygen
@@ -77,7 +76,6 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
 
 # testing & coverage
 if (${enable_tests})
-  pkg_check_modules (DBUSTEST REQUIRED dbustest-1>=14.04.0)
   set (GTEST_SOURCE_DIR /usr/src/gtest/src)
   set (GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/..)
   set (GTEST_LIBS -lpthread)
