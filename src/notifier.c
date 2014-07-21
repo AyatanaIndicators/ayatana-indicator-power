@@ -17,7 +17,7 @@
  *   Charles Kerr <charles.kerr@canonical.com>
  */
 
-#include "dbus-battery-info.h"
+#include "dbus-battery.h"
 #include "dbus-shared.h"
 #include "notifier.h"
 
@@ -57,8 +57,6 @@ static int n_notifiers = 0;
 
 struct _IndicatorPowerNotifierPrivate
 {
-  IndicatorPowerDeviceProvider * device_provider;
-
   /* The battery we're currently watching.
      This may be a physical battery or it may be a "merged" battery
      synthesized from multiple batteries present on the device.
@@ -76,6 +74,9 @@ struct _IndicatorPowerNotifierPrivate
 };
 
 typedef IndicatorPowerNotifierPrivate priv_t;
+
+static void set_is_warning_property (IndicatorPowerNotifier*, gboolean is_warning);
+static void set_power_level_property (IndicatorPowerNotifier*, PowerLevel power_level);
 
 /***
 ****  Notifications
@@ -262,7 +263,7 @@ my_dispose (GObject * o)
 
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
-  indicator_power_notifier_set_device (self, NULL);
+  indicator_power_notifier_set_battery (self, NULL);
   g_clear_pointer (&p->power_level_binding, g_binding_unbind);
   g_clear_pointer (&p->is_warning_binding, g_binding_unbind);
   g_clear_object (&p->dbus_battery);
@@ -352,7 +353,7 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
 ***/
 
 IndicatorPowerNotifier *
-indicator_power_notifier_new (IndicatorPowerDeviceProvider * device_provider)
+indicator_power_notifier_new (void)
 {
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_NOTIFIER, NULL);
 
@@ -368,6 +369,8 @@ indicator_power_notifier_set_battery (IndicatorPowerNotifier * self,
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   g_return_if_fail((battery == NULL) || INDICATOR_IS_POWER_DEVICE(battery));
   g_return_if_fail((battery == NULL) || (indicator_power_device_get_kind(battery) == UP_DEVICE_KIND_BATTERY));
+
+  p = self->priv;
 
   if (p->battery != NULL)
     {

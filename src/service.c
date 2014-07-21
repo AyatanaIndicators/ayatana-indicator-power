@@ -927,10 +927,10 @@ on_devices_changed (IndicatorPowerService * self)
   p->primary_device = indicator_power_service_choose_primary_device (p->devices);
 
   /* update the notifier's battery */
-  if ((p->primary_device != NULL) || (indicator_power_device_get_kind(p->primary_device) == UP_DEVICE_KIND_BATTERY))
-    indicator_power_notifier_set_battery (p->primary_device);
+  if ((p->primary_device != NULL) && (indicator_power_device_get_kind(p->primary_device) == UP_DEVICE_KIND_BATTERY))
+    indicator_power_notifier_set_battery (p->notifier, p->primary_device);
   else
-    indicator_power_notifier_set_battery (NULL);
+    indicator_power_notifier_set_battery (p->notifier, NULL);
 
   /* update the battery-level action's state */
   if (p->primary_device == NULL)

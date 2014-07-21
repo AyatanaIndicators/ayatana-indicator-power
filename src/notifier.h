@@ -72,8 +72,8 @@ IndicatorPowerNotifier * indicator_power_notifier_new (void);
 void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
                                        GDBusConnection         * connection);
 
-void indicator_power_notifier_set_device (IndicatorPowerNotifier  * self,
-                                          IndicatorPowerDevice    * provider);
+void indicator_power_notifier_set_battery (IndicatorPowerNotifier  * self,
+                                           IndicatorPowerDevice    * battery);
 
 
 G_END_DECLS
