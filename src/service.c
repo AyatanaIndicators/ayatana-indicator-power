@@ -22,8 +22,10 @@
 #include <gio/gio.h>
 #include <url-dispatcher.h>
 
+#include "dbus-shared.h"
 #include "device.h"
 #include "device-provider.h"
+#include "notifier.h"
 #include "ib-brightness-control.h"
 #include "ib-brightness-uscreen-control.h"
 #include "service.h"
@@ -120,6 +122,7 @@ struct _IndicatorPowerServicePrivate
   GList * devices; /* IndicatorPowerDevice */
 
   IndicatorPowerDeviceProvider * device_provider;
+  IndicatorPowerNotifier * notifier;
 };
 
 typedef IndicatorPowerServicePrivate priv_t;
@@ -821,6 +824,9 @@ on_bus_acquired (GDBusConnection * connection,
 
   p->conn = g_object_ref (G_OBJECT (connection));
 
+  /* export the battery properties */
+  indicator_power_notifier_set_bus (p->notifier, connection);
+
   /* export the actions */
   if ((id = g_dbus_connection_export_action_group (connection,
                                                    BUS_PATH,
@@ -1001,6 +1007,7 @@ my_dispose (GObject * o)
       g_clear_object (&p->settings);
     }
 
+  g_clear_object (&p->notifier);
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
@@ -1034,6 +1041,8 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->cancellable = g_cancellable_new ();
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
+
+  p->notifier = indicator_power_notifier_new (NULL);
 
   uscreen_proxy = uscreen_get_proxy(&brightness_params);
   if (uscreen_proxy != NULL)
@@ -1136,6 +1145,8 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
 
       on_devices_changed (self);
     }
+
+  indicator_power_notifier_set_device_provider (p->notifier, dp);
 }
 
 /* If a device has multiple batteries and uses only one of them at a time,

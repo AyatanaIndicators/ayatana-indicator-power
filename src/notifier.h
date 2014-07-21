@@ -22,6 +22,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gio/gio.h> /* GDBusConnection */
 
 #include "device-provider.h"
 
@@ -58,6 +59,9 @@ struct _IndicatorPowerNotifierClass
 GType indicator_power_notifier_get_type (void);
 
 IndicatorPowerNotifier * indicator_power_notifier_new (IndicatorPowerDeviceProvider * provider);
+
+void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
+                                       GDBusConnection         * connection);
 
 void indicator_power_notifier_set_device_provider (IndicatorPowerNotifier       * self,
                                                    IndicatorPowerDeviceProvider * provider);

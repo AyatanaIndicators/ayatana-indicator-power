@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name="com.canonical.indicator.power.Battery">
+
+    <property name="PowerLevel" type="i" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>The battery's power level. 0==No Low Battery, 1==Low, 2==Very Low, 3==Critical</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="IsWarning" type="b" access="read">
+      <doc:doc>
+        <doc:description>
+          <doc:para>Whether or not indicator-power-service is warning the user about low battery power.</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+  </interface>
+</node>

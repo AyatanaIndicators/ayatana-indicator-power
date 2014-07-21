@@ -17,6 +17,8 @@
  *   Charles Kerr <charles.kerr@canonical.com>
  */
 
+#include "dbus-battery-info.h"
+#include "dbus-shared.h"
 #include "device.h"
 #include "device-provider.h"
 #include "notifier.h"
@@ -35,20 +37,41 @@ enum
 {
   PROP_0,
   PROP_DEVICE_PROVIDER,
+  PROP_IS_WARNING,
+  PROP_POWER_LEVEL,
   LAST_PROP
 };
+
+#define DEVICE_PROVIDER_NAME "device-provider"
+#define IS_WARNING_NAME "is-warning"
+#define POWER_LEVEL_NAME "power-level"
 
 static GParamSpec * properties[LAST_PROP];
 
 static int n_notifiers = 0;
 
+typedef enum
+{
+  POWER_LEVEL_OK,
+  POWER_LEVEL_LOW,
+  POWER_LEVEL_VERY_LOW,
+  POWER_LEVEL_CRITICAL
+}
+PowerLevel;
+
 struct _IndicatorPowerNotifierPrivate
 {
   IndicatorPowerDeviceProvider * device_provider;
-  IndicatorPowerDevice * primary_device;
-  gdouble battery_level;
-  time_t time_remaining;
+
+  IndicatorPowerDevice * battery;
   NotifyNotification* notify_notification;
+  gboolean is_warning;
+  PowerLevel power_level;
+
+  DbusBattery * dbus_battery;
+  GBinding * is_warning_binding;
+  GBinding * power_level_binding;
+  GDBusConnection * bus;
 };
 
 typedef IndicatorPowerNotifierPrivate priv_t;
@@ -57,35 +80,53 @@ typedef IndicatorPowerNotifierPrivate priv_t;
 ****
 ***/
 
+/* implemented here rather than my_set_property() to guard from public use
+   because this is a read-only property */
 static void
-emit_critical_signal(IndicatorPowerNotifier * self G_GNUC_UNUSED)
+set_is_warning_property (IndicatorPowerNotifier * self, gboolean is_warning)
 {
-  g_message("FIXME %s %s", G_STRFUNC, G_STRLOC);
+  priv_t * p = self->priv;
+
+  if (p->is_warning != is_warning)
+    {
+      p->is_warning = is_warning;
+
+      g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_IS_WARNING]);
+    }
 }
 
+/* implemented here rather than my_set_property() to guard from public use
+   because this is a read-only property */
 static void
-emit_hide_signal(IndicatorPowerNotifier * self G_GNUC_UNUSED)
+set_power_level_property (IndicatorPowerNotifier * self, PowerLevel power_level)
 {
-  g_message("FIXME %s %s", G_STRFUNC, G_STRLOC);
+  priv_t * p = self->priv;
+
+  if (p->power_level != power_level)
+    {
+      p->power_level = power_level;
+
+      g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_POWER_LEVEL]);
+    }
 }
 
-static void
-emit_show_signal(IndicatorPowerNotifier * self G_GNUC_UNUSED)
-{
-  g_message("FIXME %s %s", G_STRFUNC, G_STRLOC);
-}
+/***
+****
+***/
 
 static void
-notification_clear(IndicatorPowerNotifier * self)
+notification_clear (IndicatorPowerNotifier * self)
 {
   priv_t * p = self->priv;
 
   if (p->notify_notification != NULL)
     {
+      set_is_warning_property (self, FALSE);
+
       notify_notification_clear_actions(p->notify_notification);
       g_signal_handlers_disconnect_by_data(p->notify_notification, self);
       g_clear_object(&p->notify_notification);
-      emit_hide_signal(self);
+
     }
 }
 
@@ -107,10 +148,7 @@ notification_show(IndicatorPowerNotifier * self,
   NotifyNotification * nn;
 
   // if there's already a notification, tear it down
-  if (p->notify_notification != NULL)
-    {
-      notification_clear (self);
-    }
+  notification_clear (self);
 
   // create the notification
   body = g_strdup_printf(_("%d%% charge remaining"), (int)indicator_power_device_get_percentage(device));
@@ -130,63 +168,75 @@ notification_show(IndicatorPowerNotifier * self,
     }
   else
     {
-      emit_show_signal(self);
+      set_is_warning_property (self, TRUE);
     }
 
   g_free (body);
 }
 
-static void
-on_battery_level_changed(IndicatorPowerNotifier * self        G_GNUC_UNUSED,
-                         IndicatorPowerDevice   * device,
-                         gdouble                  old_value,
-                         gdouble                  new_value)
+static PowerLevel
+get_power_level (const IndicatorPowerDevice * device)
 {
-  static const double critical_level = 2.0;
-  static const double very_low_level = 5.0;
-  static const double low_level = 48.0;
+  static const double percent_critical = 2.0;
+  static const double percent_very_low = 5.0;
+  static const double percent_low = 48.0;
+  const gdouble p = indicator_power_device_get_percentage(device);
+  PowerLevel ret;
 
-  if (indicator_power_device_get_state(device) != UP_DEVICE_STATE_DISCHARGING)
-    return;
+  if (p <= percent_critical)
+    ret = POWER_LEVEL_CRITICAL;
+  else if (p <= percent_very_low)
+    ret = POWER_LEVEL_VERY_LOW;
+  else if (p <= percent_low)
+    ret = POWER_LEVEL_LOW;
+  else
+    ret = POWER_LEVEL_OK;
 
-g_message ("%s - %s - %f - %f", G_STRFUNC, indicator_power_device_get_object_path(device), old_value, new_value);
-
-  if ((old_value > critical_level) && (new_value <= critical_level))
-    {
-      emit_critical_signal(self);
-    }
-  else if ((old_value > very_low_level) && (new_value <= very_low_level))
-    {
-      notification_show(self, device);
-    }
-  else if ((old_value > low_level) && (new_value <= low_level))
-    {
-      notification_show(self, device);
-    }
+  return ret;
 }
-
+  
 static void
 on_devices_changed(IndicatorPowerNotifier * self)
 {
   priv_t * p = self->priv;
   GList * devices;
+  IndicatorPowerDevice * primary;
 
-  // find the primary device
-  devices = indicator_power_device_provider_get_devices(p->device_provider);
-  g_clear_object(&p->primary_device);
-  p->primary_device = indicator_power_service_choose_primary_device (devices);
+  /* find the primary battery */
+  devices = indicator_power_device_provider_get_devices (p->device_provider);
+  primary = indicator_power_service_choose_primary_device (devices);
+  g_clear_object (&p->battery);
+  if ((primary != NULL) && (indicator_power_device_get_kind (primary) == UP_DEVICE_KIND_BATTERY))
+    p->battery = g_object_ref (primary);
+  g_clear_object(&primary);
   g_list_free_full (devices, (GDestroyNotify)g_object_unref);
 
-  if (p->primary_device != NULL)
+  /* update our state based on the new primary device */
+  if (p->battery == NULL)
     {
-      // test for battery level change
-      const gdouble old_level = (int)(p->battery_level*1000) ? p->battery_level : 100.0;
-      const gdouble new_level = indicator_power_device_get_percentage(p->primary_device);
-      if ((int)(old_level*1000) != (int)(new_level*1000))
-          on_battery_level_changed (self, p->primary_device, old_level, new_level);
+      /* if there's no primary battery, put everything in standby mode */
+      set_power_level_property (self, POWER_LEVEL_OK);
+      notification_clear(self);
+    }
+  else
+    {
+      const PowerLevel power_level = get_power_level (p->battery);
 
-      p->battery_level = new_level;
-      p->time_remaining = indicator_power_device_get_time (p->primary_device);
+      if (p->power_level != power_level)
+        {
+          set_power_level_property (self, power_level);
+
+          /* maybe update the notifications */
+          if ((power_level == POWER_LEVEL_OK) ||
+              (indicator_power_device_get_state(p->battery) != UP_DEVICE_STATE_DISCHARGING))
+            {
+              notification_clear (self);
+            }
+          else
+            {
+              notification_show (self, p->battery);
+            }
+        }
     }
 }
 
@@ -207,6 +257,14 @@ my_get_property (GObject     * o,
     {
       case PROP_DEVICE_PROVIDER:
         g_value_set_object (value, p->device_provider);
+        break;
+
+      case PROP_POWER_LEVEL:
+        g_value_set_int (value, p->power_level);
+        break;
+
+      case PROP_IS_WARNING:
+        g_value_set_boolean (value, p->is_warning);
         break;
 
       default:
@@ -237,16 +295,24 @@ static void
 my_dispose (GObject * o)
 {
   IndicatorPowerNotifier * self = INDICATOR_POWER_NOTIFIER(o);
+  priv_t * p = self->priv;
+g_message ("%s %s dispose %p", G_STRLOC, G_STRFUNC, (void*)o);
 
-  indicator_power_notifier_set_device_provider(self, NULL);
+  indicator_power_notifier_set_bus(self, NULL);
   notification_clear(self);
+  indicator_power_notifier_set_device_provider (self, NULL);
+
+  g_clear_pointer (&p->power_level_binding, g_binding_unbind);
+  g_clear_pointer (&p->is_warning_binding, g_binding_unbind);
+  g_clear_object (&p->dbus_battery);
 
   G_OBJECT_CLASS (indicator_power_notifier_parent_class)->dispose (o);
 }
 
 static void
-my_finalize (GObject * o G_GNUC_UNUSED)
+my_finalize (GObject * o)
 {
+g_message ("%s %s finalize %p", G_STRLOC, G_STRFUNC, (void*)o);
   if (!--n_notifiers)
     notify_uninit();
 }
@@ -262,8 +328,23 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
                                             INDICATOR_TYPE_POWER_NOTIFIER,
                                             IndicatorPowerNotifierPrivate);
   self->priv = p;
+g_message ("%s %s init %p", G_STRLOC, G_STRFUNC, (void*)self);
 
-  //p->battery_levels = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_variant_unref);
+  p->dbus_battery = dbus_battery_skeleton_new ();
+
+  /* FIXME: own the busname and export the skeleton */
+
+  p->is_warning_binding = g_object_bind_property (self,
+                                                  IS_WARNING_NAME,
+                                                  p->dbus_battery,
+                                                  IS_WARNING_NAME,
+                                                  G_BINDING_SYNC_CREATE);
+
+  p->power_level_binding = g_object_bind_property (self,
+                                                   POWER_LEVEL_NAME,
+                                                   p->dbus_battery,
+                                                   POWER_LEVEL_NAME,
+                                                   G_BINDING_SYNC_CREATE);
 
   if (!n_notifiers++ && !notify_init("indicator-power-service"))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
@@ -284,11 +365,27 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
   properties[PROP_0] = NULL;
 
   properties[PROP_DEVICE_PROVIDER] = g_param_spec_object (
-    "device-provider",
+    DEVICE_PROVIDER_NAME,
     "Device Provider",
     "Source for power devices",
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_POWER_LEVEL] = g_param_spec_int (
+    POWER_LEVEL_NAME,
+    "Power Level",
+    "Power Level of the batteries",
+    POWER_LEVEL_OK,
+    POWER_LEVEL_CRITICAL,
+    POWER_LEVEL_OK,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_IS_WARNING] = g_param_spec_boolean (
+    IS_WARNING_NAME,
+    "Is Warning",
+    "Whether or not we're currently warning the user about a low battery",
+    FALSE,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -301,7 +398,7 @@ IndicatorPowerNotifier *
 indicator_power_notifier_new (IndicatorPowerDeviceProvider * device_provider)
 {
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_NOTIFIER,
-                              "device-provider", device_provider,
+                              DEVICE_PROVIDER_NAME, device_provider,
                               NULL);
 
   return INDICATOR_POWER_NOTIFIER (o);
@@ -321,7 +418,7 @@ indicator_power_notifier_set_device_provider(IndicatorPowerNotifier * self,
     {
       g_signal_handlers_disconnect_by_data(p->device_provider, self);
       g_clear_object(&p->device_provider);
-      g_clear_object(&p->primary_device);
+      g_clear_object(&p->battery);
     }
 
   if (dp != NULL)
@@ -334,3 +431,46 @@ indicator_power_notifier_set_device_provider(IndicatorPowerNotifier * self,
       on_devices_changed(self);
     }
 }
+
+void
+indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
+                                  GDBusConnection * bus)
+{
+  priv_t * p;
+
+  g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
+  p = self->priv;
+
+  if (p->bus != NULL)
+    {
+      if (p->dbus_battery != NULL)
+        {
+          g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON(p->dbus_battery));
+        }
+
+      g_clear_object (&p->bus);
+    }
+
+  if (bus != NULL)
+    {
+      GError * error;
+
+      p->bus = g_object_ref (bus);
+
+      error = NULL;
+      g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(p->dbus_battery),
+                                       bus,
+                                       BUS_PATH"/Battery",
+                                       &error);
+      if (error != NULL)
+        {
+          g_warning ("Unable to export LowBattery properties: %s", error->message);
+          g_error_free (error);
+        }
+    }
+}
+
+
+
+
+
