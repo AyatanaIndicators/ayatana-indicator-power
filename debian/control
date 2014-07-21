@@ -14,6 +14,7 @@ Build-Depends: cmake,
                intltool,
 # for tests
                libgtest-dev,
+               libdbustest1-dev,
                dbus-test-runner,
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power
