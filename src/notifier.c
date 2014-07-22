@@ -61,6 +61,7 @@ struct _IndicatorPowerNotifierPrivate
      See indicator_power_service_choose_primary_device() */
   IndicatorPowerDevice * battery;
   PowerLevel power_level;
+  gboolean discharging;
 
   NotifyNotification* notify_notification;
   gboolean is_warning;
@@ -150,17 +151,25 @@ static void
 on_battery_property_changed (IndicatorPowerNotifier * self)
 {
   priv_t * p;
+  PowerLevel old_power_level;
+  PowerLevel new_power_level;
+  gboolean old_discharging;
+  gboolean new_discharging;
 
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   g_return_if_fail(INDICATOR_IS_POWER_DEVICE(self->priv->battery));
 
   p = self->priv;
 
-  set_power_level_property (self,
-                            indicator_power_notifier_get_power_level (p->battery));
+  old_power_level = p->power_level;
+  new_power_level = indicator_power_notifier_get_power_level (p->battery);
 
-  if ((indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING) &&
-      (p->power_level != POWER_LEVEL_OK))
+  old_discharging = p->discharging;
+  new_discharging = indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING;
+
+  if (new_discharging &&
+      (new_power_level != POWER_LEVEL_OK) &&
+      ((new_power_level != old_power_level) || (new_discharging != old_discharging)))
     {
       notification_show (self);
     }
@@ -168,6 +177,9 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
     {
       notification_clear (self);
     }
+
+  set_power_level_property (self, new_power_level);
+  p->discharging = new_discharging;
 }
 
 /***
