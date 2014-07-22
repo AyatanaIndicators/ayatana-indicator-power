@@ -100,45 +100,35 @@ notification_clear (IndicatorPowerNotifier * self)
 }
 
 static void
-on_notification_clicked(NotifyNotification * notify_notification G_GNUC_UNUSED,
-                        char * action G_GNUC_UNUSED,
-                        gpointer gself G_GNUC_UNUSED)
-{
-  /* no-op: notify_notification_add_action() doesn't like NULL callbacks */
-}
-
-static void
 notification_show(IndicatorPowerNotifier * self)
 {
   priv_t * p;
   char * body;
-  NotifyNotification * nn;
   GError * error;
 
   notification_clear (self);
 
+#if 0 /* using Ephemeral no-button notifications for right now;
+         however this will likely change so I'm not tearing the
+         NotifierClass.interactive code out just yet */
+
   /* only show clickable notifications if the Notify server supports them */
   if (!INDICATOR_POWER_NOTIFIER_GET_CLASS(self)->interactive)
     return;
+#endif
 
   p = self->priv;
 
   /* create the notification */
   body = g_strdup_printf(_("%.0f%% charge remaining"),
                          indicator_power_device_get_percentage(p->battery));
-  nn = notify_notification_new(_("Battery Low"), body, NULL);
-  p->notify_notification = nn;
-  notify_notification_set_hint(nn, "x-canonical-snap-decisions",
-                               g_variant_new_boolean(TRUE));
-  notify_notification_set_hint(nn, "x-canonical-private-button-tint",
-                               g_variant_new_boolean(TRUE));
-  notify_notification_add_action(nn, "OK", _("OK"),
-                                 on_notification_clicked, self, NULL);
-  g_signal_connect_swapped(nn, "closed", G_CALLBACK(notification_clear), self);
+  p->notify_notification = notify_notification_new(_("Battery Low"), body, NULL);
+  g_signal_connect_swapped(p->notify_notification, "closed",
+                           G_CALLBACK(notification_clear), self);
 
   /* show the notification */
   error = NULL;
-  notify_notification_show(nn, &error);
+  notify_notification_show(p->notify_notification, &error);
   if (error != NULL)
     {
       g_critical("Unable to show snap decision for '%s': %s", body, error->message);
