@@ -281,11 +281,11 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 
       if (old_level == new_level)
         {
-          EXPECT_EQ (0, changed_params.fields);
+          EXPECT_EQ (0, (changed_params.fields & FIELD_POWER_LEVEL));
         }
       else
         {
-          EXPECT_EQ (FIELD_POWER_LEVEL, changed_params.fields);
+          EXPECT_EQ (FIELD_POWER_LEVEL, (changed_params.fields & FIELD_POWER_LEVEL));
           EXPECT_EQ (new_level, changed_params.power_level);
         }
     }
