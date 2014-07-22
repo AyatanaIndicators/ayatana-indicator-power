@@ -595,13 +595,13 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
   struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
-  if (p->conn == NULL) /* we haven't built the menus yet */
-    return;
-
   if (sections & SECTION_HEADER)
     {
       g_simple_action_set_state (p->header_action, create_header_state (self));
     }
+
+  if (p->conn == NULL) /* we haven't built the menus yet */
+    return;
 
   if (sections & SECTION_DEVICES)
     {
