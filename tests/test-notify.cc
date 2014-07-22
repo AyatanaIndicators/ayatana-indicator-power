@@ -81,13 +81,16 @@ protected:
 
     GError * error = nullptr;
     mock = dbus_test_dbus_mock_new(NOTIFY_BUSNAME);
-    obj = dbus_test_dbus_mock_get_object(mock, NOTIFY_PATH, NOTIFY_INTERFACE, &error);
+    obj = dbus_test_dbus_mock_get_object(mock,
+                                         NOTIFY_PATH,
+                                         NOTIFY_INTERFACE,
+                                         &error);
     g_assert_no_error (error);
     
     dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_GET_INFO,
                                           nullptr,
                                           G_VARIANT_TYPE("(ssss)"),
-                                          "ret = ('mock-notify', 'test vendor', '1.0', '1.1')", // python
+                                          "ret = ('mock-notify', 'test vendor', '1.0', '1.1')",
                                           &error);
     g_assert_no_error (error);
 
@@ -142,8 +145,55 @@ TEST_F(NotifyFixture, HelloWorld)
 {
 }
 
+/***
+****
+***/
 
-// scaffolding to listen for PropertyChanged signals and remember them
+
+namespace
+{
+  static constexpr double percent_critical {2.0};
+  static constexpr double percent_very_low {5.0};
+  static constexpr double percent_low {10.0};
+
+  void set_battery_percentage (IndicatorPowerDevice * battery, gdouble p)
+  {
+    g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, p, nullptr);
+  }
+}
+
+TEST_F(NotifyFixture, PercentageToLevel)
+{
+  auto battery = indicator_power_device_new ("/object/path",
+                                             UP_DEVICE_KIND_BATTERY,
+                                             50.0,
+                                             UP_DEVICE_STATE_DISCHARGING,
+                                             30);
+
+  // confirm that the power levels trigger at the right percentages
+  for (int i=100; i>=0; --i)
+    {
+      set_battery_percentage (battery, i);
+      const auto level = indicator_power_notifier_get_power_level(battery);
+
+       if (i <= percent_critical)
+         EXPECT_EQ (POWER_LEVEL_CRITICAL, level);
+       else if (i <= percent_very_low)
+         EXPECT_EQ (POWER_LEVEL_VERY_LOW, level);
+       else if (i <= percent_low)
+         EXPECT_EQ (POWER_LEVEL_LOW, level);
+       else
+         EXPECT_EQ (POWER_LEVEL_OK, level);
+     }
+
+  g_object_unref (battery);
+}
+
+/***
+****
+***/
+
+// scaffolding to monitor PropertyChanged signals
 namespace
 {
   enum
@@ -168,59 +218,27 @@ namespace
                                     gpointer gchanged_params)
   {
     g_return_if_fail (g_variant_n_children (parameters) == 3);
-    auto changed_properties = g_variant_get_child_value (parameters, 1);
-    g_return_if_fail (g_variant_is_of_type (changed_properties, G_VARIANT_TYPE_DICTIONARY));
+    auto dict = g_variant_get_child_value (parameters, 1);
+    g_return_if_fail (g_variant_is_of_type (dict, G_VARIANT_TYPE_DICTIONARY));
     auto changed_params = static_cast<ChangedParams*>(gchanged_params);
 
     gint32 power_level;
-    if (g_variant_lookup (changed_properties, "PowerLevel", "i", &power_level, nullptr))
+    if (g_variant_lookup (dict, "PowerLevel", "i", &power_level, nullptr))
     {
       changed_params->power_level = power_level;
       changed_params->fields |= FIELD_POWER_LEVEL;
     }
 
     gboolean is_warning;
-    if (g_variant_lookup (changed_properties, "IsWarning", "b", &is_warning, nullptr))
+    if (g_variant_lookup (dict, "IsWarning", "b", &is_warning, nullptr))
     {
       changed_params->is_warning = is_warning;
       changed_params->fields |= FIELD_IS_WARNING;
     }
 
-    g_variant_unref (changed_properties);
+    g_variant_unref (dict);
   }
-
-  static const double percent_critical = 2.0;
-  static const double percent_very_low = 5.0;
-  static const double percent_low = 10.0;
 }
-
-TEST_F(NotifyFixture, PercentageToLevel)
-{
-  auto battery = indicator_power_device_new ("/object/path",
-                                             UP_DEVICE_KIND_BATTERY,
-                                             50.0,
-                                             UP_DEVICE_STATE_DISCHARGING,
-                                             30);
-
-  // confirm that the power levels trigger at the right percentages
-  for (int i=100; i>=0; --i)
-    {
-      g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, (gdouble)i, nullptr);
-      const auto level = indicator_power_notifier_get_power_level(battery);
-
-       if (i <= percent_critical)
-         EXPECT_EQ (POWER_LEVEL_CRITICAL, level);
-       else if (i <= percent_very_low)
-         EXPECT_EQ (POWER_LEVEL_VERY_LOW, level);
-       else if (i <= percent_low)
-         EXPECT_EQ (POWER_LEVEL_LOW, level);
-       else
-         EXPECT_EQ (POWER_LEVEL_OK, level);
-     }
-
-  g_object_unref (battery);
-}
-
 
 TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 {
@@ -238,16 +256,16 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
   wait_msec();
 
   ChangedParams changed_params;
-  auto subscription_tag = g_dbus_connection_signal_subscribe (bus,
-                                                              nullptr,
-                                                              "org.freedesktop.DBus.Properties",
-                                                              "PropertiesChanged",
-                                                              BUS_PATH"/Battery",
-                                                              nullptr,
-                                                              G_DBUS_SIGNAL_FLAGS_NONE,
-                                                              on_battery_property_changed,
-                                                              &changed_params,
-                                                              nullptr);
+  auto sub_tag = g_dbus_connection_signal_subscribe (bus,
+                                                     nullptr,
+                                                     "org.freedesktop.DBus.Properties",
+                                                     "PropertiesChanged",
+                                                     BUS_PATH"/Battery",
+                                                     nullptr,
+                                                     G_DBUS_SIGNAL_FLAGS_NONE,
+                                                     on_battery_property_changed,
+                                                     &changed_params,
+                                                     nullptr);
 
   // confirm that draining the battery puts
   // the power_level change through its paces                                                              
@@ -257,7 +275,7 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
       EXPECT_TRUE (changed_params.fields == 0);
 
       const auto old_level = indicator_power_notifier_get_power_level(battery);
-      g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, (gdouble)i, nullptr);
+      set_battery_percentage (battery, i);
       const auto new_level = indicator_power_notifier_get_power_level(battery);
       wait_msec();
 
@@ -273,20 +291,27 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
     }
 
   // cleanup
-  g_dbus_connection_signal_unsubscribe (bus, subscription_tag);
+  g_dbus_connection_signal_unsubscribe (bus, sub_tag);
   g_object_unref (notifier);
   g_object_unref (battery);
 }
 
+/***
+****
+***/
 
-// confirm that notifications pop up
-// when a discharging battery's power level drops
 TEST_F(NotifyFixture, EventsThatChangeNotifications)
 {
   // GetCapabilities returns an array containing 'actions', so that we'll
   // get snap decisions and the 'IsWarning' property
   GError * error = nullptr;
-  dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_GET_CAPS, nullptr, G_VARIANT_TYPE_STRING_ARRAY, "ret = ['actions', 'body']", &error);
+  dbus_test_dbus_mock_object_add_method (mock,
+                                         obj,
+                                         METHOD_GET_CAPS,
+                                         nullptr,
+                                         G_VARIANT_TYPE_STRING_ARRAY,
+                                         "ret = ['actions', 'body']",
+                                         &error);
   g_assert_no_error (error);
 
   auto battery = indicator_power_device_new ("/object/path",
@@ -301,16 +326,16 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   indicator_power_notifier_set_battery (notifier, battery);
   indicator_power_notifier_set_bus (notifier, bus);
   ChangedParams changed_params;
-  auto subscription_tag = g_dbus_connection_signal_subscribe (bus,
-                                                              nullptr,
-                                                              "org.freedesktop.DBus.Properties",
-                                                              "PropertiesChanged",
-                                                              BUS_PATH"/Battery",
-                                                              nullptr,
-                                                              G_DBUS_SIGNAL_FLAGS_NONE,
-                                                              on_battery_property_changed,
-                                                              &changed_params,
-                                                              nullptr);
+  auto sub_tag = g_dbus_connection_signal_subscribe (bus,
+                                                     nullptr,
+                                                     "org.freedesktop.DBus.Properties",
+                                                     "PropertiesChanged",
+                                                     BUS_PATH"/Battery",
+                                                     nullptr,
+                                                     G_DBUS_SIGNAL_FLAGS_NONE,
+                                                     on_battery_property_changed,
+                                                     &changed_params,
+                                                     nullptr);
 
   // test setup case
   wait_msec();
@@ -320,7 +345,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   // a) the power level changes
   // b) we get a notification
   changed_params = ChangedParams();
-  g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, (gdouble)percent_low, nullptr);
+  set_battery_percentage (battery, percent_low);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_EQ (indicator_power_notifier_get_power_level(battery), changed_params.power_level);
@@ -328,7 +353,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
 
   // now test that the warning changes if the level goes down even lower...
   changed_params = ChangedParams();
-  g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, (gdouble)percent_very_low, nullptr);
+  set_battery_percentage (battery, percent_very_low);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL, changed_params.fields);
   EXPECT_EQ (POWER_LEVEL_VERY_LOW, changed_params.power_level);
@@ -349,14 +374,14 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
 
   // ...and that it's taken down if the power level is OK
   changed_params = ChangedParams();
-  g_object_set (battery, INDICATOR_POWER_DEVICE_PERCENTAGE, (gdouble)percent_low+1, nullptr);
+  set_battery_percentage (battery, percent_low+1);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_EQ (POWER_LEVEL_OK, changed_params.power_level);
   EXPECT_FALSE (changed_params.is_warning);
 
   // cleanup
-  g_dbus_connection_signal_unsubscribe (bus, subscription_tag);
+  g_dbus_connection_signal_unsubscribe (bus, sub_tag);
   g_object_unref (notifier);
   g_object_unref (battery);
 }

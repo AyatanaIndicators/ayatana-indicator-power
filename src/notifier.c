@@ -73,8 +73,11 @@ struct _IndicatorPowerNotifierPrivate
 
 typedef IndicatorPowerNotifierPrivate priv_t;
 
-static void set_is_warning_property (IndicatorPowerNotifier*, gboolean is_warning);
-static void set_power_level_property (IndicatorPowerNotifier*, PowerLevel power_level);
+static void set_is_warning_property (IndicatorPowerNotifier*,
+                                     gboolean is_warning);
+
+static void set_power_level_property (IndicatorPowerNotifier*,
+                                      PowerLevel power_level);
 
 /***
 ****  Notifications
@@ -101,7 +104,7 @@ on_notification_clicked(NotifyNotification * notify_notification G_GNUC_UNUSED,
                         char * action G_GNUC_UNUSED,
                         gpointer gself G_GNUC_UNUSED)
 {
-  /* no-op; notify_notification_add_action() doesn't like NULL callbacks */
+  /* no-op: notify_notification_add_action() doesn't like NULL callbacks */
 }
 
 static void
@@ -183,9 +186,9 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
 
 static void
 my_get_property (GObject     * o,
-                  guint         property_id,
-                  GValue      * value,
-                  GParamSpec  * pspec)
+                 guint         property_id,
+                 GValue      * value,
+                 GParamSpec  * pspec)
 {
   IndicatorPowerNotifier * self = INDICATOR_POWER_NOTIFIER (o);
   priv_t * p = self->priv;
@@ -296,6 +299,8 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
                                    IndicatorPowerNotifierPrivate);
   self->priv = p;
 
+  /* bind the read-only properties so they'll get pushed to the bus */
+
   p->dbus_battery = dbus_battery_skeleton_new ();
 
   p->is_warning_binding = g_object_bind_property (self,
@@ -330,6 +335,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
               klass->interactive = TRUE;
           g_list_free_full (caps, g_free);
         }
+      g_debug ("Will show popups on low battery: %d", (int)klass->interactive);
     }
 }
 
