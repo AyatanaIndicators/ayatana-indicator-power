@@ -51,3 +51,11 @@ add_test_by_name(test-notify)
 add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
 add_test_by_name(test-device)
 
+###
+###
+
+set (APP_NAME indicator-power-service-cmdline-battery)
+add_executable (${APP_NAME} ${APP_NAME}.cc device-provider-mock.c)
+add_dependencies (${APP_NAME} libindicatorpowerservice)
+target_link_libraries (${APP_NAME} indicatorpowerservice ${SERVICE_DEPS_LIBRARIES})
+
