@@ -167,9 +167,11 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   old_discharging = p->discharging;
   new_discharging = indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING;
 
-  if (new_discharging &&
-      (new_power_level != POWER_LEVEL_OK) &&
-      ((new_power_level != old_power_level) || (new_discharging != old_discharging)))
+  /* pop up a notification for a battery whenever either:
+     a) it's already discharging, and its PowerLevel worsens, OR
+     b) it's already got a bad PowerLevel and its state becomes 'discharging */
+  if ((new_discharging && (new_power_level > old_power_level)) ||
+      ((new_power_level != POWER_LEVEL_OK) && new_discharging && !old_discharging))
     {
       notification_show (self);
     }
