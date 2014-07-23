@@ -58,9 +58,10 @@ static GParamSpec * properties[LAST_PROP];
 struct _IndicatorPowerNotifierPrivate
 {
   /* The battery we're currently watching.
-     This may be a physical battery or it may be a "merged" battery
-     synthesized from multiple batteries present on the device.
-     See indicator_power_service_choose_primary_device() */
+     This may be a physical battery or it may be an aggregated
+     battery from multiple batteries present on the device.
+     See indicator_power_service_choose_primary_device() and
+     bug #880881 */
   IndicatorPowerDevice * battery;
   PowerLevel power_level;
   gboolean discharging;
@@ -68,10 +69,10 @@ struct _IndicatorPowerNotifierPrivate
   NotifyNotification* notify_notification;
   gboolean is_warning;
 
-  DbusBattery * dbus_battery;
-  GBinding * is_warning_binding;
-  GBinding * power_level_binding;
   GDBusConnection * bus;
+  DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
+  GBinding * is_warning_binding; /* pushes our property to dbus_battery */
+  GBinding * power_level_binding; /* pushes our property to dbus_battery */
 };
 
 typedef IndicatorPowerNotifierPrivate priv_t;
@@ -162,7 +163,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   old_discharging = p->discharging;
   new_discharging = indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING;
 
-  /* pop up a notification for a battery whenever either:
+  /* pop up a 'low battery' notification if either:
      a) it's already discharging, and its PowerLevel worsens, OR
      b) it's already got a bad PowerLevel and its state becomes 'discharging */
   if ((new_discharging && (new_power_level > old_power_level)) ||
