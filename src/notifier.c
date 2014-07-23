@@ -96,7 +96,6 @@ notification_clear (IndicatorPowerNotifier * self)
       notify_notification_clear_actions(p->notify_notification);
       g_signal_handlers_disconnect_by_data(p->notify_notification, self);
       g_clear_object(&p->notify_notification);
-
     }
 }
 
