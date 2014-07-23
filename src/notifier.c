@@ -26,6 +26,8 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
+#define HINT_INTERACTIVE "x-canonical-switch-to-application"
+
 G_DEFINE_TYPE(IndicatorPowerNotifier,
               indicator_power_notifier,
               G_TYPE_OBJECT)
@@ -114,6 +116,9 @@ notification_show(IndicatorPowerNotifier * self)
   body = g_strdup_printf(_("%.0f%% charge remaining"),
                          indicator_power_device_get_percentage(p->battery));
   p->notify_notification = notify_notification_new(_("Battery Low"), body, NULL);
+  notify_notification_set_hint(p->notify_notification,
+                               HINT_INTERACTIVE,
+                               g_variant_new_boolean(TRUE));
   g_signal_connect_swapped(p->notify_notification, "closed",
                            G_CALLBACK(notification_clear), self);
 
