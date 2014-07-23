@@ -63,7 +63,6 @@ struct _IndicatorPowerNotifierClass
 
   /*< private >*/
   gint instance_count;
-  gboolean interactive;
 };
 
 /***

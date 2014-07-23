@@ -109,15 +109,6 @@ notification_show(IndicatorPowerNotifier * self)
 
   notification_clear (self);
 
-#if 0 /* using Ephemeral no-button notifications for right now;
-         however this will likely change so I'm not tearing the
-         NotifierClass.interactive code out just yet */
-
-  /* only show clickable notifications if the Notify server supports them */
-  if (!INDICATOR_POWER_NOTIFIER_GET_CLASS(self)->interactive)
-    return;
-#endif
-
   p = self->priv;
 
   /* create the notification */
@@ -327,19 +318,6 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
         {
           g_critical("Unable to initialize libnotify! Notifications might not be shown.");
         }
-      else
-        {
-          /* See if the notification server supports clickable actions... */
-          GList * caps;
-          GList * l;
-          klass->interactive = FALSE;
-          caps = notify_get_server_caps();
-          for (l=caps; l!=NULL && !klass->interactive; l=l->next)
-            if (!g_strcmp0 ("actions", (const char*)l->data))
-              klass->interactive = TRUE;
-          g_list_free_full (caps, g_free);
-        }
-      g_debug ("Will show popups on low battery: %d", (int)klass->interactive);
     }
 }
 
@@ -383,7 +361,6 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   klass->instance_count = 0;
-  klass->interactive = FALSE;
 }
 
 /***
