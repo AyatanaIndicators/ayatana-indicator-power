@@ -60,9 +60,6 @@ struct _IndicatorPowerNotifier
 struct _IndicatorPowerNotifierClass
 {
   GObjectClass parent_class;
-
-  /*< private >*/
-  gint instance_count;
 };
 
 /***

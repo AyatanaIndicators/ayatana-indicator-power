@@ -51,6 +51,8 @@ enum
 
 static GParamSpec * properties[LAST_PROP];
 
+static int instance_count = 0;
+
 /**
 ***
 **/
@@ -276,11 +278,12 @@ my_dispose (GObject * o)
 }
 
 static void
-my_finalize (GObject * o)
+my_finalize (GObject * o G_GNUC_UNUSED)
 {
-  IndicatorPowerNotifierClass * klass = INDICATOR_POWER_NOTIFIER_GET_CLASS(o);
-
-  if (!--klass->instance_count)
+  /* FIXME: This is an awkward place to put this. 
+     Ordinarily something like this would go in main(), but we need libnotify
+     to clean itself up before shutting down the bus in the unit tests as well. */
+  if (!--instance_count)
     notify_uninit();
 }
 
@@ -292,7 +295,6 @@ static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
 {
   priv_t * p;
-  IndicatorPowerNotifierClass * klass;
 
   p = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                    INDICATOR_TYPE_POWER_NOTIFIER,
@@ -315,9 +317,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
                                                    PROP_POWER_LEVEL_NAME,
                                                    G_BINDING_SYNC_CREATE);
 
-  klass = INDICATOR_POWER_NOTIFIER_GET_CLASS(self);
-
-  if (!klass->instance_count++)
+  if (!instance_count++)
     {
       if (!notify_init("indicator-power-service"))
         {
@@ -364,8 +364,6 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
     G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  klass->instance_count = 0;
 }
 
 /***
