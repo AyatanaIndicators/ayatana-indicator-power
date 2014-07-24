@@ -24,7 +24,6 @@
 #include <libnotify/notify.h>
 
 #include <glib/gi18n.h>
-#include <gio/gio.h>
 
 #define HINT_INTERACTIVE "x-canonical-switch-to-application"
 

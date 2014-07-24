@@ -20,9 +20,7 @@
 #ifndef __INDICATOR_POWER_NOTIFIER_H__
 #define __INDICATOR_POWER_NOTIFIER_H__
 
-#include <glib.h>
-#include <glib-object.h>
-#include <gio/gio.h> /* GDBusConnection */
+#include <gio/gio.h>
 
 #include "device.h"
 
