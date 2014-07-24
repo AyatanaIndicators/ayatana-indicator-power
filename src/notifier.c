@@ -334,8 +334,6 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
 
   g_type_class_add_private (klass, sizeof (IndicatorPowerNotifierPrivate));
 
-  properties[PROP_0] = NULL;
-
   properties[PROP_BATTERY] = g_param_spec_object (
     PROP_BATTERY_NAME,
     "Battery",
