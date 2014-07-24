@@ -438,11 +438,10 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
       p->bus = g_object_ref (bus);
 
       error = NULL;
-      g_dbus_interface_skeleton_export(skel,
-                                       bus,
-                                       BUS_PATH"/Battery",
-                                       &error);
-      if (error != NULL)
+      if (!g_dbus_interface_skeleton_export(skel,
+                                            bus,
+                                            BUS_PATH"/Battery",
+                                            &error))
         {
           g_warning ("Unable to export LowBattery properties: %s", error->message);
           g_error_free (error);
