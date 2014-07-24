@@ -52,7 +52,7 @@ class GlibFixture : public ::testing::Test
 
         if (expected_log[level] != n)
             for (size_t i=0; i<n; ++i)
-                g_message("%d %s", (n+1), v[i].c_str());
+                g_print("%d %s\n", (n+1), v[i].c_str());
       }
 
       expected_log.clear();
