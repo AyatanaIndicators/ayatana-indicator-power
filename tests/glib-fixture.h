@@ -1,8 +1,5 @@
 /*
- * Copyright 2013 Canonical Ltd.
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
+ * Copyright 2014 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
  */
 
 #include <map>
@@ -31,33 +31,50 @@ class GlibFixture : public ::testing::Test
 {
   private:
 
-    //GLogFunc realLogHandler;
+    GLogFunc realLogHandler;
 
-  protected:
+    std::map<GLogLevelFlags,size_t> expected_log;
+    std::map<GLogLevelFlags,std::vector<std::string>> log;
 
-    std::map<GLogLevelFlags,int> logCounts;
-
-    void testLogCount(GLogLevelFlags log_level, int /*expected*/)
+    void test_log_counts()
     {
-#if 0
-      EXPECT_EQ(expected, logCounts[log_level]);
-#endif
+      const GLogLevelFlags levels_to_test[] = { G_LOG_LEVEL_ERROR,
+                                                G_LOG_LEVEL_CRITICAL,
+                                                G_LOG_LEVEL_MESSAGE,
+                                                G_LOG_LEVEL_WARNING };
 
-      logCounts.erase(log_level);
+      for(const auto& level : levels_to_test)
+      {
+        const auto& v = log[level];
+        const auto n = v.size();
+
+        EXPECT_EQ(expected_log[level], n);
+
+        if (expected_log[level] != n)
+            for (size_t i=0; i<n; ++i)
+                g_message("%d %s", (n+1), v[i].c_str());
+      }
+
+      expected_log.clear();
+      log.clear();
     }
-
-  private:
 
     static void default_log_handler(const gchar    * log_domain,
                                     GLogLevelFlags   log_level,
                                     const gchar    * message,
                                     gpointer         self)
     {
-      g_print("%s - %d - %s\n", log_domain, (int)log_level, message);
-      static_cast<GlibFixture*>(self)->logCounts[log_level]++;
+      auto tmp = g_strdup_printf ("%s:%d \"%s\"", log_domain, (int)log_level, message);
+      static_cast<GlibFixture*>(self)->log[log_level].push_back(tmp);
+      g_free(tmp);
     }
 
   protected:
+
+    void increment_expected_errors(GLogLevelFlags level, size_t n=1)
+    {
+      expected_log[level] += n;
+    }
 
     virtual void SetUp()
     {
@@ -65,30 +82,16 @@ class GlibFixture : public ::testing::Test
 
       loop = g_main_loop_new(nullptr, false);
 
-      //g_log_set_default_handler(default_log_handler, this);
-
-      // only use local, temporary settings
-      g_assert(g_setenv("GSETTINGS_SCHEMA_DIR", SCHEMA_DIR, true));
-      g_assert(g_setenv("GSETTINGS_BACKEND", "memory", true));
-      g_debug("SCHEMA_DIR is %s", SCHEMA_DIR);
+      g_log_set_default_handler(default_log_handler, this);
 
       g_unsetenv("DISPLAY");
-
     }
 
     virtual void TearDown()
     {
-#if 0
-      // confirm there aren't any unexpected log messages
-      EXPECT_EQ(0, logCounts[G_LOG_LEVEL_ERROR]);
-      EXPECT_EQ(0, logCounts[G_LOG_LEVEL_CRITICAL]);
-      EXPECT_EQ(0, logCounts[G_LOG_LEVEL_WARNING]);
-      EXPECT_EQ(0, logCounts[G_LOG_LEVEL_MESSAGE]);
-      EXPECT_EQ(0, logCounts[G_LOG_LEVEL_INFO]);
-#endif
+      test_log_counts();
 
-      // revert to glib's log handler
-      //g_log_set_default_handler(realLogHandler, this);
+      g_log_set_default_handler(realLogHandler, this);
 
       g_clear_pointer(&loop, g_main_loop_unref);
     }
@@ -112,7 +115,7 @@ class GlibFixture : public ::testing::Test
   protected:
 
     /* convenience func to loop while waiting for a GObject's signal */
-    void wait_for_signal(gpointer o, const gchar * signal, unsigned int timeout_seconds=5u)
+    void wait_for_signal(gpointer o, const gchar * signal, const guint timeout_seconds=5)
     {
       // wait for the signal or for timeout, whichever comes first
       const auto handler_id = g_signal_connect_swapped(o, signal,
@@ -127,7 +130,7 @@ class GlibFixture : public ::testing::Test
     }
 
     /* convenience func to loop for N msec */
-    void wait_msec(unsigned int msec=50u)
+    void wait_msec(guint msec=50)
     {
       const auto id = g_timeout_add(msec, wait_msec__timeout, loop);
       g_main_loop_run(loop);
