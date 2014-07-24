@@ -73,8 +73,6 @@ struct _IndicatorPowerNotifierPrivate
 
   GDBusConnection * bus;
   DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
-  GBinding * is_warning_binding; /* pushes our property to dbus_battery */
-  GBinding * power_level_binding; /* pushes our property to dbus_battery */
 };
 
 typedef IndicatorPowerNotifierPrivate priv_t;
@@ -269,8 +267,6 @@ my_dispose (GObject * o)
 
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
-  g_clear_object (&p->power_level_binding);
-  g_clear_object (&p->is_warning_binding);
   g_clear_object (&p->dbus_battery);
   indicator_power_notifier_set_battery (self, NULL);
 
@@ -305,17 +301,17 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->dbus_battery = dbus_battery_skeleton_new ();
 
-  p->is_warning_binding = g_object_bind_property (self,
-                                                  PROP_IS_WARNING_NAME,
-                                                  p->dbus_battery,
-                                                  PROP_IS_WARNING_NAME,
-                                                  G_BINDING_SYNC_CREATE);
+  g_object_bind_property (self,
+                          PROP_IS_WARNING_NAME,
+                          p->dbus_battery,
+                          PROP_IS_WARNING_NAME,
+                          G_BINDING_SYNC_CREATE);
 
-  p->power_level_binding = g_object_bind_property (self,
-                                                   PROP_POWER_LEVEL_NAME,
-                                                   p->dbus_battery,
-                                                   PROP_POWER_LEVEL_NAME,
-                                                   G_BINDING_SYNC_CREATE);
+  g_object_bind_property (self,
+                          PROP_POWER_LEVEL_NAME,
+                          p->dbus_battery,
+                          PROP_POWER_LEVEL_NAME,
+                          G_BINDING_SYNC_CREATE);
 
   if (!instance_count++)
     {
