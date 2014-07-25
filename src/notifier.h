@@ -35,15 +35,6 @@ G_BEGIN_DECLS
 typedef struct _IndicatorPowerNotifier         IndicatorPowerNotifier;
 typedef struct _IndicatorPowerNotifierClass    IndicatorPowerNotifierClass;
 
-typedef enum
-{
-  POWER_LEVEL_OK,
-  POWER_LEVEL_LOW,
-  POWER_LEVEL_VERY_LOW,
-  POWER_LEVEL_CRITICAL
-}
-PowerLevel;
-
 /**
  * The Indicator Power Notifier.
  */
@@ -72,7 +63,11 @@ void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
 void indicator_power_notifier_set_battery (IndicatorPowerNotifier  * self,
                                            IndicatorPowerDevice    * battery);
 
-PowerLevel indicator_power_notifier_get_power_level (IndicatorPowerDevice * battery);
+#define POWER_LEVEL_STR_OK "ok"
+#define POWER_LEVEL_STR_LOW "low"
+#define POWER_LEVEL_STR_VERY_LOW "very_low"
+#define POWER_LEVEL_STR_CRITICAL "critical"
+const char * indicator_power_notifier_get_power_level (IndicatorPowerDevice * battery);
 
 G_END_DECLS
 

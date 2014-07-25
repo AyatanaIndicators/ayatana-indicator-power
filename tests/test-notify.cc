@@ -200,13 +200,13 @@ TEST_F(NotifyFixture, PercentageToLevel)
       const auto level = indicator_power_notifier_get_power_level(battery);
 
        if (i <= percent_critical)
-         EXPECT_EQ (POWER_LEVEL_CRITICAL, level);
+         EXPECT_STREQ (POWER_LEVEL_STR_CRITICAL, level);
        else if (i <= percent_very_low)
-         EXPECT_EQ (POWER_LEVEL_VERY_LOW, level);
+         EXPECT_STREQ (POWER_LEVEL_STR_VERY_LOW, level);
        else if (i <= percent_low)
-         EXPECT_EQ (POWER_LEVEL_LOW, level);
+         EXPECT_STREQ (POWER_LEVEL_STR_LOW, level);
        else
-         EXPECT_EQ (POWER_LEVEL_OK, level);
+         EXPECT_STREQ (POWER_LEVEL_STR_OK, level);
      }
 
   g_object_unref (battery);
@@ -227,7 +227,7 @@ namespace
 
   struct ChangedParams
   {
-    int32_t power_level = POWER_LEVEL_OK;
+    std::string power_level = POWER_LEVEL_STR_OK;
     bool is_warning = false;
     uint32_t fields = 0;
   };
@@ -245,8 +245,8 @@ namespace
     g_return_if_fail (g_variant_is_of_type (dict, G_VARIANT_TYPE_DICTIONARY));
     auto changed_params = static_cast<ChangedParams*>(gchanged_params);
 
-    gint32 power_level;
-    if (g_variant_lookup (dict, "PowerLevel", "i", &power_level, nullptr))
+    const char * power_level;
+    if (g_variant_lookup (dict, "PowerLevel", "&s", &power_level, nullptr))
     {
       changed_params->power_level = power_level;
       changed_params->fields |= FIELD_POWER_LEVEL;
@@ -362,7 +362,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
 
   // test setup case
   wait_msec();
-  EXPECT_EQ (0, changed_params.power_level);
+  EXPECT_STREQ (POWER_LEVEL_STR_OK, changed_params.power_level.c_str());
 
   // change the percent past the 'low' threshold and confirm that
   // a) the power level changes
@@ -379,7 +379,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   set_battery_percentage (battery, percent_very_low);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL, changed_params.fields);
-  EXPECT_EQ (POWER_LEVEL_VERY_LOW, changed_params.power_level);
+  EXPECT_STREQ (POWER_LEVEL_STR_VERY_LOW, changed_params.power_level.c_str());
 
   // ...and that the warning is taken down if the battery is plugged back in...
   changed_params = ChangedParams();
@@ -400,7 +400,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   set_battery_percentage (battery, percent_low+1);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
-  EXPECT_EQ (POWER_LEVEL_OK, changed_params.power_level);
+  EXPECT_STREQ (POWER_LEVEL_STR_OK, changed_params.power_level.c_str());
   EXPECT_FALSE (changed_params.is_warning);
 
   // cleanup

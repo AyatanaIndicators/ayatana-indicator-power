@@ -27,6 +27,15 @@
 
 #define HINT_INTERACTIVE "x-canonical-switch-to-application"
 
+typedef enum
+{
+  POWER_LEVEL_OK,
+  POWER_LEVEL_LOW,
+  POWER_LEVEL_VERY_LOW,
+  POWER_LEVEL_CRITICAL
+}
+PowerLevel;
+
 /**
 ***  GObject Properties
 **/
@@ -73,6 +82,48 @@ G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerNotifier,
                            G_TYPE_OBJECT)
 
 #define get_priv(o) ((priv_t*)indicator_power_notifier_get_instance_private(o))
+
+/***
+****
+***/
+
+static const char *
+power_level_to_dbus_string (const PowerLevel power_level)
+{
+  switch (power_level)
+    {
+      case POWER_LEVEL_LOW:      return "low";
+      case POWER_LEVEL_VERY_LOW: return "very_low";
+      case POWER_LEVEL_CRITICAL: return "critical";
+      default:                   return "ok";
+    }
+}
+
+PowerLevel
+get_battery_power_level (IndicatorPowerDevice * battery)
+{
+  static const double percent_critical = 2.0;
+  static const double percent_very_low = 5.0;
+  static const double percent_low = 10.0;
+  gdouble p;
+  PowerLevel ret;
+
+  g_return_val_if_fail(battery != NULL, POWER_LEVEL_OK);
+  g_return_val_if_fail(indicator_power_device_get_kind(battery) == UP_DEVICE_KIND_BATTERY, POWER_LEVEL_OK);
+
+  p = indicator_power_device_get_percentage(battery);
+
+  if (p <= percent_critical)
+    ret = POWER_LEVEL_CRITICAL;
+  else if (p <= percent_very_low)
+    ret = POWER_LEVEL_VERY_LOW;
+  else if (p <= percent_low)
+    ret = POWER_LEVEL_LOW;
+  else
+    ret = POWER_LEVEL_OK;
+
+  return ret;
+}
 
 /***
 ****  Notifications
@@ -164,7 +215,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   g_return_if_fail(INDICATOR_IS_POWER_DEVICE(p->battery));
 
   old_power_level = p->power_level;
-  new_power_level = indicator_power_notifier_get_power_level (p->battery);
+  new_power_level = get_battery_power_level (p->battery);
 
   old_discharging = p->discharging;
   new_discharging = indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING;
@@ -182,7 +233,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
       notification_clear (self);
     }
 
-  dbus_battery_set_power_level (p->dbus_battery, new_power_level);
+  dbus_battery_set_power_level (p->dbus_battery, power_level_to_dbus_string (new_power_level));
   p->discharging = new_discharging;
 }
 
@@ -326,7 +377,7 @@ indicator_power_notifier_set_battery (IndicatorPowerNotifier * self,
     {
       g_signal_handlers_disconnect_by_data (p->battery, self);
       g_clear_object (&p->battery);
-      dbus_battery_set_power_level (p->dbus_battery, POWER_LEVEL_OK);
+      dbus_battery_set_power_level (p->dbus_battery, power_level_to_dbus_string (POWER_LEVEL_OK));
       notification_clear (self);
     }
 
@@ -384,28 +435,8 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
     }
 }
 
-PowerLevel
+const char *
 indicator_power_notifier_get_power_level (IndicatorPowerDevice * battery)
 {
-  static const double percent_critical = 2.0;
-  static const double percent_very_low = 5.0;
-  static const double percent_low = 10.0;
-  gdouble p;
-  PowerLevel ret;
-
-  g_return_val_if_fail(battery != NULL, POWER_LEVEL_OK);
-  g_return_val_if_fail(indicator_power_device_get_kind(battery) == UP_DEVICE_KIND_BATTERY, POWER_LEVEL_OK);
-
-  p = indicator_power_device_get_percentage(battery);
-
-  if (p <= percent_critical)
-    ret = POWER_LEVEL_CRITICAL;
-  else if (p <= percent_very_low)
-    ret = POWER_LEVEL_VERY_LOW;
-  else if (p <= percent_low)
-    ret = POWER_LEVEL_LOW;
-  else
-    ret = POWER_LEVEL_OK;
-
-  return ret;
+  return power_level_to_dbus_string (get_battery_power_level (battery));
 }

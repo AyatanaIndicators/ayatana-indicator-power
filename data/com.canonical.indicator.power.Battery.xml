@@ -3,10 +3,10 @@
 <node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
   <interface name="com.canonical.indicator.power.Battery">
 
-    <property name="PowerLevel" type="i" access="read">
+    <property name="PowerLevel" type="s" access="read">
       <doc:doc>
         <doc:description>
-          <doc:para>The battery's power level. 0==No Low Battery, 1==Low, 2==Very Low, 3==Critical</doc:para>
+          <doc:para>The battery's power level. Possible values: 'ok', 'low', 'very_low', 'critical'</doc:para>
         </doc:description>
       </doc:doc>
     </property>
