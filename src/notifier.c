@@ -29,10 +29,10 @@
 
 typedef enum
 {
-  POWER_LEVEL_OK,
-  POWER_LEVEL_LOW,
+  POWER_LEVEL_CRITICAL,
   POWER_LEVEL_VERY_LOW,
-  POWER_LEVEL_CRITICAL
+  POWER_LEVEL_LOW,
+  POWER_LEVEL_OK
 }
 PowerLevel;
 
@@ -92,10 +92,10 @@ power_level_to_dbus_string (const PowerLevel power_level)
 {
   switch (power_level)
     {
-      case POWER_LEVEL_LOW:      return "low";
-      case POWER_LEVEL_VERY_LOW: return "very_low";
-      case POWER_LEVEL_CRITICAL: return "critical";
-      default:                   return "ok";
+      case POWER_LEVEL_LOW:      return POWER_LEVEL_STR_LOW;
+      case POWER_LEVEL_VERY_LOW: return POWER_LEVEL_STR_VERY_LOW;
+      case POWER_LEVEL_CRITICAL: return POWER_LEVEL_STR_CRITICAL;
+      default:                   return POWER_LEVEL_STR_OK;
     }
 }
 
@@ -223,7 +223,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   /* pop up a 'low battery' notification if either:
      a) it's already discharging, and its PowerLevel worsens, OR
      b) it's already got a bad PowerLevel and its state becomes 'discharging */
-  if ((new_discharging && (new_power_level > old_power_level)) ||
+  if ((new_discharging && (old_power_level > new_power_level)) ||
       ((new_power_level != POWER_LEVEL_OK) && new_discharging && !old_discharging))
     {
       notification_show (self);
@@ -316,6 +316,8 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
   /* bind the read-only properties so they'll get pushed to the bus */
 
   p->dbus_battery = dbus_battery_skeleton_new ();
+
+  p->power_level = POWER_LEVEL_OK;
 
   if (!instance_count++)
     {
