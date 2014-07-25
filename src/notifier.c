@@ -178,7 +178,7 @@ notification_show(IndicatorPowerNotifier * self)
   body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
   nn = notify_notification_new(_("Battery Low"), body, NULL);
   g_free (body);
-  notify_notification_set_hint(nn, HINT_INTERACTIVE, g_variant_new_boolean(TRUE));
+  /*notify_notification_set_hint(nn, HINT_INTERACTIVE, g_variant_new_boolean(TRUE));*/
 
   /* if we can show it, keep it */
   error = NULL;
