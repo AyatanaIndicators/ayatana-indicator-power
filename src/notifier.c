@@ -90,55 +90,71 @@ static void set_power_level_property (IndicatorPowerNotifier*,
 ***/
 
 static void
+on_notify_notification_finalized (gpointer gself, GObject * dead)
+{
+  IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(gself);
+  priv_t * const p = get_priv(self);
+  g_return_if_fail ((void*)(p->notify_notification) == (void*)dead);
+  p->notify_notification = NULL;
+  set_is_warning_property (self, FALSE);
+}
+
+static void
 notification_clear (IndicatorPowerNotifier * self)
 {
   priv_t * const p = get_priv(self);
+  NotifyNotification * nn;
 
-  if (p->notify_notification != NULL)
+  if ((nn = p->notify_notification))
     {
-      set_is_warning_property (self, FALSE);
+      GError * error = NULL;
 
-      notify_notification_clear_actions(p->notify_notification);
-      g_signal_handlers_disconnect_by_data(p->notify_notification, self);
-      g_clear_object(&p->notify_notification);
+      g_object_weak_unref(G_OBJECT(nn), on_notify_notification_finalized, self);
+
+      if (!notify_notification_close(nn, &error))
+        {
+          g_warning("Unable to close notification: %s", error->message);
+          g_error_free(error);
+        }
+
+      p->notify_notification = NULL;
+      set_is_warning_property(self, FALSE);
     }
 }
 
 static void
 notification_show(IndicatorPowerNotifier * self)
 {
-  priv_t * p;
+  priv_t * const p = get_priv(self);
+  gdouble pct;
   char * body;
+  NotifyNotification * nn;
   GError * error;
 
-  notification_clear (self);
-
-  p = get_priv (self);
+  notification_clear(self);
 
   /* create the notification */
-  body = g_strdup_printf(_("%.0f%% charge remaining"),
-                         indicator_power_device_get_percentage(p->battery));
-  p->notify_notification = notify_notification_new(_("Battery Low"), body, NULL);
-  notify_notification_set_hint(p->notify_notification,
-                               HINT_INTERACTIVE,
-                               g_variant_new_boolean(TRUE));
-  g_signal_connect_swapped(p->notify_notification, "closed",
-                           G_CALLBACK(notification_clear), self);
+  pct = indicator_power_device_get_percentage(p->battery);
+  body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
+  nn = notify_notification_new(_("Battery Low"), body, NULL);
+  g_free (body);
+  notify_notification_set_hint(nn, HINT_INTERACTIVE, g_variant_new_boolean(TRUE));
 
-  /* show the notification */
+  /* if we can show it, keep it */
   error = NULL;
-  notify_notification_show(p->notify_notification, &error);
-  if (error != NULL)
+  if (notify_notification_show(nn, &error))
     {
-      g_critical("Unable to show snap decision for '%s': %s", body, error->message);
-      g_error_free(error);
+      p->notify_notification = nn;
+      g_signal_connect(nn, "closed", G_CALLBACK(g_object_unref), NULL);
+      g_object_weak_ref(G_OBJECT(nn), on_notify_notification_finalized, self);
+      set_is_warning_property(self, TRUE);
     }
   else
     {
-      set_is_warning_property (self, TRUE);
+      g_critical("Unable to show snap decision for '%s': %s", body, error->message);
+      g_error_free(error);
+      g_object_unref(nn);
     }
-
-  g_free (body);
 }
 
 /***

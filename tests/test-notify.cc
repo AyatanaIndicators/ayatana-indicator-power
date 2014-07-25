@@ -54,7 +54,7 @@ protected:
   DbusTestDbusMockObject * obj = nullptr;
   GDBusConnection * bus = nullptr;
 
-  static constexpr int NOTIFY_ID {1234};
+  static constexpr int FIRST_NOTIFY_ID {1234};
 
   static constexpr int NOTIFICATION_CLOSED_EXPIRED   {1};
   static constexpr int NOTIFICATION_CLOSED_DISMISSED {2};
@@ -63,9 +63,11 @@ protected:
 
   static constexpr char const * APP_NAME {"indicator-power-service"};
 
+  static constexpr char const * METHOD_CLOSE {"CloseNotification"};
   static constexpr char const * METHOD_NOTIFY {"Notify"};
   static constexpr char const * METHOD_GET_CAPS {"GetCapabilities"};
   static constexpr char const * METHOD_GET_INFO {"GetServerInformation"};
+  static constexpr char const * SIGNAL_CLOSED {"NotificationClosed"};
 
   static constexpr char const * HINT_TIMEOUT {"x-canonical-snap-decisions-timeout"};
 
@@ -86,7 +88,8 @@ protected:
                                          NOTIFY_INTERFACE,
                                          &error);
     g_assert_no_error (error);
-    
+  
+    // METHOD_GET_INFO 
     dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_GET_INFO,
                                           nullptr,
                                           G_VARIANT_TYPE("(ssss)"),
@@ -94,14 +97,34 @@ protected:
                                           &error);
     g_assert_no_error (error);
 
-    auto python_str = g_strdup_printf ("ret = %d", NOTIFY_ID);
+    // METHOD_NOTIFY
+    auto str = g_strdup_printf("try:\n"
+                               "  self.NextNotifyId\n"
+                               "except AttributeError:\n"
+                               "  self.NextNotifyId = %d\n"
+                               "ret = self.NextNotifyId\n"
+                               "self.NextNotifyId += 1\n",
+                               FIRST_NOTIFY_ID);
     dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_NOTIFY,
                                           G_VARIANT_TYPE("(susssasa{sv}i)"),
                                           G_VARIANT_TYPE_UINT32,
-                                          python_str,
+                                          str,
                                           &error);
-    g_free (python_str);
     g_assert_no_error (error);
+    g_free (str);
+
+    // METHOD_CLOSE 
+    str = g_strdup_printf("self.EmitSignal('%s', '%s', 'uu', [ args[0], %d ])",
+                          NOTIFY_INTERFACE,
+                          SIGNAL_CLOSED,
+                          NOTIFICATION_CLOSED_API);
+    dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_CLOSE,
+                                          G_VARIANT_TYPE("(u)"),
+                                          nullptr,
+                                          str,
+                                          &error);
+    g_assert_no_error (error);
+    g_free (str);
 
     dbus_test_service_add_task(service, DBUS_TEST_TASK(mock));
     dbus_test_service_start_tasks(service);
