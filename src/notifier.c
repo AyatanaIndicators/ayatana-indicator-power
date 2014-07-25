@@ -234,6 +234,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
     }
 
   dbus_battery_set_power_level (p->dbus_battery, power_level_to_dbus_string (new_power_level));
+  p->power_level = new_power_level;
   p->discharging = new_discharging;
 }
 
