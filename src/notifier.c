@@ -35,14 +35,10 @@ enum
 {
   PROP_0,
   PROP_BATTERY,
-  PROP_IS_WARNING,
-  PROP_POWER_LEVEL,
   LAST_PROP
 };
 
 #define PROP_BATTERY_NAME "battery"
-#define PROP_IS_WARNING_NAME "is-warning"
-#define PROP_POWER_LEVEL_NAME "power-level"
 
 static GParamSpec * properties[LAST_PROP];
 
@@ -63,8 +59,7 @@ typedef struct
   PowerLevel power_level;
   gboolean discharging;
 
-  NotifyNotification* notify_notification;
-  gboolean is_warning;
+  NotifyNotification * notify_notification;
 
   GDBusConnection * bus;
   DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
@@ -79,12 +74,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerNotifier,
 
 #define get_priv(o) ((priv_t*)indicator_power_notifier_get_instance_private(o))
 
-static void set_is_warning_property (IndicatorPowerNotifier*,
-                                     gboolean is_warning);
-
-static void set_power_level_property (IndicatorPowerNotifier*,
-                                      PowerLevel power_level);
-
 /***
 ****  Notifications
 ***/
@@ -96,7 +85,7 @@ on_notify_notification_finalized (gpointer gself, GObject * dead)
   priv_t * const p = get_priv(self);
   g_return_if_fail ((void*)(p->notify_notification) == (void*)dead);
   p->notify_notification = NULL;
-  set_is_warning_property (self, FALSE);
+  dbus_battery_set_is_warning (p->dbus_battery, FALSE);
 }
 
 static void
@@ -118,7 +107,7 @@ notification_clear (IndicatorPowerNotifier * self)
         }
 
       p->notify_notification = NULL;
-      set_is_warning_property(self, FALSE);
+      dbus_battery_set_is_warning (p->dbus_battery, FALSE);
     }
 }
 
@@ -147,7 +136,7 @@ notification_show(IndicatorPowerNotifier * self)
       p->notify_notification = nn;
       g_signal_connect(nn, "closed", G_CALLBACK(g_object_unref), NULL);
       g_object_weak_ref(G_OBJECT(nn), on_notify_notification_finalized, self);
-      set_is_warning_property(self, TRUE);
+      dbus_battery_set_is_warning (p->dbus_battery, TRUE);
     }
   else
     {
@@ -193,7 +182,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
       notification_clear (self);
     }
 
-  set_power_level_property (self, new_power_level);
+  dbus_battery_set_power_level (p->dbus_battery, new_power_level);
   p->discharging = new_discharging;
 }
 
@@ -214,14 +203,6 @@ my_get_property (GObject     * o,
     {
       case PROP_BATTERY:
         g_value_set_object (value, p->battery);
-        break;
-
-      case PROP_POWER_LEVEL:
-        g_value_set_int (value, p->power_level);
-        break;
-
-      case PROP_IS_WARNING:
-        g_value_set_boolean (value, p->is_warning);
         break;
 
       default:
@@ -248,34 +229,6 @@ my_set_property (GObject       * o,
     }
 }
 
-/* read-only property, so not implemented in my_set_property() */
-static void
-set_is_warning_property (IndicatorPowerNotifier * self, gboolean is_warning)
-{
-  priv_t * const p = get_priv (self);
-
-  if (p->is_warning != is_warning)
-    {
-      p->is_warning = is_warning;
-
-      g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_IS_WARNING]);
-    }
-}
-
-/* read-only property, so not implemented in my_set_property() */
-static void
-set_power_level_property (IndicatorPowerNotifier * self, PowerLevel power_level)
-{
-  priv_t * const p = get_priv (self);
-
-  if (p->power_level != power_level)
-    {
-      p->power_level = power_level;
-
-      g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_POWER_LEVEL]);
-    }
-}
-
 static void
 my_dispose (GObject * o)
 {
@@ -284,8 +237,8 @@ my_dispose (GObject * o)
 
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
-  g_clear_object (&p->dbus_battery);
   indicator_power_notifier_set_battery (self, NULL);
+  g_clear_object (&p->dbus_battery);
 
   G_OBJECT_CLASS (indicator_power_notifier_parent_class)->dispose (o);
 }
@@ -313,18 +266,6 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->dbus_battery = dbus_battery_skeleton_new ();
 
-  g_object_bind_property (self,
-                          PROP_IS_WARNING_NAME,
-                          p->dbus_battery,
-                          PROP_IS_WARNING_NAME,
-                          G_BINDING_SYNC_CREATE);
-
-  g_object_bind_property (self,
-                          PROP_POWER_LEVEL_NAME,
-                          p->dbus_battery,
-                          PROP_POWER_LEVEL_NAME,
-                          G_BINDING_SYNC_CREATE);
-
   if (!instance_count++)
     {
       if (!notify_init("indicator-power-service"))
@@ -350,22 +291,6 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
     "The current battery",
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  properties[PROP_POWER_LEVEL] = g_param_spec_int (
-    PROP_POWER_LEVEL_NAME,
-    "Power Level",
-    "The battery's power level",
-    POWER_LEVEL_OK,
-    POWER_LEVEL_CRITICAL,
-    POWER_LEVEL_OK,
-    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  properties[PROP_IS_WARNING] = g_param_spec_boolean (
-    PROP_IS_WARNING_NAME,
-    "Is Warning",
-    "Whether or not we're currently warning the user about a low battery",
-    FALSE,
-    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -401,7 +326,7 @@ indicator_power_notifier_set_battery (IndicatorPowerNotifier * self,
     {
       g_signal_handlers_disconnect_by_data (p->battery, self);
       g_clear_object (&p->battery);
-      set_power_level_property (self, POWER_LEVEL_OK);
+      dbus_battery_set_power_level (p->dbus_battery, POWER_LEVEL_OK);
       notification_clear (self);
     }
 
