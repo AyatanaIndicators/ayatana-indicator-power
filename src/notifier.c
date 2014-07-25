@@ -228,7 +228,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
     {
       notification_show (self);
     }
-  else
+  else if (!new_discharging || (new_power_level == POWER_LEVEL_OK))
     {
       notification_clear (self);
     }
