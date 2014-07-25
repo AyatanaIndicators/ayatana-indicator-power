@@ -34,7 +34,6 @@ G_BEGIN_DECLS
 
 typedef struct _IndicatorPowerNotifier         IndicatorPowerNotifier;
 typedef struct _IndicatorPowerNotifierClass    IndicatorPowerNotifierClass;
-typedef struct _IndicatorPowerNotifierPrivate  IndicatorPowerNotifierPrivate;
 
 typedef enum
 {
@@ -52,7 +51,6 @@ struct _IndicatorPowerNotifier
 {
   /*< private >*/
   GObject parent;
-  IndicatorPowerNotifierPrivate * priv;
 };
 
 struct _IndicatorPowerNotifierClass

@@ -27,10 +27,6 @@
 
 #define HINT_INTERACTIVE "x-canonical-switch-to-application"
 
-G_DEFINE_TYPE(IndicatorPowerNotifier,
-              indicator_power_notifier,
-              G_TYPE_OBJECT)
-
 /**
 ***  GObject Properties
 **/
@@ -56,7 +52,7 @@ static int instance_count = 0;
 ***
 **/
 
-struct _IndicatorPowerNotifierPrivate
+typedef struct
 {
   /* The battery we're currently watching.
      This may be a physical battery or it may be an aggregated
@@ -72,9 +68,16 @@ struct _IndicatorPowerNotifierPrivate
 
   GDBusConnection * bus;
   DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
-};
+}
+IndicatorPowerNotifierPrivate;
 
 typedef IndicatorPowerNotifierPrivate priv_t;
+
+G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerNotifier,
+                           indicator_power_notifier,
+                           G_TYPE_OBJECT)
+
+#define get_priv(o) ((priv_t*)indicator_power_notifier_get_instance_private(o))
 
 static void set_is_warning_property (IndicatorPowerNotifier*,
                                      gboolean is_warning);
@@ -89,7 +92,7 @@ static void set_power_level_property (IndicatorPowerNotifier*,
 static void
 notification_clear (IndicatorPowerNotifier * self)
 {
-  priv_t * p = self->priv;
+  priv_t * const p = get_priv(self);
 
   if (p->notify_notification != NULL)
     {
@@ -110,7 +113,7 @@ notification_show(IndicatorPowerNotifier * self)
 
   notification_clear (self);
 
-  p = self->priv;
+  p = get_priv (self);
 
   /* create the notification */
   body = g_strdup_printf(_("%.0f%% charge remaining"),
@@ -152,9 +155,8 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   gboolean new_discharging;
 
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
-  g_return_if_fail(INDICATOR_IS_POWER_DEVICE(self->priv->battery));
-
-  p = self->priv;
+  p = get_priv (self);
+  g_return_if_fail(INDICATOR_IS_POWER_DEVICE(p->battery));
 
   old_power_level = p->power_level;
   new_power_level = indicator_power_notifier_get_power_level (p->battery);
@@ -189,8 +191,8 @@ my_get_property (GObject     * o,
                  GValue      * value,
                  GParamSpec  * pspec)
 {
-  IndicatorPowerNotifier * self = INDICATOR_POWER_NOTIFIER (o);
-  priv_t * p = self->priv;
+  IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER (o);
+  priv_t * const p = get_priv (self);
 
   switch (property_id)
     {
@@ -217,7 +219,7 @@ my_set_property (GObject       * o,
                  const GValue  * value,
                  GParamSpec    * pspec)
 {
-  IndicatorPowerNotifier * self = INDICATOR_POWER_NOTIFIER (o);
+  IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER (o);
 
   switch (property_id)
     {
@@ -234,7 +236,7 @@ my_set_property (GObject       * o,
 static void
 set_is_warning_property (IndicatorPowerNotifier * self, gboolean is_warning)
 {
-  priv_t * p = self->priv;
+  priv_t * const p = get_priv (self);
 
   if (p->is_warning != is_warning)
     {
@@ -248,7 +250,7 @@ set_is_warning_property (IndicatorPowerNotifier * self, gboolean is_warning)
 static void
 set_power_level_property (IndicatorPowerNotifier * self, PowerLevel power_level)
 {
-  priv_t * p = self->priv;
+  priv_t * const p = get_priv (self);
 
   if (p->power_level != power_level)
     {
@@ -261,8 +263,8 @@ set_power_level_property (IndicatorPowerNotifier * self, PowerLevel power_level)
 static void
 my_dispose (GObject * o)
 {
-  IndicatorPowerNotifier * self = INDICATOR_POWER_NOTIFIER(o);
-  priv_t * p = self->priv;
+  IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(o);
+  priv_t * const p = get_priv (self);
 
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
@@ -289,12 +291,7 @@ my_finalize (GObject * o G_GNUC_UNUSED)
 static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
 {
-  priv_t * p;
-
-  p = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                   INDICATOR_TYPE_POWER_NOTIFIER,
-                                   IndicatorPowerNotifierPrivate);
-  self->priv = p;
+  priv_t * const p = get_priv (self);
 
   /* bind the read-only properties so they'll get pushed to the bus */
 
@@ -330,8 +327,6 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
   object_class->finalize = my_finalize;
   object_class->get_property = my_get_property;
   object_class->set_property = my_set_property;
-
-  g_type_class_add_private (klass, sizeof (IndicatorPowerNotifierPrivate));
 
   properties[PROP_BATTERY] = g_param_spec_object (
     PROP_BATTERY_NAME,
@@ -381,7 +376,7 @@ indicator_power_notifier_set_battery (IndicatorPowerNotifier * self,
   g_return_if_fail((battery == NULL) || INDICATOR_IS_POWER_DEVICE(battery));
   g_return_if_fail((battery == NULL) || (indicator_power_device_get_kind(battery) == UP_DEVICE_KIND_BATTERY));
 
-  p = self->priv;
+  p = get_priv (self);
 
   if (p->battery == battery)
     return;
@@ -415,7 +410,7 @@ indicator_power_notifier_set_bus (IndicatorPowerNotifier * self,
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   g_return_if_fail((bus == NULL) || G_IS_DBUS_CONNECTION(bus));
 
-  p = self->priv;
+  p = get_priv (self);
 
   if (p->bus == bus)
     return;
