@@ -24,7 +24,7 @@ License along with this library. If not, see
 #ifndef __INDICATOR_POWER_DEVICE_H__
 #define __INDICATOR_POWER_DEVICE_H__
 
-#include <glib-object.h>
+#include <gio/gio.h> /* GIcon */
 
 G_BEGIN_DECLS
 

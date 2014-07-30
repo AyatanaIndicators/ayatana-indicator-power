@@ -5,6 +5,11 @@ add_library (gtest STATIC
 set_target_properties (gtest PROPERTIES INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} ${GTEST_INCLUDE_DIR})
 set_target_properties (gtest PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} -w)
 
+# dbustest
+pkg_check_modules(DBUSTEST REQUIRED
+                  dbustest-1>=14.04.0)
+include_directories (SYSTEM ${DBUSTEST_INCLUDE_DIRS})
+
 # add warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g ${C_WARNING_ARGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables -Wno-global-constructors") # Google Test
@@ -40,7 +45,17 @@ function(add_test_by_name name)
   add_executable (${TEST_NAME} ${TEST_NAME}.cc gschemas.compiled)
   add_test (${TEST_NAME} ${TEST_NAME})
   add_dependencies (${TEST_NAME} libindicatorpowerservice)
-  target_link_libraries (${TEST_NAME} indicatorpowerservice gtest ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS})
+  target_link_libraries (${TEST_NAME} indicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS})
 endfunction()
+add_test_by_name(test-notify)
+add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
 add_test_by_name(test-device)
+
+###
+###
+
+set (APP_NAME indicator-power-service-cmdline-battery)
+add_executable (${APP_NAME} ${APP_NAME}.cc device-provider-mock.c)
+add_dependencies (${APP_NAME} libindicatorpowerservice)
+target_link_libraries (${APP_NAME} indicatorpowerservice ${SERVICE_DEPS_LIBRARIES})
 

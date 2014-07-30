@@ -3,14 +3,20 @@ Section: gnome
 Priority: optional
 Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: cmake,
-               debhelper (>= 9),
-               dh-translations,
-               intltool,
-               libgtest-dev,
+               libnotify-dev (>= 0.7.6),
                libglib2.0-dev (>= 2.36),
                libgudev-1.0-dev,
                liburl-dispatcher1-dev,
                python:any,
+# for packaging
+               debhelper (>= 9),
+               dh-translations,
+               intltool,
+# for tests
+               libgtest-dev,
+               python3-dbusmock,
+               dbus-test-runner,
+               libdbustest1-dev,
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-power
 # If you aren't a member of ~indicator-applet-developers but need to upload
