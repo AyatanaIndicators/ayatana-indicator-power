@@ -41,9 +41,9 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
-  GMainLoop * loop;
-  IndicatorPowerService * service;
   IndicatorPowerDeviceProvider * device_provider;
+  IndicatorPowerService * service;
+  GMainLoop * loop;
 
   /* boilerplate i18n */
   setlocale (LC_ALL, "");
@@ -59,8 +59,8 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   g_main_loop_run (loop);
 
   /* cleanup */
-  g_clear_object (&device_provider);
-  g_clear_object (&service);
   g_main_loop_unref (loop);
+  g_clear_object (&service);
+  g_clear_object (&device_provider);
   return 0;
 }

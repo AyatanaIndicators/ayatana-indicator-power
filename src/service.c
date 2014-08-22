@@ -22,8 +22,10 @@
 #include <gio/gio.h>
 #include <url-dispatcher.h>
 
+#include "dbus-shared.h"
 #include "device.h"
 #include "device-provider.h"
+#include "notifier.h"
 #include "ib-brightness-control.h"
 #include "ib-brightness-uscreen-control.h"
 #include "service.h"
@@ -120,6 +122,7 @@ struct _IndicatorPowerServicePrivate
   GList * devices; /* IndicatorPowerDevice */
 
   IndicatorPowerDeviceProvider * device_provider;
+  IndicatorPowerNotifier * notifier;
 };
 
 typedef IndicatorPowerServicePrivate priv_t;
@@ -592,13 +595,13 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
   struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
-  if (p->conn == NULL) /* we haven't built the menus yet */
-    return;
-
   if (sections & SECTION_HEADER)
     {
       g_simple_action_set_state (p->header_action, create_header_state (self));
     }
+
+  if (p->conn == NULL) /* we haven't built the menus yet */
+    return;
 
   if (sections & SECTION_DEVICES)
     {
@@ -821,6 +824,9 @@ on_bus_acquired (GDBusConnection * connection,
 
   p->conn = g_object_ref (G_OBJECT (connection));
 
+  /* export the battery properties */
+  indicator_power_notifier_set_bus (p->notifier, connection);
+
   /* export the actions */
   if ((id = g_dbus_connection_export_action_group (connection,
                                                    BUS_PATH,
@@ -920,6 +926,12 @@ on_devices_changed (IndicatorPowerService * self)
   g_clear_object (&p->primary_device);
   p->primary_device = indicator_power_service_choose_primary_device (p->devices);
 
+  /* update the notifier's battery */
+  if ((p->primary_device != NULL) && (indicator_power_device_get_kind(p->primary_device) == UP_DEVICE_KIND_BATTERY))
+    indicator_power_notifier_set_battery (p->notifier, p->primary_device);
+  else
+    indicator_power_notifier_set_battery (p->notifier, NULL);
+
   /* update the battery-level action's state */
   if (p->primary_device == NULL)
     battery_level = 0;
@@ -1001,6 +1013,7 @@ my_dispose (GObject * o)
       g_clear_object (&p->settings);
     }
 
+  g_clear_object (&p->notifier);
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
@@ -1034,6 +1047,8 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->cancellable = g_cancellable_new ();
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
+
+  p->notifier = indicator_power_notifier_new ();
 
   uscreen_proxy = uscreen_get_proxy(&brightness_params);
   if (uscreen_proxy != NULL)
