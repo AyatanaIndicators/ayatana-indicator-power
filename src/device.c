@@ -353,13 +353,6 @@ device_kind_to_string (UpDeviceKind kind)
   indicator_power_device_get_icon_names:
   @device: #IndicatorPowerDevice from which to generate the icon names
 
-  This function's logic differs from GSD's power plugin in some ways:
-
-  1. For discharging batteries, we decide whether or not to use the 'caution'
-  icon based on whether or not we have <= 30 minutes remaining, rather than
-  looking at the battery's percentage left.
-  <https://bugs.launchpad.net/indicator-power/+bug/743823>
-
   See also indicator_power_device_get_gicon().
 
   Return value: (array zero-terminated=1) (transfer full):
@@ -423,13 +416,6 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
       case UP_DEVICE_STATE_PENDING_CHARGE:
       case UP_DEVICE_STATE_DISCHARGING:
       case UP_DEVICE_STATE_PENDING_DISCHARGE:
-        /* Don't show the caution/red icons unless we have <=30 min left.
-           <https://bugs.launchpad.net/indicator-power/+bug/743823>
-           Themes use the caution color when the percentage is 0% or 20%,
-           so if we have >30 min left, use 30% as the icon's percentage floor */
-        if (indicator_power_device_get_time (device) > (30*60))
-          percentage = MAX(percentage, 30);
-
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_device_icon_index (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str));

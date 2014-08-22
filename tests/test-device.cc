@@ -422,10 +422,10 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                        NULL);
-      g_string_append_printf (expected, "%s-040;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-good", kind_str);
+      g_string_append_printf (expected, "%s-020;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-020;", kind_str);
+      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
 
@@ -448,10 +448,10 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-      g_string_append_printf (expected, "%s-040;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-good", kind_str);
+      g_string_append_printf (expected, "%s-000;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000;", kind_str);
+      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
 
