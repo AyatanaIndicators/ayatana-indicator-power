@@ -83,10 +83,13 @@ static gboolean on_command_stream_available (GIOChannel *source,
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
-  g_message ("This app is basically the same as indicator-power-service but,\n"
-             "instead of the system's real devices, sees a single fake battery\n"
-             "which can be manipulated by typing commands:\n"
-             "'charging', 'discharging', a charge percentage, or ctrl-c.");
+  g_print("This test app has the same code as indicator-power-service\n"
+          "except instead of listening to UPower, it has a fake battery\n"
+          "which you can edit with keyboard inputs. Supported commands:\n"
+          "1. A number in [0..100] to set battery level\n"
+          "2. 'charging'\n"
+          "3. 'discharging'\n"
+          "4. ctrl-c to exit\n");
 
   IndicatorPowerDeviceProvider * device_provider;
   IndicatorPowerService * service;
