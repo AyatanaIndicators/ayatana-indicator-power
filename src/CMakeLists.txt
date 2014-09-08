@@ -16,10 +16,6 @@ set(SERVICE_MANUAL_SOURCES
 # generated sources
 include(GdbusCodegen)
 set(SERVICE_GENERATED_SOURCES)
-add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-upower
-                                 org.freedesktop
-                                 Dbus
-                                 ${CMAKE_CURRENT_SOURCE_DIR}/org.freedesktop.UPower.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  com.canonical.indicator.power
                                  Dbus
