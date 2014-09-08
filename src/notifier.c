@@ -187,15 +187,22 @@ notification_show(IndicatorPowerNotifier * self)
 {
   priv_t * const p = get_priv(self);
   gdouble pct;
+  const char * title;
   char * body;
   GStrv icon_names;
   const char * icon_name;
   NotifyNotification * nn;
   GError * error;
+  const PowerLevel power_level = get_battery_power_level(p->battery);
 
   notification_clear(self);
 
+  g_return_if_fail(power_level != POWER_LEVEL_OK);
+
   /* create the notification */
+  title = power_level == POWER_LEVEL_LOW
+        ? _("Battery Low")
+        : _("Battery Critical");
   pct = indicator_power_device_get_percentage(p->battery);
   body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
   icon_names = indicator_power_device_get_icon_names(p->battery);
@@ -203,7 +210,10 @@ notification_show(IndicatorPowerNotifier * self)
     icon_name = icon_names[0];
   else
     icon_name = NULL;
-  nn = notify_notification_new(_("Battery Low"), body, icon_name);
+  nn = notify_notification_new(title, body, icon_name);
+  g_strfreev (icon_names);
+  g_free (body);
+
   if (actions_supported)
     {
       notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_boolean(TRUE));
@@ -213,8 +223,6 @@ notification_show(IndicatorPowerNotifier * self)
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
       notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
     }
-  g_strfreev (icon_names);
-  g_free (body);
 
   /* if we can show it, keep it */
   error = NULL;
