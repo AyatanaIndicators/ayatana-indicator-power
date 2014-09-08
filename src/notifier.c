@@ -103,7 +103,7 @@ power_level_to_dbus_string (const PowerLevel power_level)
     }
 }
 
-PowerLevel
+static PowerLevel
 get_battery_power_level (IndicatorPowerDevice * battery)
 {
   static const double percent_critical = 2.0;
@@ -366,9 +366,6 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   if (!instance_count++)
     {
-      GList * caps;
-      GList * l;
-
       actions_supported = FALSE;
 
       if (!notify_init("indicator-power-service"))
@@ -377,6 +374,9 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
         }
       else
         {
+          GList * caps;
+          GList * l;
+
           /* see if actions are supported */
           caps = notify_get_server_caps();
           for (l=caps; l!=NULL && !actions_supported; l=l->next)
