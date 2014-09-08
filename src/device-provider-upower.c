@@ -32,7 +32,7 @@
 ****  private struct
 ***/
 
-struct _IndicatorPowerDeviceProviderUPowerPriv
+typedef struct
 {
   GDBusConnection * bus;
 
@@ -48,9 +48,13 @@ struct _IndicatorPowerDeviceProviderUPowerPriv
   GSList* subscriptions;
 
   guint watch_tag;
-};
+}
+IndicatorPowerDeviceProviderUPowerPrivate;
 
-typedef IndicatorPowerDeviceProviderUPowerPriv priv_t;
+typedef IndicatorPowerDeviceProviderUPowerPrivate priv_t;
+
+#define get_priv(o) ((priv_t*)indicator_power_device_provider_upower_get_instance_private(o))
+
 
 /***
 ****  GObject boilerplate
@@ -63,6 +67,7 @@ G_DEFINE_TYPE_WITH_CODE (
   IndicatorPowerDeviceProviderUPower,
   indicator_power_device_provider_upower,
   G_TYPE_OBJECT,
+  G_ADD_PRIVATE(IndicatorPowerDeviceProviderUPower)
   G_IMPLEMENT_INTERFACE (INDICATOR_TYPE_POWER_DEVICE_PROVIDER,
                          indicator_power_device_provider_interface_init))
 
@@ -108,7 +113,7 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
       gint64 time_to_full = 0;
       gint64 time;
       IndicatorPowerDevice * device;
-      IndicatorPowerDeviceProviderUPowerPriv * p = data->self->priv;
+      priv_t * p = get_priv(data->self);
       GVariant * dict = g_variant_get_child_value (response, 0);
 
       g_variant_lookup (dict, "Type", "u", &kind);
@@ -155,7 +160,7 @@ static void
 update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
                                 const char                         * path)
 {
-  priv_t * p = self->priv;
+  priv_t * p = get_priv(self);
   struct device_get_all_data * data;
 
   /* Symbolic composite item for indicator display.
@@ -203,7 +208,7 @@ on_queued_paths_timer(gpointer gself)
   priv_t * p;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
-  p = self->priv;
+  p = get_priv(self);
 
   /* create new proxies for all the queued paths */
   g_hash_table_iter_init (&iter, p->queued_paths);
@@ -221,7 +226,7 @@ static void
 refresh_device_soon (IndicatorPowerDeviceProviderUPower * self,
                      const char                         * object_path)
 {
-  priv_t * p = self->priv;
+  priv_t * p = get_priv(self);
 
   g_hash_table_add (p->queued_paths, g_strdup (object_path));
 
@@ -279,7 +284,7 @@ on_device_properties_changed(GDBusConnection * connection     G_GNUC_UNUSED,
   IndicatorPowerDevice* device;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
-  p = self->priv;
+  p = get_priv(self);
 
   device = g_hash_table_lookup(p->devices, object_path);
   if (device == NULL)
@@ -358,7 +363,11 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
                  GVariant        * parameters,
                  gpointer          gself)
 {
-  IndicatorPowerDeviceProviderUPower* self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
+  IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
+
+  self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
+  p = get_priv(self);
 
   if (!g_strcmp0(signal_name, "DeviceAdded"))
     {
@@ -371,8 +380,8 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
   else if (!g_strcmp0(signal_name, "DeviceRemoved"))
     {
       const char* device_path = get_path_from_nth_child(parameters, 0);
-      g_hash_table_remove(self->priv->devices, device_path);
-      g_hash_table_remove(self->priv->queued_paths, device_path);
+      g_hash_table_remove(p->devices, device_path);
+      g_hash_table_remove(p->queued_paths, device_path);
       emit_devices_changed(self);
     }
   else if (!g_strcmp0(signal_name, "Resuming"))
@@ -380,7 +389,7 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
       GHashTableIter iter;
       gpointer device_path = NULL;
       g_debug("Resumed from hibernate/sleep; queueing all devices for a refresh");
-      g_hash_table_iter_init (&iter, self->priv->devices);
+      g_hash_table_iter_init (&iter, p->devices);
       while (g_hash_table_iter_next (&iter, &device_path, NULL))
         refresh_device_soon (self, device_path);
     }
@@ -397,7 +406,7 @@ on_bus_name_appeared(GDBusConnection * bus,
   guint tag;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
-  p = self->priv;
+  p = get_priv(self);
   p->bus = G_DBUS_CONNECTION(g_object_ref(bus));
 
   tag = g_dbus_connection_signal_subscribe(p->bus,
@@ -444,7 +453,7 @@ static void
 clear_signal_subscriptions(IndicatorPowerDeviceProviderUPower* self)
 {
   GSList* l;
-  priv_t* p = self->priv;
+  priv_t* p = get_priv(self);
   for (l=p->subscriptions; l!=NULL; l=l->next)
     g_dbus_connection_signal_unsubscribe(p->bus, GPOINTER_TO_UINT(l->data));
   g_slist_free(p->subscriptions);
@@ -457,10 +466,13 @@ on_bus_name_vanished(GDBusConnection * connection G_GNUC_UNUSED,
                      gpointer          gself)
 {
   IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
+  p = get_priv(self);
+
   clear_signal_subscriptions(self);
-  g_clear_object(&self->priv->bus);
+  g_clear_object(&p->bus);
 }
 
 /***
@@ -470,11 +482,14 @@ on_bus_name_vanished(GDBusConnection * connection G_GNUC_UNUSED,
 static GList *
 my_get_devices(IndicatorPowerDeviceProvider * provider)
 {
-  GList * devices;
   IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
+  GList * devices;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(provider);
-  devices = g_hash_table_get_values (self->priv->devices);
+  p = get_priv(self);
+
+  devices = g_hash_table_get_values (p->devices);
   g_list_foreach (devices, (GFunc)g_object_ref, NULL);
   return devices;
 }
@@ -490,7 +505,7 @@ my_dispose (GObject * o)
   priv_t * p;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(o);
-  p = self->priv;
+  p = get_priv(self);
 
   if (p->cancellable != NULL)
     {
@@ -529,7 +544,7 @@ my_finalize (GObject * o)
   priv_t * p;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(o);
-  p = self->priv;
+  p = get_priv(self);
 
   g_hash_table_destroy (p->devices);
   g_hash_table_destroy (p->queued_paths);
@@ -548,9 +563,6 @@ indicator_power_device_provider_upower_class_init (IndicatorPowerDeviceProviderU
 
   object_class->dispose = my_dispose;
   object_class->finalize = my_finalize;
-
-  g_type_class_add_private (klass,
-                            sizeof (IndicatorPowerDeviceProviderUPowerPriv));
 }
 
 static void
@@ -562,13 +574,7 @@ indicator_power_device_provider_interface_init (IndicatorPowerDeviceProviderInte
 static void
 indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower * self)
 {
-  IndicatorPowerDeviceProviderUPowerPriv * p;
-
-  p = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                   INDICATOR_TYPE_POWER_DEVICE_PROVIDER_UPOWER,
-                                   IndicatorPowerDeviceProviderUPowerPriv);
-
-  self->priv = p;
+  priv_t * p = get_priv(self);
 
   p->cancellable = g_cancellable_new ();
 
