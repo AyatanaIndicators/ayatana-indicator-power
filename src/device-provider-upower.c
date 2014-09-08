@@ -163,10 +163,9 @@ update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
   priv_t * p = get_priv(self);
   struct device_get_all_data * data;
 
-  /* Symbolic composite item for indicator display.
-   * Sounds great but let's ignore it so that we'll have
-   * consistent behavior on both upower<0.99 and >=0.99.
-   * FIXME: Revisit the decision when we drop upower<0.99. */
+  /* Symbolic composite item. Nice idea! But its composite rules
+     differ from Design's so (for now) don't use it.
+     https://wiki.ubuntu.com/Power#Handling_multiple_batteries */
   if (!g_strcmp0(path, DISPLAY_DEVICE_PATH))
     return;
 
@@ -190,27 +189,26 @@ update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
 
 /*
  * UPower 0.99 added proper PropertyChanged signals, but before that
- * it MGR_IFACE emitted a DeviceChanged signal which doesn't tell which
+ * it MGR_IFACE emitted a DeviceChanged signal which didn't tell which
  * property changed, so all properties had to get refreshed w/GetAll().
  *
- * Changes tend to come in small bursts when cables are connected or
- * disconnected, so this timer tries to fold them together by waiting
- * a small bit before making calling GetAll().
+ * Changes often come in bursts, so this timer tries to fold them together
+ * by waiting a small bit before making calling GetAll().
  */
 
-/* rebuild all the proxies listed in our queued_paths hashset */
+/* rebuild all the devices listed in our queued_paths hashset */
 static gboolean
 on_queued_paths_timer(gpointer gself)
 {
-  gpointer path;
-  GHashTableIter iter;
   IndicatorPowerDeviceProviderUPower * self;
   priv_t * p;
+  GHashTableIter iter;
+  gpointer path;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER (gself);
   p = get_priv(self);
 
-  /* create new proxies for all the queued paths */
+  /* create new devices for all the queued paths */
   g_hash_table_iter_init (&iter, p->queued_paths);
   while (g_hash_table_iter_next (&iter, &path, NULL))
     update_device_from_object_path (self, path);
@@ -306,25 +304,33 @@ on_device_properties_changed(GDBusConnection * connection     G_GNUC_UNUSED,
           if (!g_strcmp0(key, "TimeToFull") || !g_strcmp0(key, "TimeToEmpty"))
             {
               const gint64 i = g_variant_get_int64(value);
-              g_object_set(device, INDICATOR_POWER_DEVICE_TIME, (guint64)i, NULL);
+              g_object_set(device,
+                           INDICATOR_POWER_DEVICE_TIME, (guint64)i,
+                           NULL);
               changed = TRUE;
             }
           else if (!g_strcmp0(key, "Percentage"))
             {
               const gdouble d = g_variant_get_double(value);
-              g_object_set(device, INDICATOR_POWER_DEVICE_PERCENTAGE, d, NULL);
+              g_object_set(device,
+                           INDICATOR_POWER_DEVICE_PERCENTAGE, d,
+                           NULL);
               changed = TRUE;
             }
           else if (!g_strcmp0(key, "Type"))
             {
               const guint32 u = g_variant_get_uint32(value);
-              g_object_set(device, INDICATOR_POWER_DEVICE_KIND, (gint)u, NULL);
+              g_object_set(device,
+                           INDICATOR_POWER_DEVICE_KIND, (gint)u,
+                           NULL);
               changed = TRUE;
             }
           else if (!g_strcmp0(key, "State"))
             {
               const guint32 u = g_variant_get_uint32(value);
-              g_object_set (device, INDICATOR_POWER_DEVICE_STATE, (gint)u, NULL);
+              g_object_set(device,
+                           INDICATOR_POWER_DEVICE_STATE, (gint)u,
+                           NULL);
               changed = TRUE;
             }
         }
@@ -342,11 +348,11 @@ get_path_from_nth_child(GVariant* parameters, gsize i)
 
   if ((parameters != NULL) && g_variant_n_children(parameters)>i)
     {
-      GVariant* child = g_variant_get_child_value(parameters, i);
-      if (g_variant_is_of_type(child, G_VARIANT_TYPE_STRING) || /* UPower >= 0.99 */
-          g_variant_is_of_type(child, G_VARIANT_TYPE_OBJECT_PATH)) /* UPower >= 0.99 */
+      GVariant* v = g_variant_get_child_value(parameters, i);
+      if (g_variant_is_of_type(v, G_VARIANT_TYPE_STRING) || /* UPower < 0.99 */
+          g_variant_is_of_type(v, G_VARIANT_TYPE_OBJECT_PATH)) /* and >= 0.99 */
         {
-          path = g_variant_get_string(child, NULL);
+          path = g_variant_get_string(v, NULL);
         }
       g_variant_unref(child);
     }
@@ -373,10 +379,6 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
     {
       refresh_device_soon (self, get_path_from_nth_child(parameters, 0));
     }
-  else if (!g_strcmp0(signal_name, "DeviceChanged"))
-    {
-      refresh_device_soon (self, get_path_from_nth_child(parameters, 0));
-    }
   else if (!g_strcmp0(signal_name, "DeviceRemoved"))
     {
       const char* device_path = get_path_from_nth_child(parameters, 0);
@@ -384,7 +386,11 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
       g_hash_table_remove(p->queued_paths, device_path);
       emit_devices_changed(self);
     }
-  else if (!g_strcmp0(signal_name, "Resuming"))
+  else if (!g_strcmp0(signal_name, "DeviceChanged")) /* UPower < 0.99 */
+    {
+      refresh_device_soon (self, get_path_from_nth_child(parameters, 0));
+    }
+  else if (!g_strcmp0(signal_name, "Resuming")) /* UPower < 0.99 */
     {
       GHashTableIter iter;
       gpointer device_path = NULL;
@@ -401,8 +407,8 @@ on_bus_name_appeared(GDBusConnection * bus,
                      const gchar     * name_owner,
                      gpointer          gself)
 {
-  IndicatorPowerDeviceProviderUPower* self;
-  priv_t* p;
+  IndicatorPowerDeviceProviderUPower * self;
+  priv_t * p;
   guint tag;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
@@ -450,17 +456,6 @@ on_bus_name_appeared(GDBusConnection * bus,
 }
 
 static void
-clear_signal_subscriptions(IndicatorPowerDeviceProviderUPower* self)
-{
-  GSList* l;
-  priv_t* p = get_priv(self);
-  for (l=p->subscriptions; l!=NULL; l=l->next)
-    g_dbus_connection_signal_unsubscribe(p->bus, GPOINTER_TO_UINT(l->data));
-  g_slist_free(p->subscriptions);
-  p->subscriptions = NULL;
-}
-
-static void
 on_bus_name_vanished(GDBusConnection * connection G_GNUC_UNUSED,
                      const gchar     * name       G_GNUC_UNUSED,
                      gpointer          gself)
@@ -471,7 +466,13 @@ on_bus_name_vanished(GDBusConnection * connection G_GNUC_UNUSED,
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
   p = get_priv(self);
 
-  clear_signal_subscriptions(self);
+  /* clear the subscriptions */
+  for (l=p->subscriptions; l!=NULL; l=l->next)
+    g_dbus_connection_signal_unsubscribe(p->bus, GPOINTER_TO_UINT(l->data));
+  g_slist_free(p->subscriptions);
+  p->subscriptions = NULL;
+
+  /* clear the bus */
   g_clear_object(&p->bus);
 }
 
@@ -521,18 +522,17 @@ my_dispose (GObject * o)
       p->queued_paths_timer = 0;
     }
 
-  clear_signal_subscriptions(self);
-
   if (p->watch_tag != 0)
     {
       g_bus_unwatch_name(p->watch_tag);
+      on_bus_name_vanished(NULL, NULL, self);
 
       p->watch_tag = 0;
-    }
+   }
 
   g_hash_table_remove_all (p->devices);
 
-  g_clear_object(&p->bus);
+ 
 
   G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
 }
@@ -576,17 +576,17 @@ indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower 
 {
   priv_t * p = get_priv(self);
 
-  p->cancellable = g_cancellable_new ();
+  p->cancellable = g_cancellable_new();
 
-  p->devices = g_hash_table_new_full (g_str_hash,
-                                      g_str_equal,
-                                      g_free,
-                                      g_object_unref);
+  p->devices = g_hash_table_new_full(g_str_hash,
+                                     g_str_equal,
+                                     g_free,
+                                     g_object_unref);
 
-  p->queued_paths = g_hash_table_new_full (g_str_hash,
-                                           g_str_equal,
-                                           g_free,
-                                           NULL);
+  p->queued_paths = g_hash_table_new_full(g_str_hash,
+                                          g_str_equal,
+                                          g_free,
+                                          NULL);
 
   p->watch_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
                                   BUS_NAME,
@@ -602,7 +602,7 @@ indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower 
 ***/
 
 IndicatorPowerDeviceProvider *
-indicator_power_device_provider_upower_new (void)
+indicator_power_device_provider_upower_new(void)
 {
   gpointer o = g_object_new (INDICATOR_TYPE_POWER_DEVICE_PROVIDER_UPOWER, NULL);
 
