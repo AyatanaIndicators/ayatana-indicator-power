@@ -35,9 +35,10 @@
 typedef struct
 {
   GDBusConnection * bus;
-
-  GHashTable * devices; /* dbus object path --> IndicatorPowerDevice */
   GCancellable * cancellable;
+
+  /* dbus object path --> IndicatorPowerDevice */
+  GHashTable * devices;
 
   /* a hashset of paths whose devices need to be refreshed */
   GHashTable * queued_paths;
@@ -47,7 +48,7 @@ typedef struct
 
   GSList* subscriptions;
 
-  guint watch_tag;
+  guint name_tag;
 }
 IndicatorPowerDeviceProviderUPowerPrivate;
 
@@ -88,11 +89,11 @@ emit_devices_changed (IndicatorPowerDeviceProviderUPower * self)
 }
 
 static void
-on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
+on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
 {
+  struct device_get_all_data * data = gdata;
   GError * error;
   GVariant * response;
-  struct device_get_all_data * data = gdata;
 
   error = NULL;
   response = g_dbus_connection_call_finish (G_DBUS_CONNECTION(o), res, &error);
@@ -183,7 +184,7 @@ update_device_from_object_path (IndicatorPowerDeviceProviderUPower * self,
                          G_DBUS_CALL_FLAGS_NO_AUTO_START,
                          -1, /* default timeout */
                          p->cancellable,
-                         on_device_properties_ready,
+                         on_get_all_response,
                          data);
 }
 
@@ -254,18 +255,20 @@ on_enumerate_devices_response(GObject       * bus,
     }
   else if (g_variant_is_of_type(v, G_VARIANT_TYPE("(ao)")))
     {
-      GVariant* ao;
+      GVariant * ao;
       GVariantIter iter;
-      const gchar* path = NULL;
+      const gchar * path;
 
       ao = g_variant_get_child_value(v, 0);
       g_variant_iter_init(&iter, ao);
+      path = NULL;
       while(g_variant_iter_loop(&iter, "o", &path))
         refresh_device_soon (gself, path);
 
       g_variant_unref(ao);
-      g_variant_unref(v);
     }
+
+  g_clear_pointer(&v, g_variant_unref);
 }
 
 static void
@@ -285,7 +288,7 @@ on_device_properties_changed(GDBusConnection * connection     G_GNUC_UNUSED,
   p = get_priv(self);
 
   device = g_hash_table_lookup(p->devices, object_path);
-  if (device == NULL)
+  if (device == NULL) /* unlikely, but let's handle it */
     {
       refresh_device_soon (self, object_path);
     }
@@ -304,10 +307,13 @@ on_device_properties_changed(GDBusConnection * connection     G_GNUC_UNUSED,
           if (!g_strcmp0(key, "TimeToFull") || !g_strcmp0(key, "TimeToEmpty"))
             {
               const gint64 i = g_variant_get_int64(value);
-              g_object_set(device,
-                           INDICATOR_POWER_DEVICE_TIME, (guint64)i,
-                           NULL);
-              changed = TRUE;
+              if (i != 0)
+                {
+                  g_object_set(device,
+                               INDICATOR_POWER_DEVICE_TIME, (guint64)i,
+                               NULL);
+                  changed = TRUE;
+                }
             }
           else if (!g_strcmp0(key, "Percentage"))
             {
@@ -354,7 +360,7 @@ get_path_from_nth_child(GVariant* parameters, gsize i)
         {
           path = g_variant_get_string(v, NULL);
         }
-      g_variant_unref(child);
+      g_variant_unref(v);
     }
 
   return path;
@@ -401,6 +407,7 @@ on_upower_signal(GDBusConnection * connection     G_GNUC_UNUSED,
     }
 }
 
+/* start listening for UPower events on the bus */
 static void
 on_bus_name_appeared(GDBusConnection * bus,
                      const gchar     * name         G_GNUC_UNUSED,
@@ -415,6 +422,7 @@ on_bus_name_appeared(GDBusConnection * bus,
   p = get_priv(self);
   p->bus = G_DBUS_CONNECTION(g_object_ref(bus));
 
+  /* listen for signals from the boss */
   tag = g_dbus_connection_signal_subscribe(p->bus,
                                            name_owner,
                                            MGR_IFACE,
@@ -427,6 +435,7 @@ on_bus_name_appeared(GDBusConnection * bus,
                                            NULL);
   p->subscriptions = g_slist_prepend(p->subscriptions, GUINT_TO_POINTER(tag));
 
+  /* listen for change events from the devices */
   tag = g_dbus_connection_signal_subscribe(p->bus,
                                            name_owner,
                                            "org.freedesktop.DBus.Properties",
@@ -439,8 +448,7 @@ on_bus_name_appeared(GDBusConnection * bus,
                                            NULL);
   p->subscriptions = g_slist_prepend(p->subscriptions, GUINT_TO_POINTER(tag));
 
-  g_hash_table_remove_all(p->devices);
-  g_hash_table_remove_all(p->queued_paths);
+  /* rebuild our devices list */
   g_dbus_connection_call(p->bus,
                          BUS_NAME,
                          MGR_PATH,
@@ -462,11 +470,22 @@ on_bus_name_vanished(GDBusConnection * connection G_GNUC_UNUSED,
 {
   IndicatorPowerDeviceProviderUPower * self;
   priv_t * p;
+  GSList * l;
 
   self = INDICATOR_POWER_DEVICE_PROVIDER_UPOWER(gself);
   p = get_priv(self);
 
-  /* clear the subscriptions */
+  /* clear the devices */
+  g_hash_table_remove_all(p->devices);
+  g_hash_table_remove_all(p->queued_paths);
+  if (p->queued_paths_timer != 0)
+    {
+      g_source_remove(p->queued_paths_timer);
+      p->queued_paths_timer = 0;
+    }
+  emit_devices_changed (self);
+
+  /* clear the bus subscriptions */
   for (l=p->subscriptions; l!=NULL; l=l->next)
     g_dbus_connection_signal_unsubscribe(p->bus, GPOINTER_TO_UINT(l->data));
   g_slist_free(p->subscriptions);
@@ -522,19 +541,15 @@ my_dispose (GObject * o)
       p->queued_paths_timer = 0;
     }
 
-  if (p->watch_tag != 0)
+  if (p->name_tag != 0)
     {
-      g_bus_unwatch_name(p->watch_tag);
+      g_bus_unwatch_name(p->name_tag);
       on_bus_name_vanished(NULL, NULL, self);
 
-      p->watch_tag = 0;
-   }
+      p->name_tag = 0;
+    }
 
-  g_hash_table_remove_all (p->devices);
-
- 
-
-  G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
+  G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose(o);
 }
 
 static void
@@ -549,7 +564,7 @@ my_finalize (GObject * o)
   g_hash_table_destroy (p->devices);
   g_hash_table_destroy (p->queued_paths);
 
-  G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->dispose (o);
+  G_OBJECT_CLASS (indicator_power_device_provider_upower_parent_class)->finalize (o);
 }
 
 /***
@@ -588,13 +603,13 @@ indicator_power_device_provider_upower_init (IndicatorPowerDeviceProviderUPower 
                                           g_free,
                                           NULL);
 
-  p->watch_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
-                                  BUS_NAME,
-                                  G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                  on_bus_name_appeared,
-                                  on_bus_name_vanished,
-                                  self,
-                                  NULL);
+  p->name_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
+                                 BUS_NAME,
+                                 G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                 on_bus_name_appeared,
+                                 on_bus_name_vanished,
+                                 self,
+                                 NULL);
 }
 
 /***
