@@ -25,6 +25,8 @@
 
 #include <glib/gi18n.h>
 
+#define HINT_INTERACTIVE "x-canonical-switch-to-application"
+
 typedef enum
 {
   POWER_LEVEL_CRITICAL,
@@ -97,7 +99,7 @@ power_level_to_dbus_string (const PowerLevel power_level)
     }
 }
 
-static PowerLevel
+PowerLevel
 get_battery_power_level (IndicatorPowerDevice * battery)
 {
   static const double percent_critical = 2.0;
@@ -176,6 +178,7 @@ notification_show(IndicatorPowerNotifier * self)
   body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
   nn = notify_notification_new(_("Battery Low"), body, NULL);
   g_free (body);
+  /*notify_notification_set_hint(nn, HINT_INTERACTIVE, g_variant_new_boolean(TRUE));*/
 
   /* if we can show it, keep it */
   error = NULL;
