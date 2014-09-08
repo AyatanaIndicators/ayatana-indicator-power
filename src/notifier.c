@@ -210,8 +210,8 @@ notification_show(IndicatorPowerNotifier * self)
       notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_boolean(TRUE));
       notify_notification_set_hint(nn, "x-canonical-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
       notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
-      notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
+      notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
     }
   g_strfreev (icon_names);
   g_free (body);
