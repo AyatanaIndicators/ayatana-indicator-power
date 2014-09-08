@@ -64,7 +64,7 @@ class GlibFixture : public ::testing::Test
                                     const gchar    * message,
                                     gpointer         self)
     {
-      auto tmp = g_strdup_printf ("%s:%d \"%s\"", log_domain, (int)log_level, message);
+      auto tmp = g_strdup_printf ("%s:%d \"%s\"", log_domain, int(log_level), message);
       static_cast<GlibFixture*>(self)->log[log_level].push_back(tmp);
       g_free(tmp);
     }
@@ -101,7 +101,7 @@ class GlibFixture : public ::testing::Test
     static gboolean
     wait_for_signal__timeout(gpointer name)
     {
-      g_error("%s: timed out waiting for signal '%s'", G_STRLOC, (char*)name);
+      g_error("%s: timed out waiting for signal '%s'", G_STRLOC, static_cast<char*>(name));
       return G_SOURCE_REMOVE;
     }
 

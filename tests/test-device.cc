@@ -172,11 +172,11 @@ TEST_F(DeviceTest, Properties)
   key = INDICATOR_POWER_DEVICE_PERCENTAGE;
   g_object_set (o, key, 50.0, NULL);
   g_object_get (o, key, &d, NULL);
-  ASSERT_EQ((int)d, 50);
+  ASSERT_EQ(int(d), 50);
 
   // TIME
   key = INDICATOR_POWER_DEVICE_TIME;
-  g_object_set (o, key, (guint64)30, NULL);
+  g_object_set (o, key, guint64(30), NULL);
   g_object_get (o, key, &u64, NULL);
   ASSERT_EQ(u64, 30);
 
@@ -193,11 +193,11 @@ TEST_F(DeviceTest, New)
                                                               30);
   ASSERT_TRUE (device != NULL);
   ASSERT_TRUE (INDICATOR_IS_POWER_DEVICE(device));
-  ASSERT_EQ (indicator_power_device_get_kind(device), UP_DEVICE_KIND_BATTERY);
-  ASSERT_EQ (indicator_power_device_get_state(device), UP_DEVICE_STATE_CHARGING);
-  ASSERT_STREQ (indicator_power_device_get_object_path(device), "/object/path");
-  ASSERT_EQ ((int)indicator_power_device_get_percentage(device), 50);
-  ASSERT_EQ (indicator_power_device_get_time(device), 30);
+  ASSERT_EQ (UP_DEVICE_KIND_BATTERY, indicator_power_device_get_kind(device));
+  ASSERT_EQ (UP_DEVICE_STATE_CHARGING, indicator_power_device_get_state(device));
+  ASSERT_STREQ ("/object/path", indicator_power_device_get_object_path(device));
+  ASSERT_EQ (50, int(indicator_power_device_get_percentage(device)));
+  ASSERT_EQ (30, indicator_power_device_get_time(device));
 
   // cleanup
   g_object_unref (device);
@@ -205,22 +205,22 @@ TEST_F(DeviceTest, New)
 
 TEST_F(DeviceTest, NewFromVariant)
 {
-  GVariant * variant = g_variant_new ("(susdut)",
-                                      "/object/path",
-                                      (guint32) UP_DEVICE_KIND_BATTERY,
-                                      "icon",
-                                      (gdouble) 50.0,
-                                      (guint32) UP_DEVICE_STATE_CHARGING,
-                                      (guint64) 30);
+  auto variant = g_variant_new("(susdut)",
+                               "/object/path",
+                               guint32(UP_DEVICE_KIND_BATTERY),
+                               "icon",
+                               50,0,
+                               guint32(UP_DEVICE_STATE_CHARGING),
+                               guint64(30));
   IndicatorPowerDevice * device = indicator_power_device_new_from_variant (variant);
   ASSERT_TRUE (variant != NULL);
   ASSERT_TRUE (device != NULL);
   ASSERT_TRUE (INDICATOR_IS_POWER_DEVICE(device));
-  ASSERT_EQ (indicator_power_device_get_kind(device), UP_DEVICE_KIND_BATTERY);
-  ASSERT_EQ (indicator_power_device_get_state(device), UP_DEVICE_STATE_CHARGING);
-  ASSERT_STREQ (indicator_power_device_get_object_path(device), "/object/path");
-  ASSERT_EQ ((int)indicator_power_device_get_percentage(device), 50);
-  ASSERT_EQ (indicator_power_device_get_time(device), 30);
+  ASSERT_EQ (UP_DEVICE_KIND_BATTERY, indicator_power_device_get_kind(device));
+  ASSERT_EQ (UP_DEVICE_STATE_CHARGING, indicator_power_device_get_state(device));
+  ASSERT_STREQ ("/object/path", indicator_power_device_get_object_path(device));
+  ASSERT_EQ (50, int(indicator_power_device_get_percentage(device)));
+  ASSERT_EQ (30, indicator_power_device_get_time(device));
 
   // cleanup
   g_object_unref (device);
@@ -407,7 +407,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
-                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                       INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                        NULL);
       g_string_append_printf (expected, "%s-060;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060;", kind_str);
@@ -420,7 +420,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
-                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                       INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                        NULL);
       g_string_append_printf (expected, "%s-020;", kind_str);
       g_string_append_printf (expected, "gpm-%s-020;", kind_str);
@@ -433,7 +433,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
-                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                       INDICATOR_POWER_DEVICE_TIME, guint64(60*15),
                        NULL);
       g_string_append_printf (expected, "%s-020;", kind_str);
       g_string_append_printf (expected, "gpm-%s-020;", kind_str);
@@ -446,7 +446,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
-                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
+                       INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                    NULL);
       g_string_append_printf (expected, "%s-000;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
@@ -459,7 +459,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
-                       INDICATOR_POWER_DEVICE_TIME, (guint64)(60*15),
+                       INDICATOR_POWER_DEVICE_TIME, guint64(60*15),
                        NULL);
       g_string_append_printf (expected, "%s-000;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
@@ -495,12 +495,12 @@ TEST_F(DeviceTest, Labels)
   log_count_ipower_expected++;
   check_label (NULL, NULL);
   log_count_ipower_expected += 5;
-  check_header (NULL, NULL, NULL, NULL, NULL);
+  check_header (nullptr, nullptr, nullptr, nullptr, nullptr);
 
   // bad args: a GObject that isn't a device
   GObject * o = G_OBJECT(g_cancellable_new());
   log_count_ipower_expected++;
-  check_label ((IndicatorPowerDevice*)o, NULL);
+  check_label (INDICATOR_POWER_DEVICE(o), nullptr);
   log_count_ipower_expected += 5;
   check_header (NULL, NULL, NULL, NULL, NULL);
   g_object_unref (o);
@@ -710,7 +710,7 @@ TEST_F(DeviceTest, ChoosePrimary)
 
   std::vector<IndicatorPowerDevice*> devices;
   for(const auto& desc : descriptions)
-    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, (time_t)desc.time));
+    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, time_t(desc.time)));
 
   const struct {
     std::vector<unsigned int> device_indices;
@@ -756,7 +756,7 @@ TEST_F(DeviceTest, ChoosePrimary)
     EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
     EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
     EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
-    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    EXPECT_EQ(int(ceil(x.percentage)), int(ceil(indicator_power_device_get_percentage(primary))));
     g_object_unref(primary);
 
     // reverse the list and repeat the test
@@ -767,7 +767,7 @@ TEST_F(DeviceTest, ChoosePrimary)
     EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
     EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
     EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
-    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    EXPECT_EQ(int(ceil(x.percentage)), int(ceil(indicator_power_device_get_percentage(primary))));
     g_object_unref(primary);
 
     // cleanup
