@@ -209,7 +209,7 @@ TEST_F(DeviceTest, NewFromVariant)
                                "/object/path",
                                guint32(UP_DEVICE_KIND_BATTERY),
                                "icon",
-                               50,0,
+                               50.0,
                                guint32(UP_DEVICE_STATE_CHARGING),
                                guint64(30));
   IndicatorPowerDevice * device = indicator_power_device_new_from_variant (variant);
