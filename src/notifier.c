@@ -361,18 +361,21 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
       GList * caps;
       GList * l;
 
+      actions_supported = FALSE;
+
       if (!notify_init("indicator-power-service"))
         {
           g_critical("Unable to initialize libnotify! Notifications might not be shown.");
         }
-
-      /* see if actions are supported */
-      actions_supported = FALSE;
-      caps = notify_get_server_caps();
-      for (l=caps; l!=NULL && !actions_supported; l=l->next)
-        if (!g_strcmp0(l->data, "actions"))
-          actions_supported = TRUE;
-      g_list_free_full(caps, g_free);
+      else
+        {
+          /* see if actions are supported */
+          caps = notify_get_server_caps();
+          for (l=caps; l!=NULL && !actions_supported; l=l->next)
+            if (!g_strcmp0(l->data, "actions"))
+              actions_supported = TRUE;
+          g_list_free_full(caps, g_free);
+        }
     }
 }
 
