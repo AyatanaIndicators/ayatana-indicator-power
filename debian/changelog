@@ -1,3 +1,15 @@
+indicator-power (12.10.6+14.10.20140909-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Add support for UPower 0.99. (LP: #1330037)
+  * When the phone's battery goes down past a certain level, pop up a
+    snap decision to warn the user. (LP: #1296431)
+
+  [ Ted Gould ]
+  * Synchronize process management across indicators
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 09 Sep 2014 04:22:52 +0000
+
 indicator-power (12.10.6+14.10.20140822-0ubuntu1) utopic; urgency=low
 
   [ Charles Kerr ]
