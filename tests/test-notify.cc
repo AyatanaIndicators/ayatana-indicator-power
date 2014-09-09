@@ -131,7 +131,7 @@ protected:
 
     bus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
     g_dbus_connection_set_exit_on_close(bus, FALSE);
-    g_object_add_weak_pointer(G_OBJECT(bus), (gpointer *)&bus);
+    g_object_add_weak_pointer(G_OBJECT(bus), reinterpret_cast<gpointer*>(&bus));
 
     notify_init(APP_NAME);
   }

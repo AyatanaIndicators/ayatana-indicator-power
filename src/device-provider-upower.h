@@ -45,8 +45,6 @@ G_BEGIN_DECLS
 
 typedef struct _IndicatorPowerDeviceProviderUPower
                 IndicatorPowerDeviceProviderUPower;
-typedef struct _IndicatorPowerDeviceProviderUPowerPriv
-                IndicatorPowerDeviceProviderUPowerPriv;
 typedef struct _IndicatorPowerDeviceProviderUPowerClass
                 IndicatorPowerDeviceProviderUPowerClass;
 
@@ -56,8 +54,6 @@ typedef struct _IndicatorPowerDeviceProviderUPowerClass
 struct _IndicatorPowerDeviceProviderUPower
 {
   GObject parent_instance;
-
-  IndicatorPowerDeviceProviderUPowerPriv * priv;
 };
 
 struct _IndicatorPowerDeviceProviderUPowerClass

@@ -37,7 +37,7 @@ static void
 on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 {
   g_message ("exiting: service couldn't acquire or lost ownership of busname");
-  g_main_loop_quit ((GMainLoop*)loop);
+  g_main_loop_quit (static_cast<GMainLoop*>(loop));
 }
 
 static IndicatorPowerDevice * battery = nullptr;
