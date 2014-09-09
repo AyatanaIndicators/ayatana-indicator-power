@@ -1,3 +1,117 @@
+indicator-power (12.10.6+14.10.20140822-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Choose the icon that's closest to the current battery charge
+    percentage (LP: #1186181)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 22 Aug 2014 16:15:51 +0000
+
+indicator-power (12.10.6+14.10.20140814-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Re-use the same Translations.cmake file across indicators (LP:
+    #1354058)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 14 Aug 2014 14:51:02 +0000
+
+indicator-power (12.10.6+14.10.20140730-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Add low-battery notifications. (LP: #1317858)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 30 Jul 2014 10:52:39 +0000
+
+indicator-power (12.10.6+14.10.20140718-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Switch from automake/autoconf to CMake.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 18 Jul 2014 21:33:30 +0000
+
+indicator-power (12.10.6+14.10.20140624-0ubuntu1) utopic; urgency=low
+
+  [ Alberto Aguirre ]
+  * Changes to address setBrightness interface moving from powerd to
+    unity-system-compositor
+
+  [ Iain Lane ]
+  * Drop powerd and u-s-c to suggests, since the code handles them not
+    being present and we don't need them on desktop (and they are in
+    universe).
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 24 Jun 2014 09:45:56 +0000
+
+indicator-power (12.10.6+14.10.20140611-0ubuntu1) utopic; urgency=low
+
+  [ Charles Kerr ]
+  * Prefer the 'battery-XXX-charging' (eg, 'battery-020-charging') icons
+    over the 'battery-low-charging' ones because the former are more
+    precise and likely closer to the actual battery level. (LP:
+    #1186181)
+
+  [ Iain Lane ]
+  * Remove the brightness slider from the phone menu. (LP: #1289470)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 11 Jun 2014 17:21:30 +0000
+
+indicator-power (12.10.6+14.10.20140428-0ubuntu1) utopic; urgency=low
+
+  [ Ricardo Salveti de Araujo ]
+  * Updating code to reflect latest powerd dbus API changes
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 28 Apr 2014 23:25:53 +0000
+
+indicator-power (12.10.6+14.04.20140411-0ubuntu1) trusty; urgency=low
+
+  [ Sebastien Bacher ]
+  * export an ubiquity profile, reusing the desktop_greeter object (LP:
+    #1306604)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 11 Apr 2014 14:01:36 +0000
+
+indicator-power (12.10.6+14.04.20140328-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * If there are two batteries detected, combine their percentages and
+    their time-remainings as per the revised spec. (LP: #880881)
+
+  [ Lars Uebernickel ]
+  * Use com.canonical.indicator.basic menu item for device items That
+    menu item can handle non-square icons. (LP: #1263228)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Mar 2014 16:10:45 +0000
+
+indicator-power (12.10.6+14.04.20140326-0ubuntu1) trusty; urgency=low
+
+  [ Y.C cheng ]
+  * Set brightness via powerd if it exist (using dbus) (LP: #1287599)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 26 Mar 2014 18:50:46 +0000
+
+indicator-power (12.10.6+14.04.20140314-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * Change the implementation of the title text / title accessible text
+    / menuitem text to follow the spec changes in
+    https://wiki.ubuntu.com/Power?action=diff&rev2=44&rev1=43#Title and
+    update the tests accordingly. (LP: #1234458)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 14 Mar 2014 14:14:07 +0000
+
+indicator-power (12.10.6+14.04.20140311-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * Add desktop_lockscreen profile
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 11 Mar 2014 18:33:10 +0000
+
+indicator-power (12.10.6+14.04.20140306-0ubuntu1) trusty; urgency=low
+
+  [ Simon Steinbeiß ]
+  * Add xfce4-powermanager as alternative recommend
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 06 Mar 2014 11:51:54 +0000
+
 indicator-power (12.10.6+14.04.20140207-0ubuntu1) trusty; urgency=low
 
   [ Ted Gould ]

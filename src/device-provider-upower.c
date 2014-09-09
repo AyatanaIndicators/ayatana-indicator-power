@@ -17,8 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #include "dbus-upower.h"
 #include "device.h"
 #include "device-provider.h"
@@ -60,7 +58,7 @@ G_DEFINE_TYPE_WITH_CODE (
   indicator_power_device_provider_upower,
   G_TYPE_OBJECT,
   G_IMPLEMENT_INTERFACE (INDICATOR_TYPE_POWER_DEVICE_PROVIDER,
-                         indicator_power_device_provider_interface_init));
+                         indicator_power_device_provider_interface_init))
 
 /***
 ****  UPOWER DBUS
@@ -102,7 +100,7 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
       gdouble percentage = 0;
       gint64 time_to_empty = 0;
       gint64 time_to_full = 0;
-      time_t time;
+      gint64 time;
       IndicatorPowerDevice * device;
       IndicatorPowerDeviceProviderUPowerPriv * p = data->self->priv;
       GVariant * dict = g_variant_get_child_value (response, 0);
@@ -120,7 +118,7 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
                                 INDICATOR_POWER_DEVICE_STATE, (gint)state,
                                 INDICATOR_POWER_DEVICE_OBJECT_PATH, data->path,
                                 INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
-                                INDICATOR_POWER_DEVICE_TIME, (guint64)time,
+                                INDICATOR_POWER_DEVICE_TIME, time,
                                 NULL);
         }
       else
@@ -129,7 +127,7 @@ on_device_properties_ready (GObject * o, GAsyncResult * res, gpointer gdata)
                                                kind,
                                                percentage,
                                                state,
-                                               time);
+                                               (time_t)time);
 
           g_hash_table_insert (p->devices,
                                g_strdup (data->path),

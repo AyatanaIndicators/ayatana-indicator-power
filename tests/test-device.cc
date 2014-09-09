@@ -19,6 +19,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <gio/gio.h>
 #include <gtest/gtest.h>
+#include <cmath> // ceil()
 #include "device.h"
 #include "service.h"
 
@@ -72,11 +73,8 @@ class DeviceTest : public ::testing::Test
     void check_label (const IndicatorPowerDevice * device,
                       const char * expected_label)
     {
-      char * label;
-
-      label = indicator_power_device_get_label (device);
+      char * label = indicator_power_device_get_readable_text (device);
       EXPECT_STREQ (expected_label, label);
-
       g_free (label);
     }
 
@@ -86,31 +84,39 @@ class DeviceTest : public ::testing::Test
                        const char * expected_percent,
                        const char * expected_a11y)
     {
-      char * label;
-      char * a11y;
+      char * a11y = NULL;
+      char * title = NULL;
 
-      indicator_power_device_get_header (device, true, true, &label, &a11y);
-      EXPECT_STREQ (expected_time_and_percent, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      title = indicator_power_device_get_readable_title (device, true, true);
+      if (expected_time_and_percent)
+        EXPECT_STREQ (expected_time_and_percent, title);
+      else
+        EXPECT_EQ(NULL, title);
+      g_free (title);
 
-      indicator_power_device_get_header (device, true, false, &label, &a11y);
-      EXPECT_STREQ (expected_time, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      title = indicator_power_device_get_readable_title (device, true, false);
+      if (expected_time)
+        EXPECT_STREQ (expected_time, title);
+      else
+        EXPECT_EQ(NULL, title);
+      g_free (title);
 
-      indicator_power_device_get_header (device, false, true, &label, &a11y);
-      EXPECT_STREQ (expected_percent, label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
-      g_free (a11y);
+      title = indicator_power_device_get_readable_title (device, false, true);
+      if (expected_percent)
+        EXPECT_STREQ (expected_percent, title);
+      else
+        EXPECT_EQ(NULL, title);
+      g_free (title);
 
-      indicator_power_device_get_header (device, false, false, &label, &a11y);
-      ASSERT_TRUE (!label || !*label);
-      EXPECT_STREQ (expected_a11y, a11y);
-      g_free (label);
+      title = indicator_power_device_get_readable_title (device, false, false);
+      EXPECT_EQ(NULL, title);
+      g_free (title);
+
+      a11y = indicator_power_device_get_accessible_title (device, false, false);
+      if (expected_a11y)
+        EXPECT_STREQ (expected_a11y, a11y);
+      else
+        EXPECT_EQ(NULL, a11y);
       g_free (a11y);
     }
 };
@@ -318,8 +324,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                        NULL);
 
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-100-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100-charging;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -329,8 +336,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
                        NULL);
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-080-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080-charging;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -340,8 +348,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                        NULL);
-      g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-060-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060-charging;", kind_str);
+      g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-good-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -351,8 +360,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        NULL);
-      g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-020-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-020-charging;", kind_str);
+      g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-low-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -362,8 +372,9 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        NULL);
-      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-000-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
@@ -411,10 +422,10 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                        NULL);
-      g_string_append_printf (expected, "%s-040;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-good", kind_str);
+      g_string_append_printf (expected, "%s-020;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-020;", kind_str);
+      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
 
@@ -437,10 +448,10 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        INDICATOR_POWER_DEVICE_TIME, (guint64)(60*60),
                    NULL);
-      g_string_append_printf (expected, "%s-040;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-good", kind_str);
+      g_string_append_printf (expected, "%s-000;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000;", kind_str);
+      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution", kind_str);
       check_icon_names (device, expected->str);
       g_string_truncate (expected, 0);
 
@@ -481,14 +492,16 @@ TEST_F(DeviceTest, Labels)
   g_setenv ("LANG", "en_US.UTF-8", TRUE);
 
   // bad args: NULL device
-  log_count_ipower_expected += 5;
+  log_count_ipower_expected++;
   check_label (NULL, NULL);
+  log_count_ipower_expected += 5;
   check_header (NULL, NULL, NULL, NULL, NULL);
 
   // bad args: a GObject that isn't a device
-  log_count_ipower_expected += 5;
   GObject * o = G_OBJECT(g_cancellable_new());
+  log_count_ipower_expected++;
   check_label ((IndicatorPowerDevice*)o, NULL);
+  log_count_ipower_expected += 5;
   check_header (NULL, NULL, NULL, NULL, NULL);
   g_object_unref (o);
 
@@ -509,7 +522,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(1:01, 50%)",
                         "(1:01)",
                         "(50%)",
-                        "Battery (1 hour 1 minute to charge, 50%)");
+                        "Battery (1 hour 1 minute to charge)");
 
   // discharging, < 12 hours left
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -521,7 +534,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(1:01, 50%)",
                         "(1:01)",
                         "(50%)",
-                        "Battery (1 hour 1 minute left, 50%)");
+                        "Battery (1 hour 1 minute left)");
 
   // discharging, > 24 hours left
   // we don't show the clock time when > 24 hours discharging
@@ -532,9 +545,9 @@ TEST_F(DeviceTest, Labels)
                    NULL);
   check_label (device, "Battery");
   check_header (device, "(50%)",
-                        "",
+                        NULL,
                         "(50%)",
-                        "Battery (50%)");
+                        "Battery");
 
 // fully charged
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -544,9 +557,9 @@ TEST_F(DeviceTest, Labels)
                    NULL);
   check_label (device, "Battery (charged)");
   check_header (device, "(100%)",
-                        "",
+                        NULL,
                         "(100%)",
-                        "Battery (charged, 100%)");
+                        "Battery (charged)");
 
   // percentage but no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -558,7 +571,7 @@ TEST_F(DeviceTest, Labels)
   check_header (device, "(estimating…, 50%)",
                         "(estimating…)",
                         "(50%)",
-                        "Battery (estimating…, 50%)");
+                        "Battery (estimating…)");
 
   // no percentage, no time estimate
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
@@ -566,8 +579,8 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_PERCENTAGE, 0.0,
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
-  check_label (device, "Battery (not present)");
-  check_header (device, "", "", "", "Battery (not present)");
+  check_label (device, "Battery");
+  check_header (device, NULL, NULL, NULL, "Battery");
 
   // power line
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
@@ -576,7 +589,7 @@ TEST_F(DeviceTest, Labels)
                    INDICATOR_POWER_DEVICE_TIME, guint64(0),
                    NULL);
   check_label (device, "AC Adapter");
-  check_header (device, "", "", "", "AC Adapter");
+  check_header (device, NULL, NULL, NULL, "AC Adapter");
 
   // cleanup
   g_object_unref(o);
@@ -584,74 +597,183 @@ TEST_F(DeviceTest, Labels)
   g_free (real_lang);
 }
 
-/* The menu title should tell you at a glance what you need to know most: what
-   device will lose power soonest (and optionally when), or otherwise which
-   device will take longest to charge (and optionally how long it will take). */
-TEST_F(DeviceTest, ChoosePrimary)
+
+TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
 {
-  GList * device_list;
-  IndicatorPowerDevice * a;
-  IndicatorPowerDevice * b;
+  // set our language so that i18n won't break these tests
+  auto real_lang = g_strdup(g_getenv ("LANG"));
+  g_setenv ("LANG", "en_US.UTF-8", true);
 
-  a = indicator_power_device_new ("/org/freedesktop/UPower/devices/mouse",
-                                  UP_DEVICE_KIND_MOUSE,
-                                  0.0,
-                                  UP_DEVICE_STATE_DISCHARGING,
-                                  0);
-  b = indicator_power_device_new ("/org/freedesktop/UPower/devices/battery",
-                                  UP_DEVICE_KIND_BATTERY,
-                                  0.0,
-                                  UP_DEVICE_STATE_DISCHARGING,
-                                  0);
-
-  /* device states + time left to {discharge,charge} + % of charge left,
-     sorted in order of preference wrt the spec's criteria.
-     So tests[i] should be picked over any test with an index greater than i */
-  struct {
-    int kind;
-    int state;
-    guint64 time;
-    double percentage;
-  } tests[] = {
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   49,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   50, 100.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   51,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      50,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      49, 100.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      48,  50.0 },
-    { UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
-    { UP_DEVICE_KIND_KEYBOARD,   UP_DEVICE_STATE_FULLY_CHARGED,  0,  50.0 },
-    { UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }
+  // set up the main loop
+  auto loop = g_main_loop_new (nullptr, false);
+  auto loop_quit_sourcefunc = [](gpointer l){
+    g_main_loop_quit(static_cast<GMainLoop*>(l));
+    return G_SOURCE_REMOVE;
   };
 
-  device_list = NULL;
-  device_list = g_list_append (device_list, a);
-  device_list = g_list_append (device_list, b);
+  auto device = INDICATOR_POWER_DEVICE (g_object_new (INDICATOR_POWER_DEVICE_TYPE, nullptr));
+  auto o = G_OBJECT(device);
 
-  for (int i=0, n=G_N_ELEMENTS(tests); i<n; i++)
+  // percentage but no time estimate
+  auto timer = g_timer_new ();
+  g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_BATTERY,
+                   INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
+                   INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
+                   INDICATOR_POWER_DEVICE_TIME, guint64(0),
+                   nullptr);
+
+  /*
+   * “estimating…” if the time remaining has been inestimable for
+   * less than 30 seconds; otherwise “unknown” if the time remaining
+   * has been inestimable for between 30 seconds and one minute;
+   * otherwise the empty string.
+   */
+  for (;;)
     {
-      for (int j=i+1; j<n; j++)
-        {
-          g_object_set (a, INDICATOR_POWER_DEVICE_KIND, tests[i].kind,
-                           INDICATOR_POWER_DEVICE_STATE, tests[i].state,
-                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[i].time),
-                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[i].percentage,
-                           NULL);
-          g_object_set (b, INDICATOR_POWER_DEVICE_KIND, tests[j].kind,
-                           INDICATOR_POWER_DEVICE_STATE, tests[j].state,
-                           INDICATOR_POWER_DEVICE_TIME, guint64(tests[j].time),
-                           INDICATOR_POWER_DEVICE_PERCENTAGE, tests[j].percentage,
-                           NULL);
-          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
+      g_timeout_add_seconds (1, loop_quit_sourcefunc, loop);
+      g_main_loop_run (loop);
 
-          /* reverse the list to check that list order doesn't matter */
-          device_list = g_list_reverse (device_list);
-          ASSERT_EQ (a, indicator_power_service_choose_primary_device(device_list));
+      const auto elapsed = g_timer_elapsed (timer, nullptr);
+
+      if (elapsed < 30)
+        {
+          check_label (device, "Battery (estimating…)");
+          check_header (device, "(estimating…, 50%)",
+                                "(estimating…)",
+                                "(50%)",
+                                "Battery (estimating…)");
+        }
+      else if (elapsed < 60)
+        {
+          check_label (device, "Battery (unknown)");
+          check_header (device, "(unknown, 50%)",
+                                "(unknown)",
+                                "(50%)",
+                                "Battery (unknown)");
+        }
+      else if (elapsed < 80)
+        {
+          check_label (device, "Battery");
+          check_header (device, "(50%)",
+                                NULL,
+                                "(50%)",
+                                "Battery");
+        }
+      else
+        {
+          break;
         }
     }
 
+  g_main_loop_unref (loop);
+
   // cleanup
-  g_list_free_full (device_list, g_object_unref);
+  g_timer_destroy (timer);
+  g_object_unref (o);
+  g_setenv ("LANG", real_lang, TRUE);
+  g_free (real_lang);
+}
+
+/* If a device has multiple batteries and uses only one of them at a time,
+   they should be presented as separate items inside the battery menu,
+   but everywhere else they should be aggregated (bug 880881).
+   Their percentages should be averaged. If any are discharging,
+   the aggregated time remaining should be the maximum of the times
+   for all those that are discharging, plus the sum of the times
+   for all those that are idle. Otherwise, the aggregated time remaining
+   should be the the maximum of the times for all those that are charging. */
+TEST_F(DeviceTest, ChoosePrimary)
+{
+  struct Description
+  { 
+    const char * path;
+    UpDeviceKind kind;
+    UpDeviceState state;
+    guint64 time;
+    double percentage;
+  };
+
+  const Description descriptions[] = {
+    { "/some/path/d0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   10,  60.0 }, // 0
+    { "/some/path/d1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 1
+    { "/some/path/d2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   30, 100.0 }, // 2
+
+    { "/some/path/c0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      10,  60.0 }, // 3
+    { "/some/path/c1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      20,  80.0 }, // 4
+    { "/some/path/c2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      30, 100.0 }, // 5
+
+    { "/some/path/f0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 6
+    { "/some/path/m0", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 7
+    { "/some/path/m1", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 8
+    { "/some/path/pw", UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }  // 9
+  };
+
+  std::vector<IndicatorPowerDevice*> devices;
+  for(const auto& desc : descriptions)
+    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, (time_t)desc.time));
+
+  const struct {
+    std::vector<unsigned int> device_indices;
+    Description expected;
+  } tests[] = {
+
+    { { 0 }, descriptions[0] }, // 1 discharging
+    { { 0, 1 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 20, 70.0 } }, // 2 discharging
+    { { 1, 2 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 90.0 } }, // 2 discharging
+    { { 0, 1, 2 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 80.0 } }, // 3 discharging
+
+    { { 3 }, descriptions[3] }, // 1 charging
+    { { 3, 4 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 20, 70.0 } }, // 2 charging
+    { { 4, 5 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 90.0 } }, // 2 charging
+    { { 3, 4, 5 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 80.0 } }, // 3 charging
+
+    { { 6 }, descriptions[6] }, // 1 charged
+    { { 6, 0 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 80.0 } }, // 1 charged, 1 discharging
+    { { 6, 3 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING,    10, 80.0 } }, // 1 charged, 1 charging
+    { { 6, 0, 3 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 73.3 } }, // 1 charged, 1 charging, 1 discharging
+
+    { { 0, 7 }, descriptions[0] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
+    { { 2, 7 }, descriptions[7] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
+
+    { { 0, 8 }, descriptions[0] }, // 1 discharging battery, 1 fully-charged mouse. pick the one that's discharging.
+    { { 6, 7 }, descriptions[7] }, // 1 discharging mouse, 1 fully-charged battery. pick the one that's discharging.
+
+    { { 0, 9 }, descriptions[0] }, // everything comes before power lines
+    { { 3, 9 }, descriptions[3] },
+    { { 7, 9 }, descriptions[7] }
+  };
+  
+  for(const auto& test : tests)
+  {
+    const auto& x = test.expected;
+
+    GList * device_glist = nullptr;
+    for(const auto& i : test.device_indices)
+      device_glist = g_list_append(device_glist, devices[i]);
+
+    auto primary = indicator_power_service_choose_primary_device(device_glist);
+    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
+    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
+    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
+    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
+    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    g_object_unref(primary);
+
+    // reverse the list and repeat the test
+    // to confirm that list order doesn't matter
+    device_glist = g_list_reverse (device_glist);
+    primary = indicator_power_service_choose_primary_device (device_glist);
+    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
+    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
+    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
+    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
+    EXPECT_EQ((int)ceil(x.percentage), (int)ceil(indicator_power_device_get_percentage(primary)));
+    g_object_unref(primary);
+
+    // cleanup
+    g_list_free(device_glist);
+  }
+
+  for (auto& device : devices)
+    g_object_unref (device);
 }

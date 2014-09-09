@@ -24,7 +24,7 @@ License along with this library. If not, see
 #ifndef __INDICATOR_POWER_DEVICE_H__
 #define __INDICATOR_POWER_DEVICE_H__
 
-#include <glib-object.h>
+#include <gio/gio.h> /* GIcon */
 
 G_BEGIN_DECLS
 
@@ -116,22 +116,27 @@ IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
 IndicatorPowerDevice* indicator_power_device_new_from_variant (GVariant * variant);
 
 
-UpDeviceKind  indicator_power_device_get_kind         (const IndicatorPowerDevice * device);
-UpDeviceState indicator_power_device_get_state        (const IndicatorPowerDevice * device);
-const gchar * indicator_power_device_get_object_path  (const IndicatorPowerDevice * device);
-gdouble       indicator_power_device_get_percentage   (const IndicatorPowerDevice * device);
-time_t        indicator_power_device_get_time         (const IndicatorPowerDevice * device);
+UpDeviceKind  indicator_power_device_get_kind              (const IndicatorPowerDevice * device);
+UpDeviceState indicator_power_device_get_state             (const IndicatorPowerDevice * device);
+const gchar * indicator_power_device_get_object_path       (const IndicatorPowerDevice * device);
+gdouble       indicator_power_device_get_percentage        (const IndicatorPowerDevice * device);
+time_t        indicator_power_device_get_time              (const IndicatorPowerDevice * device);
 
-GStrv         indicator_power_device_get_icon_names   (const IndicatorPowerDevice * device);
-GIcon       * indicator_power_device_get_gicon        (const IndicatorPowerDevice * device);
+GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device);
+GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device);
 
-gchar       * indicator_power_device_get_label        (const IndicatorPowerDevice * device);
 
-void          indicator_power_device_get_header       (const IndicatorPowerDevice * device,
-                                                       gboolean                     show_time,
-                                                       gboolean                     show_percentage,
-                                                       gchar                     ** header,
-                                                       gchar                     ** a11y);
+char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device);
+
+char        * indicator_power_device_get_accessible_text   (const IndicatorPowerDevice * device);
+
+char        * indicator_power_device_get_readable_title    (const IndicatorPowerDevice * device,
+                                                            gboolean                     want_time,
+                                                            gboolean                     want_percent);
+
+char        * indicator_power_device_get_accessible_title  (const IndicatorPowerDevice * device,
+                                                            gboolean                     want_time,
+                                                            gboolean                     want_percent);
 
 
 G_END_DECLS

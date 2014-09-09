@@ -65,6 +65,8 @@ struct _IndicatorPowerDeviceProviderUPowerClass
   GObjectClass parent_class;
 };
 
+GType indicator_power_device_provider_upower_get_type (void);
+
 IndicatorPowerDeviceProvider * indicator_power_device_provider_upower_new (void);
 
 G_END_DECLS

@@ -18,15 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <url-dispatcher.h>
 
+#include "dbus-shared.h"
 #include "device.h"
 #include "device-provider.h"
+#include "notifier.h"
 #include "ib-brightness-control.h"
+#include "ib-brightness-uscreen-control.h"
 #include "service.h"
 
 #define BUS_NAME "com.canonical.indicator.power"
@@ -104,6 +105,7 @@ struct _IndicatorPowerServicePrivate
   GSettings * settings;
 
   IbBrightnessControl * brightness_control;
+  IbBrightnessUscreenControl * brightness_uscreen_control;
 
   guint own_id;
   guint actions_export_id;
@@ -120,6 +122,7 @@ struct _IndicatorPowerServicePrivate
   GList * devices; /* IndicatorPowerDevice */
 
   IndicatorPowerDeviceProvider * device_provider;
+  IndicatorPowerNotifier * notifier;
 };
 
 typedef IndicatorPowerServicePrivate priv_t;
@@ -312,21 +315,7 @@ static GVariant *
 create_header_state (IndicatorPowerService * self)
 {
   GVariantBuilder b;
-  gchar * label = NULL;
-  gchar * a11y = NULL;
-  GIcon * icon = NULL;
-  priv_t * p = self->priv;
-
-  if (p->primary_device != NULL)
-    {
-      indicator_power_device_get_header (p->primary_device,
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S),
-                                         g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S),
-                                         &label,
-                                         &a11y);
-
-      icon = indicator_power_device_get_gicon (p->primary_device);
-    }
+  const priv_t * const p = self->priv;
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
@@ -335,24 +324,48 @@ create_header_state (IndicatorPowerService * self)
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
-  if (label != NULL)
-    g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (label));
-
-  if (icon != NULL)
+  if (p->primary_device != NULL)
     {
-      GVariant * v;
+      char * title;
+      GIcon * icon;
+      const gboolean want_time = g_settings_get_boolean (p->settings, SETTINGS_SHOW_TIME_S);
+      const gboolean want_percent = g_settings_get_boolean (p->settings, SETTINGS_SHOW_PERCENTAGE_S);
 
-      if ((v = g_icon_serialize (icon)))
+      title = indicator_power_device_get_readable_title (p->primary_device,
+                                                         want_time,
+                                                         want_percent);
+      if (title)
         {
-          g_variant_builder_add (&b, "{sv}", "icon", v);
-          g_variant_unref (v);
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "label", g_variant_new_take_string (title));
+          else
+            g_free (title);
         }
 
-      g_object_unref (icon);
-    }
+      title = indicator_power_device_get_accessible_title (p->primary_device,
+                                                           want_time,
+                                                           want_percent);
+      if (title)
+        {
+          if (*title)
+            g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (title));
+          else
+            g_free (title);
+        }
 
-  if (a11y != NULL)
-    g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_take_string (a11y));
+      if ((icon = indicator_power_device_get_gicon (p->primary_device)))
+        {
+          GVariant * serialized_icon = g_icon_serialize (icon);
+
+          if (serialized_icon != NULL)
+            {
+              g_variant_builder_add (&b, "{sv}", "icon", serialized_icon);
+              g_variant_unref (serialized_icon);
+            }
+
+          g_object_unref (icon);
+        }
+    }
 
   return g_variant_builder_end (&b);
 }
@@ -365,7 +378,7 @@ create_header_state (IndicatorPowerService * self)
 ***/
 
 static void
-append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
+append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int profile)
 {
   const UpDeviceKind kind = indicator_power_device_get_kind (device);
 
@@ -375,22 +388,31 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
     GMenuItem * item;
     GIcon * icon;
 
-    label = indicator_power_device_get_label (device);
-    item = g_menu_item_new (label, "indicator.activate-statistics");
+    label = indicator_power_device_get_readable_text (device);
+    item = g_menu_item_new (label, NULL);
     g_free (label);
-    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
-                                      indicator_power_device_get_object_path (device));
+
+    g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.indicator.basic");
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
-        GVariant * v;
-        if ((v = g_icon_serialize (icon)))
+        GVariant * serialized_icon = g_icon_serialize (icon);
+
+        if (serialized_icon != NULL)
           {
-            g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_ICON, v);
-            g_variant_unref (v);
+            g_menu_item_set_attribute_value (item,
+                                             G_MENU_ATTRIBUTE_ICON,
+                                             serialized_icon);
+            g_variant_unref (serialized_icon);
           }
 
         g_object_unref (icon);
+      }
+
+    if (profile == PROFILE_DESKTOP)
+      {
+        g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
+                                          indicator_power_device_get_object_path (device));
       }
 
     g_menu_append_item (menu, item);
@@ -400,13 +422,13 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device)
 
 
 static GMenuModel *
-create_desktop_devices_section (IndicatorPowerService * self)
+create_desktop_devices_section (IndicatorPowerService * self, int profile)
 {
   GList * l;
   GMenu * menu = g_menu_new ();
 
   for (l=self->priv->devices; l!=NULL; l=l->next)
-    append_device_to_menu (menu, l->data);
+    append_device_to_menu (menu, l->data, profile);
 
   return G_MENU_MODEL (menu);
 }
@@ -440,8 +462,17 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static void
 get_brightness_range (IndicatorPowerService * self, gint * low, gint * high)
 {
-  const int max = ib_brightness_control_get_max_value (self->priv->brightness_control);
-  *low  = max * 0.05; /* 5% minimum -- don't let the screen go completely dark */
+  priv_t * p = self->priv;
+  int max = 0;
+  if (p->brightness_control)
+    {
+      max = ib_brightness_control_get_max_value (self->priv->brightness_control);
+    }
+  else if (p->brightness_uscreen_control)
+    {
+      max = ib_brightness_uscreen_control_get_max_value (self->priv->brightness_uscreen_control);
+    }
+  *low  = (gint)(max * 0.05); /* 5% minimum -- don't let the screen go completely dark */
   *high = max;
 }
 
@@ -461,29 +492,19 @@ percentage_to_brightness (IndicatorPowerService * self, double percentage)
   return (int)(lo + (percentage*(hi-lo)));
 }
 
-static GMenuItem *
-create_brightness_menuitem (IndicatorPowerService * self)
-{
-  int lo, hi;
-  GMenuItem * item;
-
-  get_brightness_range (self,  &lo, &hi);
-
-  item = g_menu_item_new (NULL, "indicator.brightness");
-  g_menu_item_set_attribute (item, "x-canonical-type", "s", "com.canonical.unity.slider");
-  g_menu_item_set_attribute (item, "min-value", "d", brightness_to_percentage (self, lo));
-  g_menu_item_set_attribute (item, "max-value", "d", brightness_to_percentage (self, hi));
-  g_menu_item_set_attribute (item, "min-icon", "s", "torch-off" );
-  g_menu_item_set_attribute (item, "max-icon", "s", "torch-on" );
-
-  return item;
-}
-
 static GVariant *
 action_state_for_brightness (IndicatorPowerService * self)
 {
   priv_t * p = self->priv;
-  const gint brightness = ib_brightness_control_get_value (p->brightness_control);
+  gint brightness = 0;
+  if (p->brightness_control)
+    {
+      brightness = ib_brightness_control_get_value (p->brightness_control);
+    }
+  else if (p->brightness_uscreen_control)
+    {
+      brightness = ib_brightness_uscreen_control_get_value (p->brightness_uscreen_control);
+    }
   return g_variant_new_double (brightness_to_percentage (self, brightness));
 }
 
@@ -502,7 +523,16 @@ on_brightness_change_requested (GSimpleAction * action      G_GNUC_UNUSED,
   IndicatorPowerService * self = INDICATOR_POWER_SERVICE (gself);
   const gdouble percentage = g_variant_get_double (parameter);
   const int brightness = percentage_to_brightness (self, percentage);
-  ib_brightness_control_set_value (self->priv->brightness_control, brightness);
+
+  if (self->priv->brightness_control)
+    {
+      ib_brightness_control_set_value (self->priv->brightness_control, brightness);
+    }
+  else if (self->priv->brightness_uscreen_control)
+    {
+      ib_brightness_uscreen_control_set_value (self->priv->brightness_uscreen_control, brightness);
+    }
+
   update_brightness_action_state (self);
 }
 
@@ -527,18 +557,12 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 }
 
 static GMenuModel *
-create_phone_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
+create_phone_settings_section (IndicatorPowerService * self)
 {
   GMenu * section;
-  GMenuItem * item;
 
   section = g_menu_new ();
-
-  item = create_brightness_menuitem (self);
-  g_menu_append_item (section, item);
   update_brightness_action_state (self);
-  g_object_unref (item);
-
   g_menu_append (section, _("Battery settings…"), "indicator.activate-phone-settings");
 
   return G_MENU_MODEL (section);
@@ -571,18 +595,18 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
   struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
-  if (p->conn == NULL) /* we haven't built the menus yet */
-    return;
-
   if (sections & SECTION_HEADER)
     {
       g_simple_action_set_state (p->header_action, create_header_state (self));
     }
 
+  if (p->conn == NULL) /* we haven't built the menus yet */
+    return;
+
   if (sections & SECTION_DEVICES)
     {
-      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self));
-      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self));
+      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP));
+      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -596,18 +620,6 @@ static inline void
 rebuild_header_now (IndicatorPowerService * self)
 {
   rebuild_now (self, SECTION_HEADER);
-}
-
-static inline void
-rebuild_devices_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_DEVICES);
-}
-
-static inline void
-rebuild_settings_section_now (IndicatorPowerService * self)
-{
-  rebuild_now (self, SECTION_SETTINGS);
 }
 
 static void
@@ -633,12 +645,12 @@ create_menu (IndicatorPowerService * self, int profile)
         break;
 
       case PROFILE_DESKTOP:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP);
         sections[n++] = create_desktop_settings_section (self);
         break;
 
       case PROFILE_DESKTOP_GREETER:
-        sections[n++] = create_desktop_devices_section (self);
+        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER);
         break;
     }
 
@@ -812,6 +824,9 @@ on_bus_acquired (GDBusConnection * connection,
 
   p->conn = g_object_ref (G_OBJECT (connection));
 
+  /* export the battery properties */
+  indicator_power_notifier_set_bus (p->notifier, connection);
+
   /* export the actions */
   if ((id = g_dbus_connection_export_action_group (connection,
                                                    BUS_PATH,
@@ -911,11 +926,17 @@ on_devices_changed (IndicatorPowerService * self)
   g_clear_object (&p->primary_device);
   p->primary_device = indicator_power_service_choose_primary_device (p->devices);
 
+  /* update the notifier's battery */
+  if ((p->primary_device != NULL) && (indicator_power_device_get_kind(p->primary_device) == UP_DEVICE_KIND_BATTERY))
+    indicator_power_notifier_set_battery (p->notifier, p->primary_device);
+  else
+    indicator_power_notifier_set_battery (p->notifier, NULL);
+
   /* update the battery-level action's state */
   if (p->primary_device == NULL)
     battery_level = 0;
   else
-    battery_level = (int)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
+    battery_level = (guint32)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
   g_simple_action_set_state (p->battery_level_action, g_variant_new_uint32 (battery_level));
 
   rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
@@ -992,6 +1013,7 @@ my_dispose (GObject * o)
       g_clear_object (&p->settings);
     }
 
+  g_clear_object (&p->notifier);
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
@@ -999,7 +1021,9 @@ my_dispose (GObject * o)
 
   g_clear_object (&p->conn);
 
+  // g_clear_pointer has NULL check inside.
   g_clear_pointer (&p->brightness_control, ib_brightness_control_free);
+  g_clear_pointer (&p->brightness_uscreen_control, ib_brightness_uscreen_control_free);
 
   indicator_power_service_set_device_provider (self, NULL);
 
@@ -1013,6 +1037,8 @@ my_dispose (GObject * o)
 static void
 indicator_power_service_init (IndicatorPowerService * self)
 {
+  GDBusProxy *uscreen_proxy;
+  brightness_params_t brightness_params;
   priv_t * p = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             INDICATOR_TYPE_POWER_SERVICE,
                                             IndicatorPowerServicePrivate);
@@ -1022,7 +1048,17 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   p->settings = g_settings_new ("com.canonical.indicator.power");
 
-  p->brightness_control = ib_brightness_control_new ();
+  p->notifier = indicator_power_notifier_new ();
+
+  uscreen_proxy = uscreen_get_proxy(&brightness_params);
+  if (uscreen_proxy != NULL)
+    {
+      p->brightness_uscreen_control = ib_brightness_uscreen_control_new(uscreen_proxy, brightness_params);
+    }
+  else
+    {
+      p->brightness_control = ib_brightness_control_new ();
+    }
 
   init_gactions (self);
 
@@ -1096,9 +1132,8 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
 
   if (p->device_provider != NULL)
     {
-      g_signal_handlers_disconnect_by_func (p->device_provider,
-                                            G_CALLBACK(on_devices_changed),
-                                            self);
+      g_signal_handlers_disconnect_by_data (p->device_provider, self);
+
       g_clear_object (&p->device_provider);
 
       g_clear_object (&p->primary_device);
@@ -1118,6 +1153,129 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
     }
 }
 
+/* If a device has multiple batteries and uses only one of them at a time,
+   they should be presented as separate items inside the battery menu,
+   but everywhere else they should be aggregated (bug 880881).
+   Their percentages should be averaged. If any are discharging,
+   the aggregated time remaining should be the maximum of the times
+   for all those that are discharging, plus the sum of the times
+   for all those that are idle. Otherwise, the aggregated time remaining
+   should be the the maximum of the times for all those that are charging. */
+static IndicatorPowerDevice *
+create_totalled_battery_device (const GList * devices)
+{
+  const GList * l;
+  guint n_charged = 0;
+  guint n_charging = 0;
+  guint n_discharging = 0;
+  guint n_batteries = 0;
+  double sum_percent = 0;
+  time_t max_discharge_time = 0;
+  time_t max_charge_time = 0;
+  time_t sum_charged_time = 0;
+  IndicatorPowerDevice * device = NULL;
+
+  for (l=devices; l!=NULL; l=l->next)
+    {
+      const IndicatorPowerDevice * walk = INDICATOR_POWER_DEVICE(l->data);
+
+      if (indicator_power_device_get_kind(walk) == UP_DEVICE_KIND_BATTERY)
+        {
+          const double percent = indicator_power_device_get_percentage (walk);
+          const time_t t = indicator_power_device_get_time (walk);
+          const UpDeviceState state = indicator_power_device_get_state (walk);
+
+          ++n_batteries;
+
+          if (percent > 0.01)
+            sum_percent += percent;
+
+          if (state == UP_DEVICE_STATE_CHARGING)
+            {
+              ++n_charging;
+              max_charge_time = MAX(max_charge_time, t);
+            }
+          else if (state == UP_DEVICE_STATE_DISCHARGING)
+            {
+              ++n_discharging;
+              max_discharge_time = MAX(max_discharge_time, t);
+            }
+          else if (state == UP_DEVICE_STATE_FULLY_CHARGED)
+            {
+              ++n_charged;
+              sum_charged_time += t;
+            }
+        }
+    }
+
+  if (n_batteries > 1)
+    {
+      const double percent = sum_percent / n_batteries;
+      UpDeviceState state;
+      time_t time_left;
+
+      if (n_discharging > 0)
+        {
+          state = UP_DEVICE_STATE_DISCHARGING;
+          time_left = max_discharge_time + sum_charged_time;
+        }
+      else if (n_charging > 0)
+        {
+          state = UP_DEVICE_STATE_CHARGING;
+          time_left = max_charge_time;
+        }
+      else if (n_charged > 0)
+        {
+          state = UP_DEVICE_STATE_FULLY_CHARGED;
+          time_left = 0;
+        }
+      else
+        {
+          state = UP_DEVICE_STATE_UNKNOWN;
+          time_left = 0;
+        }
+
+      device = indicator_power_device_new (NULL,
+                                           UP_DEVICE_KIND_BATTERY,
+                                           percent,
+                                           state,
+                                           time_left);
+    }
+
+  return device;
+}
+
+/**
+ * If there are multiple UP_DEVICE_KIND_BATTERY devices in the list,
+ * they're merged into a new 'totalled' device representing the sum of them.
+ *
+ * Returns: (element-type IndicatorPowerDevice)(transfer full): a list of devices
+ */
+static GList*
+merge_batteries_together (GList * devices)
+{
+  GList * ret;
+  IndicatorPowerDevice * merged_device;
+
+  if ((merged_device = create_totalled_battery_device (devices)))
+    {
+      GList * l;
+
+      ret = g_list_append (NULL, merged_device);
+
+      for (l=devices; l!=NULL; l=l->next)
+        if (indicator_power_device_get_kind(INDICATOR_POWER_DEVICE(l->data)) != UP_DEVICE_KIND_BATTERY)
+          ret = g_list_append (ret, g_object_ref(l->data));
+    }
+  else /* not enough batteries to merge */
+    {
+      ret = g_list_copy (devices);
+      g_list_foreach (ret, (GFunc)g_object_ref, NULL);
+    }
+
+  return ret;
+}
+
 IndicatorPowerDevice *
 indicator_power_service_choose_primary_device (GList * devices)
 {
@@ -1125,13 +1283,10 @@ indicator_power_service_choose_primary_device (GList * devices)
 
   if (devices != NULL)
     {
-      GList * tmp;
-
-      tmp = g_list_copy (devices);
+      GList * tmp = merge_batteries_together (devices);
       tmp = g_list_sort (tmp, device_compare_func);
       primary = g_object_ref (tmp->data);
-
-      g_list_free (tmp);
+      g_list_free_full (tmp, (GDestroyNotify)g_object_unref);
     }
 
   return primary;
