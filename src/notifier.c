@@ -21,11 +21,13 @@
 #include "dbus-shared.h"
 #include "notifier.h"
 
+#include <url-dispatcher.h>
+
 #include <libnotify/notify.h>
 
 #include <glib/gi18n.h>
 
-#define HINT_INTERACTIVE "x-canonical-switch-to-application"
+#include <stdint.h> /* UINT32_MAX */
 
 typedef enum
 {
@@ -52,6 +54,8 @@ enum
 static GParamSpec * properties[LAST_PROP];
 
 static int instance_count = 0;
+
+static gboolean actions_supported = FALSE;
 
 /**
 ***
@@ -99,7 +103,7 @@ power_level_to_dbus_string (const PowerLevel power_level)
     }
 }
 
-PowerLevel
+static PowerLevel
 get_battery_power_level (IndicatorPowerDevice * battery)
 {
   static const double percent_critical = 2.0;
@@ -163,22 +167,62 @@ notification_clear (IndicatorPowerNotifier * self)
 }
 
 static void
+on_battery_settings_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
+                            char               * action    G_GNUC_UNUSED,
+                            gpointer             user_data G_GNUC_UNUSED)
+{
+  url_dispatch_send("settings:///system/battery", NULL, NULL);
+}
+
+static void
+on_dismiss_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
+                   char               * action    G_GNUC_UNUSED,
+                   gpointer             user_data G_GNUC_UNUSED)
+{
+  /* no-op; libnotify warns if we have a NULL action callback */
+}
+
+static void
 notification_show(IndicatorPowerNotifier * self)
 {
   priv_t * const p = get_priv(self);
   gdouble pct;
+  const char * title;
   char * body;
+  GStrv icon_names;
+  const char * icon_name;
   NotifyNotification * nn;
   GError * error;
+  const PowerLevel power_level = get_battery_power_level(p->battery);
 
   notification_clear(self);
 
+  g_return_if_fail(power_level != POWER_LEVEL_OK);
+
   /* create the notification */
+  title = power_level == POWER_LEVEL_LOW
+        ? _("Battery Low")
+        : _("Battery Critical");
   pct = indicator_power_device_get_percentage(p->battery);
   body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
-  nn = notify_notification_new(_("Battery Low"), body, NULL);
+  icon_names = indicator_power_device_get_icon_names(p->battery);
+  if (icon_names && *icon_names)
+    icon_name = icon_names[0];
+  else
+    icon_name = NULL;
+  nn = notify_notification_new(title, body, icon_name);
+  g_strfreev (icon_names);
   g_free (body);
-  /*notify_notification_set_hint(nn, HINT_INTERACTIVE, g_variant_new_boolean(TRUE));*/
+
+  if (actions_supported)
+    {
+      notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_boolean(TRUE));
+      notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_boolean(TRUE));
+      notify_notification_set_hint(nn, "x-canonical-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
+      notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
+      notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
+      notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
+    }
 
   /* if we can show it, keep it */
   error = NULL;
@@ -322,9 +366,23 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   if (!instance_count++)
     {
+      actions_supported = FALSE;
+
       if (!notify_init("indicator-power-service"))
         {
           g_critical("Unable to initialize libnotify! Notifications might not be shown.");
+        }
+      else
+        {
+          GList * caps;
+          GList * l;
+
+          /* see if actions are supported */
+          caps = notify_get_server_caps();
+          for (l=caps; l!=NULL && !actions_supported; l=l->next)
+            if (!g_strcmp0(l->data, "actions"))
+              actions_supported = TRUE;
+          g_list_free_full(caps, g_free);
         }
     }
 }
