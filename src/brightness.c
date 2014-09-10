@@ -62,10 +62,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerBrightness,
 ***/
 
 static void
-my_get_property (GObject     * o,
-                 guint         property_id,
-                 GValue      * value,
-                 GParamSpec  * pspec)
+my_get_property(GObject     * o,
+                guint         property_id,
+                GValue      * value,
+                GParamSpec  * pspec)
 {
   IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(o);
 
@@ -81,10 +81,10 @@ my_get_property (GObject     * o,
 }
 
 static void
-my_set_property (GObject       * o,
-                 guint           property_id,
-                 const GValue  * value,
-                 GParamSpec    * pspec)
+my_set_property(GObject       * o,
+                guint           property_id,
+                const GValue  * value,
+                GParamSpec    * pspec)
 {
   IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(o);
 
@@ -100,15 +100,15 @@ my_set_property (GObject       * o,
 }
 
 static void
-my_dispose (GObject * o)
+my_dispose(GObject * o)
 {
   IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(o);
   priv_t * p = get_priv(self);
 
   if (p->cancellable != NULL)
     {
-      g_cancellable_cancel (p->cancellable);
-      g_clear_object (&p->cancellable);
+      g_cancellable_cancel(p->cancellable);
+      g_clear_object(&p->cancellable);
     }
 
   if (p->powerd_name_tag)
@@ -208,9 +208,9 @@ on_powerd_brightness_params_ready(GObject      * source,
               p->powerd_dflt,
               (int)p->powerd_ab_supported);
 
-      /* uscreen doesn't have a get_brightness() function,
-         so the only way to know the value is to initialize it ourselves
-         (and hope nobody changes it :P */
+      /* uscreen doesn't have any way of accessing the current brightness,
+         so the only way to know its value is to initialize it ourselves
+         (and hope nobody else changes it :P) */
       percentage = brightness_to_percentage(self, p->powerd_dflt);
       indicator_power_brightness_set_percentage(self, percentage);
 
@@ -251,7 +251,7 @@ on_powerd_appeared(GDBusConnection * connection,
   g_clear_object(&p->system_bus);
   p->system_bus = g_object_ref(connection);
  
-  /* get powerd's params */
+  /* update our cache of powerd's brightness params */
   call_powerd_get_brightness_params(self);
 }
 
@@ -261,6 +261,7 @@ on_powerd_vanished(GDBusConnection * connection  G_GNUC_UNUSED,
                    gpointer          gself)
 {
   priv_t * p = get_priv(INDICATOR_POWER_BRIGHTNESS(gself));
+
   p->have_powerd_params = FALSE;
 }
 
@@ -282,7 +283,7 @@ on_set_uscreen_user_brightness_result(GObject      * system_bus,
   v = g_dbus_connection_call_finish(G_DBUS_CONNECTION(system_bus), res, &error);
   if (error != NULL)
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning("Unable to call uscreen.setBrightness: %s", error->message);
 
       g_error_free(error);
@@ -317,7 +318,7 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
 ***/
 
 static void
-indicator_power_brightness_init (IndicatorPowerBrightness * self)
+indicator_power_brightness_init(IndicatorPowerBrightness * self)
 {
   priv_t * p = get_priv(self);
 
@@ -333,7 +334,7 @@ indicator_power_brightness_init (IndicatorPowerBrightness * self)
 }
 
 static void
-indicator_power_brightness_class_init (IndicatorPowerBrightnessClass * klass)
+indicator_power_brightness_class_init(IndicatorPowerBrightnessClass * klass)
 {
   GObjectClass * object_class = G_OBJECT_CLASS(klass);
 
@@ -351,7 +352,7 @@ indicator_power_brightness_class_init (IndicatorPowerBrightnessClass * klass)
                                                     0.8,
                                                     G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties(object_class, LAST_PROP, properties);
 }
 
 /***
@@ -361,7 +362,7 @@ indicator_power_brightness_class_init (IndicatorPowerBrightnessClass * klass)
 IndicatorPowerBrightness *
 indicator_power_brightness_new(void)
 {
-  gpointer o = g_object_new (INDICATOR_TYPE_POWER_BRIGHTNESS, NULL);
+  gpointer o = g_object_new(INDICATOR_TYPE_POWER_BRIGHTNESS, NULL);
 
   return INDICATOR_POWER_BRIGHTNESS(o);
 }
