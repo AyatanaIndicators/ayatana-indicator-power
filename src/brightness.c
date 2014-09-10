@@ -43,7 +43,7 @@ typedef struct
   gint powerd_dim;
   gint powerd_min;
   gint powerd_max;
-  gint powerd_dflt;
+  gint powerd_default_value;
   gboolean powerd_ab_supported;
   gboolean have_powerd_params;
 }
@@ -199,19 +199,19 @@ on_powerd_brightness_params_ready(GObject      * source,
       g_variant_get(v, "((iiiib))", &p->powerd_dim,
                                     &p->powerd_min,
                                     &p->powerd_max,
-                                    &p->powerd_dflt,
+                                    &p->powerd_default_value,
                                     &p->powerd_ab_supported);
-      g_debug("powerd brightness settings: dim=%d, min=%d, max=%d, dflt=%d, ab_supported=%d",
+      g_debug("powerd brightness settings: dim=%d, min=%d, max=%d, default=%d, ab_supported=%d",
               p->powerd_dim,
               p->powerd_min,
               p->powerd_max,
-              p->powerd_dflt,
+              p->powerd_default_value,
               (int)p->powerd_ab_supported);
 
       /* uscreen doesn't have any way of accessing the current brightness,
          so the only way to know its value is to initialize it ourselves
          (and hope nobody else changes it :P) */
-      percentage = brightness_to_percentage(self, p->powerd_dflt);
+      percentage = brightness_to_percentage(self, p->powerd_default_value);
       indicator_power_brightness_set_percentage(self, percentage);
 
       /* cleanup */
