@@ -201,12 +201,12 @@ on_powerd_brightness_params_ready(GObject      * source,
                                     &p->powerd_max,
                                     &p->powerd_dflt,
                                     &p->powerd_ab_supported);
-      g_message("powerd brightness settings: dim=%d, min=%d, max=%d, dflt=%d, ab_supported=%d",
-                p->powerd_dim,
-                p->powerd_min,
-                p->powerd_max,
-                p->powerd_dflt,
-                (int)p->powerd_ab_supported);
+      g_debug("powerd brightness settings: dim=%d, min=%d, max=%d, dflt=%d, ab_supported=%d",
+              p->powerd_dim,
+              p->powerd_min,
+              p->powerd_max,
+              p->powerd_dflt,
+              (int)p->powerd_ab_supported);
 
       /* uscreen doesn't have a get_brightness() function,
          so the only way to know the value is to initialize it ourselves
@@ -302,7 +302,7 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
                          "/com/canonical/Unity/Screen",
                          "com.canonical.Unity.Screen",
                          "setUserBrightness",
-                         g_variant_new_int32(value),
+                         g_variant_new("(i)", value),
                          NULL, /* no return args */
                          G_DBUS_CALL_FLAGS_NONE,
                          -1, /* default timeout */
@@ -346,8 +346,8 @@ indicator_power_brightness_class_init (IndicatorPowerBrightnessClass * klass)
   properties[PROP_PERCENTAGE] = g_param_spec_double("percentage",
                                                     "Percentage",
                                                     "Brightness percentage",
-                                                    0.1, /* don't allow completely black */
-                                                    1.0, /* brightest */
+                                                    0.0, /* minimum */
+                                                    1.0, /* maximum */
                                                     0.8,
                                                     G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
@@ -375,6 +375,10 @@ indicator_power_brightness_set_percentage(IndicatorPowerBrightness * self,
   g_return_if_fail(INDICATOR_IS_POWER_BRIGHTNESS(self));
 
   p = get_priv(self);
+
+  g_debug("%s called; current value is %.2f, desired value is %.2f",
+          G_STRFUNC, p->percentage, percentage);
+
   if ((int)(p->percentage*100) != (int)(percentage*100))
     {
       set_uscreen_user_brightness(self, percentage_to_brightness(self, percentage));

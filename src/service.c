@@ -464,7 +464,7 @@ create_brightness_menu_item(void)
 
   item = g_menu_item_new(NULL, "indicator.brightness");
   g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.unity.slider");
-  g_menu_item_set_attribute(item, "min-value", "d", 0.1);
+  g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
   g_menu_item_set_attribute(item, "min-icon", "s", "torch-off" );
   g_menu_item_set_attribute(item, "max-icon", "s", "torch-on" );
@@ -476,9 +476,7 @@ static GVariant *
 action_state_for_brightness (IndicatorPowerService * self)
 {
   IndicatorPowerBrightness * b = self->priv->brightness;
-  GVariant * v = g_variant_new_double(indicator_power_brightness_get_percentage(b));
-  g_message("new brightness action state: %s", g_variant_print(v, TRUE));
-  return v;
+  return g_variant_new_double(indicator_power_brightness_get_percentage(b));
 }
 
 static void
@@ -1015,7 +1013,7 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->notifier = indicator_power_notifier_new ();
 
   p->brightness = indicator_power_brightness_new();
-  g_signal_connect_swapped(p->brightness, "notify::perentage",
+  g_signal_connect_swapped(p->brightness, "notify::percentage",
                            G_CALLBACK(update_brightness_action_state), self);
 
   init_gactions (self);
