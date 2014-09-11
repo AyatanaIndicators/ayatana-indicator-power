@@ -71,3 +71,19 @@ Test case indicator-power/low-power-notifications
     <dt>Tap 'Battery Settings'</dt>
         <dd>ubuntu-system-settings should be launched to the Battery page </dd>
 </dl>
+
+Test case indicator-power/device-brightness-slider
+<dl>
+    <dt>On a device, pull down the power indicator's menu</dt>
+        <dd>The menu should include a brightness slider with icons</dd>
+    <dt>Slide the brightness slider back and forth</dt>
+        <dd>The screen should get brighter and darker in sync with the slider's position</dd>
+    <dt>Launch unity-system-settings' Brightness panel</dt>
+    <dt>Move both the indicator's and the settings panel's sliders</dt>
+        <dd>Both sliders' positions should stay in sync with each other</dd>
+        <dd>Both should have the same effect on the screen's brightness</dd>
+    <dt>Make a note of the current brightness level and slider position</dt>
+    <dt>Reboot the device</dt>
+        <dd>The screen brightness should be the same as it was before rebooting</dd>
+        <dd>The indicator's brightness slider should be in the same position as it was before rebooting</dd>
+</dl>
