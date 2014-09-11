@@ -175,9 +175,12 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
   return brightness;
 }
 
-/***
-****  DBus Chatter: com.canonical.powerd
-***/
+/**
+ * DBus Chatter: com.canonical.powerd
+ *
+ * This is used to get default value, and upper and lower bounds,
+ * of the brightness setting
+ */
 
 static void set_brightness_global(IndicatorPowerBrightness*, int);
 
@@ -285,9 +288,11 @@ on_powerd_vanished(GDBusConnection * connection  G_GNUC_UNUSED,
   p->have_powerd_params = FALSE;
 }
 
-/***
-****  DBus Chatter: com.canonical.Unity.Screen
-***/
+/**
+ * DBus Chatter: com.canonical.Unity.Screen
+ *
+ * Used to set the backlight brightness via setUserBrightness
+ */
 
 /* setUserBrightness doesn't return anything,
    so this function is just to check for bus error messages */
@@ -445,9 +450,6 @@ indicator_power_brightness_set_percentage(IndicatorPowerBrightness * self,
                                           double                     percentage)
 {
   g_return_if_fail(INDICATOR_IS_POWER_BRIGHTNESS(self));
-
-  g_debug("%s called; current value is %.2f, desired value is %.2f",
-          G_STRFUNC, get_priv(self)->percentage, percentage);
 
   set_brightness_global(self, percentage_to_brightness(self, percentage));
 }
