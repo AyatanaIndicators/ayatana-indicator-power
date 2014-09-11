@@ -223,7 +223,7 @@ on_powerd_brightness_params_ready(GObject      * source,
             {
               /* user's first session, so init the schema's default
                  brightness from powerd's hardware-specific params */
-              g_message("%s is true, so setting brightness to powerd default '%d'", KEY_NEED_DEFAULT, p->powerd_default_value);
+              g_debug("%s is true, so initializing brightness to powerd default '%d'", KEY_NEED_DEFAULT, p->powerd_default_value);
               set_brightness_global(self, p->powerd_default_value);
               g_settings_set_boolean(p->settings, KEY_NEED_DEFAULT, FALSE);
             }
@@ -341,7 +341,6 @@ set_brightness_local(IndicatorPowerBrightness * self, int brightness)
 {
   priv_t * p = get_priv(self);
   p->percentage = brightness_to_percentage(self, brightness);
-  g_message("%s setting brightness property percentage to %.2f", G_STRFUNC, p->percentage);
   g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PERCENTAGE]);
 }
 
@@ -350,7 +349,6 @@ on_brightness_changed_in_schema(GSettings * settings,
                                 gchar     * key,
                                 gpointer    gself)
 {
-  g_message("%s schema changed; updating our local property", G_STRFUNC);
   set_brightness_local(INDICATOR_POWER_BRIGHTNESS(gself),
                        g_settings_get_int(settings, key));
 }
@@ -359,8 +357,6 @@ static void
 set_brightness_global(IndicatorPowerBrightness * self, int brightness)
 {
   priv_t * p = get_priv(self);
-
-  g_message("%s setting uscreen and local to %d", G_STRFUNC, brightness);
 
   set_uscreen_user_brightness(self, brightness);
 
