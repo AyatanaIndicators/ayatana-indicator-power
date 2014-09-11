@@ -21,6 +21,10 @@
 
 #include <gio/gio.h>
 
+#define SCHEMA_NAME "com.ubuntu.touch.system"
+#define KEY_BRIGHTNESS "brightness"
+#define KEY_NEED_DEFAULT "brightness-needs-a-default"
+
 enum
 {
   PROP_0,
@@ -34,6 +38,8 @@ typedef struct
 {
   GDBusConnection * system_bus;
   GCancellable * cancellable;
+
+  GSettings * settings;
 
   guint powerd_name_tag;
 
@@ -117,6 +123,7 @@ my_dispose(GObject * o)
       p->powerd_name_tag = 0;
     }
 
+  g_clear_object(&p->settings);
   g_clear_object(&p->system_bus);
 
   G_OBJECT_CLASS(indicator_power_brightness_parent_class)->dispose(o);
@@ -172,6 +179,8 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
 ****  DBus Chatter: com.canonical.powerd
 ***/
 
+static void set_brightness_global(IndicatorPowerBrightness*, int);
+
 static void
 on_powerd_brightness_params_ready(GObject      * source,
                                   GAsyncResult * res,
@@ -193,7 +202,6 @@ on_powerd_brightness_params_ready(GObject      * source,
     {
       IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
       priv_t * p = get_priv(self);
-      double percentage;
 
       p->have_powerd_params = TRUE;
       g_variant_get(v, "((iiiib))", &p->powerd_dim,
@@ -208,11 +216,23 @@ on_powerd_brightness_params_ready(GObject      * source,
               p->powerd_default_value,
               (int)p->powerd_ab_supported);
 
-      /* uscreen doesn't have any way of accessing the current brightness,
-         so the only way to know its value is to initialize it ourselves
-         (and hope nobody else changes it :P) */
-      percentage = brightness_to_percentage(self, p->powerd_default_value);
-      indicator_power_brightness_set_percentage(self, percentage);
+
+      if (p->settings != NULL)
+        { 
+          if (g_settings_get_boolean(p->settings, KEY_NEED_DEFAULT))
+            {
+              /* user's first session, so init the schema's default
+                 brightness from powerd's hardware-specific params */
+              g_message("%s is true, so setting brightness to powerd default '%d'", KEY_NEED_DEFAULT, p->powerd_default_value);
+              set_brightness_global(self, p->powerd_default_value);
+              g_settings_set_boolean(p->settings, KEY_NEED_DEFAULT, FALSE);
+            }
+          else
+            {
+              /* not the first time, so restore the previous session's brightness */
+              set_brightness_global(self, g_settings_get_int(p->settings, KEY_BRIGHTNESS));
+            }
+        }
 
       /* cleanup */
       g_variant_unref(v);
@@ -312,6 +332,43 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
                          self);
 }
 
+/***
+****
+***/
+
+static void
+set_brightness_local(IndicatorPowerBrightness * self, int brightness)
+{
+  priv_t * p = get_priv(self);
+  p->percentage = brightness_to_percentage(self, brightness);
+  g_message("%s setting brightness property percentage to %.2f", G_STRFUNC, p->percentage);
+  g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PERCENTAGE]);
+}
+
+static void
+on_brightness_changed_in_schema(GSettings * settings,
+                                gchar     * key,
+                                gpointer    gself)
+{
+  g_message("%s schema changed; updating our local property", G_STRFUNC);
+  set_brightness_local(INDICATOR_POWER_BRIGHTNESS(gself),
+                       g_settings_get_int(settings, key));
+}
+
+static void
+set_brightness_global(IndicatorPowerBrightness * self, int brightness)
+{
+  priv_t * p = get_priv(self);
+
+  g_message("%s setting uscreen and local to %d", G_STRFUNC, brightness);
+
+  set_uscreen_user_brightness(self, brightness);
+
+  if (p->settings != NULL)
+    g_settings_set_int(p->settings, KEY_BRIGHTNESS, brightness);
+  else
+    set_brightness_local(self, brightness);
+}
 
 /***
 ****  Instantiation
@@ -320,9 +377,29 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
 static void
 indicator_power_brightness_init(IndicatorPowerBrightness * self)
 {
-  priv_t * p = get_priv(self);
+  priv_t * p;
+  GSettingsSchema * schema;
 
+  p = get_priv(self);
   p->cancellable = g_cancellable_new();
+
+  schema = g_settings_schema_source_lookup(g_settings_schema_source_get_default(),
+                                           SCHEMA_NAME,
+                                           TRUE);
+
+  /* "brightness" is only spec'ed for the phone profile,
+     so fail gracefully & silently if we don't have the
+     schema for it. */
+  if (schema != NULL)
+    {
+      if (g_settings_schema_has_key(schema, KEY_BRIGHTNESS))
+        {
+          p->settings = g_settings_new(SCHEMA_NAME);
+          g_signal_connect(p->settings, "changed::" KEY_BRIGHTNESS,
+                           G_CALLBACK(on_brightness_changed_in_schema), self);
+        }
+      g_settings_schema_unref(schema);
+    }
 
   p->powerd_name_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
                                         "com.canonical.powerd",
@@ -371,22 +448,12 @@ void
 indicator_power_brightness_set_percentage(IndicatorPowerBrightness * self,
                                           double                     percentage)
 {
-  priv_t * p;
-
   g_return_if_fail(INDICATOR_IS_POWER_BRIGHTNESS(self));
 
-  p = get_priv(self);
-
   g_debug("%s called; current value is %.2f, desired value is %.2f",
-          G_STRFUNC, p->percentage, percentage);
+          G_STRFUNC, get_priv(self)->percentage, percentage);
 
-  if ((int)(p->percentage*100) != (int)(percentage*100))
-    {
-      set_uscreen_user_brightness(self, percentage_to_brightness(self, percentage));
-
-      p->percentage = percentage;
-      g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PERCENTAGE]);
-    }
+  set_brightness_global(self, percentage_to_brightness(self, percentage));
 }
 
 double
