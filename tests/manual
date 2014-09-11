@@ -41,7 +41,7 @@ Test-case indicator-power/unity8-items-check
         <dd>The menu is populated with items</dd>
 </dl>
 
-Test case indicator-power/detect-charging-or-discharging
+Test-case indicator-power/detect-charging-or-discharging
 <dl>
     <dt>Begin with a discharging device</dt>
         <dd>The indicator's icon should denote a discharging battery; e.g. an icon without the '⚡' sign</dd>
@@ -51,7 +51,7 @@ Test case indicator-power/detect-charging-or-discharging
         <dd>The indicator's icon should revert back to the same one in step one</dd>
 </dl>
 
-Test case indicator-power/low-power-notifications
+Test-case indicator-power/low-power-notifications
 <dl>
     <dt>Wait for the system's battery level to drop to 10% (or fake it, see 'Notes on Battery Testing' above)</dt>
         <dd>A notification should appear</dd>
@@ -72,7 +72,7 @@ Test case indicator-power/low-power-notifications
         <dd>ubuntu-system-settings should be launched to the Battery page </dd>
 </dl>
 
-Test case indicator-power/device-brightness-slider
+Test-case indicator-power/device-brightness-slider
 <dl>
     <dt>On a device, pull down the power indicator's menu</dt>
         <dd>The menu should include a brightness slider with icons</dd>
