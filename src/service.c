@@ -522,6 +522,7 @@ create_phone_settings_section(IndicatorPowerService * self)
 {
   GMenu * section;
   GMenuItem * item;
+  gboolean ab_supported;
 
   section = g_menu_new();
 
@@ -529,6 +530,18 @@ create_phone_settings_section(IndicatorPowerService * self)
   g_menu_append_item(section, item);
   update_brightness_action_state(self);
   g_object_unref(item);
+
+  g_object_get(self->priv->brightness,
+               "auto-brightness-supported", &ab_supported,
+               NULL);
+
+  if (ab_supported)
+    {
+      item = g_menu_item_new(_("Adjust brightness automatically"), "indicator.auto-brightness");
+      g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.indicator.switch");
+      g_menu_append_item(section, item);
+      g_object_unref(item);
+    }
 
   g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
 
@@ -579,7 +592,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   if (sections & SECTION_SETTINGS)
     {
       rebuild_section (desktop->submenu, 1, create_desktop_settings_section (self));
-      rebuild_section (phone->submenu, 1, create_desktop_settings_section (self));
+      rebuild_section (phone->submenu, 1, create_phone_settings_section (self));
     }
 }
 
@@ -719,6 +732,28 @@ on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
 ****
 ***/
 
+static gboolean
+convert_auto_prop_to_state(GBinding     * binding     G_GNUC_UNUSED,
+                           const GValue * from_value,
+                           GValue       * to_value,
+                           gpointer       user_data   G_GNUC_UNUSED)
+{
+  const gboolean b = g_value_get_boolean(from_value);
+  g_value_set_variant(to_value, g_variant_new_boolean(b));
+  return TRUE;
+}
+
+static gboolean
+convert_auto_state_to_prop(GBinding     * binding     G_GNUC_UNUSED,
+                           const GValue * from_value,
+                           GValue       * to_value,
+                           gpointer       user_data   G_GNUC_UNUSED)
+{
+  GVariant * v = g_value_get_variant(from_value);
+  g_value_set_boolean(to_value, g_variant_get_boolean(v));
+  return TRUE;
+}
+
 static void
 init_gactions (IndicatorPowerService * self)
 {
@@ -750,6 +785,16 @@ init_gactions (IndicatorPowerService * self)
   g_simple_action_set_enabled (a, FALSE);
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->battery_level_action = a;
+
+  /* add the auto-brightness action */
+  a = g_simple_action_new_stateful("auto-brightness", NULL, g_variant_new_boolean(FALSE));
+  g_object_bind_property_full(p->brightness, "auto-brightness",
+                              a,  "state",
+                              G_BINDING_SYNC_CREATE|G_BINDING_BIDIRECTIONAL,
+                              convert_auto_prop_to_state,
+                              convert_auto_state_to_prop,
+                              NULL, NULL);
+  g_action_map_add_action(G_ACTION_MAP(p->actions), G_ACTION(a));
 
   /* add the brightness action */
   a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));
@@ -814,9 +859,6 @@ on_bus_acquired (GDBusConnection * connection,
       struct ProfileMenuInfo * menu = &p->menus[i];
 
       g_string_printf (path, "%s/%s", BUS_PATH, menu_names[i]);
-
-      if (menu->menu == NULL)
-        create_menu (self, i);
 
       if ((id = g_dbus_connection_export_menu_model (connection,
                                                      path->str,
@@ -907,6 +949,12 @@ on_devices_changed (IndicatorPowerService * self)
   g_simple_action_set_state (p->battery_level_action, g_variant_new_uint32 (battery_level));
 
   rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
+}
+
+static void
+on_auto_brightness_supported_changed(IndicatorPowerService * self)
+{
+  rebuild_now(self, SECTION_SETTINGS);
 }
 
 
@@ -1001,9 +1049,12 @@ my_dispose (GObject * o)
 static void
 indicator_power_service_init (IndicatorPowerService * self)
 {
-  priv_t * p = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            INDICATOR_TYPE_POWER_SERVICE,
-                                            IndicatorPowerServicePrivate);
+  priv_t * p;
+  int i;
+
+  p = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                   INDICATOR_TYPE_POWER_SERVICE,
+                                   IndicatorPowerServicePrivate);
   self->priv = p;
 
   p->cancellable = g_cancellable_new ();
@@ -1020,14 +1071,20 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   g_signal_connect_swapped (p->settings, "changed", G_CALLBACK(rebuild_header_now), self);
 
-  p->own_id = g_bus_own_name (G_BUS_TYPE_SESSION,
-                              BUS_NAME,
-                              G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT,
-                              on_bus_acquired,
-                              NULL,
-                              on_name_lost,
-                              self,
-                              NULL);
+  for (i=0; i<N_PROFILES; ++i)
+    create_menu(self, i);
+
+  g_signal_connect_swapped(p->brightness, "notify::auto-brightness-supported",
+                           G_CALLBACK(on_auto_brightness_supported_changed), self);
+
+  p->own_id = g_bus_own_name(G_BUS_TYPE_SESSION,
+                             BUS_NAME,
+                             G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT,
+                             on_bus_acquired,
+                             NULL,
+                             on_name_lost,
+                             self,
+                             NULL);
 }
 
 static void

@@ -22,13 +22,17 @@
 #include <gio/gio.h>
 
 #define SCHEMA_NAME "com.ubuntu.touch.system"
+#define KEY_AUTO "auto-brightness"
+#define KEY_AUTO_SUPPORTED "auto-brightness-supported"
 #define KEY_BRIGHTNESS "brightness"
-#define KEY_NEED_DEFAULT "brightness-needs-a-default"
+#define KEY_NEED_DEFAULT "brightness-needs-hardware-default"
 
 enum
 {
   PROP_0,
   PROP_PERCENTAGE,
+  PROP_AUTO,
+  PROP_AUTO_SUPPORTED,
   LAST_PROP
 };
 
@@ -74,11 +78,20 @@ my_get_property(GObject     * o,
                 GParamSpec  * pspec)
 {
   IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(o);
+  priv_t * p = get_priv(self);
 
   switch (property_id)
     {
       case PROP_PERCENTAGE:
         g_value_set_double(value, indicator_power_brightness_get_percentage(self));
+        break;
+
+      case PROP_AUTO:
+        g_value_set_boolean(value, p->settings ? g_settings_get_boolean(p->settings, KEY_AUTO) : FALSE);
+        break;
+
+      case PROP_AUTO_SUPPORTED:
+        g_value_set_boolean(value, p->powerd_ab_supported);
         break;
 
       default:
@@ -93,11 +106,17 @@ my_set_property(GObject       * o,
                 GParamSpec    * pspec)
 {
   IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(o);
+  priv_t * p = get_priv(self);
 
   switch (property_id)
     {
       case PROP_PERCENTAGE:
         indicator_power_brightness_set_percentage(self, g_value_get_double(value));
+        break;
+
+      case PROP_AUTO:
+        if (p->settings != NULL)
+          g_settings_set_boolean (p->settings, KEY_AUTO, g_value_get_boolean(value));
         break;
 
       default:
@@ -205,6 +224,7 @@ on_powerd_brightness_params_ready(GObject      * source,
     {
       IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
       priv_t * p = get_priv(self);
+      const gboolean old_ab_supported = p->powerd_ab_supported;
 
       p->have_powerd_params = TRUE;
       g_variant_get(v, "((iiiib))", &p->powerd_dim,
@@ -218,7 +238,9 @@ on_powerd_brightness_params_ready(GObject      * source,
               p->powerd_max,
               p->powerd_default_value,
               (int)p->powerd_ab_supported);
-
+ 
+      if (old_ab_supported != p->powerd_ab_supported)
+        g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_AUTO_SUPPORTED]);
 
       if (p->settings != NULL)
         { 
@@ -371,6 +393,13 @@ set_brightness_global(IndicatorPowerBrightness * self, int brightness)
     set_brightness_local(self, brightness);
 }
 
+static void
+on_auto_changed_in_schema(IndicatorPowerBrightness * self)
+{
+  g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_AUTO]);
+}
+
+
 /***
 ****  Instantiation
 ***/
@@ -398,6 +427,8 @@ indicator_power_brightness_init(IndicatorPowerBrightness * self)
           p->settings = g_settings_new(SCHEMA_NAME);
           g_signal_connect(p->settings, "changed::" KEY_BRIGHTNESS,
                            G_CALLBACK(on_brightness_changed_in_schema), self);
+          g_signal_connect_swapped(p->settings, "changed::" KEY_AUTO,
+                                   G_CALLBACK(on_auto_changed_in_schema), self);
         }
       g_settings_schema_unref(schema);
     }
@@ -422,13 +453,28 @@ indicator_power_brightness_class_init(IndicatorPowerBrightnessClass * klass)
 
   properties[PROP_0] = NULL;
 
-  properties[PROP_PERCENTAGE] = g_param_spec_double("percentage",
-                                                    "Percentage",
-                                                    "Brightness percentage",
-                                                    0.0, /* minimum */
-                                                    1.0, /* maximum */
-                                                    0.8,
-                                                    G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+  properties[PROP_PERCENTAGE] = g_param_spec_double(
+    "percentage",
+    "Percentage",
+    "Brightness percentage",
+    0.0, /* minimum */
+    1.0, /* maximum */
+    0.8,
+    G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_AUTO] = g_param_spec_boolean(
+    "auto-brightness",
+    "Auto-Brightness",
+    "Automatically adjust brightness level",
+    FALSE,
+    G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_AUTO_SUPPORTED] = g_param_spec_boolean(
+    "auto-brightness-supported",
+    "Auto-Brightness Supported",
+    "True if the device can automatically adjust brightness",
+    FALSE,
+    G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties(object_class, LAST_PROP, properties);
 }
