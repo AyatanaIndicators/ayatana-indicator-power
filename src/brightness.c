@@ -339,7 +339,7 @@ on_set_uscreen_user_brightness_result(GObject      * system_bus,
   g_clear_pointer(&v, g_variant_unref);
 }
 
-void
+static void
 set_uscreen_user_brightness(IndicatorPowerBrightness * self,
                             int                        value)
 {
