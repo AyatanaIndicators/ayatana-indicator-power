@@ -5,9 +5,8 @@ add_definitions(-DG_LOG_DOMAIN="Indicator-Power")
 
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
+    brightness.c
     device-provider-upower.c
-    ib-brightness-control.c
-    ib-brightness-uscreen-control.c
     device-provider.c
     device.c
     notifier.c

@@ -1,41 +1,89 @@
 
+Notes on Battery Testing
+
+When building from source, an executable 'indicator-power-service-cmdline-battery' will be built in the tests/ directory. This has the same code as indicator-power-service, except instead of listening to UPower it has a single fake battery that can be set from the command line to set its charge level and whether it's charging or discharging.
+
+You'll need to stop the current indicator-power-service before starting the test one. After that, you enter in a number, or 'charging', or 'discharging', to set the fake battery. ctrl-c exits.
+
+Example:
+
+$ stop indicator-power # stop the real indicator-power service
+$ build/tests/indicator-power-service-cmdline-battery # start the test service
+50 # sets the fake battery level to 50%
+30 # sets the fake battery level to 30%
+charging # sets the fake battery to charging
+discharging # sets the fake battery to discharging
+ctrl-c # exits the test service
+$ start indicator-power # restart the real service
+
+
+
 Test-case indicator-power/unity7-items-check
 <dl>
-	<dt>Log in to a Unity 7 user session</dt>
-	<dt>Go to the panel and click on the Power indicator</dt>
-		<dd>Ensure there are items in the menu</dd>
+    <dt>Log in to a Unity 7 user session</dt>
+    <dt>Go to the panel and click on the Power indicator</dt>
+        <dd>Ensure there are items in the menu</dd>
 </dl>
 
 Test-case indicator-power/unity7-greeter-items-check
 <dl>
-	<dt>Start a system and wait for the greeter or logout of the current user session</dt>
-	<dt>Go to the panel and click on the Power indicator</dt>
-		<dd>Ensure there are items in the menu</dd>
+    <dt>Start a system and wait for the greeter or logout of the current user session</dt>
+    <dt>Go to the panel and click on the Power indicator</dt>
+        <dd>Ensure there are items in the menu</dd>
 </dl>
 
 Test-case indicator-power/unity8-items-check
 <dl>
-	<dt>Login to a user session running Unity 8</dt>
-	<dt>Pull down the top panel until it sticks open</dt>
-	<dt>Navigate through the tabs until "Battery" is shown</dt>
-		<dd>Battery is at the top of the menu</dd>
-		<dd>The menu is populated with items</dd>
+    <dt>Login to a user session running Unity 8</dt>
+    <dt>Pull down the top panel until it sticks open</dt>
+    <dt>Navigate through the tabs until "Battery" is shown</dt>
+        <dd>Battery is at the top of the menu</dd>
+        <dd>The menu is populated with items</dd>
 </dl>
 
-Test-case indicator-power/low-battery-popups
+Test-case indicator-power/detect-charging-or-discharging
 <dl>
-	<dt>Open a terminal</dt>
-	<dt>Stop the currently-running power indicator: "stop indicator-power"</dt>
-	<dt>Start the fake battery harness in the tests/build/ directory: "indicator-power-service-cmdline-battery"</dt>
-		<dd>Battery indicator should update, showing a discharging battery with a 50% charge</dd>
-	<dt>Type: "10" (no quotes) and press Enter</dt>
-		<dd>A popup should appear saying 'Battery low - 10% charge remaining'</dd>
-		<dd>Battery indicator's icon should show a low charge</dd>
-		<dd>Battery indicator's "Charge level" menuitem should show a 10% charge</dd>
-	<dt>Type: "9" (no quotes) and press Enter</dt>
-		<dd>The 'Battery low' popup should NOT appear, since we've already been notified</dd>
-		<dd>Battery indicator's "Charge level" menuitem should show a 9% charge</dd>
-	<dt>Type: "5" (no quotes) and press Enter</dt>
-		<dd>No 'Battery low' popup SHOULD appear, since 5% is the next warning threshold</dd>
-		<dd>Battery indicator's "Charge level" menuitem should show a 5% charge</dd>
+    <dt>Begin with a discharging device</dt>
+        <dd>The indicator's icon should denote a discharging battery; e.g. an icon without the '⚡' sign</dd>
+    <dt>Plug it in so that its battery is charging</dt>
+        <dd>The indicator's icon should change to show a charging battery</dd> 
+    <dt>Unplug it again</dt>
+        <dd>The indicator's icon should revert back to the same one in step one</dd>
+</dl>
+
+Test-case indicator-power/low-power-notifications
+<dl>
+    <dt>Wait for the system's battery level to drop to 10% (or fake it, see 'Notes on Battery Testing' above)</dt>
+        <dd>A notification should appear</dd>
+        <dd>Its title should read "Battery Low"</dd>
+        <dd>Its text should read "10% charge remaining"</dd>
+        <dd>The icon should be a low power icon</dd>
+        <dd>It should have two actions, "Battery settings" and "OK". </dd>
+    <dt>Tap OK to dismiss the popup</dt>
+    <dt>Wait (or fake) the battery level to drop to 9%</dt>
+        <dd>No new notification should appear -- we're still at the "Low" level </dd>
+    <dt>Wait (or fake) the battery level to drop to 4%</dt>
+        <dd>A notification should appear</dd>
+        <dd>Its title should read "Battery Critical"</dd>
+        <dd>Its text should read "4% charge remaining"</dd>
+        <dd>The icon should be a critical power icon</dd>
+        <dd>It should have two actions, "Battery settings" and "OK". </dd>
+    <dt>Tap 'Battery Settings'</dt>
+        <dd>ubuntu-system-settings should be launched to the Battery page </dd>
+</dl>
+
+Test-case indicator-power/device-brightness-slider
+<dl>
+    <dt>On a device, pull down the power indicator's menu</dt>
+        <dd>The menu should include a brightness slider with icons</dd>
+    <dt>Slide the brightness slider back and forth</dt>
+        <dd>The screen should get brighter and darker in sync with the slider's position</dd>
+    <dt>Launch unity-system-settings' Brightness panel</dt>
+    <dt>Move both the indicator's and the settings panel's sliders</dt>
+        <dd>Both sliders' positions should stay in sync with each other</dd>
+        <dd>Both should have the same effect on the screen's brightness</dd>
+    <dt>Make a note of the current brightness level and slider position</dt>
+    <dt>Reboot the device</dt>
+        <dd>The screen brightness should be the same as it was before rebooting</dd>
+        <dd>The indicator's brightness slider should be in the same position as it was before rebooting</dd>
 </dl>
