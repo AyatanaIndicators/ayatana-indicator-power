@@ -5,6 +5,7 @@ Position=40
 
 [phone]
 ObjectPath=/com/canonical/indicator/power/phone
+Position=25
 
 [desktop]
 ObjectPath=/com/canonical/indicator/power/desktop
@@ -17,6 +18,7 @@ ObjectPath=/com/canonical/indicator/power/desktop_greeter
 
 [phone_greeter]
 ObjectPath=/com/canonical/indicator/power/desktop_greeter
+Position=25
 
 [ubiquity]
 ObjectPath=/com/canonical/indicator/power/desktop_greeter
