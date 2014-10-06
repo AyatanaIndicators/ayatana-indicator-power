@@ -1,7 +1,7 @@
 [Indicator Service]
 Name=indicator-power
 ObjectPath=/com/canonical/indicator/power
-Position=40
+Position=25
 
 [phone]
 ObjectPath=/com/canonical/indicator/power/phone
