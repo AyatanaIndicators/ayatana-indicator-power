@@ -218,6 +218,7 @@ notification_show(IndicatorPowerNotifier * self)
     {
       notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_string("true"));
       notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_string("true"));
+      notify_notification_set_hint(nn, "x-canonical-private-affirmative-tint", g_variant_new_string("true"));
       notify_notification_set_hint(nn, "x-canonical-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
       notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
