@@ -1,21 +1,17 @@
 
 Notes on Battery Testing
 
-When building from source, an executable 'indicator-power-service-cmdline-battery' will be built in the tests/ directory. This has the same code as indicator-power-service, except instead of listening to UPower it has a single fake battery that can be set from the command line to set its charge level and whether it's charging or discharging.
+Mock battery settings are available for testing purposes.
 
-You'll need to stop the current indicator-power-service before starting the test one. After that, you enter in a number, or 'charging', or 'discharging', to set the fake battery. ctrl-c exits.
+The indicator's schema name is "com.canonical.indicator.power" and there are four keys: "mock-battery-enabled" (a boolean), "mock-battery-level" (charger percent, an integer from 0-100),  "mock-battery-charging" (a boolean of whether the mock battery is charging or discharging), and "mock-battery-minutes-left" (minutes remaining to charge/discharge).
 
-Example:
+Example use:
 
-$ stop indicator-power # stop the real indicator-power service
-$ build/tests/indicator-power-service-cmdline-battery # start the test service
-50 # sets the fake battery level to 50%
-30 # sets the fake battery level to 30%
-charging # sets the fake battery to charging
-discharging # sets the fake battery to discharging
-ctrl-c # exits the test service
-$ start indicator-power # restart the real service
-
+$ gsettings reset-recursively com.canonical.indicator.power               # reset settings to the default state
+$ gsettings list-recursively com.canonical.indicator.power | grep mock    # show the current mock settings
+$ gsettings set com.canonical.indicator.power mock-battery-enabled true   # use the mock battery
+$ gsettings set com.canonical.indicator.power mock-battery-level 10       # set the mock battery's charge to 10%
+$ gsettings set com.canonical.indicator.power mock-battery-enabled false  # go back to production settings
 
 
 Test-case indicator-power/unity7-items-check
