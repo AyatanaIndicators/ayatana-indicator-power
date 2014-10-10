@@ -20,5 +20,29 @@
       <_summary>When to show the battery status in the menu bar.</_summary>
       <_description>Options for when to show battery status. Valid options are "present", "charge", and "never".</_description>
     </key>
+
+    <key name="mock-battery-enabled" type="b">
+      <default>false</default>
+      <_summary>Whether to use a mock battery for testing.</_summary>
+      <_description>When enabled, a single mock battery will be used instead of monitoring upower.</_description>
+    </key>
+    <key name="mock-battery-level" type="i">
+      <range min="0" max="100"/>
+      <default>50</default>
+      <_summary>The charge level of the mock battery.</_summary>
+      <_description>The charge level of the mock battery.</_description>
+    </key>
+    <key name="mock-battery-charging" type="b">
+      <default>false</default>
+      <_summary>Charge state of the mock battery</_summary>
+      <_description>Whether the mock battery is charging or discharging</_description>
+    </key>
+    <key name="mock-battery-minutes-left" type="i">
+      <range min="0" max="420"/>
+      <default>30</default>
+      <_summary>Time remaining on the battery</_summary>
+      <_description>Minutes left until the battery finishes charging/discharging</_description>
+    </key>
+      
   </schema>
 </schemalist>

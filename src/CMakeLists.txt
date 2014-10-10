@@ -6,6 +6,7 @@ add_definitions(-DG_LOG_DOMAIN="Indicator-Power")
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
+    device-provider-mock.c
     device-provider-upower.c
     device-provider.c
     device.c
