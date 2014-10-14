@@ -18,67 +18,13 @@
  */
 
 #include <locale.h>
-#include <stdlib.h> /* exit() */
 
+#include <glib.h>
 #include <glib/gi18n.h>
-#include <gio/gio.h>
 
 #include "device.h"
-#include "device-provider-mock.h"
-#include "device-provider-upower.h"
 #include "service.h"
-
-/***
-****  MOCK
-***/
-
-static IndicatorPowerDevice*
-get_mock_battery(GSettings * settings)
-{
-  const double percent = g_settings_get_int(settings, "mock-battery-level");
-
-  const UpDeviceState state = g_settings_get_boolean(settings, "mock-battery-charging")
-                            ? UP_DEVICE_STATE_CHARGING
-                            : UP_DEVICE_STATE_DISCHARGING;
-
-  const int seconds_left = g_settings_get_int(settings, "mock-battery-minutes-left") * 60;
-
-  return indicator_power_device_new ("/some/path",
-                                     UP_DEVICE_KIND_BATTERY,
-                                     percent,
-                                     state,
-                                     seconds_left);
-}
-
-static IndicatorPowerDeviceProvider*
-get_device_provider(GSettings * settings)
-{
-  IndicatorPowerDeviceProvider * provider = NULL;
-
-  if (g_settings_get_boolean(settings, "mock-battery-enabled"))
-    {
-      IndicatorPowerDevice * battery = get_mock_battery(settings);
-      provider = indicator_power_device_provider_mock_new ();
-      indicator_power_device_provider_add_device (INDICATOR_POWER_DEVICE_PROVIDER_MOCK(provider), battery);
-      g_object_unref (battery);
-    }
-  else
-    {
-      provider = indicator_power_device_provider_upower_new ();
-    }
-
-  return provider;
-}
-
-static void
-on_mock_settings_changed(GSettings* settings,
-                         gchar    * key       G_GNUC_UNUSED,
-                         gpointer   service)
-{
-  IndicatorPowerDeviceProvider* provider = get_device_provider(settings);
-  indicator_power_service_set_device_provider (INDICATOR_POWER_SERVICE(service), provider);
-  g_object_unref(provider);
-}
+#include "testing.h"
 
 /***
 ****
@@ -94,25 +40,18 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
-  GSettings * settings;
-  GMainLoop * loop;
   IndicatorPowerService * service;
+  IndicatorPowerTesting * testing;
+  GMainLoop * loop;
 
   /* boilerplate i18n */
   setlocale (LC_ALL, "");
   bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
   textdomain (GETTEXT_PACKAGE);
 
-  /* mock settings */
-  service = indicator_power_service_new (NULL);
-  settings = g_settings_new ("com.canonical.indicator.power");
-  g_signal_connect(settings, "changed::mock-battery-enabled", G_CALLBACK(on_mock_settings_changed), service);
-  g_signal_connect(settings, "changed::mock-battery-level", G_CALLBACK(on_mock_settings_changed), service);
-  g_signal_connect(settings, "changed::mock-battery-charging", G_CALLBACK(on_mock_settings_changed), service);
-  g_signal_connect(settings, "changed::mock-battery-minutes-left", G_CALLBACK(on_mock_settings_changed), service);
-  on_mock_settings_changed(settings, NULL, service);
-
   /* run */
+  service = indicator_power_service_new (NULL);
+  testing = indicator_power_testing_new (service);
   loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (service, INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
                     G_CALLBACK(on_name_lost), loop);
@@ -121,6 +60,6 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   /* cleanup */
   g_main_loop_unref (loop);
   g_clear_object (&service);
-  g_clear_object (&settings);
+  g_clear_object (&testing);
   return 0;
 }
