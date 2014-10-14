@@ -33,7 +33,6 @@
 enum
 {
   PROP_0,
-  PROP_BUS,
   PROP_SERVICE,
   LAST_PROP
 };
@@ -78,6 +77,52 @@ update_device_provider (IndicatorPowerTesting * self)
                   : p->provider_upower;
   indicator_power_service_set_device_provider(p->service, device_provider);
 }
+
+static void
+set_bus(IndicatorPowerTesting * self, GDBusConnection * bus)
+{
+  priv_t * p;
+  GDBusInterfaceSkeleton * skel;
+
+  g_return_if_fail(INDICATOR_IS_POWER_TESTING(self));
+  g_return_if_fail((bus == NULL) || G_IS_DBUS_CONNECTION(bus));
+
+  p = get_priv (self);
+
+  if (p->bus == bus)
+    return;
+
+  skel = G_DBUS_INTERFACE_SKELETON(p->skeleton);
+
+  if (p->bus != NULL)
+    {
+      if (skel != NULL)
+        g_dbus_interface_skeleton_unexport (skel);
+
+      g_clear_object (&p->bus);
+    }
+
+  if (bus != NULL)
+    {
+      GError * error;
+
+      p->bus = g_object_ref (bus);
+
+      error = NULL;
+      if (!g_dbus_interface_skeleton_export(skel,
+                                            bus,
+                                            BUS_PATH"/Testing",
+                                            &error))
+        {
+          g_warning ("Unable to export Testing properties: %s", error->message);
+          g_error_free (error);
+        }
+    }
+}
+
+/***
+****
+***/
 
 static void
 on_mock_battery_enabled_changed(DbusTesting           * skeleton  G_GNUC_UNUSED,
@@ -141,7 +186,7 @@ on_bus_changed(IndicatorPowerService * service,
 {
   GObject * bus = NULL;
   g_object_get(service, "bus", &bus, NULL);  
-  indicator_power_testing_set_bus(self, G_DBUS_CONNECTION(bus));
+  set_bus(self, G_DBUS_CONNECTION(bus));
   g_clear_object(&bus);
 }
 
@@ -160,10 +205,6 @@ my_get_property(GObject     * o,
 
   switch (property_id)
     {
-      case PROP_BUS:
-        g_value_set_object(value, p->bus);
-        break;
-
       case PROP_SERVICE:
         g_value_set_object(value, p->service);
         break;
@@ -184,10 +225,6 @@ my_set_property(GObject       * o,
 
   switch (property_id)
     {
-      case PROP_BUS:
-        indicator_power_testing_set_bus(self, G_DBUS_CONNECTION(g_value_get_object(value)));
-        break;
-
       case PROP_SERVICE:
         g_assert(p->service == NULL); /* G_PARAM_CONSTRUCT_ONLY */
         p->service = g_value_dup_object(value);
@@ -204,7 +241,7 @@ my_dispose(GObject * o)
   IndicatorPowerTesting * const self = INDICATOR_POWER_TESTING(o);
   priv_t * const p = get_priv (self);
 
-  indicator_power_testing_set_bus(self, NULL);
+  set_bus(self, NULL);
   g_clear_object(&p->skeleton);
   g_clear_object(&p->provider_upower);
   g_clear_object(&p->provider_mock);
@@ -290,13 +327,6 @@ indicator_power_testing_class_init (IndicatorPowerTestingClass * klass)
   object_class->get_property = my_get_property;
   object_class->set_property = my_set_property;
 
-  properties[PROP_BUS] = g_param_spec_object (
-    "bus",
-    "Bus",
-    "The GDBusConnection on which to export menus",
-    G_TYPE_OBJECT,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
   properties[PROP_SERVICE] = g_param_spec_object (
     "service",
     "Servie",
@@ -317,48 +347,5 @@ indicator_power_testing_new (IndicatorPowerService * service)
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_TESTING, "service", service, NULL);
 
   return INDICATOR_POWER_TESTING (o);
-}
-
-void
-indicator_power_testing_set_bus(IndicatorPowerTesting * self,
-                                GDBusConnection       * bus)
-{
-  priv_t * p;
-  GDBusInterfaceSkeleton * skel;
-
-  g_return_if_fail(INDICATOR_IS_POWER_TESTING(self));
-  g_return_if_fail((bus == NULL) || G_IS_DBUS_CONNECTION(bus));
-
-  p = get_priv (self);
-
-  if (p->bus == bus)
-    return;
-
-  skel = G_DBUS_INTERFACE_SKELETON(p->skeleton);
-
-  if (p->bus != NULL)
-    {
-      if (skel != NULL)
-        g_dbus_interface_skeleton_unexport (skel);
-
-      g_clear_object (&p->bus);
-    }
-
-  if (bus != NULL)
-    {
-      GError * error;
-
-      p->bus = g_object_ref (bus);
-
-      error = NULL;
-      if (!g_dbus_interface_skeleton_export(skel,
-                                            bus,
-                                            BUS_PATH"/Testing",
-                                            &error))
-        {
-          g_warning ("Unable to export Testing properties: %s", error->message);
-          g_error_free (error);
-        }
-    }
 }
 
