@@ -1,21 +1,37 @@
 
 Notes on Battery Testing
 
-When building from source, an executable 'indicator-power-service-cmdline-battery' will be built in the tests/ directory. This has the same code as indicator-power-service, except instead of listening to UPower it has a single fake battery that can be set from the command line to set its charge level and whether it's charging or discharging.
+Mock battery propreties are available for testing purposes.
 
-You'll need to stop the current indicator-power-service before starting the test one. After that, you enter in a number, or 'charging', or 'discharging', to set the fake battery. ctrl-c exits.
+The testing properties are DBus properties published on busname "com.canonical.indicator.power", object path "/com/canonical/indicator/power/Testing", and interface "com.canonical.indicator.power.Testing". The four properties are "MockBatteryEnabled" (boolean, default false), "MockBatteryLevel" (uint32 [0-100], default 50), "MockBatteryState" (string, default 'discharging'), "MockBatteryMinutesLeft" (minutes remaining to charge/discharge, uint32, default 30).
 
-Example:
+Example use:
 
-$ stop indicator-power # stop the real indicator-power service
-$ build/tests/indicator-power-service-cmdline-battery # start the test service
-50 # sets the fake battery level to 50%
-30 # sets the fake battery level to 30%
-charging # sets the fake battery to charging
-discharging # sets the fake battery to discharging
-ctrl-c # exits the test service
-$ start indicator-power # restart the real service
+Show the testing properties:
 
+$ gdbus call --session --dest "com.canonical.indicator.power" \
+             --object-path /com/canonical/indicator/power/Testing \
+             --method org.freedesktop.DBus.Properties.GetAll \
+             com.canonical.indicator.power.Testing
+({'MockBatteryEnabled': <false>, 'MockBatteryLevel': <uint32 50>, 'MockBatteryState': <'discharging'>, 'MockBatteryMinutesLeft': <uint32 30>},)
+
+Enable the mock battery:
+
+$ gdbus call --session --dest "com.canonical.indicator.power" \
+             --object-path /com/canonical/indicator/power/Testing \
+             --method org.freedesktop.DBus.Properties.Set \
+             com.canonical.indicator.power.Testing \
+             MockBatteryEnabled \
+             "<true>"
+
+Set the mock battery's charge to 10%
+
+$ gdbus call --session --dest "com.canonical.indicator.power" \
+             --object-path /com/canonical/indicator/power/Testing \
+             --method org.freedesktop.DBus.Properties.Set \
+             com.canonical.indicator.power.Testing \
+             MockBatteryLevel \
+             "<uint32 10>"
 
 
 Test-case indicator-power/unity7-items-check

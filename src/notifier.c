@@ -55,8 +55,6 @@ static GParamSpec * properties[LAST_PROP];
 
 static int instance_count = 0;
 
-static gboolean actions_supported = FALSE;
-
 /**
 ***
 **/
@@ -76,6 +74,9 @@ typedef struct
 
   GDBusConnection * bus;
   DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
+
+  gboolean caps_queried;
+  gboolean actions_supported;
 }
 IndicatorPowerNotifierPrivate;
 
@@ -182,6 +183,33 @@ on_dismiss_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
   /* no-op; libnotify warns if we have a NULL action callback */
 }
 
+static gboolean
+are_actions_supported(IndicatorPowerNotifier * self)
+{
+  priv_t * const p = get_priv(self);
+
+  if (!p->caps_queried)
+    {
+      gboolean actions_supported;
+      GList * caps;
+      GList * l;
+
+      /* see if actions are supported */
+      actions_supported = FALSE;
+      caps = notify_get_server_caps();
+      for (l=caps; l!=NULL && !actions_supported; l=l->next)
+        if (!g_strcmp0(l->data, "actions"))
+          actions_supported = TRUE;
+
+      p->actions_supported = actions_supported;
+      p->caps_queried = TRUE;
+
+      g_list_free_full(caps, g_free);
+    }
+
+  return p->actions_supported;
+}
+
 static void
 notification_show(IndicatorPowerNotifier * self)
 {
@@ -214,7 +242,7 @@ notification_show(IndicatorPowerNotifier * self)
   g_strfreev (icon_names);
   g_free (body);
 
-  if (actions_supported)
+  if (are_actions_supported(self))
     {
       notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_string("true"));
       notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_string("true"));
@@ -354,6 +382,7 @@ my_finalize (GObject * o G_GNUC_UNUSED)
 ****  Instantiation
 ***/
 
+
 static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
 {
@@ -365,27 +394,8 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->power_level = POWER_LEVEL_OK;
 
-  if (!instance_count++)
-    {
-      actions_supported = FALSE;
-
-      if (!notify_init("indicator-power-service"))
-        {
-          g_critical("Unable to initialize libnotify! Notifications might not be shown.");
-        }
-      else
-        {
-          GList * caps;
-          GList * l;
-
-          /* see if actions are supported */
-          caps = notify_get_server_caps();
-          for (l=caps; l!=NULL && !actions_supported; l=l->next)
-            if (!g_strcmp0(l->data, "actions"))
-              actions_supported = TRUE;
-          g_list_free_full(caps, g_free);
-        }
-    }
+  if (!instance_count++ && !notify_init("indicator-power-service"))
+    g_critical("Unable to initialize libnotify! Notifications might not be shown.");
 }
 
 static void

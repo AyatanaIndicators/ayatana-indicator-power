@@ -81,7 +81,7 @@ indicator_power_device_provider_interface_init (IndicatorPowerDeviceProviderInte
 }
 
 static void
-indicator_power_device_provider_mock_init (IndicatorPowerDeviceProviderMock * self)
+indicator_power_device_provider_mock_init (IndicatorPowerDeviceProviderMock * self G_GNUC_UNUSED)
 {
 }
 

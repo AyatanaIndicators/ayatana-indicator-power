@@ -51,6 +51,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 enum
 {
   PROP_0,
+  PROP_BUS,
   PROP_DEVICE_PROVIDER,
   LAST_PROP
 };
@@ -839,6 +840,7 @@ on_bus_acquired (GDBusConnection * connection,
   g_debug ("bus acquired: %s", name);
 
   p->conn = g_object_ref (G_OBJECT (connection));
+  g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_BUS]);
 
   /* export the battery properties */
   indicator_power_notifier_set_bus (p->notifier, connection);
@@ -977,6 +979,10 @@ my_get_property (GObject     * o,
 
   switch (property_id)
     {
+      case PROP_BUS:
+        g_value_set_object (value, p->conn);
+        break;
+
       case PROP_DEVICE_PROVIDER:
         g_value_set_object (value, p->device_provider);
         break;
@@ -1112,6 +1118,13 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
     G_TYPE_NONE, 0);
 
   properties[PROP_0] = NULL;
+
+  properties[PROP_BUS] = g_param_spec_object (
+    "bus",
+    "Bus",
+    "GDBusConnection for exporting menus/actions",
+    G_TYPE_OBJECT,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_DEVICE_PROVIDER] = g_param_spec_object (
     "device-provider",

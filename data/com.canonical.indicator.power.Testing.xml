@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name="com.canonical.indicator.power.Testing">
+
+    <property name="MockBatteryEnabled" type="b" access="readwrite">
+      <doc:doc>
+        <doc:description>
+          <doc:para>Whether or not the mock battery is enabled. (Default: false)</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="MockBatteryLevel" type="u" access="readwrite">
+      <doc:doc>
+        <doc:description>
+          <doc:para>The charge level of the mock battery (0-100%, Default: 50%)</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="MockBatteryState" type="s" access="readwrite">
+      <doc:doc>
+        <doc:description>
+          <doc:para>The mock battery's state. Possible values: 'charging', 'discharging' (Defualt: 'discharging')</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+    <property name="MockBatteryMinutesLeft" type="u" access="readwrite">
+      <doc:doc>
+        <doc:description>
+          <doc:para>Muntes left until the mock battery finishes charging/dischargin (Default: 30)</doc:para>
+        </doc:description>
+      </doc:doc>
+    </property>
+
+  </interface>
+</node>

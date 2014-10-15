@@ -18,14 +18,13 @@
  */
 
 #include <locale.h>
-#include <stdlib.h> /* exit() */
 
+#include <glib.h>
 #include <glib/gi18n.h>
-#include <gio/gio.h>
 
 #include "device.h"
-#include "device-provider-upower.h"
 #include "service.h"
+#include "testing.h"
 
 /***
 ****
@@ -41,8 +40,8 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
-  IndicatorPowerDeviceProvider * device_provider;
   IndicatorPowerService * service;
+  IndicatorPowerTesting * testing;
   GMainLoop * loop;
 
   /* boilerplate i18n */
@@ -51,8 +50,8 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   textdomain (GETTEXT_PACKAGE);
 
   /* run */
-  device_provider = indicator_power_device_provider_upower_new ();
-  service = indicator_power_service_new (device_provider);
+  service = indicator_power_service_new (NULL);
+  testing = indicator_power_testing_new (service);
   loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (service, INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
                     G_CALLBACK(on_name_lost), loop);
@@ -61,6 +60,6 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   /* cleanup */
   g_main_loop_unref (loop);
   g_clear_object (&service);
-  g_clear_object (&device_provider);
+  g_clear_object (&testing);
   return 0;
 }

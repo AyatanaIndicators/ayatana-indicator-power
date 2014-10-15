@@ -6,10 +6,12 @@ add_definitions(-DG_LOG_DOMAIN="Indicator-Power")
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
+    device-provider-mock.c
     device-provider-upower.c
     device-provider.c
     device.c
     notifier.c
+    testing.c
     service.c)
 
 # generated sources
@@ -19,6 +21,10 @@ add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  com.canonical.indicator.power
                                  Dbus
                                  ${CMAKE_SOURCE_DIR}/data/com.canonical.indicator.power.Battery.xml)
+add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-testing
+                                 com.canonical.indicator.power
+                                 Dbus
+                                 ${CMAKE_SOURCE_DIR}/data/com.canonical.indicator.power.Testing.xml)
 # add the bin dir to our include path so the code can find the generated header files
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
