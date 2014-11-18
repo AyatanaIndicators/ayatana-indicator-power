@@ -22,7 +22,7 @@
     <property name="MockBatteryState" type="s" access="readwrite">
       <doc:doc>
         <doc:description>
-          <doc:para>The mock battery's state. Possible values: 'charging', 'discharging' (Defualt: 'discharging')</doc:para>
+          <doc:para>The mock battery's state. Possible values: 'charging', 'discharging' (Default: 'discharging')</doc:para>
         </doc:description>
       </doc:doc>
     </property>
@@ -30,7 +30,7 @@
     <property name="MockBatteryMinutesLeft" type="u" access="readwrite">
       <doc:doc>
         <doc:description>
-          <doc:para>Muntes left until the mock battery finishes charging/dischargin (Default: 30)</doc:para>
+          <doc:para>Minutes left until the mock battery finishes charging/discharging (Default: 30)</doc:para>
         </doc:description>
       </doc:doc>
     </property>
