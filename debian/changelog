@@ -1,3 +1,13 @@
+indicator-power (12.10.6+15.04.20141203-0ubuntu1) vivid; urgency=low
+
+  [ Charles Kerr ]
+  * Show the phone menu in the phone greeter.
+
+  [ Christopher Lee ]
+  * Fix some minor typos in power testing xml file.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 03 Dec 2014 16:26:04 +0000
+
 indicator-power (12.10.6+15.04.20141103-0ubuntu1) vivid; urgency=low
 
   [ Sebastien Bacher ]
