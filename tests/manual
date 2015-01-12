@@ -13,7 +13,6 @@ $ gdbus call --session --dest "com.canonical.indicator.power" \
              --object-path /com/canonical/indicator/power/Testing \
              --method org.freedesktop.DBus.Properties.GetAll \
              com.canonical.indicator.power.Testing
-({'MockBatteryEnabled': <false>, 'MockBatteryLevel': <uint32 50>, 'MockBatteryState': <'discharging'>, 'MockBatteryMinutesLeft': <uint32 30>},)
 
 Enable the mock battery:
 
@@ -86,6 +85,14 @@ Test-case indicator-power/low-power-notifications
         <dd>It should have two actions, "Battery settings" and "OK". </dd>
     <dt>Tap 'Battery Settings'</dt>
         <dd>ubuntu-system-settings should be launched to the Battery page </dd>
+</dl>
+
+Test-case indicator-power/low-power-icon
+<dl>
+    <dt>Wait for the system's battery level to drop to 21% (or fake it, see 'Notes on Battery Testing' above)</dt>
+        <dd>The indicator's icon should use the non-critical coloring (eg, grey)</dd>
+    <dt>Wait for the system's battery level to drop to 20% (or fake it, see 'Notes on Battery Testing' above)</dt>
+        <dd>The indicator's icon should use the critical coloring (eg, red)</dd>
 </dl>
 
 Test-case indicator-power/device-brightness-slider
