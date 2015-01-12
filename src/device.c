@@ -319,7 +319,23 @@ get_device_icon_suffix (gdouble percentage)
 }
 
 static const gchar *
-get_device_icon_index (gdouble percentage)
+get_closest_10_percent_percentage (gdouble percentage)
+{
+  if (percentage >= 95) return "100";
+  if (percentage >= 85) return "090";
+  if (percentage >= 75) return "080";
+  if (percentage >= 65) return "070";
+  if (percentage >= 55) return "060";
+  if (percentage >= 45) return "050";
+  if (percentage >= 35) return "040";
+  if (percentage >= 20) return "030"; /* 20 rather than 25: see bug #1388235 */
+  if (percentage >= 15) return "020";
+  if (percentage >=  5) return "010";
+  return "000";
+}
+
+static const gchar *
+get_fallback_device_icon_index (gdouble percentage)
 {
   if (percentage >= 90) return "100";
   if (percentage >= 70) return "080";
@@ -364,6 +380,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 {
   const gchar *suffix_str;
   const gchar *index_str;
+  const gchar *index_str_2;
 
   /* LCOV_EXCL_START */
   g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
@@ -406,9 +423,15 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
       case UP_DEVICE_STATE_CHARGING:
         suffix_str = get_device_icon_suffix (percentage);
-        index_str = get_device_icon_index (percentage);
+        index_str = get_closest_10_percent_percentage (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s-charging", kind_str, index_str));
+        index_str_2 = get_fallback_device_icon_index (percentage);
+        if (g_strcmp0 (index_str, index_str_2))
+          {
+            g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str_2));
+            g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s-charging", kind_str, index_str_2));
+          }
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-symbolic", kind_str, suffix_str));
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, suffix_str));
         break;
@@ -417,9 +440,15 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
       case UP_DEVICE_STATE_DISCHARGING:
       case UP_DEVICE_STATE_PENDING_DISCHARGE:
         suffix_str = get_device_icon_suffix (percentage);
-        index_str = get_device_icon_index (percentage);
+        index_str = get_closest_10_percent_percentage (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str));
+        index_str_2 = get_fallback_device_icon_index (percentage);
+        if (g_strcmp0 (index_str, index_str_2))
+          {
+            g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str_2));
+            g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str_2));
+          }
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-symbolic", kind_str, suffix_str));
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, suffix_str));
         break;
