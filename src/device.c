@@ -328,7 +328,7 @@ get_closest_10_percent_percentage (gdouble percentage)
   if (percentage >= 55) return "060";
   if (percentage >= 45) return "050";
   if (percentage >= 35) return "040";
-  if (percentage >= 20) return "030"; /* 20 rather than 25: see bug #1388235 */
+  if (percentage >= 21) return "030"; /* don't round down to 20: see bug #1388235 */
   if (percentage >= 15) return "020";
   if (percentage >=  5) return "010";
   return "000";
