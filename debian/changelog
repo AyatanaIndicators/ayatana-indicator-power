@@ -1,3 +1,10 @@
+indicator-power (12.10.6+15.04.20150130-0ubuntu1) vivid; urgency=medium
+
+  [ Charles Kerr ]
+  * Publish the primary device's state for on the bus. (LP: #1416096)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 30 Jan 2015 22:51:49 +0000
+
 indicator-power (12.10.6+15.04.20141203-0ubuntu1) vivid; urgency=low
 
   [ Charles Kerr ]
