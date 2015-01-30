@@ -290,14 +290,14 @@ static GVariant *
 calculate_device_state_action_state (IndicatorPowerService * self)
 {
   const priv_t * const p = self->priv;
-  const char * str;
+  UpDeviceState device_state;
 
   if (p->primary_device != NULL)
-    str = device_state_to_string(indicator_power_device_get_state(p->primary_device));
+    device_state = indicator_power_device_get_state(p->primary_device);
   else
-    str = "";
+    device_state = UP_DEVICE_STATE_UNKNOWN;
 
-  return g_variant_new_string(str);
+  return g_variant_new_string(device_state_to_string(device_state));
 }
 
 static GVariant*
