@@ -115,6 +115,7 @@ struct _IndicatorPowerServicePrivate
   GSimpleActionGroup * actions;
   GSimpleAction * header_action;
   GSimpleAction * battery_level_action;
+  GSimpleAction * device_state_action;
   GSimpleAction * brightness_action;
 
   IndicatorPowerDevice * primary_device;
@@ -245,6 +246,74 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
 
   return ret;
 }
+
+static const char*
+device_state_to_string(UpDeviceState device_state)
+{
+  const char * str;
+
+  switch (device_state)
+    {
+      case UP_DEVICE_STATE_CHARGING:
+        str = "charging";
+        break;
+
+      case UP_DEVICE_STATE_DISCHARGING:
+        str = "discharging";
+        break;
+
+      case UP_DEVICE_STATE_EMPTY:
+        str = "empty";
+        break;
+
+      case UP_DEVICE_STATE_FULLY_CHARGED:
+        str = "fully-charged";
+        break;
+
+      case UP_DEVICE_STATE_PENDING_CHARGE:
+        str = "pending-charge";
+        break;
+
+      case UP_DEVICE_STATE_PENDING_DISCHARGE:
+        str = "pending-discharge";
+        break;
+
+      default:
+        str = "unknown";
+        break;
+    }
+
+  return str;
+}
+
+static GVariant *
+calculate_device_state_action_state (IndicatorPowerService * self)
+{
+  const priv_t * const p = self->priv;
+  const char * str;
+
+  if (p->primary_device != NULL)
+    str = device_state_to_string(indicator_power_device_get_state(p->primary_device));
+  else
+    str = "";
+
+  return g_variant_new_string(str);
+}
+
+static GVariant*
+calculate_battery_level_action_state (IndicatorPowerService * self)
+{
+  const priv_t * const p = self->priv;
+  guint32 battery_level;
+  
+  if (p->primary_device == NULL)
+    battery_level = 0;
+  else
+    battery_level = (guint32)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
+
+  return g_variant_new_uint32 (battery_level);
+}
+
 
 /***
 ****
@@ -786,10 +855,16 @@ init_gactions (IndicatorPowerService * self)
   p->header_action = a;
 
   /* add the power-level action */
-  a = g_simple_action_new_stateful ("battery-level", NULL, g_variant_new_uint32(0));
+  a = g_simple_action_new_stateful ("battery-level", NULL, calculate_battery_level_action_state(self));
   g_simple_action_set_enabled (a, FALSE);
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->battery_level_action = a;
+
+  /* add the charge state action */
+  a = g_simple_action_new_stateful ("device-state", NULL, calculate_device_state_action_state(self));
+  g_simple_action_set_enabled (a, FALSE);
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
+  p->device_state_action = a;
 
   /* add the auto-brightness action */
   a = g_simple_action_new_stateful("auto-brightness", NULL, g_variant_new_boolean(FALSE));
@@ -931,7 +1006,6 @@ static void
 on_devices_changed (IndicatorPowerService * self)
 {
   priv_t * p = self->priv;
-  guint32 battery_level;
 
   /* update the device list */
   g_list_free_full (p->devices, (GDestroyNotify)g_object_unref);
@@ -948,11 +1022,10 @@ on_devices_changed (IndicatorPowerService * self)
     indicator_power_notifier_set_battery (p->notifier, NULL);
 
   /* update the battery-level action's state */
-  if (p->primary_device == NULL)
-    battery_level = 0;
-  else
-    battery_level = (guint32)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
-  g_simple_action_set_state (p->battery_level_action, g_variant_new_uint32 (battery_level));
+  g_simple_action_set_state (p->battery_level_action, calculate_battery_level_action_state(self));
+
+  /* update the device-state action's state */
+  g_simple_action_set_state (p->device_state_action, calculate_device_state_action_state(self));
 
   rebuild_now (self, SECTION_HEADER | SECTION_DEVICES);
 }
