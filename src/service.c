@@ -536,8 +536,8 @@ create_brightness_menu_item(void)
   g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.unity.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
-  g_menu_item_set_attribute(item, "min-icon", "s", "torch-off" );
-  g_menu_item_set_attribute(item, "max-icon", "s", "torch-on" );
+  g_menu_item_set_attribute(item, "min-icon", "s", "display-brightness-min" );
+  g_menu_item_set_attribute(item, "max-icon", "s", "display-brightness-max" );
 
   return item;
 }
