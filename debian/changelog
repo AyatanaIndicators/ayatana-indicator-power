@@ -1,3 +1,11 @@
+indicator-power (12.10.6+15.04.20150331-0ubuntu1) vivid; urgency=medium
+
+  [ Charles Kerr ]
+  * For the brightness slider, use the same left & right icons as ubunu-
+    system-settings (LP: #1289465)
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Tue, 31 Mar 2015 20:24:46 +0000
+
 indicator-power (12.10.6+15.04.20150212-0ubuntu1) vivid; urgency=medium
 
   [ Charles Kerr ]
