@@ -530,14 +530,21 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static GMenuItem *
 create_brightness_menu_item(void)
 {
+  GIcon * icon;
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
   g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.unity.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
-  g_menu_item_set_attribute(item, "min-icon", "s", "torch-off" );
-  g_menu_item_set_attribute(item, "max-icon", "s", "torch-on" );
+
+  icon = g_themed_icon_new("display-brightness-min");
+  g_menu_item_set_attribute_value(item, "min-icon", g_icon_serialize(icon));
+  g_clear_object(&icon);
+
+  icon = g_themed_icon_new("display-brightness-max");
+  g_menu_item_set_attribute_value(item, "max-icon", g_icon_serialize(icon));
+  g_clear_object(&icon);
 
   return item;
 }
