@@ -530,7 +530,7 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
 static GMenuItem *
 create_brightness_menu_item(void)
 {
-  GICon * icon;
+  GIcon * icon;
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
