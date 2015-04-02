@@ -1,3 +1,13 @@
+indicator-power (12.10.6+15.04.20150402-0ubuntu1) vivid; urgency=medium
+
+  [ Marc Deslauriers ]
+  * Change sort order to prefer items with known time remaining
+
+  [ Ubuntu MATE Developers ]
+  * This merge proposal adds support for MATE Desktop.
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Thu, 02 Apr 2015 20:31:02 +0000
+
 indicator-power (12.10.6+15.04.20150331-0ubuntu1) vivid; urgency=medium
 
   [ Charles Kerr ]
