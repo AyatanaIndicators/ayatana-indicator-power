@@ -30,7 +30,7 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          upower,
-Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | switchboard-plug-power | xfce4-power-manager,
+Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | switchboard-plug-power | xfce4-power-manager | mate-power-manager,
             indicator-applet (>= 0.2) | indicator-renderer,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
