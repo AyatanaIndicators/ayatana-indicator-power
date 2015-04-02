@@ -161,9 +161,9 @@ get_device_kind_weight (const IndicatorPowerDevice * device)
 
 /* sort devices from most interesting to least interesting on this criteria:
    1. discharging items from least time remaining until most time remaining
-   2. discharging items with an unknown time remaining
-   3. charging items from most time left to charge to least time left to charge
-   4. charging items with an unknown time remaining
+   2. charging items from most time left to charge to least time left to charge
+   3. charging items with an unknown time remaining
+   4. discharging items with an unknown time remaining
    5. batteries, then non-line power, then line-power */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
@@ -182,7 +182,8 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
   ret = 0;
 
   state = UP_DEVICE_STATE_DISCHARGING;
-  if (!ret && ((a_state == state) || (b_state == state)))
+  if (!ret && (((a_state == state) && a_time) ||
+               ((b_state == state) && b_time)))
     {
       if (a_state != state) /* b is discharging */
         {
@@ -204,8 +205,7 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
     }
 
   state = UP_DEVICE_STATE_CHARGING;
-  if (!ret && (((a_state == state) && a_time) ||
-               ((b_state == state) && b_time)))
+  if (!ret && ((a_state == state) || (b_state == state)))
     {
       if (a_state != state) /* b is charging */
         {
@@ -222,6 +222,23 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
           else if (a_time != b_time)
             ret = a_time > b_time ? -1 : 1;
           else
+            ret = a_percentage < b_percentage ? -1 : 1;
+        }
+    }
+
+  state = UP_DEVICE_STATE_DISCHARGING;
+  if (!ret && ((a_state == state) || (b_state == state)))
+    {
+      if (a_state != state) /* b is discharging */
+        {
+          ret = 1;
+        }
+      else if (b_state != state) /* a is discharging */
+        {
+          ret = -1;
+        }
+      else /* both are discharging; use percentage */
+        {
             ret = a_percentage < b_percentage ? -1 : 1;
         }
     }
