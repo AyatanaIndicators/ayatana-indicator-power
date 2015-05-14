@@ -110,6 +110,7 @@ struct _IndicatorPowerServicePrivate
   guint actions_export_id;
   GDBusConnection * conn;
 
+  gboolean menus_built;
   struct ProfileMenuInfo menus[N_PROFILES];
 
   GSimpleActionGroup * actions;
@@ -674,7 +675,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
       g_simple_action_set_state (p->header_action, create_header_state (self));
     }
 
-  if (p->conn == NULL) /* we haven't built the menus yet */
+  if (!p->menus_built)
     return;
 
   if (sections & SECTION_DEVICES)
@@ -1184,6 +1185,7 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   for (i=0; i<N_PROFILES; ++i)
     create_menu(self, i);
+  p->menus_built = TRUE;
 
   g_signal_connect_swapped(p->brightness, "notify::auto-brightness-supported",
                            G_CALLBACK(on_auto_brightness_supported_changed), self);
