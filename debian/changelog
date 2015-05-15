@@ -1,3 +1,11 @@
+indicator-power (12.10.6+15.10.20150515-0ubuntu1) wily; urgency=medium
+
+  [ Charles Kerr ]
+  * Fix timing issue that caused "Adjust brightness automatically"
+    menuitem to sometimes not be shown. (LP: #1382861)
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Fri, 15 May 2015 16:40:33 +0000
+
 indicator-power (12.10.6+15.04.20150402-0ubuntu1) vivid; urgency=medium
 
   [ Marc Deslauriers ]
