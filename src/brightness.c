@@ -223,8 +223,6 @@ on_powerd_brightness_params_ready(GObject      * oproxy,
       priv_t * p = get_priv(self);
       const gboolean old_ab_supported = p->powerd_ab_supported;
 
-      g_message("%s", g_variant_print(v, TRUE));
-
       p->have_powerd_params = TRUE;
       g_variant_get(v, "(iiiib)", &p->powerd_dim,
                                   &p->powerd_min,
