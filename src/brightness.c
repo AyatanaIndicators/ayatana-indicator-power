@@ -226,11 +226,11 @@ on_powerd_brightness_params_ready(GObject      * oproxy,
       g_message("%s", g_variant_print(v, TRUE));
 
       p->have_powerd_params = TRUE;
-      g_variant_get(v, "((iiiib))", &p->powerd_dim,
-                                    &p->powerd_min,
-                                    &p->powerd_max,
-                                    &p->powerd_default_value,
-                                    &p->powerd_ab_supported);
+      g_variant_get(v, "(iiiib)", &p->powerd_dim,
+                                  &p->powerd_min,
+                                  &p->powerd_max,
+                                  &p->powerd_default_value,
+                                  &p->powerd_ab_supported);
       g_debug("powerd brightness settings: dim=%d, min=%d, max=%d, default=%d, ab_supported=%d",
               p->powerd_dim,
               p->powerd_min,
