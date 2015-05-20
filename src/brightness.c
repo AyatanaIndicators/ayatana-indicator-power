@@ -18,6 +18,7 @@
  */
 
 #include "brightness.h"
+#include "dbus-powerd.h"
 
 #include <gio/gio.h>
 
@@ -204,9 +205,10 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
  */
 
 static void set_brightness_global(IndicatorPowerBrightness*, int);
+static void set_brightness_local(IndicatorPowerBrightness*, int);
 
 static void
-on_powerd_brightness_params_ready(DbusPowerd   * dbus_proxy,
+on_powerd_brightness_params_ready(GObject      * oproxy,
                                   GAsyncResult * res,
                                   gpointer       gself)
 {
@@ -215,7 +217,7 @@ on_powerd_brightness_params_ready(DbusPowerd   * dbus_proxy,
 
   v = NULL;
   error = NULL;
-  if (dbus_powerd_call_get_brightness_params_finish (dbus_proxy, &v, res, &error))
+  if (dbus_powerd_call_get_brightness_params_finish(DBUS_POWERD(oproxy), &v, res, &error))
     {
       IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
       priv_t * p = get_priv(self);
@@ -282,7 +284,7 @@ on_powerd_name_owner_changed(GDBusProxy * powerd_proxy,
 
       if (owner != NULL)
         {
-          dbus_powerd_call_get_brightness_params(powerd_proxy,
+          dbus_powerd_call_get_brightness_params(DBUS_POWERD(powerd_proxy),
                                                  p->cancellable,
                                                  on_powerd_brightness_params_ready,
                                                  gself);
@@ -315,19 +317,19 @@ on_powerd_proxy_ready(GObject      * source_object G_GNUC_UNUSED,
   if (powerd_proxy != NULL)
     {
       priv_t * p;
+      p = get_priv(INDICATOR_POWER_BRIGHTNESS(gself));
 
       /* keep a handle to the system bus */
       g_clear_object(&p->system_bus);
-      p->system_bus = g_object_ref(g_dbus_proxy_get_connection(powerd_proxy));
+      p->system_bus = g_object_ref(g_dbus_proxy_get_connection(G_DBUS_PROXY(powerd_proxy)));
 
       /* keep the proxy and listen to owner changes */
-      p = get_priv(INDICATOR_POWER_BRIGHTNESS(gself));
       p->powerd_proxy = powerd_proxy;
       g_signal_connect(p->powerd_proxy, "notify::g-name-owner",
                        G_CALLBACK(on_powerd_name_owner_changed), gself);
-      g_signal_connect(p->powerd_proxy, "brightness",
+      g_signal_connect(p->powerd_proxy, "notify::brightness",
                        G_CALLBACK(on_powerd_brightness_changed), gself);
-      on_powerd_name_owner_changed(powerd_proxy, NULL, gself);
+      on_powerd_name_owner_changed(G_DBUS_PROXY(powerd_proxy), NULL, gself);
     }
   else if (error != NULL)
     {
@@ -468,14 +470,6 @@ indicator_power_brightness_init(IndicatorPowerBrightness * self)
                                  p->cancellable,
                                  on_powerd_proxy_ready,
                                  self);
-
-  p->powerd_name_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
-                                        "com.canonical.powerd",
-                                        G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                        on_powerd_appeared,
-                                        on_powerd_vanished,
-                                        self,
-                                        NULL);
 }
 
 static void
