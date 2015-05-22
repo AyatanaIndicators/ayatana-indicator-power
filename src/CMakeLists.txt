@@ -17,6 +17,10 @@ set(SERVICE_MANUAL_SOURCES
 # generated sources
 include(GdbusCodegen)
 set(SERVICE_GENERATED_SOURCES)
+add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-powerd
+                                 com.canonical
+                                 Dbus
+                                 ${CMAKE_SOURCE_DIR}/src/com.canonical.powerd.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  com.canonical.indicator.power
                                  Dbus

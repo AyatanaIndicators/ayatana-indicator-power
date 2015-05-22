@@ -18,6 +18,7 @@
  */
 
 #include "brightness.h"
+#include "dbus-powerd.h"
 
 #include <gio/gio.h>
 
@@ -45,7 +46,8 @@ typedef struct
 
   GSettings * settings;
 
-  guint powerd_name_tag;
+  DbusPowerd * powerd_proxy;
+  char * powerd_name_owner;
 
   double percentage;
 
@@ -136,14 +138,15 @@ my_dispose(GObject * o)
       g_clear_object(&p->cancellable);
     }
 
-  if (p->powerd_name_tag)
+  if (p->powerd_proxy != NULL)
     {
-      g_bus_unwatch_name(p->powerd_name_tag);
-      p->powerd_name_tag = 0;
+      g_signal_handlers_disconnect_by_data(p->powerd_proxy, o);
+      g_clear_object(&p->powerd_proxy);
     }
 
   g_clear_object(&p->settings);
   g_clear_object(&p->system_bus);
+  g_clear_pointer(&p->powerd_name_owner, g_free);
 
   G_OBJECT_CLASS(indicator_power_brightness_parent_class)->dispose(o);
 }
@@ -202,36 +205,30 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
  */
 
 static void set_brightness_global(IndicatorPowerBrightness*, int);
+static void set_brightness_local(IndicatorPowerBrightness*, int);
 
 static void
-on_powerd_brightness_params_ready(GObject      * source,
+on_powerd_brightness_params_ready(GObject      * oproxy,
                                   GAsyncResult * res,
                                   gpointer       gself)
 {
   GError * error;
   GVariant * v;
 
+  v = NULL;
   error = NULL;
-  v = g_dbus_connection_call_finish(G_DBUS_CONNECTION(source), res, &error);
-  if (v == NULL)
-    {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning("Unable to get system bus: %s", error->message);
-
-      g_error_free(error);
-    }
-  else
+  if (dbus_powerd_call_get_brightness_params_finish(DBUS_POWERD(oproxy), &v, res, &error))
     {
       IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
       priv_t * p = get_priv(self);
       const gboolean old_ab_supported = p->powerd_ab_supported;
 
       p->have_powerd_params = TRUE;
-      g_variant_get(v, "((iiiib))", &p->powerd_dim,
-                                    &p->powerd_min,
-                                    &p->powerd_max,
-                                    &p->powerd_default_value,
-                                    &p->powerd_ab_supported);
+      g_variant_get(v, "(iiiib)", &p->powerd_dim,
+                                  &p->powerd_min,
+                                  &p->powerd_max,
+                                  &p->powerd_default_value,
+                                  &p->powerd_ab_supported);
       g_debug("powerd brightness settings: dim=%d, min=%d, max=%d, default=%d, ab_supported=%d",
               p->powerd_dim,
               p->powerd_min,
@@ -262,52 +259,83 @@ on_powerd_brightness_params_ready(GObject      * source,
       /* cleanup */
       g_variant_unref(v);
     }
+  else if (error != NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning("Unable to get system bus: %s", error->message);
+
+      g_error_free(error);
+    }
 }
 
 static void
-call_powerd_get_brightness_params(IndicatorPowerBrightness * self)
-{
-  priv_t * p = get_priv(self);
-
-  g_dbus_connection_call(p->system_bus,
-                         "com.canonical.powerd",
-                         "/com/canonical/powerd",
-                         "com.canonical.powerd",
-                         "getBrightnessParams",
-                         NULL,
-                         G_VARIANT_TYPE("((iiiib))"),
-                         G_DBUS_CALL_FLAGS_NONE,
-                         -1, /* default timeout */
-                         p->cancellable,
-                         on_powerd_brightness_params_ready,
-                         self);
-}
-
-static void
-on_powerd_appeared(GDBusConnection * connection,
-                   const gchar     * bus_name     G_GNUC_UNUSED,
-                   const gchar     * name_owner   G_GNUC_UNUSED,
-                   gpointer          gself)
-{
-  IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
-  priv_t * p = get_priv(self);
-
-  /* keep a handle to the system bus */
-  g_clear_object(&p->system_bus);
-  p->system_bus = g_object_ref(connection);
- 
-  /* update our cache of powerd's brightness params */
-  call_powerd_get_brightness_params(self);
-}
-
-static void
-on_powerd_vanished(GDBusConnection * connection  G_GNUC_UNUSED,
-                   const gchar     * bus_name    G_GNUC_UNUSED,
-                   gpointer          gself)
+on_powerd_name_owner_changed(GDBusProxy * powerd_proxy,
+                             GParamSpec * pspec         G_GNUC_UNUSED,
+                             gpointer     gself)
 {
   priv_t * p = get_priv(INDICATOR_POWER_BRIGHTNESS(gself));
+  gchar * owner = g_dbus_proxy_get_name_owner(powerd_proxy);
 
-  p->have_powerd_params = FALSE;
+  if (g_strcmp0(p->powerd_name_owner, owner))
+    {
+      p->have_powerd_params = FALSE;
+
+      if (owner != NULL)
+        {
+          dbus_powerd_call_get_brightness_params(DBUS_POWERD(powerd_proxy),
+                                                 p->cancellable,
+                                                 on_powerd_brightness_params_ready,
+                                                 gself);
+        }
+
+      g_free(p->powerd_name_owner);
+      p->powerd_name_owner = owner;
+  }
+}
+
+static void
+on_powerd_brightness_changed(DbusPowerd * powerd_proxy,
+                             GParamSpec * pspec         G_GNUC_UNUSED,
+                             gpointer     gself)
+{
+  set_brightness_local(gself, dbus_powerd_get_brightness(powerd_proxy));
+}
+
+static void
+on_powerd_proxy_ready(GObject      * source_object G_GNUC_UNUSED,
+                      GAsyncResult * res,
+                      gpointer       gself)
+{
+  GError * error;
+  DbusPowerd * powerd_proxy;
+
+  error = NULL;
+  powerd_proxy = dbus_powerd_proxy_new_for_bus_finish(res, &error);
+
+  if (powerd_proxy != NULL)
+    {
+      priv_t * p;
+      p = get_priv(INDICATOR_POWER_BRIGHTNESS(gself));
+
+      /* keep a handle to the system bus */
+      g_clear_object(&p->system_bus);
+      p->system_bus = g_object_ref(g_dbus_proxy_get_connection(G_DBUS_PROXY(powerd_proxy)));
+
+      /* keep the proxy and listen to owner changes */
+      p->powerd_proxy = powerd_proxy;
+      g_signal_connect(p->powerd_proxy, "notify::g-name-owner",
+                       G_CALLBACK(on_powerd_name_owner_changed), gself);
+      g_signal_connect(p->powerd_proxy, "notify::brightness",
+                       G_CALLBACK(on_powerd_brightness_changed), gself);
+      on_powerd_name_owner_changed(G_DBUS_PROXY(powerd_proxy), NULL, gself);
+    }
+  else if (error != NULL)
+    {
+      if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning("Unable to get powerd proxy: %s", error->message);
+
+      g_error_free(error);
+    }
 }
 
 /**
@@ -433,13 +461,13 @@ indicator_power_brightness_init(IndicatorPowerBrightness * self)
       g_settings_schema_unref(schema);
     }
 
-  p->powerd_name_tag = g_bus_watch_name(G_BUS_TYPE_SYSTEM,
-                                        "com.canonical.powerd",
-                                        G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                        on_powerd_appeared,
-                                        on_powerd_vanished,
-                                        self,
-                                        NULL);
+  dbus_powerd_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+                                 G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+                                 "com.canonical.powerd",
+                                 "/com/canonical/powerd",
+                                 p->cancellable,
+                                 on_powerd_proxy_ready,
+                                 self);
 }
 
 static void
