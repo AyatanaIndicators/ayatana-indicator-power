@@ -162,12 +162,12 @@ get_device_kind_weight (const IndicatorPowerDevice * device)
 }
 
 /* sort devices from most interesting to least interesting on this criteria:
-   1. device that supplied the power to the system
-   2. discharging items from least time remaining until most time remaining
-   3. charging items from most time left to charge to least time left to charge
-   4. charging items with an unknown time remaining
-   5. discharging items with an unknown time remaining
-   6. batteries, then non-line power, then line-power */
+   1. discharging items from least time remaining until most time remaining
+   2. charging items from most time left to charge to least time left to charge
+   3. charging items with an unknown time remaining
+   4. discharging items with an unknown time remaining, but 10% or below
+   5. batteries, then non-line power, then line-power
+   6. discharging items with an unknown time remaining, but above 10% */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
 {
@@ -199,6 +199,14 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
     }
 
   state = UP_DEVICE_STATE_DISCHARGING;
+
+  /* discharging items with more than 10% remaining always lose */
+  if (!ret && (((a_state == state) && !a_time && (a_percentage > 10))))
+      ret = 1;
+
+  if (!ret && (((b_state == state) && !b_time && (b_percentage > 10))))
+      ret = -1;
+
   if (!ret && (((a_state == state) && a_time) ||
                ((b_state == state) && b_time)))
     {
