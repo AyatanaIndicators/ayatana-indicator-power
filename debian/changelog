@@ -1,3 +1,14 @@
+indicator-power (12.10.6+15.10.20151005.1-0ubuntu1) wily; urgency=medium
+
+  [ CI Train Bot ]
+  * New rebuild forced.
+
+  [ Sebastien Bacher ]
+  * under unity8 start system-settings instead unity-control-center (LP:
+    #1489482)
+
+ -- Charles Kerr <charles.kerr@canonical.com>  Mon, 05 Oct 2015 18:44:21 +0000
+
 indicator-power (12.10.6+15.10.20150522-0ubuntu1) wily; urgency=medium
 
   [ Charles Kerr ]
