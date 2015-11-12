@@ -20,7 +20,6 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <url-dispatcher.h>
 
 #include "brightness.h"
 #include "dbus-shared.h"
@@ -783,12 +782,7 @@ on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
 
   if (control_center_cmd == NULL)
     {
-      if (g_getenv ("MIR_SOCKET") != NULL)
-        {
-          url_dispatch_send("settings:///system/battery", NULL, NULL);
-          return;
-        }
-      else if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
+      if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu"))
         {
           control_center_cmd = "xfce4-power-manager-settings";
         }
@@ -828,14 +822,6 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
   g_free (cmd);
 }
 
-static void
-on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
-                             GVariant      * param  G_GNUC_UNUSED,
-                             gpointer        gself  G_GNUC_UNUSED)
-{
-  url_dispatch_send("settings:///system/battery", NULL, NULL);
-}
-
 /***
 ****
 ***/
@@ -872,7 +858,6 @@ init_gactions (IndicatorPowerService * self)
 
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
-    { "activate-phone-settings", on_phone_settings_activated },
     { "activate-statistics", on_statistics_activated, "s" }
   };
 
