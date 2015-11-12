@@ -3,32 +3,32 @@ Notes on Battery Testing
 
 Mock battery propreties are available for testing purposes.
 
-The testing properties are DBus properties published on busname "com.canonical.indicator.power", object path "/com/canonical/indicator/power/Testing", and interface "com.canonical.indicator.power.Testing". The four properties are "MockBatteryEnabled" (boolean, default false), "MockBatteryLevel" (uint32 [0-100], default 50), "MockBatteryState" (string, default 'discharging'), "MockBatteryMinutesLeft" (minutes remaining to charge/discharge, uint32, default 30).
+The testing properties are DBus properties published on busname "org.ayatana.indicator.power", object path "/org/ayatana/indicator/power/Testing", and interface "org.ayatana.indicator.power.Testing". The four properties are "MockBatteryEnabled" (boolean, default false), "MockBatteryLevel" (uint32 [0-100], default 50), "MockBatteryState" (string, default 'discharging'), "MockBatteryMinutesLeft" (minutes remaining to charge/discharge, uint32, default 30).
 
 Example use:
 
 Show the testing properties:
 
-$ gdbus call --session --dest "com.canonical.indicator.power" \
-             --object-path /com/canonical/indicator/power/Testing \
+$ gdbus call --session --dest "org.ayatana.indicator.power" \
+             --object-path /org/ayatana/indicator/power/Testing \
              --method org.freedesktop.DBus.Properties.GetAll \
-             com.canonical.indicator.power.Testing
+             org.ayatana.indicator.power.Testing
 
 Enable the mock battery:
 
-$ gdbus call --session --dest "com.canonical.indicator.power" \
-             --object-path /com/canonical/indicator/power/Testing \
+$ gdbus call --session --dest "org.ayatana.indicator.power" \
+             --object-path /org/ayatana/indicator/power/Testing \
              --method org.freedesktop.DBus.Properties.Set \
-             com.canonical.indicator.power.Testing \
+             org.ayatana.indicator.power.Testing \
              MockBatteryEnabled \
              "<true>"
 
 Set the mock battery's charge to 10%
 
-$ gdbus call --session --dest "com.canonical.indicator.power" \
-             --object-path /com/canonical/indicator/power/Testing \
+$ gdbus call --session --dest "org.ayatana.indicator.power" \
+             --object-path /org/ayatana/indicator/power/Testing \
              --method org.freedesktop.DBus.Properties.Set \
-             com.canonical.indicator.power.Testing \
+             org.ayatana.indicator.power.Testing \
              MockBatteryLevel \
              "<uint32 10>"
 

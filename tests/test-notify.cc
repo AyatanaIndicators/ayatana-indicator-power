@@ -61,7 +61,7 @@ protected:
   static constexpr int NOTIFICATION_CLOSED_API       {3};
   static constexpr int NOTIFICATION_CLOSED_UNDEFINED {4};
 
-  static constexpr char const * APP_NAME {"indicator-power-service"};
+  static constexpr char const * APP_NAME {"ayatana-indicator-power-service"};
 
   static constexpr char const * METHOD_CLOSE {"CloseNotification"};
   static constexpr char const * METHOD_NOTIFY {"Notify"};
@@ -69,7 +69,7 @@ protected:
   static constexpr char const * METHOD_GET_INFO {"GetServerInformation"};
   static constexpr char const * SIGNAL_CLOSED {"NotificationClosed"};
 
-  static constexpr char const * HINT_TIMEOUT {"x-canonical-snap-decisions-timeout"};
+  static constexpr char const * HINT_TIMEOUT {"x-ayatana-snap-decisions-timeout"};
 
 protected:
 

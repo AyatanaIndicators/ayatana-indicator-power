@@ -1,7 +1,7 @@
-set (SERVICE_LIB "indicatorpowerservice")
-set (SERVICE_EXEC "indicator-power-service")
+set (SERVICE_LIB "ayatanaindicatorpowerservice")
+set (SERVICE_EXEC "aytana-indicator-power-service")
 
-add_definitions(-DG_LOG_DOMAIN="Indicator-Power")
+add_definitions(-DG_LOG_DOMAIN="Ayatana-Indicator-Power")
 
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
@@ -18,17 +18,17 @@ set(SERVICE_MANUAL_SOURCES
 include(GdbusCodegen)
 set(SERVICE_GENERATED_SOURCES)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-powerd
-                                 com.canonical
+                                 org.ayatana
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/src/com.canonical.powerd.xml)
+                                 ${CMAKE_SOURCE_DIR}/src/org.ayatana.powerd.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
-                                 com.canonical.indicator.power
+                                 org.ayatana.indicator.power
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/data/com.canonical.indicator.power.Battery.xml)
+                                 ${CMAKE_SOURCE_DIR}/data/org.ayatana.indicator.power.Battery.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-testing
-                                 com.canonical.indicator.power
+                                 org.ayatana.indicator.power
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/data/com.canonical.indicator.power.Testing.xml)
+                                 ${CMAKE_SOURCE_DIR}/data/org.ayatana.indicator.power.Testing.xml)
 # add the bin dir to our include path so the code can find the generated header files
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -53,4 +53,3 @@ add_executable (${SERVICE_EXEC} main.c)
 set_source_files_properties(${SERVICE_SOURCES} main.c PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
 target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${GCOV_LIBS})
 install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_PKGLIBEXECDIR})
-

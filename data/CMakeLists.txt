@@ -3,7 +3,7 @@
 ##
 
 include (UseGSettings)
-set (SCHEMA_NAME "com.canonical.indicator.power.gschema.xml")
+set (SCHEMA_NAME "org.ayatana.indicator.power.gschema.xml")
 set (SCHEMA_FILE "${CMAKE_CURRENT_BINARY_DIR}/${SCHEMA_NAME}")
 set (SCHEMA_FILE_IN "${CMAKE_CURRENT_SOURCE_DIR}/${SCHEMA_NAME}.in")
 
@@ -80,11 +80,11 @@ install (FILES "${UPSTART_XDG_AUTOSTART_FILE}"
 ##
 
 # where to install
-set (UNITY_INDICATOR_DIR "${CMAKE_INSTALL_FULL_DATAROOTDIR}/unity/indicators")
-message (STATUS "${UNITY_INDICATOR_DIR} is the Unity Indicator install dir")
+set (AYATANA_INDICATOR_DIR "${CMAKE_INSTALL_FULL_DATAROOTDIR}/ayatana/indicators")
+message (STATUS "${AYATANA_INDICATOR_DIR} is the Unity Indicator install dir")
 
-set (UNITY_INDICATOR_NAME "com.canonical.indicator.power")
-set (UNITY_INDICATOR_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${UNITY_INDICATOR_NAME}")
+set (AYATANA_INDICATOR_NAME "org.ayatana.indicator.power")
+set (AYATANA_INDICATOR_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${AYATANA_INDICATOR_NAME}")
 
-install (FILES "${UNITY_INDICATOR_FILE}"
-         DESTINATION "${UNITY_INDICATOR_DIR}")
+install (FILES "${AYATANA_INDICATOR_FILE}"
+         DESTINATION "${AYATANA_INDICATOR_DIR}")

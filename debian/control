@@ -1,7 +1,7 @@
-Source: indicator-power
+Source: ayatana-indicator-power
 Section: gnome
 Priority: optional
-Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Maintainer: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 Build-Depends: cmake,
                libnotify-dev (>= 0.7.6),
                libglib2.0-dev (>= 2.36),
@@ -10,22 +10,18 @@ Build-Depends: cmake,
                python:any,
 # for packaging
                debhelper (>= 9),
-               dh-translations,
                intltool,
 # for tests
                libgtest-dev,
                python3-dbusmock,
                dbus-test-runner,
                libdbustest1-dev,
-Standards-Version: 3.9.5
-Homepage: https://launchpad.net/indicator-power
-# If you aren't a member of ~indicator-applet-developers but need to upload
-# packaging changes, just go ahead.  ~indicator-applet-developers will notice
-# and sync up the code again.
-Vcs-Bzr: https://code.launchpad.net/~indicator-applet-developers/indicator-power/trunk.13.04
-Vcs-Browser: https://bazaar.launchpad.net/~indicator-applet-developers/indicator-power/trunk.13.04/files
+Standards-Version: 3.9.6
+Homepage: https://github.com/ArcticaProject/ayatana-indicator-power
+Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git
+Vcs-Browser: https://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git/
 
-Package: indicator-power
+Package: ayatana-indicator-power
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
@@ -34,6 +30,6 @@ Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system
             indicator-applet (>= 0.2) | indicator-renderer,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
-Description: Indicator showing power state.
+Description: Ayatana Indicator showing power state.
  This indicator displays current power management information and gives 
  the user a way to access power management preferences.

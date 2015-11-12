@@ -1,4 +1,4 @@
-'''apport package hook for indicator-power
+'''apport package hook for ayatana-indicator-power
 
 (c) 2011 Canonical Ltd.
 Author: Ken VanDine <ken.vandine@ubuntu.com>

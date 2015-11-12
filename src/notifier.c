@@ -73,7 +73,7 @@ typedef struct
   NotifyNotification * notify_notification;
 
   GDBusConnection * bus;
-  DbusBattery * dbus_battery; /* com.canonical.indicator.power.Battery skeleton */
+  DbusBattery * dbus_battery; /* org.ayatana.indicator.power.Battery skeleton */
 
   gboolean caps_queried;
   gboolean actions_supported;
@@ -244,10 +244,10 @@ notification_show(IndicatorPowerNotifier * self)
 
   if (are_actions_supported(self))
     {
-      notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-canonical-private-affirmative-tint", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-canonical-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
+      notify_notification_set_hint(nn, "x-ayatana-snap-decisions", g_variant_new_string("true"));
+      notify_notification_set_hint(nn, "x-ayatana-non-shaped-icon", g_variant_new_string("true"));
+      notify_notification_set_hint(nn, "x-ayatana-private-affirmative-tint", g_variant_new_string("true"));
+      notify_notification_set_hint(nn, "x-ayatana-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
       notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
       notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);

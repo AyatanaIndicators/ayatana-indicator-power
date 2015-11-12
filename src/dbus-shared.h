@@ -21,8 +21,8 @@
 #ifndef DBUS_SHARED_H
 #define DBUS_SHARED_H
 
-#define BUS_NAME "com.canonical.indicator.power"
-#define BUS_PATH "/com/canonical/indicator/power"
+#define BUS_NAME "org.ayatana.indicator.power"
+#define BUS_PATH "/org/ayatana/indicator/power"
 
 #endif /* DBUS_SHARED_H */
 

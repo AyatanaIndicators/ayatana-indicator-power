@@ -1,11 +1,11 @@
-project(indicator-power C CXX)
+project(ayatana-indicator-power C CXX)
 cmake_minimum_required(VERSION 2.8.9)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(PROJECT_VERSION "14.10.0")
+set(PROJECT_VERSION "0.11.0")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
-set(GETTEXT_PACKAGE "indicator-power")
+set(GETTEXT_PACKAGE "ayatana-indicator-power")
 add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
                  -DGNOMELOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
 

@@ -1,0 +1,24 @@
+[Indicator Service]
+Name=indicator-power
+ObjectPath=/org.ayatana.indicator/power
+Position=40
+
+[phone]
+ObjectPath=/org.ayatana.indicator/power/phone
+Position=25
+
+[desktop]
+ObjectPath=/org.ayatana.indicator/power/desktop
+
+[desktop_greeter]
+ObjectPath=/org.ayatana.indicator/power/desktop_greeter
+
+[desktop_lockscreen]
+ObjectPath=/org.ayatana.indicator/power/desktop_greeter
+
+[phone_greeter]
+ObjectPath=/org.ayatana.indicator/power/phone
+Position=25
+
+[ubiquity]
+ObjectPath=/org.ayatana.indicator/power/desktop_greeter
