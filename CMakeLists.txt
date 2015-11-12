@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.9)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(PROJECT_VERSION "0.11.0")
+set(PROJECT_VERSION "2.0.90")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
 set(GETTEXT_PACKAGE "ayatana-indicator-power")
 add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
