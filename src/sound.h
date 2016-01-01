@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-void sound_play_file(const char* filename);
+void sound_play_uri(const char* uri);
 
 G_END_DECLS
 

@@ -149,7 +149,9 @@ play_low_battery_sound (void)
   filename = datafile_find(DATAFILE_TYPE_SOUND, key);
   if (filename != NULL)
     {
-      sound_play_file(filename);
+      gchar * uri = g_filename_to_uri(filename, NULL, NULL);
+      sound_play_uri(uri);
+      g_free(uri);
       g_free(filename);
     }
   else
