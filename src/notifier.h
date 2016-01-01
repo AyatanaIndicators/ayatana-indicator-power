@@ -23,6 +23,7 @@
 #include <gio/gio.h>
 
 #include "device.h"
+#include "sound-player.h"
 
 G_BEGIN_DECLS
 
@@ -55,13 +56,16 @@ struct _IndicatorPowerNotifierClass
 
 GType indicator_power_notifier_get_type (void);
 
-IndicatorPowerNotifier * indicator_power_notifier_new (void);
+IndicatorPowerNotifier * indicator_power_notifier_new (IndicatorPowerSoundPlayer * sound_player);
 
 void indicator_power_notifier_set_bus (IndicatorPowerNotifier  * self,
                                        GDBusConnection         * connection);
 
 void indicator_power_notifier_set_battery (IndicatorPowerNotifier  * self,
                                            IndicatorPowerDevice    * battery);
+
+void indicator_power_notifier_set_sound_player (IndicatorPowerNotifier     * self,
+                                                IndicatorPowerSoundPlayer  * battery);
 
 #define POWER_LEVEL_STR_OK "ok"
 #define POWER_LEVEL_STR_LOW "low"

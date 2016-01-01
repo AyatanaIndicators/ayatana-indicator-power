@@ -20,7 +20,9 @@ set(SERVICE_MANUAL_SOURCES
     testing.c
     service.c
     utils.c
-    sound.c)
+    sound-player.c
+    sound-player-gst.c
+    sound-player-mock.c)
 
 # generated sources
 include(GdbusCodegen)

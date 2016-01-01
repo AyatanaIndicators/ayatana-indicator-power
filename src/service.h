@@ -24,6 +24,7 @@
 #include <glib-object.h>
 
 #include "device-provider.h"
+#include "notifier.h"
 
 G_BEGIN_DECLS
 
@@ -64,10 +65,14 @@ struct _IndicatorPowerServiceClass
 
 GType indicator_power_service_get_type (void);
 
-IndicatorPowerService * indicator_power_service_new (IndicatorPowerDeviceProvider * provider);
+IndicatorPowerService * indicator_power_service_new (IndicatorPowerDeviceProvider * provider,
+                                                     IndicatorPowerNotifier       * notifier);
 
 void indicator_power_service_set_device_provider (IndicatorPowerService        * self,
                                                   IndicatorPowerDeviceProvider * provider);
+
+void indicator_power_service_set_notifier (IndicatorPowerService  * self,
+                                           IndicatorPowerNotifier * notifier);
 
 IndicatorPowerDevice * indicator_power_service_choose_primary_device (GList * devices);
 

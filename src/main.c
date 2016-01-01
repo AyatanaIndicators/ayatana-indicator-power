@@ -23,7 +23,9 @@
 #include <glib/gi18n.h>
 
 #include "device.h"
+#include "notifier.h"
 #include "service.h"
+#include "sound-player-gst.h"
 #include "testing.h"
 
 /***
@@ -40,6 +42,8 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
+  IndicatorPowerSoundPlayer * sound_player;
+  IndicatorPowerNotifier * notifier;
   IndicatorPowerService * service;
   IndicatorPowerTesting * testing;
   GMainLoop * loop;
@@ -50,7 +54,9 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   textdomain (GETTEXT_PACKAGE);
 
   /* run */
-  service = indicator_power_service_new (NULL);
+  sound_player = indicator_power_sound_player_gst_new ();
+  notifier = indicator_power_notifier_new (sound_player);
+  service = indicator_power_service_new(NULL, notifier);
   testing = indicator_power_testing_new (service);
   loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (service, INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
@@ -59,7 +65,9 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 
   /* cleanup */
   g_main_loop_unref (loop);
-  g_clear_object (&service);
   g_clear_object (&testing);
+  g_clear_object (&service);
+  g_clear_object (&notifier);
+  g_clear_object (&sound_player);
   return 0;
 }

@@ -1,5 +1,8 @@
 /*
- * Copyright 2015 Canonical Ltd.
+ * Copyright 2013 Canonical Ltd.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -12,16 +15,47 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
  */
 
-#include "sound.h"
-
-#include <glib.h>
+#include "sound-player.h"
+#include "sound-player-gst.h"
 
 #include <gst/gst.h>
+
+
+/***
+****  private struct
+***/
+
+typedef struct
+{
+  int unused;
+}
+IndicatorPowerSoundPlayerGSTPrivate;
+
+typedef IndicatorPowerSoundPlayerGSTPrivate priv_t;
+
+#define get_priv(o) ((priv_t*)indicator_power_sound_player_gst_get_instance_private(o))
+
+
+/***
+****  GObject boilerplate
+***/
+
+static void indicator_power_device_provider_interface_init (
+                                IndicatorPowerSoundPlayerInterface * iface);
+
+G_DEFINE_TYPE_WITH_CODE (
+  IndicatorPowerSoundPlayerGST,
+  indicator_power_sound_player_gst,
+  G_TYPE_OBJECT,
+  G_ADD_PRIVATE(IndicatorPowerSoundPlayerGST)
+  G_IMPLEMENT_INTERFACE (INDICATOR_TYPE_POWER_SOUND_PLAYER,
+                         indicator_power_device_provider_interface_init))
+
+/***
+****  GSTREAMER
+***/
 
 static void
 gst_init_once(void)
@@ -81,14 +115,17 @@ static gboolean bus_callback(GstBus* bus G_GNUC_UNUSED, GstMessage* msg, gpointe
   return G_SOURCE_CONTINUE;
 }
 
-void
-sound_play_uri(const char* uri)
+/***
+****  IndicatorPowerSoundPlayer virtual functions
+***/
+
+static void
+my_play_uri (IndicatorPowerSoundPlayer * self G_GNUC_UNUSED, const gchar * uri)
 {
   GstElement * element;
   GstBus * bus;
 
-  gst_init_once();
-
+  /* create the element */
   element = gst_element_factory_make("playbin", NULL);
 
   /* start listening for gst events */
@@ -102,3 +139,35 @@ sound_play_uri(const char* uri)
   gst_element_set_state(element, GST_STATE_PLAYING);
 }
 
+/***
+****  Instantiation
+***/
+
+static void
+indicator_power_sound_player_gst_class_init (IndicatorPowerSoundPlayerGSTClass * klass)
+{
+  gst_init_once();
+}
+
+static void
+indicator_power_device_provider_interface_init (IndicatorPowerSoundPlayerInterface * iface)
+{
+  iface->play_uri = my_play_uri;
+}
+
+static void
+indicator_power_sound_player_gst_init (IndicatorPowerSoundPlayerGST * self G_GNUC_UNUSED)
+{
+}
+
+/***
+****  Public API
+***/
+
+IndicatorPowerSoundPlayer *
+indicator_power_sound_player_gst_new(void)
+{
+  gpointer o = g_object_new (INDICATOR_TYPE_POWER_SOUND_PLAYER_GST, NULL);
+
+  return INDICATOR_POWER_SOUND_PLAYER (o);
+}
