@@ -68,3 +68,14 @@ set (AYATANA_INDICATOR_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${AYATANA_INDICATOR_NAM
 
 install (FILES "${AYATANA_INDICATOR_FILE}"
          DESTINATION "${AYATANA_INDICATOR_DIR}")
+
+##
+##  Sounds
+##
+
+# where to install
+set (SOUNDS_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}/sounds")
+message (STATUS "${SOUNDS_DIR} is the Sound install dir")
+
+install (FILES "Low battery.ogg"
+         DESTINATION "${SOUNDS_DIR}")
