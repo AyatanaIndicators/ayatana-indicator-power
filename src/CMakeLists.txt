@@ -10,6 +10,7 @@ endif()
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
+    datafiles.c
     device-provider-mock.c
     device-provider-upower.c
     device-provider.c
