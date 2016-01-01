@@ -1,8 +1,5 @@
 /*
- * Copyright 2013 Canonical Ltd.
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
+ * Copyright 2016 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
  */
 
 #ifndef __INDICATOR_POWER_SOUND_PLAYER_GST__H__
