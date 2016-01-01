@@ -23,6 +23,7 @@
 #include "dbus-shared.h"
 #include "device.h"
 #include "notifier.h"
+#include "sound-player-mock.h"
 
 #include <gtest/gtest.h>
 
@@ -76,6 +77,8 @@ protected:
   void SetUp()
   {
     super::SetUp();
+
+    g_setenv ("XDG_DATA_HOME", XDG_DATA_HOME, TRUE);
 
     // init DBusMock / dbus-test-runner
 
@@ -275,7 +278,8 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.
-  auto notifier = indicator_power_notifier_new ();
+  auto sound_player = indicator_power_sound_player_mock_new ();
+  auto notifier = indicator_power_notifier_new (sound_player);
   indicator_power_notifier_set_battery (notifier, battery);
   indicator_power_notifier_set_bus (notifier, bus);
   wait_msec();
@@ -317,13 +321,22 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 
   // cleanup
   g_dbus_connection_signal_unsubscribe (bus, sub_tag);
-  g_object_unref (notifier);
   g_object_unref (battery);
+  g_object_unref (notifier);
+  g_object_unref (sound_player);
 }
 
 /***
 ****
 ***/
+
+namespace
+{
+  static void on_uri_played(IndicatorPowerSoundPlayer*, const char* uri, gpointer glast_uri)
+  {
+    *static_cast<std::string*>(glast_uri) = uri;
+  }
+}
 
 TEST_F(NotifyFixture, EventsThatChangeNotifications)
 {
@@ -348,7 +361,11 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
 
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.
-  auto notifier = indicator_power_notifier_new ();
+  const std::string low_power_uri {"file://" XDG_DATA_HOME "/" GETTEXT_PACKAGE "/sounds/Low%20battery.ogg"};
+  std::string last_uri;
+  auto sound_player = indicator_power_sound_player_mock_new ();
+  g_signal_connect(sound_player, "uri-played", G_CALLBACK(on_uri_played), &last_uri);
+  auto notifier = indicator_power_notifier_new (sound_player);
   indicator_power_notifier_set_battery (notifier, battery);
   indicator_power_notifier_set_bus (notifier, bus);
   ChangedParams changed_params;
@@ -366,6 +383,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   // test setup case
   wait_msec();
   EXPECT_STREQ (POWER_LEVEL_STR_OK, changed_params.power_level.c_str());
+  EXPECT_TRUE(last_uri.empty());
 
   // change the percent past the 'low' threshold and confirm that
   // a) the power level changes
@@ -376,38 +394,48 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_EQ (indicator_power_notifier_get_power_level(battery), changed_params.power_level);
   EXPECT_TRUE (changed_params.is_warning);
+  EXPECT_EQ (low_power_uri, last_uri);
 
   // now test that the warning changes if the level goes down even lower...
+  last_uri.clear();
   changed_params = ChangedParams();
   set_battery_percentage (battery, percent_very_low);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL, changed_params.fields);
   EXPECT_STREQ (POWER_LEVEL_STR_VERY_LOW, changed_params.power_level.c_str());
+  EXPECT_EQ (low_power_uri, last_uri);
 
   // ...and that the warning is taken down if the battery is plugged back in...
+  last_uri.clear();
   changed_params = ChangedParams();
   g_object_set (battery, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING, nullptr);
   wait_msec();
   EXPECT_EQ (FIELD_IS_WARNING, changed_params.fields);
   EXPECT_FALSE (changed_params.is_warning);
+  EXPECT_TRUE(last_uri.empty());
 
   // ...and that it comes back if we unplug again...
+  last_uri.clear();
   changed_params = ChangedParams();
   g_object_set (battery, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING, nullptr);
   wait_msec();
   EXPECT_EQ (FIELD_IS_WARNING, changed_params.fields);
   EXPECT_TRUE (changed_params.is_warning);
+  EXPECT_EQ (low_power_uri, last_uri);
 
   // ...and that it's taken down if the power level is OK
+  last_uri.clear();
   changed_params = ChangedParams();
   set_battery_percentage (battery, percent_low+1);
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_STREQ (POWER_LEVEL_STR_OK, changed_params.power_level.c_str());
   EXPECT_FALSE (changed_params.is_warning);
+  EXPECT_TRUE(last_uri.empty());
 
   // cleanup
   g_dbus_connection_signal_unsubscribe (bus, sub_tag);
   g_object_unref (notifier);
   g_object_unref (battery);
+  g_object_unref (sound_player);
 }
