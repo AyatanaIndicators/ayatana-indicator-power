@@ -1270,6 +1270,13 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_NOTIFIER] = g_param_spec_object (
+    "notifier",
+    "Notifier",
+    "Notifies user of important battery changes",
+    G_TYPE_OBJECT,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
