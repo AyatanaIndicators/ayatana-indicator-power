@@ -406,6 +406,7 @@ my_dispose (GObject * o)
   priv_t * const p = get_priv (self);
 
   indicator_power_notifier_set_bus (self, NULL);
+  indicator_power_notifier_set_sound_player (self, NULL);
   notification_clear (self);
   indicator_power_notifier_set_battery (self, NULL);
   g_clear_object (&p->dbus_battery);
