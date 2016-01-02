@@ -18,6 +18,7 @@
  */
 
 #include "datafiles.h"
+#include "dbus-accounts-sound.h"
 #include "dbus-battery.h"
 #include "dbus-shared.h"
 #include "notifier.h"
@@ -86,6 +87,9 @@ typedef struct
   gboolean actions_supported;
 
   IndicatorPowerSoundPlayer * sound_player;
+
+  GCancellable * cancellable;
+  DbusAccountsServiceSound * accounts_service_sound_proxy;
 }
 IndicatorPowerNotifierPrivate;
 
@@ -144,13 +148,52 @@ get_battery_power_level (IndicatorPowerDevice * battery)
 ***/
 
 static void
+on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
+                      GAsyncResult * res,
+                      gpointer       gself)
+{
+  GError * error;
+  DbusAccountsServiceSound * proxy;
+
+  error = NULL;
+  proxy = dbus_accounts_service_sound_proxy_new_for_bus_finish (res, &error);
+  if (error != NULL)
+    {
+      if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning("%s Couldn't find accounts service sound proxy: %s", G_STRLOC, error->message);
+
+      g_clear_error(&error);
+    }
+  else
+    {
+      IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(gself);
+      priv_t * const p = get_priv (self);
+      p->accounts_service_sound_proxy = proxy;
+    }
+}
+
+static gboolean
+silent_mode (IndicatorPowerNotifier * self)
+{
+  priv_t * const p = get_priv (self);
+
+  return (p->accounts_service_sound_proxy != NULL)
+      && (dbus_accounts_service_sound_get_silent_mode(p->accounts_service_sound_proxy));
+}
+
+static void
 play_low_battery_sound (IndicatorPowerNotifier * self)
 {
   const gchar * const key = LOW_BATTERY_SOUND;
   gchar * filename;
   priv_t * const p = get_priv(self);
 
+  /* can't play? */
   g_return_if_fail (p->sound_player != NULL);
+
+  /* won't play? */
+  if (silent_mode(self))
+    return;
 
   filename = datafile_find(DATAFILE_TYPE_SOUND, key);
   if (filename != NULL)
@@ -405,11 +448,18 @@ my_dispose (GObject * o)
   IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(o);
   priv_t * const p = get_priv (self);
 
+  if (p->cancellable != NULL)
+    {
+      g_cancellable_cancel(p->cancellable);
+      g_clear_object(&p->cancellable);
+    }
+
   indicator_power_notifier_set_bus (self, NULL);
   indicator_power_notifier_set_sound_player (self, NULL);
   notification_clear (self);
   indicator_power_notifier_set_battery (self, NULL);
   g_clear_object (&p->dbus_battery);
+  g_clear_object (&p->accounts_service_sound_proxy);
 
   G_OBJECT_CLASS (indicator_power_notifier_parent_class)->dispose (o);
 }
@@ -428,7 +478,6 @@ my_finalize (GObject * o G_GNUC_UNUSED)
 ****  Instantiation
 ***/
 
-
 static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
 {
@@ -440,8 +489,21 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->power_level = POWER_LEVEL_OK;
 
+  p->cancellable = g_cancellable_new();
+
   if (!instance_count++ && !notify_init("ayatana-indicator-power-service"))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
+
+  gchar* object_path = g_strdup_printf("/org/freedesktop/Accounts/User%lu", (gulong)getuid());
+  dbus_accounts_service_sound_proxy_new_for_bus(
+    G_BUS_TYPE_SYSTEM,
+    G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+    "org.freedesktop.Accounts",
+    object_path,
+    p->cancellable,
+    on_sound_proxy_ready,
+    self);
+  g_clear_pointer(&object_path, g_free);
 }
 
 static void
