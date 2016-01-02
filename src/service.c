@@ -1339,9 +1339,13 @@ indicator_power_service_set_notifier (IndicatorPowerService  * self,
   g_return_if_fail (!notifier || INDICATOR_IS_POWER_NOTIFIER (notifier));
   p = self->priv;
 
-  if (p->notifier != notifier)
+  if (p->notifier == notifier)
+    return;
+
+  g_clear_object (&p->notifier);
+
+  if (notifier != NULL)
     {
-      g_clear_object (&p->notifier);
       p->notifier = g_object_ref (notifier);
       indicator_power_notifier_set_bus (p->notifier, p->conn);
     }
