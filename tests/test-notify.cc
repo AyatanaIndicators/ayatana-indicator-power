@@ -359,9 +359,14 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
                                              30,
                                              TRUE);
 
+  // the file we expect to play on a low battery notification...
+  const char* expected_file = XDG_DATA_HOME "/" GETTEXT_PACKAGE "/sounds/" LOW_BATTERY_SOUND;
+  char* tmp = g_filename_to_uri(expected_file, nullptr, nullptr);
+  const std::string low_power_uri {tmp};
+  g_clear_pointer(&tmp, g_free);
+
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.
-  const std::string low_power_uri {"file://" XDG_DATA_HOME "/" GETTEXT_PACKAGE "/sounds/Low%20battery.ogg"};
   std::string last_uri;
   auto sound_player = indicator_power_sound_player_mock_new ();
   g_signal_connect(sound_player, "uri-played", G_CALLBACK(on_uri_played), &last_uri);

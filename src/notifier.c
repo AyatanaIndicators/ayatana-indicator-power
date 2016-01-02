@@ -146,7 +146,7 @@ get_battery_power_level (IndicatorPowerDevice * battery)
 static void
 play_low_battery_sound (IndicatorPowerNotifier * self)
 {
-  const gchar * const key = "Low battery.ogg";
+  const gchar * const key = LOW_BATTERY_SOUND;
   gchar * filename;
   priv_t * const p = get_priv(self);
 

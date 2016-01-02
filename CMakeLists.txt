@@ -41,7 +41,8 @@ set (CMAKE_INSTALL_FULL_PKGLIBEXECDIR "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_
 
 set(GETTEXT_PACKAGE "ayatana-indicator-power")
 add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
-                 -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
+                 -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}"
+                 -DLOW_BATTERY_SOUND="Low battery.ogg")
 
 ##
 ##  Check for prerequisites
