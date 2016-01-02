@@ -1,11 +1,6 @@
 /*
- * Copyright 2013 Canonical Ltd.
+ * Copyright 2013-2016 Canonical Ltd.
  * Copytight 2021 AyatanaIndicators
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
- *   Ted Gould <ted@canonical.com>
- *   Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -18,6 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
+ *   Ted Gould <ted@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include <glib/gi18n.h>
