@@ -187,8 +187,12 @@ silent_mode (IndicatorPowerNotifier * self)
 {
   priv_t * const p = get_priv (self);
 
-  return (p->accounts_service_sound_proxy != NULL)
-      && (dbus_accounts_service_sound_get_silent_mode(p->accounts_service_sound_proxy));
+  /* if we don't have a proxy yet, assume we're in silent mode
+     as a "do no harm" level of response */
+  if (p->accounts_service_sound_proxy == NULL)
+    return TRUE;
+
+  return dbus_accounts_service_sound_get_silent_mode(p->accounts_service_sound_proxy);
 }
 #endif
 
