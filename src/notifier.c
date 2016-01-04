@@ -171,7 +171,7 @@ on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
       if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         {
           get_priv(gself)->accounts_service_sound_proxy_pending = FALSE;
-          g_warning("%s Couldn't find accounts service sound proxy: %s", G_STRLOC, error->message);
+          g_debug("%s Couldn't find accounts service sound proxy: %s", G_STRLOC, error->message);
         }
 
       g_clear_error(&error);
