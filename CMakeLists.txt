@@ -69,6 +69,13 @@ pkg_check_modules(
 )
 include_directories(${URLDISPATCHER_INCLUDE_DIRS})
 
+if(EXISTS "/usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml")
+  set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS ON)
+  add_definitions ( -DHAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS )
+else()
+  set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS OFF)
+endif()
+
 ##
 ##  custom targets
 ##

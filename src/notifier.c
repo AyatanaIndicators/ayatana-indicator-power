@@ -18,7 +18,11 @@
  */
 
 #include "datafiles.h"
+
+#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
 #include "dbus-accounts-sound.h"
+#endif
+
 #include "dbus-battery.h"
 #include "dbus-shared.h"
 #include "notifier.h"
@@ -89,7 +93,9 @@ typedef struct
   IndicatorPowerSoundPlayer * sound_player;
 
   GCancellable * cancellable;
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
   DbusAccountsServiceSound * accounts_service_sound_proxy;
+  #endif
 }
 IndicatorPowerNotifierPrivate;
 
@@ -147,16 +153,18 @@ get_battery_power_level (IndicatorPowerDevice * battery)
 ****  Sounds
 ***/
 
+#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
 static void
 on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
                       GAsyncResult * res,
                       gpointer       gself)
 {
   GError * error;
-  DbusAccountsServiceSound * proxy;
-
   error = NULL;
+
+  DbusAccountsServiceSound * proxy;
   proxy = dbus_accounts_service_sound_proxy_new_for_bus_finish (res, &error);
+
   if (error != NULL)
     {
       if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
@@ -172,6 +180,7 @@ on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
     }
 }
 
+
 static gboolean
 silent_mode (IndicatorPowerNotifier * self)
 {
@@ -180,6 +189,7 @@ silent_mode (IndicatorPowerNotifier * self)
   return (p->accounts_service_sound_proxy != NULL)
       && (dbus_accounts_service_sound_get_silent_mode(p->accounts_service_sound_proxy));
 }
+#endif
 
 static void
 play_low_battery_sound (IndicatorPowerNotifier * self)
@@ -191,9 +201,11 @@ play_low_battery_sound (IndicatorPowerNotifier * self)
   /* can't play? */
   g_return_if_fail (p->sound_player != NULL);
 
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
   /* won't play? */
   if (silent_mode(self))
     return;
+  #endif
 
   filename = datafile_find(DATAFILE_TYPE_SOUND, key);
   if (filename != NULL)
@@ -459,7 +471,10 @@ my_dispose (GObject * o)
   notification_clear (self);
   indicator_power_notifier_set_battery (self, NULL);
   g_clear_object (&p->dbus_battery);
+
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
   g_clear_object (&p->accounts_service_sound_proxy);
+  #endif
 
   G_OBJECT_CLASS (indicator_power_notifier_parent_class)->dispose (o);
 }
@@ -467,7 +482,7 @@ my_dispose (GObject * o)
 static void
 my_finalize (GObject * o G_GNUC_UNUSED)
 {
-  /* FIXME: This is an awkward place to put this. 
+  /* FIXME: This is an awkward place to put this.
      Ordinarily something like this would go in main(), but we need libnotify
      to clean itself up before shutting down the bus in the unit tests as well. */
   if (!--instance_count)
@@ -494,6 +509,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
   if (!instance_count++ && !notify_init("ayatana-indicator-power-service"))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
 
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
   gchar* object_path = g_strdup_printf("/org/freedesktop/Accounts/User%lu", (gulong)getuid());
   dbus_accounts_service_sound_proxy_new_for_bus(
     G_BUS_TYPE_SYSTEM,
@@ -504,6 +520,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
     on_sound_proxy_ready,
     self);
   g_clear_pointer(&object_path, g_free);
+  #endif
 }
 
 static void
