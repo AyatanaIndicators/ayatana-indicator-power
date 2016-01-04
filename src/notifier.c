@@ -548,7 +548,7 @@ indicator_power_notifier_class_init (IndicatorPowerNotifierClass * klass)
   properties[PROP_SOUND_PLAYER] = g_param_spec_object (
     PROP_SOUND_PLAYER_NAME,
     "Sound Player",
-    "The current battery",
+    "The current sound player",
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
