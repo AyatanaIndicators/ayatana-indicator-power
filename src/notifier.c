@@ -176,6 +176,7 @@ on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
     {
       IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(gself);
       priv_t * const p = get_priv (self);
+      g_clear_object (&p->accounts_service_sound_proxy);
       p->accounts_service_sound_proxy = proxy;
     }
 }
