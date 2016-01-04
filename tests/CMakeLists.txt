@@ -9,6 +9,13 @@ include_directories (SYSTEM ${DBUSTEST_INCLUDE_DIRS})
 # add warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${C_WARNING_ARGS}")
 
+# build the mocks
+set(MOCK_LIB "indicatorpowerservicemocks")
+set(MOCK_SOURCES sound-player-mock.c)
+set_source_files_properties(${MOCK_SOURCES}
+                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
+add_library(${MOCK_LIB} STATIC ${MOCK_SOURCES})
+
 # build the necessary schemas
 set_directory_properties (PROPERTIES
                           ADDITIONAL_MAKE_CLEAN_FILES gschemas.compiled)
@@ -50,8 +57,8 @@ function(add_test_by_name name)
   add_executable (${TEST_NAME} ${TEST_NAME}.cc)
   target_link_options(${TEST_NAME} PRIVATE -no-pie)
   add_test (${TEST_NAME} ${TEST_NAME})
-  add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice gschemas-compiled)
-  target_link_libraries (${TEST_NAME} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS} ${URLDISPATCHER_LIBRARIES} ${GMOCK_LIBRARIES})
+  add_dependencies (${TEST_NAME} ${MOCK_LIB} ayatanaindicatorpowerservice gschemas-compiled)
+  target_link_libraries (${TEST_NAME} ${MOCK_LIB} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS} ${URLDISPATCHER_LIBRARIES} ${GMOCK_LIBRARIES})
 endfunction()
 add_test_by_name(test-notify)
 add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
