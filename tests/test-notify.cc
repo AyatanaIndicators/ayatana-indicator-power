@@ -166,7 +166,6 @@ protected:
 
   int get_notify_call_count() const
   {
-    // confirm that we got exactly one call
     guint len {0u};
     GError* error {nullptr};
     dbus_test_dbus_mock_object_get_method_calls(mock, obj, METHOD_NOTIFY, &len, &error);
@@ -444,7 +443,6 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   clear_method_calls();
 
   // ...and that the warning is taken down if the battery is plugged back in...
-  //last_uri.clear();
   changed_params = ChangedParams();
   g_object_set (battery, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING, nullptr);
   wait_msec();
@@ -453,7 +451,6 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   EXPECT_EQ (0, get_notify_call_count());
 
   // ...and that it comes back if we unplug again...
-  //last_uri.clear();
   changed_params = ChangedParams();
   g_object_set (battery, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING, nullptr);
   wait_msec();
@@ -464,7 +461,6 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   clear_method_calls();
 
   // ...and that it's taken down if the power level is OK
-  //last_uri.clear();
   changed_params = ChangedParams();
   set_battery_percentage (battery, percent_low+1);
   wait_msec();

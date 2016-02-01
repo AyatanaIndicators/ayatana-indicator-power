@@ -311,7 +311,9 @@ notification_show(IndicatorPowerNotifier * self)
 
   if (are_actions_supported(self))
     {
+      #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
       if (!silent_mode(self))
+      #endif
         {
           gchar* filename = datafile_find(DATAFILE_TYPE_SOUND, LOW_BATTERY_SOUND);
           if (filename != NULL)
