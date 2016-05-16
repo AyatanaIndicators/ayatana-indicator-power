@@ -40,13 +40,20 @@ set (CMAKE_INSTALL_FULL_PKGLIBEXECDIR "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_
 ##
 
 set(GETTEXT_PACKAGE "ayatana-indicator-power")
-add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
-                 -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}"
-                 -DLOW_BATTERY_SOUND="Low battery.ogg")
+add_definitions(
+  -DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
+  -DG_LOG_DOMAIN="${GETTEXT_PACKAGE}"
+  -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}"
+  -DLOW_BATTERY_SOUND="Low battery.ogg"
+)
 
 ##
 ##  Check for prerequisites
 ##
+
+set(SERVICE_LIB "ayatanaindicatorpowerservice")
+set(SERVICE_EXEC "ayatana-indicator-power-service")
+add_definitions(-DSERVICE_EXEC="${SERVICE_EXEC}")
 
 find_package (PkgConfig REQUIRED)
 include (CheckIncludeFile)

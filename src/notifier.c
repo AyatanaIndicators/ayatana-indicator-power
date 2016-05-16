@@ -489,7 +489,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->cancellable = g_cancellable_new();
 
-  if (!instance_count++ && !notify_init("ayatana-indicator-power-service"))
+  if (!instance_count++ && !notify_init(SERVICE_EXEC))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
 
   #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS

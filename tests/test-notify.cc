@@ -61,8 +61,6 @@ protected:
   static constexpr int NOTIFICATION_CLOSED_API       {3};
   static constexpr int NOTIFICATION_CLOSED_UNDEFINED {4};
 
-  static constexpr char const * APP_NAME {"ayatana-indicator-power-service"};
-
   static constexpr char const * METHOD_CLOSE {"CloseNotification"};
   static constexpr char const * METHOD_NOTIFY {"Notify"};
   static constexpr char const * METHOD_GET_CAPS {"GetCapabilities"};
@@ -135,7 +133,7 @@ protected:
     g_dbus_connection_set_exit_on_close(bus, FALSE);
     g_object_add_weak_pointer(G_OBJECT(bus), reinterpret_cast<gpointer*>(&bus));
 
-    notify_init(APP_NAME);
+    notify_init(SERVICE_EXEC);
   }
 
   virtual void TearDown()

@@ -1,8 +1,3 @@
-set (SERVICE_LIB "ayatanaindicatorpowerservice")
-set (SERVICE_EXEC "ayatana-indicator-power-service")
-
-add_definitions(-DG_LOG_DOMAIN="ayatana-indicator-power")
-
 if(URLDISPATCHER_FOUND)
     add_definitions( -DHAS_URLDISPATCHER )
 endif()
