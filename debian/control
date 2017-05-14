@@ -15,7 +15,7 @@ Build-Depends: cmake,
                python3-dbusmock,
                dbus-test-runner,
                libdbustest1-dev,
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: https://github.com/ArcticaProject/ayatana-indicator-power
 Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git
 Vcs-Browser: https://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git/
