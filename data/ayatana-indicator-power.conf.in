@@ -6,4 +6,4 @@ stop on desktop-end or ayatana-indicator-services-end
 respawn
 respawn limit 2 10
 
-exec @pkglibexecdir@/ayatana-indicator-power-service
+exec $SNAP@pkglibexecdir@/ayatana-indicator-power-service
