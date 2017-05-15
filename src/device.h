@@ -44,6 +44,7 @@ typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
 #define INDICATOR_POWER_DEVICE_OBJECT_PATH  "object-path"
 #define INDICATOR_POWER_DEVICE_PERCENTAGE   "percentage"
 #define INDICATOR_POWER_DEVICE_TIME         "time"
+#define INDICATOR_POWER_DEVICE_POWER_SUPPLY "power-supply"
 
 typedef enum
 {
@@ -107,7 +108,8 @@ IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
                                                   UpDeviceKind     kind,
                                                   gdouble          percentage,
                                                   UpDeviceState    state,
-                                                  time_t           time);
+                                                  time_t           time,
+                                                  gboolean         power_supply);
 
 /**
  * Convenience wrapper around indicator_power_device_new()
@@ -121,6 +123,7 @@ UpDeviceState indicator_power_device_get_state             (const IndicatorPower
 const gchar * indicator_power_device_get_object_path       (const IndicatorPowerDevice * device);
 gdouble       indicator_power_device_get_percentage        (const IndicatorPowerDevice * device);
 time_t        indicator_power_device_get_time              (const IndicatorPowerDevice * device);
+gboolean      indicator_power_device_get_power_supply      (const IndicatorPowerDevice * device);
 
 GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device);
 GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device);

@@ -191,7 +191,8 @@ TEST_F(NotifyFixture, PercentageToLevel)
                                              UP_DEVICE_KIND_BATTERY,
                                              50.0,
                                              UP_DEVICE_STATE_DISCHARGING,
-                                             30);
+                                             30,
+                                             TRUE);
 
   // confirm that the power levels trigger at the right percentages
   for (int i=100; i>=0; --i)
@@ -269,7 +270,8 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
                                              UP_DEVICE_KIND_BATTERY,
                                              50.0,
                                              UP_DEVICE_STATE_DISCHARGING,
-                                             30);
+                                             30,
+                                             TRUE);
 
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.
@@ -341,7 +343,8 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
                                              UP_DEVICE_KIND_BATTERY,
                                              percent_low + 1.0,
                                              UP_DEVICE_STATE_DISCHARGING,
-                                             30);
+                                             30,
+                                             TRUE);
 
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.

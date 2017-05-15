@@ -160,11 +160,12 @@ get_device_kind_weight (const IndicatorPowerDevice * device)
 }
 
 /* sort devices from most interesting to least interesting on this criteria:
-   1. discharging items from least time remaining until most time remaining
-   2. charging items from most time left to charge to least time left to charge
-   3. charging items with an unknown time remaining
-   4. discharging items with an unknown time remaining
-   5. batteries, then non-line power, then line-power */
+   1. device that supplied the power to the system
+   2. discharging items from least time remaining until most time remaining
+   3. charging items from most time left to charge to least time left to charge
+   4. charging items with an unknown time remaining
+   5. discharging items with an unknown time remaining
+   6. batteries, then non-line power, then line-power */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
 {
@@ -172,6 +173,8 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
   int state;
   const IndicatorPowerDevice * a = ga;
   const IndicatorPowerDevice * b = gb;
+  const gboolean a_power_supply = indicator_power_device_get_power_supply (a);
+  const gboolean b_power_supply = indicator_power_device_get_power_supply (b);
   const int a_state = indicator_power_device_get_state (a);
   const int b_state = indicator_power_device_get_state (b);
   const gdouble a_percentage = indicator_power_device_get_percentage (a);
@@ -180,6 +183,18 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
   const time_t b_time = indicator_power_device_get_time (b);
 
   ret = 0;
+
+  if (!ret && (a_power_supply != b_power_supply))
+    {
+      if (a_power_supply) /* a provides power to the system */
+        {
+          ret = -1;
+        }
+      else /* b provides power to the system */
+        {
+          ret = 1;
+        }
+    }
 
   state = UP_DEVICE_STATE_DISCHARGING;
   if (!ret && (((a_state == state) && a_time) ||
@@ -1380,7 +1395,8 @@ create_totalled_battery_device (const GList * devices)
                                            UP_DEVICE_KIND_BATTERY,
                                            percent,
                                            state,
-                                           time_left);
+                                           time_left,
+                                           TRUE);
     }
 
   return device;

@@ -113,6 +113,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
       gint64 time_to_empty = 0;
       gint64 time_to_full = 0;
       gint64 time;
+      gboolean power_supply = FALSE;
       IndicatorPowerDevice * device;
       priv_t * p = get_priv(data->self);
       GVariant * dict = g_variant_get_child_value (response, 0);
@@ -122,6 +123,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
       g_variant_lookup (dict, "Percentage", "d", &percentage);
       g_variant_lookup (dict, "TimeToEmpty", "x", &time_to_empty);
       g_variant_lookup (dict, "TimeToFull", "x", &time_to_full);
+      g_variant_lookup (dict, "PowerSupply", "b", &power_supply);
       time = time_to_empty ? time_to_empty : time_to_full;
 
       if ((device = g_hash_table_lookup (p->devices, data->path)))
@@ -131,6 +133,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
                                 INDICATOR_POWER_DEVICE_OBJECT_PATH, data->path,
                                 INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
                                 INDICATOR_POWER_DEVICE_TIME, time,
+                                INDICATOR_POWER_DEVICE_POWER_SUPPLY, power_supply,
                                 NULL);
         }
       else
@@ -139,7 +142,8 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
                                                kind,
                                                percentage,
                                                state,
-                                               (time_t)time);
+                                               (time_t)time,
+                                               power_supply);
 
           g_hash_table_insert (p->devices,
                                g_strdup (data->path),

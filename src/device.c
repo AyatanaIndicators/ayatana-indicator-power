@@ -42,6 +42,7 @@ struct _IndicatorPowerDevicePrivate
      the time-remaining field for this device, or 0 if not applicable.
      This is used when generating the time-remaining string. */
   GTimer * inestimable;
+  gboolean power_supply;
 };
 
 /* Properties */
@@ -53,6 +54,7 @@ enum {
   PROP_OBJECT_PATH,
   PROP_PERCENTAGE,
   PROP_TIME,
+  PROP_POWER_SUPPLY,
   N_PROPERTIES
 };
 
@@ -116,6 +118,12 @@ indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
                                                0,
                                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_POWER_SUPPLY] = g_param_spec_boolean (INDICATOR_POWER_DEVICE_POWER_SUPPLY,
+                                                        "power supply",
+                                                        "The device's power supply",
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
@@ -132,6 +140,7 @@ indicator_power_device_init (IndicatorPowerDevice *self)
   priv->object_path = NULL;
   priv->percentage = 0.0;
   priv->time = 0;
+  priv->power_supply = FALSE;
 
   self->priv = priv;
 }
@@ -190,6 +199,10 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
         g_value_set_uint64 (value, (guint64)priv->time);
         break;
 
+      case PROP_POWER_SUPPLY:
+        g_value_set_boolean (value, priv->power_supply);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(o, prop_id, pspec);
         break;
@@ -223,6 +236,10 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
 
       case PROP_TIME:
         p->time = (time_t) g_value_get_uint64(value);
+        break;
+
+      case PROP_POWER_SUPPLY:
+        p->power_supply = g_value_get_boolean (value);
         break;
 
       default:
@@ -302,6 +319,16 @@ indicator_power_device_get_time (const IndicatorPowerDevice * device)
   /* LCOV_EXCL_STOP */
 
   return device->priv->time;
+}
+
+gboolean
+indicator_power_device_get_power_supply (const IndicatorPowerDevice * device)
+{
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), FALSE);
+  /* LCOV_EXCL_STOP */
+
+  return device->priv->power_supply;
 }
 
 /***
@@ -867,7 +894,8 @@ indicator_power_device_new (const gchar * object_path,
                             UpDeviceKind  kind,
                             gdouble percentage,
                             UpDeviceState state,
-                            time_t timestamp)
+                            time_t timestamp,
+                            gboolean power_supply)
 {
   GObject * o = g_object_new (INDICATOR_POWER_DEVICE_TYPE,
     INDICATOR_POWER_DEVICE_KIND, kind,
@@ -875,6 +903,7 @@ indicator_power_device_new (const gchar * object_path,
     INDICATOR_POWER_DEVICE_OBJECT_PATH, object_path,
     INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
     INDICATOR_POWER_DEVICE_TIME, (guint64)timestamp,
+    INDICATOR_POWER_DEVICE_POWER_SUPPLY, power_supply,
     NULL);
   return INDICATOR_POWER_DEVICE(o);
 }
@@ -882,7 +911,7 @@ indicator_power_device_new (const gchar * object_path,
 IndicatorPowerDevice *
 indicator_power_device_new_from_variant (GVariant * v)
 {
-  g_return_val_if_fail (g_variant_is_of_type (v, G_VARIANT_TYPE("(susdut)")), NULL);
+  g_return_val_if_fail (g_variant_is_of_type (v, G_VARIANT_TYPE("(susdutb)")), NULL);
 
   UpDeviceKind kind = UP_DEVICE_KIND_UNKNOWN;
   UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
@@ -890,18 +919,21 @@ indicator_power_device_new_from_variant (GVariant * v)
   const gchar * object_path = NULL;
   gdouble percentage = 0;
   guint64 time = 0;
+  gboolean power_supply = FALSE;
 
-  g_variant_get (v, "(&su&sdut)",
+  g_variant_get (v, "(&su&sdutb)",
                  &object_path,
                  &kind,
                  &icon,
                  &percentage,
                  &state,
-                 &time);
+                 &time,
+                 &power_supply);
 
   return indicator_power_device_new (object_path,
                                      kind,
                                      percentage,
                                      state,
-                                     (time_t)time);
+                                     (time_t)time,
+                                     power_supply);
 }
