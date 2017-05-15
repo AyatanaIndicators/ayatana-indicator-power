@@ -61,13 +61,16 @@ class DeviceTest : public ::testing::Test
 
   protected:
 
-    void check_icon_names (const IndicatorPowerDevice * device, const char * expected)
+    static std::string get_icon_names_from_device(const IndicatorPowerDevice* device)
     {
+      std::string ret;
       char ** names = indicator_power_device_get_icon_names (device);
       char * str = g_strjoinv (";", names);
-      ASSERT_STREQ (expected, str);
+      if (str != nullptr)
+        ret = str;
       g_free (str);
       g_strfreev (names);
+      return ret;
     }
 
     void check_label (const IndicatorPowerDevice * device,
@@ -120,6 +123,13 @@ class DeviceTest : public ::testing::Test
       g_free (a11y);
     }
 };
+
+#define EXPECT_ICON_NAMES_EQ(expected_in,device_in)                          \
+  do {                                                                       \
+    const std::string tmp_expected {expected_in};                            \
+    const std::string tmp_actual {get_icon_names_from_device(device_in)};    \
+    EXPECT_EQ(tmp_expected, tmp_actual);                                     \
+  } while(0)
 
 /***
 ****
@@ -266,14 +276,16 @@ TEST_F(DeviceTest, IconNames)
   // power
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
                    NULL);
-  check_icon_names (device, "ac-adapter-symbolic;"
-                            "ac-adapter");
+  EXPECT_ICON_NAMES_EQ("ac-adapter-symbolic;"
+                       "ac-adapter",
+                       device);
 
   // monitor
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_MONITOR,
                    NULL);
-  check_icon_names (device, "gpm-monitor-symbolic;"
-                            "gpm-monitor");
+  EXPECT_ICON_NAMES_EQ("gpm-monitor-symbolic;"
+                       "gpm-monitor",
+                       device);
 
   // devices that hold a charge
   struct {
@@ -301,7 +313,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-empty;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
       g_string_append_printf (expected, "%s-empty", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charged
@@ -314,7 +326,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-100;", kind_str);
       g_string_append_printf (expected, "%s-full-charged;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charging, 95%
@@ -326,7 +338,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-100-charging;", kind_str);
       g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charging, 85%
@@ -340,7 +352,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-080-charging;", kind_str);
       g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charging, 50%
@@ -354,7 +366,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-060-charging;", kind_str);
       g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-good-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charging, 25%
@@ -364,11 +376,11 @@ TEST_F(DeviceTest, IconNames)
                        NULL);
       g_string_append_printf (expected, "%s-030-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030-charging;", kind_str);
-      g_string_append_printf (expected, "%s-020-charging;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-020-charging;", kind_str);
+      g_string_append_printf (expected, "%s-040-charging;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040-charging;", kind_str);
       g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-low-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // charging, 5%
@@ -382,7 +394,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 95%
@@ -394,7 +406,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-100;", kind_str);
       g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 85%
@@ -408,7 +420,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-080;", kind_str);
       g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 50% -- 1 hour left
@@ -423,7 +435,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-060;", kind_str);
       g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-good", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 25% -- 1 hour left
@@ -434,11 +446,11 @@ TEST_F(DeviceTest, IconNames)
                        NULL);
       g_string_append_printf (expected, "%s-030;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030;", kind_str);
-      g_string_append_printf (expected, "%s-020;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-020;", kind_str);
+      g_string_append_printf (expected, "%s-040;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
       g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-low", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 25% -- 15 minutes left
@@ -449,11 +461,11 @@ TEST_F(DeviceTest, IconNames)
                        NULL);
       g_string_append_printf (expected, "%s-030;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030;", kind_str);
-      g_string_append_printf (expected, "%s-020;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-020;", kind_str);
+      g_string_append_printf (expected, "%s-040;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
       g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-low", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 5% -- 1 hour left
@@ -468,7 +480,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
       g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // discharging, 5% -- 15 minutes left
@@ -483,7 +495,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
       g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
       // state unknown
@@ -493,7 +505,7 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-missing-symbolic;", kind_str);
       g_string_append_printf (expected, "gpm-%s-missing;", kind_str);
       g_string_append_printf (expected, "%s-missing", kind_str);
-      check_icon_names (device, expected->str);
+      EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
   }
   g_string_free (expected, TRUE);

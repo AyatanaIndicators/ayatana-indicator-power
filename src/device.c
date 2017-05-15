@@ -340,7 +340,7 @@ get_fallback_device_icon_index (gdouble percentage)
   if (percentage >= 90) return "100";
   if (percentage >= 70) return "080";
   if (percentage >= 50) return "060";
-  if (percentage >= 30) return "040";
+  if (percentage >  20) return "040"; /* don't round down to 20: see bug #1559731 */
   if (percentage >= 10) return "020";
   return "000";
 }
