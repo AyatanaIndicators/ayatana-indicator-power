@@ -1,0 +1,8 @@
+[Unit]
+Description=Ayatana Indicator Power
+PartOf=graphical-session.target
+After=ayatana-indicators-pre.target
+
+[Service]
+ExecStart=@pkglibexecdir@/ayatana-indicator-power-service
+Restart=on-failure
