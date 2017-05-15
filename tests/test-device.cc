@@ -1,27 +1,32 @@
 /*
-Copyright 2012 Canonical Ltd.
+ * Copyright 2012-2016 Canonical Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3, as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranties of
+ * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
+ */
 
-Authors:
-    Charles Kerr <charles.kerr@canonical.com>
-
-This program is free software: you can redistribute it and/or modify it
-under the terms of the GNU General Public License version 3, as published
-by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranties of
-MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along
-with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+#include "device.h"
+#include "service.h"
 
 #include <gio/gio.h>
 #include <gtest/gtest.h>
+
+#include <algorithm>
 #include <cmath> // ceil()
-#include "device.h"
-#include "service.h"
+#include <string>
+
 
 class DeviceTest : public ::testing::Test
 {
@@ -337,7 +342,11 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-100-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100-charging;", kind_str);
       g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-full-charging", kind_str);
+      g_string_append_printf (expected, "%s-full-charging;", kind_str);
+      g_string_append_printf (expected, "%s-100;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-100;", kind_str);
+      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
@@ -351,7 +360,13 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-080-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080-charging;", kind_str);
       g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-full-charging", kind_str);
+      g_string_append_printf (expected, "%s-full-charging;", kind_str);
+      g_string_append_printf (expected, "%s-090;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-090;", kind_str);
+      g_string_append_printf (expected, "%s-080;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-080;", kind_str);
+      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
@@ -365,7 +380,13 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-060-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060-charging;", kind_str);
       g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-good-charging", kind_str);
+      g_string_append_printf (expected, "%s-good-charging;", kind_str);
+      g_string_append_printf (expected, "%s-050;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-050;", kind_str);
+      g_string_append_printf (expected, "%s-060;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-060;", kind_str);
+      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
@@ -379,7 +400,13 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-040-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-040-charging;", kind_str);
       g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-low-charging", kind_str);
+      g_string_append_printf (expected, "%s-low-charging;", kind_str);
+      g_string_append_printf (expected, "%s-030;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-030;", kind_str);
+      g_string_append_printf (expected, "%s-040;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-040;", kind_str);
+      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
@@ -393,7 +420,13 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-000-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-caution-charging", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging;", kind_str);
+      g_string_append_printf (expected, "%s-010;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-010;", kind_str);
+      g_string_append_printf (expected, "%s-000;", kind_str);
+      g_string_append_printf (expected, "gpm-%s-000;", kind_str);
+      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
 
@@ -496,15 +529,13 @@ TEST_F(DeviceTest, IconNames)
       g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
-      g_string_truncate (expected, 0);
 
-      // state unknown
-      g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
-                       INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN,
+      // if we know the charge level, but not that it’s charging,
+      // then we should use the same icons as when it’s discharging. 
+      // https://wiki.ubuntu.com/Power?action=diff&rev2=78&rev1=77
+      // https://bugs.launchpad.net/ubuntu/+source/indicator-power/+bug/1470080
+      g_object_set (o, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN,
                        NULL);
-      g_string_append_printf (expected, "%s-missing-symbolic;", kind_str);
-      g_string_append_printf (expected, "gpm-%s-missing;", kind_str);
-      g_string_append_printf (expected, "%s-missing", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
   }
@@ -704,6 +735,101 @@ TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
   g_free (real_lang);
 }
 
+namespace
+{
+  const std::array<std::pair<std::string,UpDeviceKind>,UP_DEVICE_KIND_LAST> kinds = {
+    std::make_pair("unknown", UP_DEVICE_KIND_UNKNOWN),
+    std::make_pair("line-power", UP_DEVICE_KIND_LINE_POWER),
+    std::make_pair("battery", UP_DEVICE_KIND_BATTERY),
+    std::make_pair("ups", UP_DEVICE_KIND_UPS),
+    std::make_pair("monitor", UP_DEVICE_KIND_MONITOR),
+    std::make_pair("mouse", UP_DEVICE_KIND_MOUSE),
+    std::make_pair("keyboard", UP_DEVICE_KIND_KEYBOARD),
+    std::make_pair("pda", UP_DEVICE_KIND_PDA),
+    std::make_pair("phone", UP_DEVICE_KIND_PHONE),
+    std::make_pair("media-player", UP_DEVICE_KIND_MEDIA_PLAYER),
+    std::make_pair("tablet", UP_DEVICE_KIND_TABLET),
+    std::make_pair("computer", UP_DEVICE_KIND_COMPUTER)
+  };
+  const std::string& kind2str(UpDeviceKind kind)
+  {
+    return std::find_if(
+      kinds.begin(),
+      kinds.end(),
+      [kind](decltype(kinds[0])& i){return i.second==kind;}
+    )->first;
+  }
+  UpDeviceKind str2kind(const std::string& str)
+  {
+    return std::find_if(
+      kinds.begin(),
+      kinds.end(),
+      [str](decltype(kinds[0])& i){return i.first==str;}
+    )->second;
+  }
+
+  /**
+  **/
+
+  const std::array<std::pair<std::string,UpDeviceState>,UP_DEVICE_STATE_LAST> states =
+  {
+    std::make_pair("unknown", UP_DEVICE_STATE_UNKNOWN),
+    std::make_pair("charging", UP_DEVICE_STATE_CHARGING),
+    std::make_pair("discharging", UP_DEVICE_STATE_DISCHARGING),
+    std::make_pair("empty", UP_DEVICE_STATE_EMPTY),
+    std::make_pair("charged", UP_DEVICE_STATE_FULLY_CHARGED),
+    std::make_pair("pending-charge", UP_DEVICE_STATE_PENDING_CHARGE),
+    std::make_pair("pending-discharge", UP_DEVICE_STATE_PENDING_DISCHARGE)
+  };
+  const std::string& state2str(UpDeviceState state)
+  {
+    return std::find_if(
+      states.begin(),
+      states.end(),
+      [state](decltype(states[0])& i){return i.second==state;}
+    )->first;
+  }
+  UpDeviceState str2state(const std::string& str)
+  {
+    return std::find_if(
+      states.begin(),
+      states.end(),
+      [str](decltype(states[0])& i){return i.first==str;}
+    )->second;
+  }
+
+  /**
+  **/
+
+  std::string device2str(IndicatorPowerDevice* device)
+  {
+    std::ostringstream o;
+    const auto path = indicator_power_device_get_object_path(device);
+
+    o << kind2str(indicator_power_device_get_kind(device))
+      << ' ' << state2str(indicator_power_device_get_state(device))
+      << ' ' << indicator_power_device_get_time(device)<<'m'
+      << ' ' << int(ceil(indicator_power_device_get_percentage(device)))<<'%'
+      << ' ' << (path ? path : "nopath");
+
+    return o.str();
+  }
+
+  IndicatorPowerDevice* str2device(const std::string& str)
+  {
+    auto tokens = g_strsplit(str.c_str(), " ", 0);
+    g_assert(5u == g_strv_length(tokens));
+    const auto kind = str2kind(tokens[0]);
+    const auto state = str2state(tokens[1]);
+    const time_t time = atoi(tokens[2]);
+    const double pct = strtod(tokens[3],nullptr);
+    const char* path = !g_strcmp0(tokens[4],"nopath") ? nullptr : tokens[4];
+    auto ret = indicator_power_device_new(path, kind, pct, state, time);
+    g_strfreev(tokens);
+    return ret;
+  }
+}
+
 /* If a device has multiple batteries and uses only one of them at a time,
    they should be presented as separate items inside the battery menu,
    but everywhere else they should be aggregated (bug 880881).
@@ -714,96 +840,130 @@ TEST_F(DeviceTest, Inestimable___this_takes_80_seconds)
    should be the the maximum of the times for all those that are charging. */
 TEST_F(DeviceTest, ChoosePrimary)
 {
-  struct Description
-  { 
-    const char * path;
-    UpDeviceKind kind;
-    UpDeviceState state;
-    guint64 time;
-    double percentage;
-  };
-
-  const Description descriptions[] = {
-    { "/some/path/d0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   10,  60.0 }, // 0
-    { "/some/path/d1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 1
-    { "/some/path/d2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_DISCHARGING,   30, 100.0 }, // 2
-
-    { "/some/path/c0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      10,  60.0 }, // 3
-    { "/some/path/c1", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      20,  80.0 }, // 4
-    { "/some/path/c2", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_CHARGING,      30, 100.0 }, // 5
-
-    { "/some/path/f0", UP_DEVICE_KIND_BATTERY,    UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 6
-    { "/some/path/m0", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_DISCHARGING,   20,  80.0 }, // 7
-    { "/some/path/m1", UP_DEVICE_KIND_MOUSE,      UP_DEVICE_STATE_FULLY_CHARGED,  0, 100.0 }, // 8
-    { "/some/path/pw", UP_DEVICE_KIND_LINE_POWER, UP_DEVICE_STATE_UNKNOWN,        0,   0.0 }  // 9
-  };
-
-  std::vector<IndicatorPowerDevice*> devices;
-  for(const auto& desc : descriptions)
-    devices.push_back(indicator_power_device_new(desc.path, desc.kind, desc.percentage, desc.state, time_t(desc.time)));
-
   const struct {
-    std::vector<unsigned int> device_indices;
-    Description expected;
+    std::string description;
+    std::string expected;
+    std::vector<std::string> devices;
   } tests[] = {
-
-    { { 0 }, descriptions[0] }, // 1 discharging
-    { { 0, 1 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 20, 70.0 } }, // 2 discharging
-    { { 1, 2 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 90.0 } }, // 2 discharging
-    { { 0, 1, 2 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 30, 80.0 } }, // 3 discharging
-
-    { { 3 }, descriptions[3] }, // 1 charging
-    { { 3, 4 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 20, 70.0 } }, // 2 charging
-    { { 4, 5 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 90.0 } }, // 2 charging
-    { { 3, 4, 5 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING, 30, 80.0 } }, // 3 charging
-
-    { { 6 }, descriptions[6] }, // 1 charged
-    { { 6, 0 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 80.0 } }, // 1 charged, 1 discharging
-    { { 6, 3 },    { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_CHARGING,    10, 80.0 } }, // 1 charged, 1 charging
-    { { 6, 0, 3 }, { nullptr, UP_DEVICE_KIND_BATTERY, UP_DEVICE_STATE_DISCHARGING, 10, 73.3 } }, // 1 charged, 1 charging, 1 discharging
-
-    { { 0, 7 }, descriptions[0] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
-    { { 2, 7 }, descriptions[7] }, // 1 discharging battery, 1 discharging mouse. pick the one with the least time left.
-
-    { { 0, 8 }, descriptions[0] }, // 1 discharging battery, 1 fully-charged mouse. pick the one that's discharging.
-    { { 6, 7 }, descriptions[7] }, // 1 discharging mouse, 1 fully-charged battery. pick the one that's discharging.
-
-    { { 0, 9 }, descriptions[0] }, // everything comes before power lines
-    { { 3, 9 }, descriptions[3] },
-    { { 7, 9 }, descriptions[7] }
+    {
+      "one discharging battery",
+      "battery discharging 10m 60% bat01",
+      { "battery discharging 10m 60% bat01" }
+    },
+    {
+      "merge two discharging batteries",
+      "battery discharging 20m 70% nopath",
+      { "battery discharging 10m 60% bat01", "battery discharging 20m 80% bat02" }
+    },
+    {
+      "merge two other discharging batteries",
+      "battery discharging 30m 90% nopath",
+      { "battery discharging 20m 80% bat01", "battery discharging 30m 100% bat02" }
+    },
+    {
+      "merge three discharging batteries",
+      "battery discharging 30m 80% nopath",
+      { "battery discharging 10m 60% bat01", "battery discharging 20m 80% bat02", "battery discharging 30m 100% bat03" }
+    },
+    {
+      "one charging battery",
+      "battery charging 10m 60% bat01",
+      { "battery charging 10m 60% bat01" }
+    },
+    {
+      "merge two charging batteries",
+      "battery charging 20m 70% nopath",
+      { "battery charging 10m 60% bat01", "battery charging 20m 80% bat02" }
+    },
+    {
+      "merge two other charging batteries",
+      "battery charging 30m 90% nopath",
+      { "battery charging 20m 80% bat01", "battery charging 30m 100% bat02" }
+    },
+    {
+      "merge three charging batteries",
+      "battery charging 30m 80% nopath",
+      { "battery charging 10m 60% bat01", "battery charging 20m 80% bat02", "battery charging 30m 100% bat03" }
+    },
+    {
+      "one charged battery",
+      "battery charged 0m 100% bat01",
+      { "battery charged 0m 100% bat01" }
+    },
+    {
+      "merge one charged, one discharging",
+      "battery discharging 10m 80% nopath",
+      { "battery charged 0m 100% bat01", "battery discharging 10m 60% bat02" }
+    },
+    {
+      "merged one charged, one charging",
+      "battery charging 10m 80% nopath",
+      { "battery charged 0m 100% bat01", "battery charging 10m 60% bat02" }
+    },
+    {
+      "merged one charged, one charging, one discharging",
+      "battery discharging 10m 74% nopath",
+      { "battery charged 0m 100% bat01", "battery charging 10m 60% bat02", "battery discharging 10m 60% bat03" }
+    },
+    {
+      "one discharging mouse and one discharging battery. pick the one with the least time left",
+      "battery discharging 10m 60% bat01",
+      { "battery discharging 10m 60% bat01", "mouse discharging 20m 80% mouse01" }
+    },
+    {
+      "one discharging mouse and a different discharging battery. pick the one with the least time left",
+      "mouse discharging 20m 80% mouse01",
+      { "battery discharging 30m 100% bat01", "mouse discharging 20m 80% mouse01" }
+    },
+    {
+      "everything comes before power lines #1",
+      "battery discharging 10m 60% bat01",
+      { "battery discharging 10m 60% bat01", "line-power unknown 0m 0% lp01" }
+    },
+    {
+      "everything comes before power lines #2",
+      "battery charging 10m 60% bat01",
+      { "battery charging 10m 60% bat01", "line-power unknown 0m 0% lp01" }
+    },
+    {
+      "everything comes before power lines #2",
+      "mouse discharging 20m 80% mouse01",
+      { "mouse discharging 20m 80% mouse01", "line-power unknown 0m 0% lp01" }
+    },
+    {
+      // https://bugs.launchpad.net/ubuntu/+source/indicator-power/+bug/1470080/comments/10
+      "don't select a device with unknown state when we have another device with a known state...",
+      "battery charged 0m 100% bat01",
+      { "battery charged 0m 100% bat01", "phone unknown 0m 61% phone01" }
+    },
+    {
+      // https://bugs.launchpad.net/ubuntu/+source/indicator-power/+bug/1470080/comments/10
+      "...but do select the unknown state device if nothing else is available",
+      "phone unknown 0m 61% phone01",
+      { "phone unknown 0m 61% phone01" }
+    }
   };
   
   for(const auto& test : tests)
   {
-    const auto& x = test.expected;
+    // build the device list
+    GList* device_glist {};
+    for (const auto& description : test.devices)
+        device_glist = g_list_append(device_glist, str2device(description));
 
-    GList * device_glist = nullptr;
-    for(const auto& i : test.device_indices)
-      device_glist = g_list_append(device_glist, devices[i]);
-
+    // run the test
     auto primary = indicator_power_service_choose_primary_device(device_glist);
-    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
-    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
-    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
-    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
-    EXPECT_EQ(int(ceil(x.percentage)), int(ceil(indicator_power_device_get_percentage(primary))));
-    g_object_unref(primary);
+    EXPECT_EQ(test.expected, device2str(primary));
+    g_clear_object(&primary);
 
     // reverse the list and repeat the test
     // to confirm that list order doesn't matter
-    device_glist = g_list_reverse (device_glist);
-    primary = indicator_power_service_choose_primary_device (device_glist);
-    EXPECT_STREQ(x.path, indicator_power_device_get_object_path(primary));
-    EXPECT_EQ(x.kind, indicator_power_device_get_kind(primary));
-    EXPECT_EQ(x.state, indicator_power_device_get_state(primary));
-    EXPECT_EQ(x.time, indicator_power_device_get_time(primary));
-    EXPECT_EQ(int(ceil(x.percentage)), int(ceil(indicator_power_device_get_percentage(primary))));
-    g_object_unref(primary);
+    device_glist = g_list_reverse(device_glist);
+    primary = indicator_power_service_choose_primary_device(device_glist);
+    EXPECT_EQ(test.expected, device2str(primary));
+    g_clear_object(&primary);
 
     // cleanup
-    g_list_free(device_glist);
+    g_list_free_full(device_glist, g_object_unref);
   }
-
-  for (auto& device : devices)
-    g_object_unref (device);
 }

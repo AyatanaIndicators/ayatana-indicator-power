@@ -243,7 +243,25 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
         }
     }
 
-  if (!ret) /* neither device is charging nor discharging... */
+  /* neither device is charging nor discharging... */
+
+  /* unless there's no other option,
+     don't choose a device with an unknown state.
+     https://bugs.launchpad.net/ubuntu/+source/indicator-power/+bug/1470080 */
+  state = UP_DEVICE_STATE_UNKNOWN;
+  if (!ret && ((a_state == state) || (b_state == state)))
+    {
+      if (a_state != state) /* b is unknown */
+        {
+          ret = -1;
+        }
+      else if (b_state != state) /* a is unknown */
+        {
+          ret = 1;
+        }
+    }
+
+  if (!ret)
     {
       const int weight_a = get_device_kind_weight (a);
       const int weight_b = get_device_kind_weight (b);
