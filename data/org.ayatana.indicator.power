@@ -1,5 +1,5 @@
 [Indicator Service]
-Name=indicator-power
+Name=ayatana-indicator-power
 ObjectPath=/org/ayatana/indicator/power
 Position=40
 

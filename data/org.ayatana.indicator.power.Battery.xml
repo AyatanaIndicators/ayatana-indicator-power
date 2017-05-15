@@ -14,7 +14,7 @@
     <property name="IsWarning" type="b" access="read">
       <doc:doc>
         <doc:description>
-          <doc:para>Whether or not indicator-power-service is warning the user about low battery power.</doc:para>
+          <doc:para>Whether or not ayatana-indicator-power-service is warning the user about low battery power.</doc:para>
         </doc:description>
       </doc:doc>
     </property>
