@@ -1,5 +1,5 @@
 set (SERVICE_LIB "ayatanaindicatorpowerservice")
-set (SERVICE_EXEC "aytana-indicator-power-service")
+set (SERVICE_EXEC "ayatana-indicator-power-service")
 
 add_definitions(-DG_LOG_DOMAIN="Ayatana-Indicator-Power")
 
