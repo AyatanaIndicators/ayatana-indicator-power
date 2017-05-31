@@ -331,7 +331,7 @@ indicator_power_testing_class_init (IndicatorPowerTestingClass * klass)
   properties[PROP_SERVICE] = g_param_spec_object (
     "service",
     "Servie",
-    "The IndicatorPower Service",
+    "The Ayatana Indicator Power Service",
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
