@@ -2,8 +2,7 @@
 Type=Application
 Name=Ayatana Indicator Power
 Exec=@pkglibexecdir@/ayatana-indicator-power-service
-OnlyShowIn=Unity;GNOME;
+OnlyShowIn=Unity;MATE;
 NoDisplay=true
 StartupNotify=false
 Terminal=false
-AutostartCondition=GNOME3 unless-session gnome
