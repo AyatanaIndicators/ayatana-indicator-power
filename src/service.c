@@ -849,10 +849,20 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
                          GVariant      * param,
                          gpointer        gself  G_GNUC_UNUSED)
 {
-  char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
-                           g_variant_get_string (param, NULL), NULL);
-  execute_command (cmd);
-  g_free (cmd);
+  if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "mate"))
+    {
+      char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
+                               g_variant_get_string (param, NULL), NULL);
+      execute_command (cmd);
+      g_free (cmd);
+    }
+  else
+    {
+      char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
+                               g_variant_get_string (param, NULL), NULL);
+      execute_command (cmd);
+      g_free (cmd);
+    }
 }
 
 /***
