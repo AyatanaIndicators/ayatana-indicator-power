@@ -383,7 +383,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->power_level = POWER_LEVEL_OK;
 
-  if (!instance_count++ && !notify_init("indicator-power-service"))
+  if (!instance_count++ && !notify_init("ayatana-indicator-power-service"))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
 }
 

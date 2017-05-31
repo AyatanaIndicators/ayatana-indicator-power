@@ -25,4 +25,3 @@
 #define BUS_PATH "/org/ayatana/indicator/power"
 
 #endif /* DBUS_SHARED_H */
-
