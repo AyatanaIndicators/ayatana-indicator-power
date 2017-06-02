@@ -584,7 +584,7 @@ create_brightness_menu_item(void)
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
-  g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.unity.slider");
+  g_menu_item_set_attribute(item, "x-canonical-type", "s", "org.ayatana.unity.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
 
