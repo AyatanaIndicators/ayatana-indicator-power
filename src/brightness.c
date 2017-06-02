@@ -375,7 +375,7 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
 
   g_dbus_connection_call(p->system_bus,
                          "com.canonical.Unity.Screen",
-                         "/com.canonical/Unity.Screen",
+                         "/com/canonical/Unity/Screen",
                          "com.canonical.Unity.Screen",
                          "setUserBrightness",
                          g_variant_new("(i)", value),
