@@ -198,7 +198,7 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
 }
 
 /**
- * DBus Chatter: org.ayatana.powerd
+ * DBus Chatter: com.canonical.powerd
  *
  * This is used to get default value, and upper and lower bounds,
  * of the brightness setting
@@ -339,7 +339,7 @@ on_powerd_proxy_ready(GObject      * source_object G_GNUC_UNUSED,
 }
 
 /**
- * DBus Chatter: org.ayatana.Unity.Screen
+ * DBus Chatter: com.canonical.Unity.Screen
  *
  * Used to set the backlight brightness via setUserBrightness
  */
@@ -374,9 +374,9 @@ set_uscreen_user_brightness(IndicatorPowerBrightness * self,
   priv_t * p = get_priv(self);
 
   g_dbus_connection_call(p->system_bus,
-                         "org.ayatana.Unity.Screen",
-                         "/org.ayatana.Unity/Screen",
-                         "org.ayatana.Unity.Screen",
+                         "com.canonical.Unity.Screen",
+                         "/com.canonical/Unity.Screen",
+                         "com.canonical.Unity.Screen",
                          "setUserBrightness",
                          g_variant_new("(i)", value),
                          NULL, /* no return args */
@@ -463,8 +463,8 @@ indicator_power_brightness_init(IndicatorPowerBrightness * self)
 
   dbus_powerd_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
                                  G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
-                                 "org.ayatana.powerd",
-                                 "/org.ayatana.powerd",
+                                 "com.canonical.powerd",
+                                 "/com/canonical/powerd",
                                  p->cancellable,
                                  on_powerd_proxy_ready,
                                  self);
