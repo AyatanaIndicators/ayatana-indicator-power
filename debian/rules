@@ -17,8 +17,6 @@ override_dh_install:
 	find debian/ayatana-indicator-power -name \*.la -delete
 	find debian/ayatana-indicator-power -name \*.a -delete
 	dh_install --fail-missing
-	mkdir -p debian/ayatana-indicator-power/usr/share/apport/package-hooks/
-	cp debian/source_ayatana-indicator-power.py debian/ayatana-indicator-power/usr/share/apport/package-hooks/
 
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..
