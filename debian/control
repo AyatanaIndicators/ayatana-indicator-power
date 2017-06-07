@@ -33,6 +33,6 @@ Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system
             mate-indicator-applet | xfce4-indicator-plugin,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
-Description: Ayatana Indicator showing power state.
+Description: Ayatana Indicator showing power state
  This indicator displays current power management information and gives 
  the user a way to access power management preferences.
