@@ -1,26 +1,88 @@
-Format: http://dep.debian.net/deps/dep5
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: ayatana-indicator-power
+Upstream-Contact: Ayatana Indicator Power
 Source: https://github.com/ArcticaProject/ayatana-indicator-power
 
-Files: *
-Copyright: 2011, Canonical Ltd.
-           2015, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+Files: CMakeLists.txt
+ ChangeLog
+ MERGE-REVIEW
+ NEWS
+ cmake/GCov.cmake
+ cmake/GdbusCodegen.cmake
+ cmake/Translations.cmake
+ cmake/UseGSettings.cmake
+ data/CMakeLists.txt
+ data/ayatana-indicator-power.conf.in
+ data/ayatana-indicator-power.desktop.in
+ data/ayatana-indicator-power.override
+ data/ayatana-indicator-power.service.in
+ data/org.ayatana.indicator.power
+ data/org.ayatana.indicator.power.Battery.xml
+ data/org.ayatana.indicator.power.Testing.xml
+ data/org.ayatana.indicator.power.gschema.xml.in
+ debian/changelog
+ debian/compat
+ debian/control
+ debian/patches/README
+ debian/rules
+ debian/source/format
+ debian/upstream/signing-key.asc
+ debian/watch
+ po/CMakeLists.txt
+ po/Makevars
+ po/POTFILES.in
+ src/CMakeLists.txt
+ src/org.ayatana.powerd.xml
+ tests/CMakeLists.txt
+ tests/Makefile.am.strings
+ tests/manual
+Copyright: 2011-2016, Canonical Ltd.
 License: GPL-3
- This program is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License version 3, as published 
- by the Free Software Foundation.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranties of
- MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
- PURPOSE.  See the GNU General Public License for more details.
- .
- On Debian systems, the complete text of the GNU General
- Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
+Comment:
+ Assuming same license and copyright holdership as found in the
+ project files containing a license header.
+
+Files: src/brightness.c
+ src/brightness.h
+ src/dbus-shared.h
+ src/device-provider-mock.c
+ src/device-provider-mock.h
+ src/device-provider-upower.c
+ src/device-provider-upower.h
+ src/device-provider.c
+ src/device-provider.h
+ src/main.c
+ src/notifier.c
+ src/notifier.h
+ src/service.c
+ src/service.h
+ src/testing.c
+ src/testing.h
+ tests/glib-fixture.h
+ tests/test-dbus-listener.cc
+ tests/test-device.cc
+ tests/test-notify.cc
+Copyright: 2011, Canonical Ltd.
+  2012, Canonical Ltd.
+  2012-2016, Canonical Ltd.
+  2013, Canonical Ltd.
+  2014, Canonical Ltd.
+License: GPL-3
+
+Files: src/device.c
+ src/device.h
+Copyright: 2012, Canonical Ltd.
+License: GPL-3
+
+Files: tests/test-service.cc
+Copyright: 2013, Canonical Ltd.
+License: GPL-3
 
 Files: debian/*
 Copyright: 2011 Ken VanDine <ken.vandine@canonical.com>
-           2015, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+           2015-2017, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+License: GPL-2+
+
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -37,3 +99,19 @@ License: GPL-2+
  .
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
+License: GPL-3
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 3 of the License.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
