@@ -1,0 +1,3928 @@
+2017-06-07 16:27:17 +0200 Mike Gabriel (f712ca5)
+
+	* release 2.0.91 (HEAD -> master, release-builds)
+
+2017-06-02 16:09:17 +0200 Mike Gabriel (fb4f8b2)
+
+	* src/brightness.c Fix sed search+replace flaw. (origin/master)
+
+2017-06-02 12:37:42 +0200 Mike Gabriel (ef2ba34)
+
+	* one step back, let's keep this Ubuntu-centric, we need to add a
+          org.gnome.SettingsDaemon-way of doing this...
+
+2017-06-02 11:00:11 +0200 Mike Gabriel (ff21a6c)
+
+	* src/service.s: Fix x-canonical-type of the brightness slider
+          building against ayatana-ido.
+
+2017-05-31 17:07:24 +0200 Mike Gabriel (30c0c43)
+
+	* debian/{control,rules}: Enable all hardening flags.
+
+2017-05-31 17:03:33 +0200 Mike Gabriel (ab351f2)
+
+	* Drop debian/ayatana-indicator-power.maintscript. Not required in
+          this version of the power indicator.
+
+2017-05-31 17:02:52 +0200 Mike Gabriel (b79892f)
+
+	* ayatana-indicator-power: XDG-Autostart in Unity and MATE for now.
+
+2017-05-31 17:01:13 +0200 Mike Gabriel (7354fe6)
+
+	* Partially revert 51a4186. Of course, we need the XDG autostart
+          file. Not the upstart/xdg autostart file, though.
+
+2017-05-31 15:30:24 +0200 Mike Gabriel (8ec5165)
+
+	* src/notifier.c: Fix our own service executable name in
+          notify_init() call.
+
+2017-05-31 15:29:53 +0200 Mike Gabriel (79a5dc9)
+
+	* src/testing.c: Use 'Ayatana Indicator Power Serivce' as service
+          name.
+
+2017-05-31 15:17:52 +0200 Mike Gabriel (585a2f6)
+
+	* debian/control: Drop from R (ayatana-indicator-power):
+          indicator-applet | indicator-renderer. Add to R instead:
+          mate-indicator-applet | xfce4-indicator-plugin.
+
+2017-05-31 15:16:57 +0200 Mike Gabriel (e41dcc8)
+
+	* src/service.c: Prefer mate-power-statistics to
+          gnome-power-statistics if in a MATE session.
+
+2017-05-31 15:09:32 +0200 Mike Gabriel (3f6306b)
+
+	* src/service.c: Know about DESKTOP_SESSION xfce as well (not only
+          about xubuntu).
+
+2017-05-16 14:07:54 +0200 Mike Gabriel (6436d4e)
+
+	* src/CMakeLists.txt: Fix nasty typo.
+
+2017-05-16 11:12:10 +0200 Mike Gabriel (7f6aa3f)
+
+	* Another fix-up for previous commits: keep org.ayatana.indicator
+          namespace for indicator types.
+
+2017-05-16 11:04:46 +0200 Mike Gabriel (394a06b)
+
+	* Fixup previous commit. More x-canonical-* type changes.
+
+2017-05-15 16:45:12 +0200 Mike Gabriel (2a7ebff)
+
+	* One step back... Mimick Canonical's API. Use their namespace for
+          item attributes.
+
+2017-05-15 15:34:24 +0200 Mike Gabriel (b4468d6)
+
+	* debian/control: Fix porting flaw, we need ayatana-indicator-common,
+          not indicator-common.
+
+2017-05-15 15:07:23 +0200 Rodney Dawes (51a4186)
+
+	* Remove old autostart files.
+
+2017-05-15 15:01:23 +0200 Charles Kerr (bd1a508)
+
+	* Make device with power supply has higher sorting priority. (LP:
+          #1100546)
+
+2017-05-15 14:59:42 +0200 Michael Terry (dbfed3a)
+
+	* Work inside a snap by prefixing hard coded paths with . (LP:
+          #1629009)
+
+2017-05-15 14:59:01 +0200 Charles Kerr (3afc69b)
+
+	* Add systemd user session unit file
+
+2017-05-15 14:54:40 +0200 Charles Kerr (f223d5a)
+
+	* Fix bug that chose the wrong header icon if a connected device has
+          a charge but its charging/discharging state is unknown.
+          (LP: #1470080).
+
+2017-05-15 14:50:57 +0200 Charles Kerr (c2b69b8)
+
+	* Fix the fallback power icon so the battery icon doesn't show red
+          above 20% even when the Suru icon theme isn't present.
+          Fixes: LP:#1559731.
+
+2017-05-15 14:42:07 +0200 Mike Gabriel (78ae40e)
+
+	* data/*: Fix namespace separation from project we forked from.
+
+2017-05-14 22:30:07 +0200 Mike Gabriel (04578ca)
+
+	* debian/control: Bump Standards-Version: to 3.9.8. No changes
+          needed.
+
+2015-11-12 10:26:36 +0100 Mike Gabriel (dd439ef)
+
+	* Fix various BUS_PATH names (copy+paste errors in previous commits).
+
+2015-11-12 09:26:48 +0100 Mike Gabriel (9614a2e)
+
+	* Version bump to 2.0.90.
+
+2015-11-12 08:49:00 +0100 Mike Gabriel (0a9cc2a)
+
+	* Drop unnecessary dependency on Ubuntu's url-dispatcher.
+
+2015-11-12 08:40:14 +0100 Mike Gabriel (0f33bc4)
+
+	* Fork from Ubuntu's indicator-power code project.
+
+2015-10-05 18:44:21 +0000 CI Train Bot (511915f)
+
+	* Releasing 12.10.6+15.10.20151005.1-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.10.20151005.1-0ubuntu1,
+          refs/bzr/origin/heads/master)
+
+2015-10-05 18:44:19 +0000 Sebastien Bacher (5d36e8d)
+
+	* under unity8 start system-settings instead unity-control-center
+          Fixes: #1489482 Approved by: Charles Kerr, PS Jenkins bot
+
+2015-08-27 15:18:40 +0100 Sebastien Bacher (b8a77a0)
+
+	* under unity8 start system-settings instead unity-control-center
+
+2015-05-22 17:54:53 +0000 CI Train Bot (ff85d7e)
+
+	* Releasing 12.10.6+15.10.20150522-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.10.20150522-0ubuntu1)
+
+2015-05-22 17:54:50 +0000 Charles Kerr (cb5ebdb)
+
+	* When powerd updates the backlight brightness, update the indicator
+          slider to show the new value. Fixes: #1370791 Approved by:
+          Alejandro J. Cura
+
+2015-05-22 12:20:27 -0500 Charles Kerr (b877001)
+
+	* when powerd adjusts the system brightness, adjust the brightness
+          slider appropriately.
+
+2015-05-20 14:18:08 -0500 Charles Kerr (3c2d328)
+
+	* sync with indicator-power/15.04
+
+2015-05-20 13:42:55 -0500 Charles Kerr (5288b42)
+
+	* remove g_message tracer
+
+2015-05-20 13:38:31 -0500 Charles Kerr (05d6082)
+
+	* fix the get-brightness-params return signature now that it's
+          wrapped in a proxy
+
+2015-05-20 13:35:30 -0500 Charles Kerr (f4c8e26)
+
+	* a little more work on getting the powerd proxy running
+
+2015-05-20 10:34:26 -0500 Charles Kerr (108a1e2)
+
+	* in brightness.c, add a powerd proxy and listen to it for brightness
+          property changes.
+
+2015-05-15 16:40:33 +0000 CI Train Bot (a7c6825)
+
+	* Releasing 12.10.6+15.10.20150515-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.10.20150515-0ubuntu1)
+
+2015-05-15 16:40:29 +0000 Charles Kerr (dcf21a7)
+
+	* Fix timing issue that caused "Adjust brightness automatically"
+          menuitem to sometimes not be shown. Fixes: #1382861
+          Approved by: PS Jenkins bot, Rodney Dawes
+
+2015-05-15 16:39:51 +0000 CI Train Bot (65f5646)
+
+	* Releasing 12.10.6+15.04.20150515-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20150515-0ubuntu1)
+
+2015-05-15 16:39:47 +0000 Charles Kerr (e0a33ec)
+
+	* Fix timing issue that caused "Adjust brightness automatically"
+          menuitem to sometimes not be shown. Fixes: #1382861
+          Approved by: PS Jenkins bot, Rodney Dawes
+
+2015-05-14 16:53:02 -0500 Charles Kerr (373d9f1)
+
+	* better checking on whether or not menus are built.
+
+2015-04-02 20:31:02 +0000 CI Train Bot (05d07c8)
+
+	* Releasing 12.10.6+15.04.20150402-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20150402-0ubuntu1)
+
+2015-04-02 20:30:59 +0000 Marc Deslauriers (a3cf499)
+
+	* Change sort order to prefer items with known time remaining
+          Approved by: Charles Kerr, PS Jenkins bot
+
+2015-04-02 20:30:52 +0000 Ubuntu MATE Developers (e332c6b)
+
+	* This merge proposal adds support for MATE Desktop. Approved by: Ted
+          Gould
+
+2015-03-31 20:24:46 +0000 CI Train Bot (e7a6c33)
+
+	* Releasing 12.10.6+15.04.20150331-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20150331-0ubuntu1)
+
+2015-03-31 20:24:43 +0000 Charles Kerr (c16921a)
+
+	* For the brightness slider, use the same left & right icons as
+          ubunu-system-settings Fixes: #1289465 Approved by:
+          Alejandro J. Cura, PS Jenkins bot
+
+2015-03-31 14:33:48 -0500 Charles Kerr (708527d)
+
+	* oops, forgot to commit this tyop fix before pushing
+
+2015-03-10 15:41:38 -0400 Marc Deslauriers (31f83e8)
+
+	*   * Change sort order to prefer items with known time remaining    
+          (LP: #1315434)
+
+2015-03-02 21:41:27 -0600 Charles Kerr (39439d9)
+
+	* use a GThemedIcon
+
+2015-03-02 20:43:35 -0600 Charles Kerr (e33b4e7)
+
+	* in the brightness slider, use the display-brightness-min and
+          display-brightness-max icons.
+
+2015-02-25 14:49:06 +0000 Ubuntu MATE Developers (5838f6d)
+
+	* Added support for MATE.
+
+2015-02-12 22:45:30 +0000 CI Train Bot (ae9a41c)
+
+	* Releasing 12.10.6+15.04.20150212-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20150212-0ubuntu1)
+
+2015-02-12 22:45:24 +0000 Charles Kerr (8e3fb8c)
+
+	* Use the new power level icons for a more accurate display of the
+          battery level. Fixes: #1388235 Approved by: Ted Gould, PS
+          Jenkins bot
+
+2015-01-30 22:51:50 +0000 CI Train Bot (55104b7)
+
+	* Releasing 12.10.6+15.04.20150130-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20150130-0ubuntu1)
+
+2015-01-30 22:51:41 +0000 Charles Kerr (e759c85)
+
+	* Publish the primary device's state for on the bus. Fixes: #1416096
+          Approved by: Ken VanDine, Ted Gould, PS Jenkins bot
+
+2015-01-30 11:58:57 -0600 Charles Kerr (6057cd8)
+
+	* in the new device-state action state, use the string 'unknown' if
+          no primary device is found.
+
+2015-01-30 11:21:06 -0600 Charles Kerr (32b591d)
+
+	* publish a device state for the benefit of u-s-s
+
+2015-01-30 11:03:41 -0600 Charles Kerr (3850d8b)
+
+	* publish a device state for the benefit of u-s-s
+
+2015-01-12 16:43:58 -0600 Charles Kerr (92b25d8)
+
+	* update manual tests
+
+2015-01-12 16:43:49 -0600 Charles Kerr (a43f1c3)
+
+	* fix fencepost error s.t. 20% actually uses battery-020
+
+2015-01-12 15:47:27 -0600 Charles Kerr (d989c88)
+
+	* round power level to the nearest 10% to take advantage of
+          higher-resolution power level icons
+
+2014-12-09 11:02:51 -0600 Ted Gould (499fb96)
+
+	* Package sync for upower changes
+
+2014-12-03 16:26:05 +0000 CI bot (4f07f00)
+
+	* Releasing 12.10.6+15.04.20141203-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20141203-0ubuntu1)
+
+2014-12-03 16:25:52 +0000 Christopher Lee (29058f3)
+
+	* Fix some minor typos in power testing xml file. Approved by: Ted
+          Gould, PS Jenkins bot
+
+2014-12-03 16:25:40 +0000 Charles Kerr (8a59942)
+
+	* Show the phone menu in the phone greeter.
+
+2014-12-02 17:14:10 -0600 Charles Kerr (8d522c8)
+
+	* d'oh
+
+2014-12-02 17:03:26 -0600 Charles Kerr (87db72f)
+
+	* use the same menu in both phone and phone_greeter profiles
+
+2014-11-18 15:53:37 +1300 Christopher Lee (42a6c1c)
+
+	* Fix minor typos in power testing xml file.
+
+2014-11-03 20:55:53 +0000 CI bot (d5a8d0a)
+
+	* Releasing 12.10.6+15.04.20141103-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+15.04.20141103-0ubuntu1)
+
+2014-11-03 20:55:42 +0000 Sebastien Bacher (d0ee781)
+
+	* List missing source for translations
+
+2014-10-15 02:46:03 +0000 CI bot (3209f1a)
+
+	* Releasing 12.10.6+14.10.20141015-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20141015-0ubuntu1)
+
+2014-10-15 02:45:50 +0000 Charles Kerr (2496678)
+
+	* Add mock battery support to make QA testing easier. Fixes: 1373511
+          Approved by: Antti Kaijanmäki, PS Jenkins bot, Ted Gould
+
+2014-10-14 20:58:28 -0500 Charles Kerr (ee53f5d)
+
+	* r273 tried to fix the blocking bug listed at
+          http://paste.ubuntu.com/8562226/, but in the process
+          introduced a new bug that manifested in RTM. This removes
+          r273 and uses a different fix.
+
+2014-10-14 14:50:47 -0500 Charles Kerr (5f316dc)
+
+	* in testing.c, make 'bus' a private field instead of a public
+          GObject property
+
+2014-10-14 14:09:32 -0500 Charles Kerr (f599c1b)
+
+	* move the mock battery from GSettings to DBus
+
+2014-10-14 14:09:00 -0500 Charles Kerr (407c63c)
+
+	* fix notify get-capabilities startup blocking bug found in testing
+
+2014-10-14 14:07:50 -0500 Charles Kerr (1e530c2)
+
+	* make service's bus connection a property so that
+          IndicatorPowerTesting can listen for it and export an
+          object before the name is acquired
+
+2014-10-14 14:06:58 -0500 Charles Kerr (c07c186)
+
+	* move the testing settings to a DBus interface
+
+2014-10-14 11:00:13 +0200 Sebastien Bacher (da7995b)
+
+	* List missing source for translations
+
+2014-10-10 16:37:14 -0500 Charles Kerr (f934717)
+
+	* update manual test notes for the mock battery
+
+2014-10-10 16:11:36 -0500 Charles Kerr (7eb00e8)
+
+	* add gsettings for a mock battery to make QA tester's lives easier
+
+2014-10-09 13:42:16 +0000 CI bot (7251f3d)
+
+	* Releasing 12.10.6+14.10.20141009-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20141009-0ubuntu1)
+
+2014-10-09 13:42:03 +0000 Cody Garver (939cea2)
+
+	* Add Switchboard as alternative recommend Fixes: 1291051 Approved
+          by: Ted Gould, PS Jenkins bot
+
+2014-10-09 13:41:50 +0000 Charles Kerr (10101c2)
+
+	* Remove the border around the icon when showing a low battery
+          notification. Fixes: 1378411 Approved by: Antti
+          Kaijanmäki, PS Jenkins bot
+
+2014-10-07 10:58:22 -0500 Charles Kerr (01a0d94)
+
+	* confirmation buttons should be green, so add the 'affirmative-tint'
+          hint for the OK button.
+
+2014-10-07 10:26:05 -0500 Charles Kerr (f82d29b)
+
+	* use a string for unity-notification's boolean types.
+
+2014-10-06 17:31:07 +0000 CI bot (c73b4b9)
+
+	* Releasing 12.10.6+14.10.20141006-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20141006-0ubuntu1)
+
+2014-10-06 17:30:53 +0000 Charles Kerr (969a970)
+
+	* Move the position of this indicator on the panel. Fixes: 1377294
+          Approved by: Ted Gould, PS Jenkins bot
+
+2014-10-06 11:56:02 -0500 Charles Kerr (47082f1)
+
+	* only rearrange the indicator position on the phone
+
+2014-10-06 11:10:10 -0500 Charles Kerr (0b76796)
+
+	* move indicator as per the 'Indicator RTM Usability Fixes' document
+
+2014-09-12 18:49:45 +0000 CI bot (0dc696d)
+
+	* Releasing 12.10.6+14.10.20140912-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140912-0ubuntu1)
+
+2014-09-12 18:49:31 +0000 Charles Kerr (2982ab5)
+
+	* Restore the the brightness slider and have the brightness setting
+          persist between reboots. Fixes: 1289470, 1364453 Approved
+          by: Ted Gould, PS Jenkins bot
+
+2014-09-12 11:37:02 -0500 Charles Kerr (e5abeb9)
+
+	* in brightness.c, set_uscreen_user_brightness() should be a
+          private/static function
+
+2014-09-11 19:15:14 -0500 Charles Kerr (54fd6bf)
+
+	* add an 'auto brightness' checkbox
+
+2014-09-11 15:02:31 -0500 Charles Kerr (d5d3065)
+
+	* fix typo in manual tests
+
+2014-09-11 15:00:48 -0500 Charles Kerr (20889f1)
+
+	* add device-brightness-slider manual test
+
+2014-09-11 14:31:33 -0500 Charles Kerr (9d0cc59)
+
+	* tweak comments for readability
+
+2014-09-11 14:24:31 -0500 Charles Kerr (2e3d004)
+
+	* remove the new code's g_message() tracers or replace with g_debug()
+
+2014-09-11 14:17:03 -0500 Charles Kerr (25cc0e4)
+
+	* run manual tests through test-case-format tidier
+
+2014-09-11 14:15:07 -0500 Charles Kerr (7eb2466)
+
+	* add manual tests
+
+2014-09-11 13:18:14 -0500 Charles Kerr (7ced238)
+
+	* first draft of adding persistence to the brightness slider
+
+2014-09-10 17:08:58 -0500 Charles Kerr (4adcc32)
+
+	* copyediting: rename 'dflt' as 'default_value' for readability
+
+2014-09-10 17:03:40 -0500 Charles Kerr (ae12f25)
+
+	* copyediting: whitespace, comment text
+
+2014-09-10 16:52:30 -0500 Charles Kerr (f5fae61)
+
+	* fix typo; change g_message() calls to g_debug(); use same
+          percentage range as ubuntu-system-settings
+
+2014-09-10 16:28:42 -0500 Charles Kerr (e90e9f7)
+
+	* first draft of non-blocking powerd/uscreen brightness impl
+
+2014-09-09 04:22:52 +0000 CI bot (dd89ffe)
+
+	* Releasing 12.10.6+14.10.20140909-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140909-0ubuntu1)
+
+2014-09-09 04:22:39 +0000 Charles Kerr (c91ba6b)
+
+	* When the phone's battery goes down past a certain level, pop up a
+          snap decision to warn the user. Fixes: 1296431 Approved
+          by: Ted Gould, PS Jenkins bot
+
+2014-09-09 04:22:19 +0000 Charles Kerr (2720a57)
+
+	* Add support for UPower 0.99. Fixes: 1330037 Approved by: Ted Gould,
+          PS Jenkins bot
+
+2014-09-09 04:21:58 +0000 Ted Gould (4b15eb1)
+
+	* Synchronize process management across indicators Approved by:
+          Charles Kerr, PS Jenkins bot
+
+2014-09-08 22:58:48 -0500 Ted Gould (334e3b3)
+
+	* Merge trunk
+
+2014-09-08 16:19:37 -0500 Charles Kerr (ee6e07f)
+
+	* sync with lp-1330037-add-upower-099-support to resolve merge
+          conflicts
+
+2014-09-08 16:14:45 -0500 Charles Kerr (0c312c1)
+
+	* drop our gcc -Weverything fixes in notifier.c so that they don't
+          step on the changes in lp-1296431-low-power-snap-decisions
+
+2014-09-08 15:35:19 -0500 Charles Kerr (24b9a28)
+
+	* in notifier's snap decisions, distinguish in the title between low
+          battery and critical battery
+
+2014-09-08 11:45:00 -0500 Charles Kerr (48b162d)
+
+	* in notifier.c, don't call notify_get_server_caps() if notify_init()
+          failed.
+
+2014-09-08 11:43:56 -0500 Charles Kerr (b06dda0)
+
+	* in notifier.c, reverse the order in which we add the actions so
+          they'll look right on the phone
+
+2014-09-08 11:16:29 -0500 Charles Kerr (b2d6637)
+
+	* fix typo introduced while trying to fix clang -Weverything warnings
+
+2014-09-08 10:39:58 -0500 Charles Kerr (0ab79ac)
+
+	* on phone, add nonexpiring snap-decision popup on low battery
+          events.
+
+2014-09-08 09:50:22 -0500 Charles Kerr (84265a5)
+
+	* more copyediting
+
+2014-09-08 08:34:50 -0500 Charles Kerr (84a32ae)
+
+	* copyediting.
+
+2014-09-08 08:13:43 -0500 Charles Kerr (cede6ed)
+
+	* in device-provider-upower, use glib's G_ADD_PRIVATE() macro
+
+2014-09-07 23:57:04 -0500 Charles Kerr (26e4c85)
+
+	* add upower 0.99 support
+
+2014-09-07 23:56:10 -0500 Charles Kerr (d0fc633)
+
+	* silence warnings generated by clang -Weverything
+
+2014-08-22 16:15:52 +0000 CI bot (059246d)
+
+	* Releasing 12.10.6+14.10.20140822-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140822-0ubuntu1)
+
+2014-08-22 16:15:36 +0000 Charles Kerr (575a5a1)
+
+	* Choose the icon that's closest to the current battery charge
+          percentage Fixes: 1186181 Approved by: Antti Kaijanmäki,
+          PS Jenkins bot
+
+2014-08-22 09:56:00 -0500 Charles Kerr (9eee0b5)
+
+	* in debian/control, bump standards version from 3.9.2 to 3.9.5 to
+          make lintian happy
+
+2014-08-22 09:55:30 -0500 Charles Kerr (3d4c3f2)
+
+	* sync with trunk.
+
+2014-08-14 14:51:03 +0000 CI bot (c7e1740)
+
+	* Releasing 12.10.6+14.10.20140814-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140814-0ubuntu1)
+
+2014-08-14 14:50:53 +0000 Charles Kerr (7c2aed0)
+
+	* Re-use the same Translations.cmake file across indicators Fixes:
+          1354058 Approved by: Ted Gould, PS Jenkins bot
+
+2014-08-09 18:19:02 -0500 Charles Kerr (e613cb5)
+
+	* sync the shared Translations.cmake file to pick up recent bugfixes.
+
+2014-07-30 10:52:39 +0000 CI bot (42414e0)
+
+	* Releasing 12.10.6+14.10.20140730-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140730-0ubuntu1)
+
+2014-07-30 10:52:30 +0000 Charles Kerr (b4f91b1)
+
+	* Add low-battery notifications. Fixes: 1317858, 1317860 Approved by:
+          PS Jenkins bot, Lars Uebernickel
+
+2014-07-29 10:05:20 -0500 Charles Kerr (a402b61)
+
+	* sync unit tests.
+
+2014-07-29 09:49:19 -0500 Charles Kerr (b04239b)
+
+	* show the icon that most closely matches the battery charge
+          percentage.
+
+2014-07-25 00:34:59 -0500 Charles Kerr (b46ec7d)
+
+	* in notify.c, improve the logic for when to tear down a notification
+
+2014-07-25 00:28:23 -0500 Charles Kerr (265ab08)
+
+	* disable the notification's interactive hint for now
+
+2014-07-25 00:05:04 -0500 Charles Kerr (eaf64b2)
+
+	* fix bug introduced in previous commit
+
+2014-07-24 23:40:28 -0500 Charles Kerr (35a2513)
+
+	* in notify, reverse the numerical order of the now-private
+          PowerLevel enum so that they have the more intuitive
+          behavior of higher integer values meaning a better power
+          level.
+
+2014-07-24 23:31:11 -0500 Charles Kerr (f15482d)
+
+	* on the bus, publish the battery's power_level as strings rather
+          than ints
+
+2014-07-24 23:13:52 -0500 Charles Kerr (079ac51)
+
+	* in notifier.c, remove unnecessary middleman properties and deal
+          with the dbus-battery properties directly.
+
+2014-07-24 22:51:03 -0500 Charles Kerr (e9ba47b)
+
+	* in notifier.c, fix potential callchain loop when closing a
+          notification
+
+2014-07-24 21:25:22 -0500 Charles Kerr (b715352)
+
+	* in notifier, use G_DEFINE_TYPE_WITH_PRIVATE
+
+2014-07-24 16:25:32 -0500 Charles Kerr (f7f949e)
+
+	* d'oh
+
+2014-07-24 15:20:16 -0500 Charles Kerr (34cf2ba)
+
+	* remove redundant '#include glib', '#include gobject' calls
+
+2014-07-24 15:17:32 -0500 Charles Kerr (62a35de)
+
+	* check the return value of g_dbus_interface_skeleton_export()
+          directly instead of indirectly testing to see if the
+          GError it used is nonnull.
+
+2014-07-24 15:15:09 -0500 Charles Kerr (11784e2)
+
+	* don't set to zero fields in a struct that's been calloc()ed
+          already.
+
+2014-07-24 15:14:20 -0500 Charles Kerr (f4e1a83)
+
+	* in notifier.c, don't keep pointers to the bindings around as
+          they're cleaned up automatically when either of the
+          objects is destroyed.
+
+2014-07-24 09:20:35 -0500 Charles Kerr (8b9a801)
+
+	* in tests/glib-fixture.h, sync with the glib-fixture.h from
+          indicator-transfer, it's got less '#if 0' cruft
+
+2014-07-23 16:22:27 -0500 Charles Kerr (d185409)
+
+	* remove instance_count from IndicatorPowerNotifierClass
+
+2014-07-23 16:18:33 -0500 Charles Kerr (aba9e62)
+
+	* copyediting: slightly better comments.
+
+2014-07-23 16:09:00 -0500 Charles Kerr (bf93456)
+
+	* make the notifications click-to-dismiss by adding the 'interactive
+          notification' hint
+
+2014-07-23 16:04:20 -0500 Charles Kerr (a62291b)
+
+	* copyediting
+
+2014-07-23 16:04:02 -0500 Charles Kerr (a8ea5a0)
+
+	* remove now-unused code that tests whether the Notify server
+          supports actions
+
+2014-07-22 12:19:20 -0500 Charles Kerr (1f98321)
+
+	* make the notification popup decision logic simpler & easier to read
+
+2014-07-22 12:01:45 -0500 Charles Kerr (dd32234)
+
+	* add manual test case for using the
+          indicator-power-service-cmdline-battery test utility
+
+2014-07-22 11:59:59 -0500 Charles Kerr (79a3d89)
+
+	* Filter out some redundant warnings -- e.g., don't notify when the
+          power percentage drops from 10% to 9%, only when it
+          crosses a PowerLevel threshold
+
+2014-07-22 11:59:03 -0500 Charles Kerr (584aa80)
+
+	* Make the when-does-power-level-change tests work whether or not
+          Ephemeral notifications are being used.
+
+2014-07-22 11:27:07 -0500 Charles Kerr (7ecf18c)
+
+	* for now, only show Ephemeral notifications when the battery gets
+          low.
+
+2014-07-22 09:58:29 -0500 Charles Kerr (399eab2)
+
+	* add indicator-power-service-cmdline-battery, a manual test utility
+          to test the indicator's behavior when a battery's state
+          changes
+
+2014-07-22 09:54:36 -0500 Charles Kerr (dd5f50b)
+
+	* when a device changes, update the header action state even if the
+          menus haven't been created yet. This fixes a startup
+          condition found by the tests.
+
+2014-07-22 09:53:53 -0500 Charles Kerr (9c3d863)
+
+	* copyediting: code cleanup
+
+2014-07-21 18:12:11 -0500 Charles Kerr (f5db19d)
+
+	* in debian/control, add python3-dbusmock to Build-Deps for tests
+
+2014-07-21 18:04:55 -0500 Charles Kerr (34925a7)
+
+	* in debian/control, add libdbustest1-dev to Build-Deps for tests
+
+2014-07-21 17:27:49 -0500 Charles Kerr (51f39c8)
+
+	* in notifier.c, use g_clear_object to unref the GBindings
+
+2014-07-21 17:13:15 -0500 Charles Kerr (1bd1b70)
+
+	* add tests for events that change whether or not a 'low battery'
+          notification is being shown
+
+2014-07-21 16:08:29 -0500 Charles Kerr (2cb851b)
+
+	* add tests to confirm that the DBus object's PowerLevel property
+          changes at the right times (and only at the right times)
+          when the battery is draining
+
+2014-07-21 14:15:28 -0500 Charles Kerr (8c4b964)
+
+	* copyediting
+
+2014-07-21 13:48:18 -0500 Charles Kerr (f5bf7f9)
+
+	* don't show clickable actions if the Notify server doesn't support
+          them.
+
+2014-07-21 12:32:49 -0500 Charles Kerr (125f6f6)
+
+	* copy the dbus-test-runner/dbusmock scaffolding for freedesktop
+          Notifications from the indicator-datetime tests
+
+2014-07-21 12:21:54 -0500 Charles Kerr (d5b4275)
+
+	* add dbus-test-runner as a build dependency for tests
+
+2014-07-21 12:10:41 -0500 Charles Kerr (7b3b8a2)
+
+	* fix build issues
+
+2014-07-21 12:03:44 -0500 Charles Kerr (bc32a96)
+
+	* sync with lp:indicator-power
+
+2014-07-21 11:25:16 -0500 Charles Kerr (1902911)
+
+	* remove DeviceProvider from Notifier
+
+2014-07-21 00:50:24 -0500 Charles Kerr (b08f9b0)
+
+	* second draft of low battery power notifications, still a work in
+          progress
+
+2014-07-18 21:33:31 +0000 CI bot (967a547)
+
+	* Releasing 12.10.6+14.10.20140718-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140718-0ubuntu1)
+
+2014-07-18 21:33:19 +0000 Charles Kerr (512426b)
+
+	* Switch from automake/autoconf to CMake. Approved by: Ted Gould, PS
+          Jenkins bot
+
+2014-07-17 14:46:23 -0500 Charles Kerr (9f1ebe8)
+
+	* replace 'std::vector<unsigned>' with 'std::vector<unsigned int>'
+          for readability
+
+2014-07-16 19:25:12 -0500 Charles Kerr (e187f6f)
+
+	* none of the current tests require dbustest-1, so remove it from
+          pkg_check_modules
+
+2014-07-16 18:59:29 -0500 Charles Kerr (082a47c)
+
+	* add dh-translations to Build-Depends
+
+2014-07-16 18:29:24 -0500 Charles Kerr (1f2f165)
+
+	* add po/CMakeLists.txt
+
+2014-07-16 18:28:24 -0500 Charles Kerr (69081d4)
+
+	* in debian/rules, remove autotool-specific bits
+
+2014-07-16 01:08:54 -0500 Charles Kerr (6ea2db5)
+
+	* add first draft of low battery notifications
+
+2014-07-16 01:07:29 -0500 Charles Kerr (74b8522)
+
+	* in debian/control and CMake files, add libnotify
+
+2014-07-16 01:06:59 -0500 Charles Kerr (066f1fb)
+
+	* in device.h, add #include <gio/gio.h> to pick up needed GIcon
+          declaration
+
+2014-07-13 23:43:41 -0500 Charles Kerr (35a8b17)
+
+	* replace autoconf/automake with cmake
+
+2014-07-13 23:33:16 -0500 Charles Kerr (3f29c1a)
+
+	* fix some compiler warnings generated by clang static analyzer
+
+2014-06-24 09:45:57 +0000 CI bot (2d06cbb)
+
+	* Releasing 12.10.6+14.10.20140624-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140624-0ubuntu1)
+
+2014-06-24 09:45:47 +0000 Iain Lane (724900e)
+
+	* Drop powerd and u-s-c to suggests, since the code handles them not
+          being present and we don't need them on desktop (and they
+          are in universe).
+
+2014-06-24 09:45:34 +0000 Alberto Aguirre (049c09d)
+
+	* Changes to address setBrightness interface moving from powerd to
+          unity-system-compositor
+
+2014-06-24 09:39:13 +0100 Iain Lane (b6da254)
+
+	* Change powerd/u-s-c dependency to a suggests
+
+2014-06-20 14:56:37 -0500 Alberto Aguirre (0e5ceb9)
+
+	* Specify required unity-system-compositor version
+
+2014-06-19 15:55:54 -0500 Alberto Aguirre (89f187f)
+
+	* Add 1.11 as  allowed version for lcov
+
+2014-06-19 10:32:17 -0500 Alberto Aguirre (ed6ad9d)
+
+	* Add powerd and unity-system-compositor to Depends
+
+2014-06-19 10:23:42 -0500 Alberto Aguirre (cd9a40f)
+
+	* Remove powerd reference in message
+
+2014-06-19 10:04:01 -0500 Alberto Aguirre (9e9a0da)
+
+	* Remove references to powerd since the brightness interface is now
+          provided by Unity.Screen
+
+2014-06-16 22:58:17 -0500 Alberto Aguirre (2769c7f)
+
+	* Changes to address setBrightness interface moving from powerd to
+          unity-system-compositor
+
+2014-06-11 17:21:30 +0000 CI bot (3982a33)
+
+	* Releasing 12.10.6+14.10.20140611-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140611-0ubuntu1)
+
+2014-06-11 17:21:20 +0000 Charles Kerr (defec1d)
+
+	* Prefer the 'battery-XXX-charging' (eg, 'battery-020-charging')
+          icons over the 'battery-low-charging' ones because the
+          former are more precise and likely closer to the actual
+          battery level. Fixes: 1186181
+
+2014-06-11 17:21:08 +0000 Iain Lane (34ba55d)
+
+	* Remove the brightness slider from the phone menu. Fixes: 1289470
+
+2014-06-05 10:15:32 -0500 Ted Gould (cc51d0f)
+
+	* Adding lcov 1.11
+
+2014-05-05 10:21:42 -0500 Charles Kerr (8c874cb)
+
+	* prefer the 'battery-020-charging' icon to the
+          'battery-low-charging' one because the former is more
+          precise so its icon is more likely to be close to the
+          actual actual battery level.
+
+2014-04-28 23:25:54 +0000 CI bot (34cda47)
+
+	* Releasing 12.10.6+14.10.20140428-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.10.20140428-0ubuntu1)
+
+2014-04-28 23:25:45 +0000 Ricardo Salveti de Araujo (7aaf31b)
+
+	* Updating code to reflect latest powerd dbus API changes
+
+2014-04-28 16:15:18 -0700 Ricardo Salveti de Araujo (bab79c8)
+
+	* updating code to reflect latest powerd dbus API changes
+
+2014-04-15 14:43:09 +0100 Iain Lane (fb4c324)
+
+	* Don't build the tests when cross compiling, they fail to build
+
+2014-04-15 14:16:44 +0100 Iain Lane (db02577)
+
+	* Build-Depend on python:any, for cross building.
+
+2014-04-15 14:08:08 +0100 Iain Lane (b36744e)
+
+	* Don't add the brightness entry to the phone profile; it's been
+          removed by design
+
+2014-04-11 14:01:37 +0000 CI bot (58ed2f8)
+
+	* Releasing 12.10.6+14.04.20140411-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140411-0ubuntu1)
+
+2014-04-11 14:01:27 +0000 Sebastien Bacher (d12706e)
+
+	* export an ubiquity profile, reusing the desktop_greeter object
+          Fixes: 1306604
+
+2014-04-11 15:47:39 +0200 Sebastien Bacher (a76095e)
+
+	* export an ubiquity profile, reusing the desktop_greeter object
+
+2014-04-09 04:28:37 -0500 Cody Garver (27fa892)
+
+	* Uppercase Pantheon
+
+2014-04-09 03:28:01 -0500 Cody Garver (96b4124)
+
+	* Use XDG_CURRENT_DESKTOP instead
+
+2014-04-09 01:42:05 -0500 Cody Garver (3a9c255)
+
+	* Correct packaging
+
+2014-03-28 16:10:45 +0000 CI bot (ca89fdd)
+
+	* Releasing 12.10.6+14.04.20140328-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140328-0ubuntu1)
+
+2014-03-28 16:10:35 +0000 Lars Uebernickel (fc86e4d)
+
+	* Use com.canonical.indicator.basic menu item for device items
+
+2014-03-28 16:10:23 +0000 Charles Kerr (71ef362)
+
+	* If there are two batteries detected, combine their percentages and
+          their time-remainings as per the revised spec. Fixes:
+          880881, 1297466
+
+2014-03-27 13:17:22 +0100 Lars Uebernickel (0b58eeb)
+
+	* Use com.canonical.indicator.basic menu item for device items
+
+2014-03-26 18:50:46 +0000 CI bot (39ab6b3)
+
+	* Releasing 12.10.6+14.04.20140326-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140326-0ubuntu1)
+
+2014-03-26 18:50:37 +0000 Y.C cheng (ebf3030)
+
+	* Set brightness via powerd if it exist (using dbus) Fixes: 1287599
+
+2014-03-26 12:58:56 +0800 Y.C cheng (20aa7e1)
+
+	* remove modificaiton in changelog for CI
+
+2014-03-25 14:48:57 -0500 Charles Kerr (8fcb63c)
+
+	* sync to lp:indicator-power
+
+2014-03-25 14:35:17 -0500 Charles Kerr (9b33101)
+
+	* add translator comments to the new translatable strings.
+
+2014-03-24 15:29:01 -0500 Cody Garver (d08ca44)
+
+	* Add switchboard-plug-power as an alternative recommendation in
+          packaging
+
+2014-03-19 14:35:12 -0500 Charles Kerr (0ea6d3d)
+
+	* add a courtesy message to let observers know that test-device isn't
+          stuck, it's just slow.
+
+2014-03-19 14:15:54 -0500 Charles Kerr (b3ec90e)
+
+	* when choosing a primary device and more than one battery is found,
+          accumulate their percentages and time-remaining properties
+          as per the spec revisions in bug #880881.
+
+2014-03-15 03:30:23 -0500 Cody Garver (4ba6d06)
+
+	* Add support for Switchboard when in Pantheon session to fix bug
+          #1291051
+
+2014-03-14 14:14:07 +0000 CI bot (6b9e3d4)
+
+	* Releasing 12.10.6+14.04.20140314-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140314-0ubuntu1)
+
+2014-03-14 14:13:58 +0000 Charles Kerr (fe4849e)
+
+	* Change the implementation of the title text / title accessible text
+          / menuitem text to follow the spec changes in
+          https://wiki.ubuntu.com/Power?action=diff&rev2=44&rev1=43#Title
+          and update the tests accordingly. Fixes: 1234458
+
+2014-03-13 17:27:29 -0500 Charles Kerr (d615980)
+
+	* add lp:~charlesk/indicator-power/lp-1256872
+
+2014-03-13 10:32:04 -0500 Charles Kerr (b1f0d40)
+
+	* when expecting a NULL string, use EXPECT_EQ(NULL, str)
+
+2014-03-13 10:31:33 -0500 Charles Kerr (bee4794)
+
+	* in the new indicator_power_device_get_*() functions, use
+          g_return_val_if_fail(foo, NULL) rather than
+          g_return_if_fail(foo)
+
+2014-03-13 09:16:54 -0500 Charles Kerr (a49c013)
+
+	* copyediting: add const, fix misaligned whitespace
+
+2014-03-13 09:15:27 -0500 Charles Kerr (3c4a789)
+
+	* remove INDICATOR_IS_POWER_DEVICE(device) tests from private
+          functions
+
+2014-03-13 09:05:34 -0500 Charles Kerr (9936e22)
+
+	* in the new indicator_power_device_get_*() functions, use
+          heap-allocated strings rather than relying on
+          g_snprintf().
+
+2014-03-11 18:33:10 +0000 CI bot (2596b05)
+
+	* Releasing 12.10.6+14.04.20140311-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140311-0ubuntu1)
+
+2014-03-11 18:33:00 +0000 Lars Uebernickel (c67067b)
+
+	* Add desktop_lockscreen profile
+
+2014-03-11 14:27:17 +0100 Lars Uebernickel (12cf8a5)
+
+	* Add desktop_lockscreen profile
+
+2014-03-06 11:51:54 +0000 CI bot (24f2ab3)
+
+	* Releasing 12.10.6+14.04.20140306-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140306-0ubuntu1)
+
+2014-03-06 11:51:46 +0000 Simon Steinbeiß (0e381b4)
+
+	* Add xfce4-powermanager as alternative recommend
+
+2014-03-06 11:27:12 +0800 Y.C cheng (a67018f)
+
+	* refine and use default value as initial brightness value
+
+2014-03-05 17:16:36 +0800 Y.C cheng (a046fce)
+
+	* add GCancellable and cancel it before free
+
+2014-03-05 16:09:10 +0800 Y.C cheng (237ba71)
+
+	* brightness parameters as necessary condition to use powerd
+
+2014-03-05 13:32:26 +0800 Y.C cheng (6a577e1)
+
+	* clean up / wrong code fix
+
+2014-03-04 23:09:42 -0600 Charles Kerr (065169e)
+
+	* slightly better comments
+
+2014-03-04 22:57:52 -0600 Charles Kerr (0f47066)
+
+	* update the header / menuitem text / accessible text to reflect the
+          changes in
+          https://wiki.ubuntu.com/Power?action=diff&rev2=44&rev1=43#Title
+
+2014-03-03 17:18:05 +0800 Y.C cheng (18fd0fa)
+
+	* set brightness via powerd if it exist (using dbus)
+
+2014-02-26 10:39:18 -0600 Ted Gould (e8635c2)
+
+	* Update for gnome-fallback
+
+2014-02-20 10:01:34 -0600 Ted Gould (d7f93a7)
+
+	* Make sure to go into that subdirectory
+
+2014-02-20 08:59:27 -0600 Ted Gould (6f4bbf0)
+
+	* Add the Upstart override
+
+2014-02-20 08:57:02 -0600 Ted Gould (87f8929)
+
+	* Make it only show in Unity
+
+2014-02-20 08:56:38 -0600 Ted Gould (bf09f85)
+
+	* Make the Upstart job match
+
+2014-02-18 20:20:57 +0100 Simon Steinbeiß (8c0a214)
+
+	* Add xfce4-powermanager as alternative recommend
+
+2014-02-07 16:32:36 +0000 CI bot (8c96b02)
+
+	* Releasing 12.10.6+14.04.20140207-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6+14.04.20140207-0ubuntu1)
+
+2014-02-07 16:32:26 +0000 CI bot (aea3f06)
+
+	* Adding acceptance tests and merge review policies
+
+2014-01-31 20:44:40 +0000 Ted Gould (e447a75)
+
+	* Adding acceptance tests and merge review policies.
+
+2014-01-31 14:27:02 -0600 Ted Gould (5efc941)
+
+	* Adding merge review policy
+
+2014-01-31 14:27:02 -0600 Ted Gould (dfa6753)
+
+	* Adding basic acceptance tests
+
+2014-01-27 17:34:20 +0000 Automatic PS uploader (02cef6a)
+
+	* Releasing 12.10.6+14.04.20140127-0ubuntu1 (revision 224 from
+          lp:indicator-power).
+
+2014-01-27 13:17:49 +0000 Automatic PS uploader (831ba77)
+
+	* Releasing 12.10.6+14.04.20140127-0ubuntu1, based on r224
+
+2014-01-27 05:58:04 +0000 Ricardo Salveti de Araujo (a98a7c1)
+
+	* device.c: pending_charge means not charging.
+
+2014-01-24 23:35:28 -0200 Ricardo Salveti de Araujo (90bce0b)
+
+	* device.c: pending_charge means not charging
+
+2014-01-24 14:34:39 +0000 Automatic PS uploader (2d54e43)
+
+	* Releasing 12.10.6+14.04.20140124-0ubuntu1 (revision 222 from
+          lp:indicator-power).
+
+2014-01-24 10:59:49 +0000 Automatic PS uploader (898e6b8)
+
+	* Releasing 12.10.6+14.04.20140124-0ubuntu1, based on r222
+
+2014-01-22 11:30:25 +0000 Lars Uebernickel (eab4835)
+
+	* Run xfce-powermanager-settings when in an Xubuntu session.
+
+2014-01-22 11:54:01 +0100 Lars Uebernickel (e10669b)
+
+	* service.c: cache the control center command
+
+2014-01-22 11:46:36 +0100 Lars Uebernickel (12febda)
+
+	* service.c: execute unity-control-center on desktops other than
+          unity as well
+
+2014-01-22 11:43:00 +0100 Lars Uebernickel (2f5e7c9)
+
+	* service.c: remove free() on uninitialized pointer
+
+2014-01-21 18:40:02 +0100 Simon Steinbeiß (fd8313f)
+
+	* Add support for opening xfce4-powermanager-settings when in a
+          Xubuntu-session
+
+2014-01-21 16:42:22 +0000 Robert Ancell (10c22e3)
+
+	* Use unity-control-center if it is available. Fixes:
+          https://bugs.launchpad.net/bugs/1257505.
+
+2014-01-14 17:40:27 +1300 Robert Ancell (b118fa5)
+
+	* Recommend unity-control-center before gnome-control-center
+
+2014-01-10 15:02:31 +1300 Robert Ancell (1bd93b0)
+
+	* Use unity-control-center if it is available
+
+2013-12-05 17:51:35 +0000 Calum Lind (a253b42)
+
+	* From bug 1255655: "focus[es] the correct tab upon opening
+          gnome-power-statistics when clicking the indicator
+          battery.". Fixes: https://bugs.launchpad.net/bugs/1255655.
+
+2013-12-04 12:44:25 +0000 Calum Lind (5a957ff)
+
+	* merge from trunk
+
+2013-12-04 11:59:21 +0000 Calum Lind (84d26b8)
+
+	* Focus to battery tab when opening in gnome-power-statistics
+
+2013-12-03 18:47:22 +0000 Lars Uebernickel (b2c58f6)
+
+	* gcov.m4: add 1.10 to the lcov version list.
+
+2013-12-03 15:00:14 +0100 Lars Uebernickel (c596b45)
+
+	* gcov.m4: add 1.10 to the lcov version list
+
+2013-11-29 22:03:27 +0000 Automatic PS uploader (3ff43b0)
+
+	* Releasing 12.10.6+14.04.20131129-0ubuntu1 (revision 217 from
+          lp:indicator-power).
+
+2013-11-29 18:36:27 +0000 Automatic PS uploader (f7a1777)
+
+	* Releasing 12.10.6+14.04.20131129-0ubuntu1, based on r217
+
+2013-11-29 16:18:03 +0000 Lars Uebernickel (1d5aed9)
+
+	* Use GSettingsActions instead of g_settings_bind
+
+2013-11-29 16:37:22 +0100 Lars Uebernickel (87f6a0f)
+
+	* Don't keep GSettingsActions around
+
+2013-11-28 14:20:08 +0100 Lars Uebernickel (e9b6509)
+
+	* Use GSettingsActions instead of g_settings_bind
+
+2013-11-27 19:44:55 +0000 Calum Lind (5468416)
+
+	* Focus to battery tab when opening in gnome-power-statistics
+
+2013-11-25 15:36:31 +0000 Automatic PS uploader (d531422)
+
+	* Releasing 12.10.6+14.04.20131125-0ubuntu1 (revision 215 from
+          lp:indicator-power).
+
+2013-11-25 03:55:08 +0000 Automatic PS uploader (25e3ff0)
+
+	* Releasing 12.10.6+14.04.20131125-0ubuntu1, based on r215
+
+2013-11-08 19:33:03 +0000 Charles Kerr (c608bd8)
+
+	* fix a minor memory leak that was caused by treating the variant
+          returned by g_icon_serialize() as floating.
+
+2013-11-08 11:23:15 -0600 Charles Kerr (32c637b)
+
+	* fix a minor memory leak that was caused by treating the variant
+          returned by g_icon_serialize() as floating.
+
+2013-11-04 15:01:58 +0000 Charles Kerr (bde1f5d)
+
+	* We really only need to keep a handful of properties up-to-date for
+          each upower device. Given that upower requires us to
+          refetch all properties with GetAll whenever it signals
+          that it's changed, we really don't need to keep bus
+          proxies alive for each device.
+
+2013-11-03 17:59:28 -0600 Charles Kerr (7dd7640)
+
+	* in on_bus_ready(), use g_error_matches().
+
+2013-11-03 17:57:10 -0600 Charles Kerr (65fa65f)
+
+	* in on_device_properties_ready(), improve the g_warning() text to be
+          more useful.
+
+2013-11-03 17:47:10 -0600 Charles Kerr (adfd4c6)
+
+	* in on_device_properties_ready(), use g_error_matches
+
+2013-10-31 17:59:48 +0000 Ted Gould (7066fed)
+
+	* Switching DBus service to an Upstart Job. Fixes:
+          https://bugs.launchpad.net/bugs/1185565.
+
+2013-10-30 17:46:44 +0000 Nick Dedekind (1ca27d4)
+
+	* Removed Label from brightness slider. Fixes:
+          https://bugs.launchpad.net/bugs/1240756.
+
+2013-10-30 09:51:05 -0700 Nick Dedekind (cd42d9e)
+
+	* Use NULL for empty string
+
+2013-10-29 11:23:29 -0700 Nick Dedekind (833e7fc)
+
+	* Removed brigtness label from indicator menu
+
+2013-10-29 09:29:22 -0700 Ted Gould (4913289)
+
+	* Add in the autostart config
+
+2013-10-29 09:25:02 -0700 Ted Gould (fb13441)
+
+	* Updating to trunk
+
+2013-10-29 12:04:22 +0000 Automatic PS uploader (1a9e81a)
+
+	* Releasing 12.10.6+14.04.20131029.1-0ubuntu1 (revision 210 from
+          lp:indicator-power).
+
+2013-10-29 10:31:05 +0000 Automatic PS uploader (52f40f1)
+
+	* Releasing 12.10.6+14.04.20131029.1-0ubuntu1, based on r210
+
+2013-10-28 18:13:21 +0000 Ted Gould (7f7e1ab)
+
+	* Adding a phone_greeter profile.
+
+2013-10-28 10:24:11 -0700 Ted Gould (30747fc)
+
+	* Adding a phone_greeter profile
+
+2013-10-24 22:01:02 +0000 Sebastien Bacher (f4cbf51)
+
+	* Don't leak the g_file_get_contents value, reported by valgrind .
+
+2013-10-24 16:13:57 -0400 Sebastien Bacher (e1e4997)
+
+	* Don't leak the g_file_get_contents value, reported by valgrind
+
+2013-10-15 00:34:24 +0000 Marcus Tomlinson (6c9f30f)
+
+	* Added torch icons to either end of brightness slider. Fixes:
+          https://bugs.launchpad.net/bugs/1227250.
+
+2013-10-10 16:24:18 +0200 Marcus Tomlinson (f192ac0)
+
+	* Added "torch-on" and "torch-off" icons to brightness slider menu
+          item.
+
+2013-10-08 07:48:39 +0000 Automatic PS uploader (b3d3cbe)
+
+	* Releasing 12.10.6+13.10.20131008-0ubuntu1 (revision 206 from
+          lp:indicator-power).
+
+2013-10-08 02:34:02 +0000 Automatic PS uploader (2d02157)
+
+	* Releasing 12.10.6+13.10.20131008-0ubuntu1, based on r206
+
+2013-10-04 15:03:53 +0000 Ted Gould (150e04c)
+
+	* Adding an additional slash to the settings URL. Fixes:
+          https://bugs.launchpad.net/bugs/1231444.
+
+2013-10-04 09:36:34 -0500 Ted Gould (5cc73ec)
+
+	* Adding an additional slash to the settings URL
+
+2013-10-04 10:18:52 +0000 Automatic PS uploader (b872bf2)
+
+	* Releasing 12.10.6+13.10.20131004-0ubuntu1 (revision 204 from
+          lp:indicator-power).
+
+2013-10-04 02:28:43 +0000 Automatic PS uploader (cca3975)
+
+	* Releasing 12.10.6+13.10.20131004-0ubuntu1, based on r204
+
+2013-10-03 15:42:50 -0500 Charles Kerr (7c2a156)
+
+	* don't create proxies for each upower device.
+
+2013-10-02 14:10:58 +0000 Charles Kerr (29eb8c2)
+
+	* Listen for the "Resuming" signal from upower to refresh devices
+          when resuming from suspend/hibernate. Fixes:
+          https://bugs.launchpad.net/bugs/1224931.
+
+2013-10-01 13:50:48 -0500 Charles Kerr (76c6292)
+
+	* Listen for the 'Resuming' signal from upower. When it's received,
+          refresh all our devices.
+
+2013-10-01 13:50:10 -0500 Charles Kerr (5a739fd)
+
+	* replace a g_print() call with g_debug()
+
+2013-10-01 17:04:52 +0000 Charles Kerr (a16d123)
+
+	* Revert bug #824629 code --  use the correct charge % when deciding
+          what icon to use. Fixes:
+          https://bugs.launchpad.net/bugs/1215520.
+
+2013-10-01 09:05:32 -0500 Charles Kerr (3fe1d26)
+
+	* use the correct battery icon when charging/discharging
+
+2013-09-18 14:33:48 +0000 Automatic PS uploader (6c04d1a)
+
+	* Releasing 12.10.6+13.10.20130918.2-0ubuntu1 (revision 201 from
+          lp:indicator-power).
+
+2013-09-18 13:57:00 +0000 Automatic PS uploader (9b17a6b)
+
+	* Releasing 12.10.6+13.10.20130918.2-0ubuntu1, based on r201
+
+2013-09-18 15:51:46 +0200 Łukasz 'sil2100' Zemczak (97e7e6d)
+
+	* Add the FFe bug number to the last changelog entry (LP: #1215980)
+
+2013-09-18 12:54:08 +0300 Timo Jyrinki (7b46f6c)
+
+	* Manual changelog entry to indicate why the reverting of the revert
+          is ok now.
+
+2013-09-17 13:07:57 +0000 Ted Gould (0344077)
+
+	* Use URL dispatcher to show settings on the phone.
+
+2013-09-15 20:51:58 -0500 Ted Gould (bb9e728)
+
+	* Don't do the revert
+
+2013-09-15 20:51:11 -0500 Ted Gould (22f3ee8)
+
+	* Update to trunk before revert
+
+2013-09-14 03:22:27 +0000 Stéphane Graber (5fbb8ed)
+
+	* Revert previous upload.
+
+2013-09-13 22:43:47 -0400 Stéphane Graber (8d05805)
+
+	* Revert the previous upload as it caused 10 extra packages to be
+          installed on all Ubuntu desktop machines and as a result
+          caused a FeatureFreeze violation.
+
+2013-09-13 19:40:21 +0000 Automatic PS uploader (830e6a6)
+
+	* Releasing 12.10.6+13.10.20130913-0ubuntu1 (revision 196 from
+          lp:indicator-power).
+
+2013-09-13 15:15:32 +0000 Automatic PS uploader (a14a925)
+
+	* Releasing 12.10.6+13.10.20130913-0ubuntu1, based on r196
+
+2013-09-11 18:48:18 +0000 Charles Kerr (f853cb2)
+
+	* Adds a title in the header's action state. Fixes:
+          https://bugs.launchpad.net/bugs/1223635.
+
+2013-09-11 11:40:40 -0500 Charles Kerr (4ca541c)
+
+	* use g_variant_new_take_string() where appropriate
+
+2013-09-11 11:39:45 -0500 Charles Kerr (ce4067c)
+
+	* add a title entry to the header action's state
+
+2013-09-09 14:28:07 +0000 Ted Gould (5507ff9)
+
+	* Use URL Dispatcher for settings on the phone.
+
+2013-09-04 10:32:43 -0500 Ted Gould (5ec4944)
+
+	* Adding a phone settings action
+
+2013-09-04 10:32:28 -0500 Ted Gould (627005e)
+
+	* Grabbing the URL dispatcher build
+
+2013-09-04 10:32:09 -0500 Ted Gould (a3bfe6c)
+
+	* Adding a build dep on URL dispatcher
+
+2013-08-30 12:51:19 +0000 Automatic PS uploader (f4ae2d0)
+
+	* Releasing 12.10.6+13.10.20130830.2-0ubuntu1 (revision 193 from
+          lp:indicator-power).
+
+2013-08-30 10:07:39 +0000 Automatic PS uploader (81d519f)
+
+	* Releasing 12.10.6+13.10.20130830.2-0ubuntu1, based on r193
+
+2013-08-30 09:48:33 +0000 Sebastien Bacher (eae8289)
+
+	* revert previous commit, liburl-dispatcher1 depends on
+          upstart-app-launch which is in universe, that's blocking
+          indicators from landing.
+
+2013-08-30 11:22:59 +0200 Sebastien Bacher (7b1c7e8)
+
+	* revert previous commit, liburl-dispatcher1 depends on
+          upstart-app-launch which is in universe, that's blocking
+          indicators from landing.
+
+2013-08-30 04:00:49 +0000 Ted Gould (4179a81)
+
+	* Make settings work on the phone.
+
+2013-08-29 21:56:50 +0000 Sebastien Bacher (cb21c21)
+
+	* don't depends on gnome-control-center, recommends is enough, since
+          it's only required for the preferences menu item. Let
+          ubuntu-system-settings replace it as an alternative,
+          that's needed on the touch image.
+
+2013-08-29 16:42:17 -0500 Ted Gould (0becc25)
+
+	* Merging seb128's branch
+
+2013-08-29 16:27:16 -0500 Ted Gould (2dc4a6e)
+
+	* Add a new action for phone settings and call the dispatcher
+
+2013-08-29 16:26:41 -0500 Ted Gould (0f4852e)
+
+	* Adding build items on url dispatcher
+
+2013-08-29 16:26:13 -0500 Ted Gould (4b27302)
+
+	* Fix dependendencies to include url-dispatcher and allow
+          system-settings
+
+2013-08-29 22:46:34 +0200 Sebastien Bacher (ae2fc2d)
+
+	* don't depends on gnome-control-center, recommends is enough, since
+          it's only required for the preferences menu item. Let
+          ubuntu-system-settings replace it as an alternative,
+          that's needed on the touch image.
+
+2013-08-27 15:12:36 -0500 Ted Gould (812ac9a)
+
+	* Dropping debugging for system-wide support
+
+2013-08-27 11:46:32 -0500 Ted Gould (667bae7)
+
+	* Switching the dvus service to an upstart job
+
+2013-08-23 19:07:00 +0000 Automatic PS uploader (7c271b3)
+
+	* Releasing 12.10.6+13.10.20130823-0ubuntu1 (revision 189 from
+          lp:indicator-power).
+
+2013-08-23 18:07:29 +0000 Automatic PS uploader (dfebb76)
+
+	* Releasing 12.10.6+13.10.20130823-0ubuntu1, based on r189
+
+2013-08-23 17:56:56 +0000 Charles Kerr (2e46eb4)
+
+	* Don't show the time remaining for a discharging battery if it
+          exceeds 24 hours because it's probably an erroneous time
+          estimate. Fixes: https://bugs.launchpad.net/bugs/1216030.
+
+2013-08-23 12:10:26 -0500 Charles Kerr (90f4785)
+
+	* update the tests to look at the 24 hour threshold
+
+2013-08-23 12:07:06 -0500 Charles Kerr (b1f32d5)
+
+	* as per the changes in
+          https://wiki.ubuntu.com/Power?action=diff&rev2=39&rev1=38,
+          hide the discharge time remaining if it's > 24 hours
+
+2013-08-23 14:45:19 +0000 Charles Kerr (e079d4b)
+
+	* Updates the power indicator to match the spec changes at
+          <https://wiki.ubuntu.com/Power?action=diff&rev2=37&rev1=36>.
+
+2013-08-23 08:57:47 -0500 Charles Kerr (ad28ae2)
+
+	* copyediting: some newly-dead code should have been removed instead
+          of just commented out
+
+2013-08-23 08:57:22 -0500 Charles Kerr (b84432b)
+
+	* copyediting: more descriptive comments when building
+          label/header/a11y text
+
+2013-08-22 23:58:00 -0500 Charles Kerr (cfda45b)
+
+	* copyediting: remove trailing spaces in source code
+
+2013-08-22 23:52:27 -0500 Charles Kerr (65b6f06)
+
+	* don't use deprecated GSimpleActionGroup APIs
+
+2013-08-22 23:51:20 -0500 Charles Kerr (c15ff1e)
+
+	* add show-percentage feature, basing off Haw Loeung's patch.
+
+2013-08-22 18:36:37 -0500 Charles Kerr (3c2e7c8)
+
+	* add schema changes from hloeung's branch
+
+2013-08-21 08:34:13 +0000 Automatic PS uploader (f22849a)
+
+	* Releasing 12.10.6+13.10.20130821-0ubuntu1 (revision 186 from
+          lp:indicator-power).
+
+2013-08-21 06:06:50 +0000 Automatic PS uploader (bc7c071)
+
+	* Releasing 12.10.6+13.10.20130821-0ubuntu1, based on r186
+
+2013-08-20 15:00:46 +0000 Charles Kerr (cf9f238)
+
+	* Add a brightness slider to indicator-power's phone menu.
+
+2013-08-19 22:47:23 -0500 Charles Kerr (7121aeb)
+
+	* copyediting: trivial dead code removal
+
+2013-08-19 22:43:15 -0500 Charles Kerr (21871f8)
+
+	* make the brightness slider work correctly in both unity8 and ido
+
+2013-08-19 22:41:09 -0500 Charles Kerr (1b56431)
+
+	* in ib_brightness_control_set_value(), log the strerror when write()
+          fails.
+
+2013-08-19 20:03:01 -0500 Charles Kerr (ffaf526)
+
+	* add ib-brightness-control for phone menu
+
+2013-08-08 02:33:16 +0000 Automatic PS uploader (63e89ea)
+
+	* Releasing 12.10.6+13.10.20130808-0ubuntu1 (revision 184 from
+          lp:indicator-power).
+
+2013-08-08 02:02:11 +0000 Automatic PS uploader (f56cb9f)
+
+	* Releasing 12.10.6+13.10.20130808-0ubuntu1, based on r184
+
+2013-08-07 22:44:07 +0000 Allan LeSage (ad584c1)
+
+	* This restores coverage reporting; we could alternately add the
+          COVERAGE_CFLAGS to SHARED_CFLAGS instead. Fixes:
+          https://bugs.launchpad.net/bugs/1204127.
+
+2013-08-07 15:56:13 -0500 Allan LeSage (5f1524a)
+
+	* Restore coverage flags.
+
+2013-07-25 08:04:56 +0000 Automatic PS uploader (02ddec5)
+
+	* Releasing 12.10.6+13.10.20130725-0ubuntu1 (revision 182 from
+          lp:indicator-power).
+
+2013-07-25 02:03:03 +0000 Automatic PS uploader (e84ea95)
+
+	* Releasing 12.10.6+13.10.20130725-0ubuntu1, based on r182
+
+2013-07-24 15:09:49 +0000 Charles Kerr (e5d2ea5)
+
+	* Set the battery-level action's 'sensitive' flag to false so that it
+          will not be clickable, as per the phone spec.
+
+2013-07-24 08:30:22 -0500 Charles Kerr (9fd02d4)
+
+	* set the phone menu's battery-level action's 'enabled' flag to false
+          so that it won't be clickable, as per the spec.
+
+2013-07-24 09:44:37 +0000 Charles Kerr (6cca65e)
+
+	* Add a phone profile and menu.
+
+2013-07-24 00:10:17 -0500 Charles Kerr (2d6f099)
+
+	* add a profile for the phone's power indicator
+          https://wiki.ubuntu.com/Power#Phone
+
+2013-07-23 11:50:41 -0500 Charles Kerr (6e63cf5)
+
+	* rename create_devices_section as create_desktop_devices_section
+          since we're about to add a sibling
+          create_phone_devices_section
+
+2013-07-08 13:49:40 +0000 Automatic PS uploader (a6db14f)
+
+	* Releasing 12.10.6+13.10.20130708-0ubuntu1 (revision 179 from
+          lp:indicator-power).
+
+2013-07-08 02:01:53 +0000 Automatic PS uploader (2e21a4f)
+
+	* Releasing 12.10.6+13.10.20130708-0ubuntu1, based on r179
+
+2013-07-05 04:14:13 +0000 Lars Uebernickel (cfbd125)
+
+	* Put service into libexecir.
+
+2013-07-05 03:09:14 +0000 Lars Uebernickel (e1166c9)
+
+	* indicator file: rename greeter to desktop_greeter.
+
+2013-07-04 16:14:54 -0400 Lars Uebernickel (2ca78c7)
+
+	* Put service into libexecdir
+
+2013-07-04 14:58:59 -0400 Lars Uebernickel (51182d1)
+
+	* indicator file: greeter -> desktop_greeter
+
+2013-07-03 17:34:35 +0000 Automatic PS uploader (91878b5)
+
+	* Releasing 12.10.6+13.10.20130703.1-0ubuntu1 to ubuntu.
+
+2013-07-03 14:16:58 +0000 Automatic PS uploader (e825a65)
+
+	* Releasing 12.10.6+13.10.20130703.1-0ubuntu1, based on r176
+
+2013-07-02 16:44:24 +0000 Charles Kerr (b227201)
+
+	* add a Position entry in the .indicator file. Fixes:
+          https://bugs.launchpad.net/bugs/1196650.
+
+2013-07-02 11:07:02 -0500 Charles Kerr (15ee6e1)
+
+	* in the .indicator file, add a Position entry
+
+2013-07-02 13:16:12 +0000 Charles Kerr (0f046a6)
+
+	* make the greeter menu key consistent with indicator-session.
+
+2013-07-02 09:35:50 +0000 Automatic PS uploader (61fb99c)
+
+	* Releasing 12.10.6+13.10.20130702-0ubuntu1 to ubuntu.
+
+2013-07-02 02:02:36 +0000 Automatic PS uploader (ce51165)
+
+	* Releasing 12.10.6+13.10.20130702-0ubuntu1, based on r173
+
+2013-07-01 15:52:27 -0500 Charles Kerr (ce05101)
+
+	* in service.c's menu_names array, use 'desktop_greeter' as the key
+          instead of 'greeter'
+
+2013-07-01 09:05:13 +0000 Sebastien Bacher (09635bc)
+
+	* backport the changelog from the manual distro upload.
+
+2013-07-01 10:25:59 +0200 Sebastien Bacher (04b32b4)
+
+	* backport the changelog from the manual distro upload
+
+2013-06-29 00:05:32 +0000 Charles Kerr (5fb3644)
+
+	* don't rely on the dbus pkg-config variable to know where to install
+          .service files.
+
+2013-06-28 16:33:39 -0500 Charles Kerr (f6329d6)
+
+	* since we're removing localinstall mode, no need to pass it as an
+          arg here either
+
+2013-06-28 16:15:24 -0500 Charles Kerr (8bfff65)
+
+	* remove 'local install' mode
+
+2013-06-28 16:46:04 +0000 Charles Kerr (9ba857d)
+
+	* similar to the i-datetime change, use the unicode ellipsis
+          directly.
+
+2013-06-28 15:20:17 +0000 Automatic PS uploader (ae08ab6)
+
+	* Releasing 12.10.6+13.10.20130628-0ubuntu1 to ubuntu.
+
+2013-06-28 09:55:00 -0500 Charles Kerr (54b4afe)
+
+	* use … directly in strings instead of the C octal escaped UTF-8.
+
+2013-06-28 02:02:40 +0000 Automatic PS uploader (ada376a)
+
+	* Releasing 12.10.6+13.10.20130628-0ubuntu1, based on r169
+
+2013-06-20 16:12:44 +0000 Łukasz 'sil2100' Zemczak (30b8b27)
+
+	* Add a build-dep on python. This is required as we're using
+          gdbus-codegen from libglib2.0-dev which only 'recommends'
+          python. We don't install recommends, so to get things
+          working, this build-dep is needed.
+
+2013-06-20 17:57:23 +0200 Łukasz 'sil2100' Zemczak (6811e6b)
+
+	* Add a build-dep on python. This is required as we're using
+          gdbus-codegen from libglib2.0-dev which only 'recommends'
+          python. We don't install recommends, so to get things
+          working, this build-dep is needed
+
+2013-06-19 21:13:09 +0000 Charles Kerr (0ce78de)
+
+	* Convert the power indicator into a service that exports GMenus and
+          GActions in accordance with our indicator-ng design.
+
+2013-06-19 14:47:23 -0500 Charles Kerr (258f3ad)
+
+	* adjust device-provider-upower's timer to reduce how many times we
+          pull the device's properties over the bus.
+
+2013-06-19 10:10:50 -0500 Charles Kerr (8f74477)
+
+	* remove the '--replace' command line argument; process management
+          will be handled by Upstart
+
+2013-06-19 10:01:19 -0500 Charles Kerr (e2431a9)
+
+	* in indicator_power_device_provider_get_devices, confirm that the
+          get_devices function pointer isn't NULL before we call it.
+
+2013-06-19 09:52:36 -0500 Charles Kerr (0ec4365)
+
+	* in provider-upower.c, clear its private hashtable in dispose() and
+          destroy it in finalize()
+
+2013-06-19 09:43:11 -0500 Charles Kerr (dec4af4)
+
+	* lower the interval on the upower timer to make our updates more
+          responsive
+
+2013-06-19 07:29:43 -0500 Charles Kerr (eeb91e4)
+
+	* in configure.ac, add AM_PROG_AR to silence an autotools warning
+          caused by the temporary static libraries created in src/
+
+2013-06-19 01:29:37 -0500 Charles Kerr (34161b3)
+
+	* fix build issue in indicator_power_device_provider_get_devices(),
+          reported by CI...
+
+2013-06-19 00:45:50 -0500 Charles Kerr (9cb5ad0)
+
+	* put the service on the production busname
+
+2013-06-19 00:29:55 -0500 Charles Kerr (f566ca0)
+
+	* add a dbus service file for indicator-power...
+
+2013-06-19 00:00:33 -0500 Charles Kerr (1b56362)
+
+	* bump NEWS for 'make dist'
+
+2013-06-18 21:28:30 -0500 Charles Kerr (eeb37d1)
+
+	* install the .indicator file into share/unity/indicators/
+
+2013-06-18 21:15:59 -0500 Charles Kerr (34cffae)
+
+	* remove the short-term TODO
+
+2013-06-18 20:59:56 -0500 Charles Kerr (8e052ae)
+
+	* remove INDICATORDIR and INDICATORICONSDIR from configure.ac
+
+2013-06-17 18:01:51 -0500 Charles Kerr (bef4229)
+
+	* get test-devices building and passing again.
+
+2013-06-17 18:01:26 -0500 Charles Kerr (b3a23dc)
+
+	* update POTFILES.in to reflect the new files in src/
+
+2013-06-17 18:01:04 -0500 Charles Kerr (9990582)
+
+	* remove the gtest-xorg dependency, we're no longer using gui
+          elements in the tests
+
+2013-06-17 12:00:41 -0500 Charles Kerr (aa625b0)
+
+	* tighten the -Wextra screws a little tighter
+
+2013-06-17 11:53:41 -0500 Charles Kerr (72d74f4)
+
+	* in device-provider-upower's dispose(), disconnect from our proxy's
+          signal before we unref the proxy
+
+2013-06-17 08:30:39 -0500 Charles Kerr (a4d5e56)
+
+	* copyediting: group common functions together, fix line wrap, better
+          commenting
+
+2013-06-16 23:33:30 -0500 Charles Kerr (37051c1)
+
+	* add a short-term TODO file
+
+2013-06-16 23:32:58 -0500 Charles Kerr (545b341)
+
+	* first steps at fixing the tests that broke during GMenuification
+
+2013-06-16 23:32:29 -0500 Charles Kerr (1ad51b4)
+
+	* update indicator-power build rules to reflect the changes in source
+          code and in dependencies
+
+2013-06-16 23:31:41 -0500 Charles Kerr (b8f5e07)
+
+	* update build rules: remove now-unneeded build dependencies for
+          libindicator, gtk, gnome-settings-daemon-dev,
+          libupower-glib, libdbus-1-dev
+
+2013-06-16 23:18:11 -0500 Charles Kerr (1d8adeb)
+
+	* add power.indicator
+
+2013-06-16 23:16:19 -0500 Charles Kerr (f5c93cd)
+
+	* explicitly use gio; remove unused glib-upower.h calls
+
+2013-06-16 23:10:06 -0500 Charles Kerr (cbbf63c)
+
+	* add a main() wrapper to create a service and pass a
+          device-provider-upower to it
+
+2013-06-16 23:09:29 -0500 Charles Kerr (997a109)
+
+	* remove the old IndicatorObject code
+
+2013-06-16 23:09:09 -0500 Charles Kerr (ee13ae6)
+
+	* add the heart of the service
+
+2013-06-16 23:08:21 -0500 Charles Kerr (da79f94)
+
+	* add device-provider-upower, a UPower implementation of
+          device-provider
+
+2013-06-16 23:07:59 -0500 Charles Kerr (ebde9c5)
+
+	* add device-provider, an interface class for an object that provides
+          IndicatorPowerDevices. This could be given a UPower
+          implementation, or a mock implementation, or a
+          whatever-replaces-upower-on-phones implementation.
+
+2013-06-16 23:05:40 -0500 Charles Kerr (f3deb18)
+
+	* remove the org.gnome.SettingsDaemon listener; we'll use UPower
+          directly
+
+2013-06-16 23:03:23 -0500 Charles Kerr (d67d887)
+
+	* add UPower xml files for gdbus-codegen
+
+2013-03-07 15:59:13 +0000 Automatic PS uploader (0b05855)
+
+	* Releasing 12.10.6daily13.03.07-0ubuntu1 to ubuntu.
+
+2013-03-07 02:01:57 +0000 Automatic PS uploader (bdb55d2)
+
+	* Releasing 12.10.6daily13.03.07-0ubuntu1, based on r166
+
+2013-03-06 15:18:42 +0000 Mathieu Trudel-Lapierre (17c0ead)
+
+	* Do the linking with -lpthread correctly. Fixes:
+          https://bugs.launchpad.net/bugs/1126362.
+
+2013-03-05 10:17:39 -0500 Mathieu Trudel-Lapierre (6922c6a)
+
+	* Make use of XORG_GTEST_LDFLAGS that xorg-gtest can export to know
+          whether there are extra libraries we should link against.
+
+2013-01-25 12:26:58 +0000 Automatic PS uploader (f9e5ac4)
+
+	* Releasing 12.10.6daily13.01.25-0ubuntu1 to ubuntu.
+
+2013-01-25 02:01:11 +0000 Automatic PS uploader (0589b7d)
+
+	* Releasing 12.10.6daily13.01.25-0ubuntu1, based on r164
+
+2013-01-23 15:33:51 +0000 Mathieu Trudel-Lapierre (4b2a473)
+
+	* Fix path to gtest source.
+
+2013-01-22 15:00:25 -0500 Mathieu Trudel-Lapierre (72ba52e)
+
+	* Fix path to gtest sources.
+
+2013-01-18 23:13:06 +0000 Automatic PS uploader (e9e5df9)
+
+	* Releasing 12.10.6daily13.01.18-0ubuntu1 to ubuntu.
+
+2013-01-18 02:01:19 +0000 Automatic PS uploader (838849d)
+
+	* Releasing 12.10.6daily13.01.18-0ubuntu1, based on r162
+
+2013-01-17 18:15:56 -0500 Mathieu Trudel-Lapierre (040e7a8)
+
+	* releasing version 12.10.6daily13.01.17-0ubuntu1
+          (refs/bzr/origin/tags/12.10.6daily13.01.17-0ubuntu1)
+
+2013-01-17 23:01:37 +0000 Charles Kerr (a399017)
+
+	* g_type_init() is deprecated as of glib 2.35.4, so bump our glib
+          minimum requirement and remove the g_type_init() call.
+
+2013-01-17 15:07:08 -0600 Charles Kerr (5535cc5)
+
+	* remove g_type_init() calls and bump glib minimum to 2.35.4, where
+          g_type_init() is deprecated
+
+2013-01-17 02:01:39 +0000 Automatic PS uploader (35cadc9)
+
+	* Releasing 12.10.6daily13.01.17-0ubuntu1, based on r160
+
+2013-01-15 13:00:46 +0000 Phillip Susi (06c8a32)
+
+	* This is Phillip Susi's patch from
+          lp:~psusi/ubuntu/raring/indicator-power/show-ups, proposed
+          here for trunk. Fixes:
+          https://bugs.launchpad.net/bugs/1007095.
+
+2013-01-14 10:21:01 -0600 Phillip Susi (181b366)
+
+	* merge lp:~psusi/ubuntu/raring/indicator-power/show-ups
+
+2012-11-21 12:44:39 +0100 Didier Roche (7281308)
+
+	* Releasing 12.10.6daily12.11.21.1-0ubuntu1 to ubuntu
+
+2012-11-21 10:41:37 +0000 unknown (e05edf4)
+
+	* Releasing 12.10.6daily12.11.21.1-0ubuntu1, based on r158
+
+2012-11-16 20:40:54 +0000 Charles Kerr (9d92445)
+
+	* explicitly cast integral values to the correct type when passing
+          them to a varargs function. Fixes:
+          https://bugs.launchpad.net/bugs/1079795.
+
+2012-11-16 11:58:24 -0600 Charles Kerr (1d3272d)
+
+	* explicitly cast integral values to the correct type when passing
+          them to a varargs function.
+
+2012-11-16 13:42:49 +0000 Didier Roche (a911ab8)
+
+	* Report missing changes in indicator-power trunk from trunk.12.10.
+
+2012-11-16 14:20:55 +0100 Didier Roche (cc47ec0)
+
+	* remove the duplicated case
+
+2012-11-16 13:21:47 +0100 Didier Roche (c9912e1)
+
+	* report accidently revert fixes when inline packaging was merged in
+
+2012-11-16 09:41:27 +0000 Didier Roche (378d1e1)
+
+	* add bootstrap message.
+
+2012-11-16 10:18:04 +0100 Didier Roche (bedc8ea)
+
+	* add bootstrap message
+
+2012-11-15 20:15:51 +0000 Ken VanDine (81f2ecd)
+
+	* Import debian/.
+
+2012-11-15 12:20:50 -0500 Mathieu Trudel-Lapierre (721e3c4)
+
+	* make sure we call dh_install --fail-missing in the dh_install
+          override, to be consistent with other indicator packages.
+
+2012-11-15 12:14:24 -0500 Mathieu Trudel-Lapierre (d82a5a9)
+
+	* Add libgtest-dev to Build-Depends for unit tests.
+
+2012-11-15 12:05:00 -0500 Mathieu Trudel-Lapierre (43db0f0)
+
+	* Add libxorg-gtest-dev to Build-Depends for unit tests.
+
+2012-11-15 11:56:16 -0500 Mathieu Trudel-Lapierre (78fa11f)
+
+	* Add autopoint to Build-Depends.
+
+2012-11-14 16:58:54 -0500 Mathieu Trudel-Lapierre (8989d86)
+
+	* debian/rules: it's dh_autoreconf, not dh-autoreconf.
+
+2012-11-14 16:51:39 -0500 Mathieu Trudel-Lapierre (11b06f3)
+
+	* use DPKG_GENSYMBOLS_CHECK_LEVEL=4.
+
+2012-11-14 16:46:50 -0500 Mathieu Trudel-Lapierre (b4f0934)
+
+	* * debian/rules:   - use the dh sequencer with --with autoreconf.  
+          - override dh_autoreconf to call autogen.sh from upstream.
+
+2012-11-14 16:45:27 -0500 Mathieu Trudel-Lapierre (db6421c)
+
+	* Update Vcs-Bzr and Vcs-Browser fields, add notice to uploaders.
+
+2012-11-14 16:40:39 -0500 Mathieu Trudel-Lapierre (c3848e4)
+
+	*   - Reorganize Build-Depends for clarity; build system b-deps
+          first.   - Use trailing commas for dep lists, as per other
+          indicator packages.
+
+2012-11-14 16:39:04 -0500 Mathieu Trudel-Lapierre (d8f0f89)
+
+	* debian/compat: bump to compat level 9.
+
+2012-11-14 16:38:42 -0500 Mathieu Trudel-Lapierre (d18b6c2)
+
+	* * debian/control:   - Bump Build-Depends on debhelper to (>= 9).
+
+2012-11-14 13:55:48 -0500 Mathieu Trudel-Lapierre (baa58fe)
+
+	* Specify to bzr-builddeb that the package should be built using
+          split mode.
+
+2012-11-14 13:55:13 -0500 Mathieu Trudel-Lapierre (9287192)
+
+	* Open new changelog entry.
+
+2012-11-14 13:54:41 -0500 Mathieu Trudel-Lapierre (aae9eaa)
+
+	* Import debian/ from lp:~ubuntu-desktop/indicator-power/ubuntu.
+
+2012-11-14 11:14:13 +0100 Sebastien Bacher (78e1bc5)
+
+	* releasing version 12.10.5-0ubuntu1
+
+2012-11-14 11:09:49 +0100 Sebastien Bacher (7ef9fc9)
+
+	* * New upstream release:   - Fix a device display bug introduced in
+          12.10.3 (LP: #1075192)
+
+2012-11-14 11:08:13 +0100 Sebastien Bacher (fb0e7bd)
+
+	* Import upstream version 12.10.5
+
+2012-11-13 14:50:29 -0600 Charles Kerr (17629a4)
+
+	* bump NEWS
+
+2012-11-13 14:44:16 -0600 Charles Kerr (7c335dd)
+
+	* 12.10.5 (refs/bzr/origin/tags/12.10.5)
+
+2012-11-13 14:40:47 -0600 Charles Kerr (f6075f0)
+
+	* backport the 'AC Adapter shown in panel' bugfix from trunk/13.04
+
+2012-11-08 11:35:21 -0600 Charles Kerr (727b8ca)
+
+	* add 'check-news' to AM_INIT_AUTOMAKE
+
+2012-11-07 17:56:07 +0000 Charles Kerr (7b7b36e)
+
+	* Handle choosing a primary device when no device is charging nor
+          discharging. Fixes:
+          https://bugs.launchpad.net/bugs/1075192.
+
+2012-11-07 11:29:51 -0600 Charles Kerr (f446e2f)
+
+	* change indicator_power_device_get_time_details() s.t. the 'short
+          details' for an AC Adapter is an empty string.
+
+2012-11-07 11:25:41 -0600 Charles Kerr (a499914)
+
+	* modify DeviceTest.Labels s.t. it fails (currently failing) if the
+          'short' string for an AC Adapter is nonempty.
+
+2012-11-06 14:56:52 -0600 Charles Kerr (a2e4245)
+
+	* when choosing a primary device from devices that are neither
+          charging nor discharging, prefer batteries, then
+          everything except line-power, then line power
+
+2012-11-06 14:54:57 -0600 Charles Kerr (7b37016)
+
+	* in TestDevice.ChoosePrimary, add another test (currently failing)
+          to confirm that when indicator-datetime is choosing from
+          devices that are neither charging nor discharging,
+          batteries are more interesting than other devices, and
+          other devices are more interesting than
+          UP_DEVICE_KIND_LINE_POWER
+
+2012-11-06 13:59:36 -0600 Charles Kerr (75636fb)
+
+	* when choosing between two devices, always pick the one that's not a
+          UP_DEVICE_KIND_LINE_POWER
+
+2012-11-06 13:42:53 -0600 Charles Kerr (e555496)
+
+	* add unit test (currently failing) to test for the bug reported in
+          LP bug #1075192
+
+2012-11-05 18:03:10 +0100 Sebastien Bacher (74bed2a)
+
+	* releasing version 12.10.4-0ubuntu1
+
+2012-11-05 12:41:24 +0100 Sebastien Bacher (0c14d7b)
+
+	* * New upstream release.   - Show the proper icon for mice and ups
+          devices. (LP: #1066208)
+
+2012-11-05 12:38:14 +0100 Sebastien Bacher (a3b85f4)
+
+	* Import upstream version 12.10.4
+
+2012-11-04 11:48:11 -0600 Charles Kerr (014fbc2)
+
+	* 12.10.4 (refs/bzr/origin/tags/12.10.4)
+
+2012-11-04 11:46:50 -0600 Charles Kerr (2fa0264)
+
+	* fix logic error in primary device selection; add unit tests to
+          confirm the fix. (lp:~charlesk/indicator-power/lp-1071757)
+
+2012-10-29 11:17:19 +0000 Charles Kerr (1e5b83d)
+
+	* Fix the logic error. Add tests to confirm the fix. Fixes:
+          https://bugs.launchpad.net/bugs/1071757.
+
+2012-10-29 11:59:09 +0100 Charles Kerr (7d558ff)
+
+	* copyediting: fix comment text
+
+2012-10-28 08:40:44 +0100 Charles Kerr (a76e474)
+
+	* in TestDevice, make the log variable names a little more consistent
+
+2012-10-28 01:54:45 +0200 Charles Kerr (8867ec9)
+
+	* set DeviceTest's gwarning/gcritical log func to one that prints no
+          messages but accumulates the log count. This way we can
+          both (a) silence in-console warnings that look like bugs
+          in the test but are actually desirable warnings generated
+          by fuzz testing, and (b) assert that we get exactly as
+          many warnings/criticals as we expect to get.
+
+2012-10-28 01:48:30 +0200 Charles Kerr (7c0d274)
+
+	* expand DeviceTest.ChoosePrimary to test choosing from a wider
+          variety of device states.
+
+2012-10-26 18:04:43 +0200 Charles Kerr (0189c72)
+
+	* fix logic error when deciding which primary device to select.
+
+2012-10-26 18:03:46 +0200 Charles Kerr (cd8e633)
+
+	* add test (currently failing) to detect the logic error reported in
+          bug #1071757
+
+2012-10-26 15:20:16 +0200 Charles Kerr (681e4e9)
+
+	* 12.10.3 (refs/bzr/origin/tags/12.10.3)
+
+2012-10-26 15:14:30 +0200 Charles Kerr (880f44e)
+
+	* choose the correct primary device, and choose the correct icon for
+          it.
+
+2012-10-26 14:48:54 +0200 Charles Kerr (6d19670)
+
+	* choose the correct primary device, and choose the correct icon for
+          it.
+
+2012-10-26 10:53:51 +0200 Charles Kerr (e246512)
+
+	* fix copy-paste comment error
+
+2012-10-26 10:53:32 +0200 Charles Kerr (a842e7b)
+
+	* fix comment typo
+
+2012-10-26 10:02:14 +0200 Charles Kerr (b7b7ffd)
+
+	* Select the primary device based on the spec's criteria. Add tests
+          to confirm.
+
+2012-10-26 09:14:11 +0200 Charles Kerr (a8d3382)
+
+	* silence the known/nonbug gtk and glib warnings
+
+2012-10-26 09:08:59 +0200 Charles Kerr (92b48e8)
+
+	* add unit tests to confirm the device refcounts are correct s.t.
+          IndicatorPower isn't leaking devices
+
+2012-10-26 09:05:25 +0200 Charles Kerr (8659889)
+
+	* fix leaked icon and label; found by running valgrind on
+          tests/test-indicator
+
+2012-10-26 09:00:50 +0200 Charles Kerr (90af0bf)
+
+	* Fix unhandled enum 'unknown device' that was smoked out by the unit
+          tests.
+
+2012-10-25 14:55:48 +0200 Charles Kerr (46f92ba)
+
+	* the device kind string wasn't being used in some icon names.
+
+2012-10-03 21:31:41 +0200 Sebastien Bacher (a42d1cd)
+
+	* releasing version 12.10.2-0ubuntu1
+
+2012-10-03 21:26:45 +0200 Sebastien Bacher (c302843)
+
+	* * New upstream release.   - Show a more accurate view of
+          discharging batteries (LP: #1054146)   - Fix a GIcon
+          memory leak   - In device.c, include gi18n-lib.h instead
+          of gi18n.h
+
+2012-10-03 21:25:19 +0200 Sebastien Bacher (0fa9b26)
+
+	* Import upstream version 12.10.2
+
+2012-10-03 11:51:08 -0500 Charles Kerr (3a0758a)
+
+	* 12.10.2 (refs/bzr/origin/tags/12.10.2)
+
+2012-10-03 11:46:15 -0500 Charles Kerr (af699e1)
+
+	* merge lp:~charlesk/indicator-power/lp-1054146 to give a more
+          accurate view of discharging batteries
+
+2012-10-03 11:30:18 -0500 Charles Kerr (2b046e7)
+
+	* when discharging the battery, prefer the percent-charged icons over
+          the full,good,low icons because the former show a more
+          accurate view of the charge.
+
+2012-09-26 17:00:52 +0200 Lars Uebernickel (b226f3f)
+
+	* Merge lp:~/larsu/indicator-power/plug-get-icon-memory-leak
+
+2012-09-25 09:58:35 +0200 Lars Uebernickel (e4002d5)
+
+	* get_icon: Plug memory leak
+
+2012-09-20 11:04:57 +0200 Didier Roche (938cb5d)
+
+	* releasing version 12.10.1-0ubuntu2
+
+2012-09-20 11:04:39 +0200 Didier Roche (002ce20)
+
+	* * Cherry-pick:   - Ensure the power indicator string translations
+          are loaded. Thanks lars
+
+2012-09-20 10:25:00 +0200 Lars Uebernickel (a94288f)
+
+	* device.c: include gi18n-lib.h instead of gi18n.h
+
+2012-09-05 16:20:25 -0500 Charles Kerr (75e9a60)
+
+	* copyediting: text formatting to make the icon list more readable
+
+2012-08-22 11:29:36 +0200 Sebastien Bacher (d90c644)
+
+	* releasing version 12.10.1-0ubuntu1
+
+2012-08-22 11:29:14 +0200 Sebastien Bacher (1286a19)
+
+	* New upstream release.
+
+2012-08-22 11:28:47 +0200 Sebastien Bacher (c752cbe)
+
+	* Import upstream version 12.10.1
+
+2012-08-21 23:44:51 -0500 Charles Kerr (fb058d4)
+
+	* 12.10.1 (refs/bzr/origin/tags/12.10.1)
+
+2012-08-21 21:05:49 -0500 Charles Kerr (300b1cc)
+
+	* merge lp:~charlesk/indicator-power/lp-1023533 to bump the glib
+          prerequisite
+
+2012-07-13 11:13:37 -0500 Charles Kerr (b2b5176)
+
+	* raise glib minimum to 2.33
+
+2012-07-11 21:46:44 +0200 Sebastien Bacher (79146a3)
+
+	* releasing version 12.10.0-0ubuntu1
+
+2012-07-11 21:46:25 +0200 Sebastien Bacher (2e4ec4a)
+
+	* * New upstream release. * debian/control: updated glib requirement
+
+2012-07-11 21:39:51 +0200 Sebastien Bacher (4af0bd2)
+
+	* Import upstream version 12.10.0
+
+2012-07-11 12:12:35 -0500 Charles Kerr (7bc1a48)
+
+	* bump version to 12.10.0 (refs/bzr/origin/tags/12.10.0)
+
+2012-07-11 12:10:21 -0500 Charles Kerr (6401fdd)
+
+	* merge lp:~charlesk/indicator-power/coverage
+
+2012-07-03 17:20:35 -0500 Charles Kerr (2343edb)
+
+	* disable test-dbus-listener for now
+
+2012-06-07 10:36:13 -0500 Charles Kerr (867f9fe)
+
+	* remove some dead code.
+
+2012-06-07 08:57:15 -0500 Charles Kerr (8b31b76)
+
+	* improve the variant sanity tests in
+          indicator_power_device_new_from_variant()
+
+2012-06-06 16:00:06 -0500 Charles Kerr (9091bba)
+
+	* reimplement indicator_power_device_get_icon_names() since our CA is
+          incompatible with reusing code from GSD.
+
+2012-06-06 15:24:53 -0500 Charles Kerr (137b2e1)
+
+	* remove superfluous #include
+
+2012-06-06 15:22:38 -0500 Charles Kerr (bca7ca9)
+
+	* simplify the Device properties' name strings
+
+2012-06-06 15:21:35 -0500 Charles Kerr (0acce23)
+
+	* For GTK-Doc, reference functions with function_name() instead of
+          #function_name
+
+2012-06-06 15:19:26 -0500 Charles Kerr (73bef48)
+
+	* In indicator_power_device_new_from_variant(), check whether the
+          input variant has the correct type before using it.
+
+2012-06-06 15:06:59 -0500 Charles Kerr (50fb08d)
+
+	* add G_OBJECT_WARN_INVALID_PROPERTY_ID for the 'default' switch case
+          in Device's get/set property methods
+
+2012-06-06 15:04:05 -0500 Charles Kerr (de56d59)
+
+	* IndicatorObjectDevice's finalize() function needs to chain up to
+          the parent class.
+
+2012-06-06 15:02:55 -0500 Charles Kerr (da3c570)
+
+	* in IndicatorPowerDevice's class init function, use
+          g_object_class_install_properties() instead of installing
+          each property separately.
+
+2012-06-06 14:51:22 -0500 Charles Kerr (42caee4)
+
+	* remove prototype for indicator_power_dbus_listener_new() since it's
+          not needed/used
+
+2012-06-06 14:50:39 -0500 Charles Kerr (65f33de)
+
+	* simplify the devices-enumerated signal's name
+
+2012-06-06 14:47:08 -0500 Charles Kerr (fcd052a)
+
+	* if self->cancellable is non-NULL in dispose(), pass it to
+          g_cancellable_cancel() before clearing the listener's
+          reference
+
+2012-06-06 14:43:11 -0500 Charles Kerr (5cac4eb)
+
+	* remove trailing whitespace
+
+2012-06-06 14:42:23 -0500 Charles Kerr (79d37d6)
+
+	* add g_bus_unwatch_name() to watcher's dispose() method
+
+2012-06-06 14:39:51 -0500 Charles Kerr (f2310de)
+
+	* add a GTK-Doc signal comment block for
+          indictor-power-dbus-listener's enumerated signal
+
+2012-06-06 14:30:34 -0500 Charles Kerr (15d6b25)
+
+	* move the header files from noinst_HEADERS to libpower_la_SOURCES
+
+2012-06-01 14:48:05 -0500 Charles Kerr (66ba8ed)
+
+	* In indicator-power.c's put_primary_device(), remove dead code.
+
+2012-06-01 14:24:17 -0500 Charles Kerr (99a719a)
+
+	* copyediting: fix tab damage in dbus-listener.[ch]
+
+2012-06-01 14:19:27 -0500 Charles Kerr (52d1979)
+
+	* copyediting: fix tab damage in device.[ch]
+
+2012-06-01 13:58:43 -0500 Charles Kerr (b108010)
+
+	* use C++-style comments in test-device.cc
+
+2012-06-01 13:57:03 -0500 Charles Kerr (0b46d08)
+
+	* In indicator_power_device_get_time_details(), add a test for
+          non-devices being passed in.
+
+2012-06-01 13:43:40 -0500 Charles Kerr (5b17593)
+
+	* Fix edge case in indicator_power_device_get_icon_names() that
+          returned a bad value if the caller passed in a NULL
+          pointer as a device. Added regression test.
+
+2012-06-01 13:39:10 -0500 Charles Kerr (4c433bf)
+
+	* In indicator_power_device_get_time_details(), use g_strdup(foo)
+          instead of g_strdup_printf("%s",foo)
+
+2012-06-01 13:38:16 -0500 Charles Kerr (560aa0e)
+
+	* Add coverage test for AC Adapters in
+          indicator_power_device_get_time_details()
+
+2012-06-01 13:37:24 -0500 Charles Kerr (7c3ac19)
+
+	* capitalize the second word in 'AC Adapter'
+
+2012-06-01 13:37:05 -0500 Charles Kerr (9937a07)
+
+	* in indicator_power_device_get_time_details(), don't list 'not
+          present' for AC Adapters that have no % and no time
+          estimate
+
+2012-06-01 13:21:08 -0500 Charles Kerr (ea0293e)
+
+	* Add unit tests for indicator_power_device_get_time_details()
+
+2012-06-01 13:20:02 -0500 Charles Kerr (53d9c7e)
+
+	* In indicator_power_device_get_time_details(), remove an unlikely
+          branch that could result in time/detail strings not being
+          set.
+
+2012-06-01 12:39:15 -0500 Charles Kerr (624a1f3)
+
+	* Add gcda/gcno to CLEANFILES s.t. 'make clean' will cover them
+
+2012-05-31 14:07:14 -0500 Charles Kerr (9a753ec)
+
+	* in indicator_power_device_get_time_details(), limit the scope of
+          variables short_timestring and detailed_timestring
+
+2012-05-31 14:00:12 -0500 Charles Kerr (8476e80)
+
+	* Move private indicator-power function build_device_time_details()
+          to device.c to public function
+          indicator_power_device_get_time_details() so that we can
+          unit test the user-visible strings.
+
+2012-05-31 13:08:27 -0500 Charles Kerr (97867c3)
+
+	* remove IndicatorPowerDevice's now-unused device icon string.
+
+2012-05-31 13:00:31 -0500 Charles Kerr (b18b586)
+
+	* Add indicator_power_device_get_icon_names().
+
+2012-05-31 12:59:24 -0500 Charles Kerr (89c515d)
+
+	* remove some g_message() calls that shouldn't've been committed.
+
+2012-05-29 17:28:15 -0500 Charles Kerr (ab87d8f)
+
+	* add a test to make sure that the listener responds to a
+          PropertiesChanged signal
+
+2012-05-29 14:41:27 -0500 Charles Kerr (5786eca)
+
+	* t^Cak to indicator_set_power_differences()
+
+2012-05-29 13:35:52 -0500 Charles Kerr (1c35339)
+
+	* use g_clear_pointer() where useful
+
+2012-05-29 13:29:32 -0500 Charles Kerr (8a37ae2)
+
+	* add tests for gsd GetDevices returning (a) no devices and (b) an
+          error
+
+2012-05-29 13:28:47 -0500 Charles Kerr (7f08c9a)
+
+	* exclude G_DEFINE_TYPE from coverage testing in dbus-listener.c
+
+2012-05-28 19:37:43 -0500 Charles Kerr (7b8cd09)
+
+	* add more tests to improve coverage: different device types, no
+          primary device
+
+2012-05-28 11:33:07 -0500 Charles Kerr (b9a6194)
+
+	* add a mock GSD.Power to handle the GetPower requests
+
+2012-05-27 09:22:28 -0500 Charles Kerr (23a2672)
+
+	* use signals to decouple i-power and dbus-listener
+
+2012-05-27 08:35:52 -0500 Charles Kerr (675cc79)
+
+	* Add skeleton test for IndicatorPowerDbusListener
+
+2012-05-26 17:49:13 -0500 Charles Kerr (2f1281d)
+
+	* add coverage for charging with >1 minute but <1 hour left
+
+2012-05-26 17:10:48 -0500 Charles Kerr (eda15ff)
+
+	* add coverage for DBusListener get_property()
+
+2012-05-26 16:57:13 -0500 Charles Kerr (194cfbc)
+
+	* try adding LCOV_EXCL_{START,STOP} for unreachable conditions (glib
+          looking for subclasses of IndicatorPowerDevice;
+          unreachables in G_DEFINE_TYPE)
+
+2012-05-26 16:26:02 -0500 Charles Kerr (aeb6ab5)
+
+	* call g_object_run_dispose() in a standalone test to get coverage on
+          the NULL / non-NULL branches of dispose()'s
+          g_clear_pointer() calls
+
+2012-05-26 16:22:51 -0500 Charles Kerr (21656d9)
+
+	* nope, LCOV_EXCL_LINE doesn't work on macros
+
+2012-05-26 16:19:05 -0500 Charles Kerr (83aee49)
+
+	* try adding LCOV_EXCL_LINE for unreachable conditions (glib looking
+          for subclasses of IndicatorPowerDevice; unreachables in
+          G_DEFINE_TYPE)
+
+2012-05-26 16:11:03 -0500 Charles Kerr (5937352)
+
+	* reuse the same cancellable across multiple non-concurrent dbus
+          calls
+
+2012-05-26 15:56:10 -0500 Charles Kerr (b3a1b20)
+
+	* avoid a cyclical refcount dependency between IndicatorPower and its
+          DBusListener
+
+2012-05-26 15:42:58 -0500 Charles Kerr (29ec6d2)
+
+	* extract-method to simplify testing the accessible text
+
+2012-05-26 15:19:38 -0500 Charles Kerr (9ee74a3)
+
+	* separate the dbus org.gnome.SettingsDaemon.Power logic into a
+          separate class
+
+2012-05-26 14:35:22 -0500 Charles Kerr (e0d1b32)
+
+	* add coverage for various charging/discharging/charged states
+
+2012-05-26 14:16:26 -0500 Charles Kerr (676aef0)
+
+	* first draft of adding tests for a discharging battery
+
+2012-05-25 17:10:52 -0500 Charles Kerr (7ac2b78)
+
+	* make indicator_power_set_devices() safe for passing in the same
+          devices more than once
+
+2012-05-25 16:00:56 -0500 Charles Kerr (73d31da)
+
+	* fix negated logic in menu_add_device() introduced in r160
+
+2012-05-25 15:31:16 -0500 Charles Kerr (ce82684)
+
+	* indicator_power_set_devices() should fail gracefully when no
+          devices are available
+
+2012-05-25 15:02:03 -0500 Charles Kerr (6bbfe3a)
+
+	* make Jenkins happy
+
+2012-05-25 14:58:56 -0500 Charles Kerr (34c756a)
+
+	* modify IndicatorPower to use IndicatorPowerDevices internally
+
+2012-05-25 09:26:06 -0500 Charles Kerr (33f4e3d)
+
+	* put IndicatorPower's fields back inside a priv struct
+
+2012-05-24 19:27:59 -0500 Charles Kerr (4d1bb11)
+
+	* ah, c++ is too smart for the last commit's implicit conversion.
+
+2012-05-24 19:24:11 -0500 Charles Kerr (ebf2eda)
+
+	* test passing bad non-NULL pointers to Device's accessors
+
+2012-05-24 19:06:58 -0500 Charles Kerr (88d4861)
+
+	* add unit tests confirming that the device accessor functions won't
+          crash when you pass NULL for the device
+
+2012-05-24 19:00:51 -0500 Charles Kerr (9e188d4)
+
+	* remove the 'default' clause from get_property() and set_property().
+
+2012-05-24 18:56:15 -0500 Charles Kerr (2643aa2)
+
+	* remove some unnecessary type compatibilty tests...
+          g_object_get_property() does these tests for us
+
+2012-05-24 18:51:51 -0500 Charles Kerr (d2ba05c)
+
+	* remove the tests that attempted to exercise the code removed in
+          r151
+
+2012-05-24 18:48:04 -0500 Charles Kerr (fd7ad85)
+
+	* don't include the unit tests' code in coverage metrics
+
+2012-05-24 18:47:38 -0500 Charles Kerr (f023be5)
+
+	* remove some unnecessary type compatibilty tests...
+          g_object_set_property() does these tests for us
+
+2012-05-24 18:21:34 -0500 Charles Kerr (4c95f0b)
+
+	* add unit tests for getting/setting device properties
+
+2012-05-24 16:50:58 -0500 Charles Kerr (d8484ce)
+
+	* first draft of getting GSettings working in the unit tests before
+          the schema is installed.
+
+2012-05-24 11:50:38 -0500 Charles Kerr (caae424)
+
+	* remove the g_clear_pointer() calls s.t. things will build and run
+          on alesage's Jenkins setup running Precise
+
+2012-05-24 11:32:16 -0500 Charles Kerr (f18b60b)
+
+	* remove the g_clear_pointer() calls s.t. things will build and run
+          on alesage's Jenkins setup running Precise
+
+2012-05-24 10:15:28 -0500 Charles Kerr (4f74252)
+
+	* add test-indicator.cc
+
+2012-05-24 10:00:15 -0500 Charles Kerr (f434dc2)
+
+	* add a 'hello world' test for instantiating IndicatorPower
+
+2012-05-24 09:49:30 -0500 Charles Kerr (622c185)
+
+	* add private container struct IndicatorPowerDevice
+
+2012-05-23 22:11:51 -0500 Charles Kerr (71a3e53)
+
+	* replace 'Power Settings...' with 'Power Settings…'
+
+2012-05-23 10:42:13 -0500 Charles Kerr (122e56d)
+
+	* move libpower's automake rules into src/
+
+2012-04-26 08:42:37 -0500 Charles Kerr (8e7ee28)
+
+	* fix a handful of string and GVariant leaks in indicator-power.
+
+2012-04-15 09:23:24 -0500 Charles Kerr (820cc22)
+
+	* tweak: in put_primary_device(), peek at the variant's strings
+          instead of dup'ing them
+
+2012-04-15 09:20:51 -0500 Charles Kerr (3e92639)
+
+	* sync with lp:indicator-power
+
+2012-04-15 09:17:21 -0500 Charles Kerr (fd5fac8)
+
+	* fix leaked strings in menu_add_device when (kind ==
+          UP_DEVICE_KIND_LINE_POWER)
+
+2012-04-11 14:16:23 -0400 Ken VanDine (bd7a606)
+
+	* releasing version 2.0-0ubuntu1
+
+2012-04-11 13:13:28 -0400 Ken VanDine (387890e)
+
+	* * New upstream release.   * Make menu items accessible with Orca
+          Screen reader (LP: #953176)   * Plug memory leaks when
+          updating our icons
+
+2012-04-11 10:13:01 -0500 Charles Kerr (6e6011e)
+
+	* releasing version 2.0-0ubuntu1~ppa1
+
+2012-04-11 10:12:03 -0500 Charles Kerr (c88bf4d)
+
+	* * New upstream release.   * Make menu items accessible with Orca
+          Screen reader (LP: #953176)   * Plug memory leaks when
+          updating our icons
+
+2012-04-11 10:10:15 -0500 Charles Kerr (109d4fe)
+
+	* Import upstream version 2.0
+
+2012-04-11 10:09:38 -0500 Charles Kerr (9868757)
+
+	* Sync from Ubuntu Desktop
+
+2012-04-11 10:02:18 -0500 Charles Kerr (3242c72)
+
+	* 2.0 (tag: 2.0, refs/bzr/origin/tags/2.0)
+
+2012-04-10 14:54:47 -0500 Charles Kerr (f1c836c)
+
+	* merge lp:~allanlesage/indicator-power/TDD to improve our gcov fules
+          in autotools
+
+2012-04-09 14:32:39 -0500 Charles Kerr (a24e06c)
+
+	* use atk_object_set_name(foo,bar)" instead of
+          g_object_set(foo,"accessible-name",bar,NULL)"
+
+2012-04-09 14:16:07 -0500 Charles Kerr (45bc12d)
+
+	* leak fix 3 of 3: don't leak the GIcons returned by
+          get_device_icon()
+
+2012-04-09 14:14:20 -0500 Charles Kerr (7a5b5a6)
+
+	* leak fix 2 of 3: fix leaky fallback GIcon in get_device_icon()
+
+2012-04-09 14:13:25 -0500 Charles Kerr (6305fe3)
+
+	* leak fix 1 of 3: don't leak object_path and device_icon if kind ==
+          UP_DEVICE_KIND_LINE_POWER
+
+2012-04-09 14:10:51 -0500 Charles Kerr (8e0baaf)
+
+	* if possible, set the device menuitems' accessible names.
+
+2012-03-27 16:22:53 -0500 Allan LeSage (13e52ee)
+
+	* Pedantic name change for gcovr xml results.
+
+2012-03-27 15:34:42 -0500 Allan LeSage (3db9585)
+
+	* Added gcov coverage tooling.
+
+2012-03-21 15:29:32 -0400 Ken VanDine (4e4a839)
+
+	* releasing version 1.93-0ubuntu1
+
+2012-03-21 15:22:09 -0400 Ken VanDine (fddb19e)
+
+	* * New upstream release.   * Fix for translatable strings not being
+          extracted for i18n (LP: #957542)
+
+2012-03-21 12:47:39 -0500 Charles Kerr (abc3faf)
+
+	* releasing version 1.93-0ubuntu1~ppa1
+
+2012-03-21 12:46:42 -0500 Charles Kerr (b8ba3be)
+
+	* * New upstream release.   * Fix for translatable strings not being
+          extracted for i18n (LP: #957542)
+
+2012-03-21 12:45:36 -0500 Charles Kerr (4c91eb5)
+
+	* Import upstream version 1.93
+
+2012-03-21 12:44:43 -0500 Charles Kerr (e9f8e72)
+
+	* Sync from Ubuntu Desktop
+
+2012-03-21 12:34:38 -0500 Charles Kerr (aec0158)
+
+	* 1.93 (tag: 1.93, refs/bzr/origin/tags/1.93)
+
+2012-03-17 14:48:58 -0500 Charles Kerr (22a82f6)
+
+	* Fix memory leaks in get_primary_device().
+
+2012-03-17 14:45:06 -0500 Charles Kerr (a9ab1c3)
+
+	* Fix variant leak in count_batteries() -- the returned value of
+          g_variant_get_child_value() needs to be freed with
+          g_variant_unref() when we're done with it.
+
+2012-03-17 14:42:05 -0500 Charles Kerr (0489149)
+
+	* fix variant leaks in menu_add_devices()
+
+2012-03-17 14:00:20 -0500 Charles Kerr (0ef46e1)
+
+	* merge lp:~kelemeng/indicator-power/bug957542 to fix extracting
+          translatable strings from ipower (Bug #957542)
+
+2012-03-17 00:35:49 +0100 Gabor Kelemen (f1ad17d)
+
+	* Add g_dngettext to the list of known keywords. LP: #957542
+
+2012-03-14 19:44:02 +0100 Sebastien Bacher (82e7ef0)
+
+	* releasing version 1.92-0ubuntu1
+
+2012-03-14 19:43:52 +0100 Sebastien Bacher (6b63458)
+
+	* New upstream release.
+
+2012-03-14 19:43:43 +0100 Sebastien Bacher (fdf4d4c)
+
+	* Import upstream version 1.92
+
+2012-03-14 10:41:52 -0500 Charles Kerr (af5642f)
+
+	* 1.91 (tag: 1.92, refs/bzr/origin/tags/1.92)
+
+2012-02-23 02:47:47 -0500 Ken VanDine (eecdfb2)
+
+	* releasing version 1.91-0ubuntu1
+
+2012-02-23 02:21:00 -0500 Ken VanDine (1d09e63)
+
+	* * New upstream release.   * Fix for the icon not changing when
+          state changes (LP: #933466)   * Fix accessible
+          descriptions (LP: #891932)
+
+2012-02-23 00:35:34 -0600 Ted Gould (9539d05)
+
+	* releasing version 1.91-0ubuntu1~ppa1
+
+2012-02-23 00:34:06 -0600 Ted Gould (b1bc105)
+
+	* * New upstream release.   * Fix for the icon not changing when
+          state changes (LP: #933466)   * Fix accessible
+          descriptions (LP: #891932)
+
+2012-02-23 00:28:30 -0600 Ted Gould (fd038ed)
+
+	* Import upstream version 1.91
+
+2012-02-23 00:28:11 -0600 Ted Gould (f775f62)
+
+	* Merging with U. Desktop
+
+2012-02-23 00:19:11 -0600 Ted Gould (f1c5931)
+
+	* 1.91 (tag: 1.91, refs/bzr/origin/tags/1.91)
+
+2012-02-22 23:07:44 -0600 Ted Gould (500b6ee)
+
+	* Fix accessible descriptions
+
+2012-02-22 17:39:50 -0600 Charles Kerr (5396553)
+
+	* when a new entry is added, ensure that its accessible_string is
+          properly set
+
+2012-02-22 15:44:05 -0600 Charles Kerr (92c0175)
+
+	* fix trivial indentation error
+
+2012-02-22 15:27:56 -0600 Charles Kerr (f688c48)
+
+	* fix trivial misspelling
+
+2012-02-22 15:25:29 -0600 Charles Kerr (947e415)
+
+	* fix set_accessible_desc() to update the entries' accessible_desc
+          fields and emit the accessible-desc-changed signal
+
+2012-02-17 10:46:54 -0500 Ken VanDine (c80b2c6)
+
+	* releasing version 1.90-0ubuntu2
+
+2012-02-17 08:34:26 -0600 Charles Kerr (e1c4456)
+
+	* Listen for the "g-properties-changed" signal instead of the
+          "g-signal" signal from its GDBusProxy to fix bug #933466.
+
+2012-02-16 15:37:03 -0600 Charles Kerr (94398e2)
+
+	* register for g-properties-changed rather than g-signal
+
+2012-02-14 23:42:19 +0100 Sebastien Bacher (4dcb232)
+
+	* releasing version 1.90-0ubuntu1
+
+2012-02-14 16:26:51 -0600 Ted Gould (b33fcf3)
+
+	* releasing version 1.90-0ubuntu1~ppa1
+
+2012-02-14 16:26:21 -0600 Ted Gould (527b493)
+
+	* * New upstream release.   * Support for hiding of icon and settings
+          for it as well   * Adding a name hint
+
+2012-02-14 16:25:10 -0600 Ted Gould (55cbd83)
+
+	* Import upstream version 1.90
+
+2012-02-14 16:11:20 -0600 Ted Gould (1651ec1)
+
+	* 1.90 (tag: 1.90, refs/bzr/origin/tags/1.90)
+
+2012-02-14 16:11:10 -0600 Ted Gould (e9cd101)
+
+	* Fixing distcheck
+
+2012-02-14 16:06:04 -0600 Ted Gould (612662f)
+
+	* Make data have it's own makefile so the GSettings rules work
+          properly on distcheck
+
+2012-02-14 15:57:17 -0600 Ted Gould (ea4f2d8)
+
+	* Style and performance fixes
+
+2012-02-14 13:06:16 +0000 Javier Jardón (207267a)
+
+	* Use G_GNUC_CONST for indicator_power_get_type() to improve
+          performance
+
+2012-02-14 13:05:41 +0000 Javier Jardón (4a60cd5)
+
+	* Code style fixes
+
+2012-02-13 16:41:52 -0600 Charles Kerr (16fb53f)
+
+	* add icon-policy from branch
+          lp:~charlesk/indicator-power/icon-policy
+
+2012-02-13 14:26:23 -0600 Charles Kerr (aee1300)
+
+	* ensure that we don't have a reference to the proxy or proxy_cancel
+          fields in indicator_power_dispose().
+
+2012-02-13 14:20:34 -0600 Charles Kerr (8be6c2d)
+
+	* move POWER_INDICATOR_ICON_POLICY_* enum to the top of the file
+
+2012-02-13 14:18:56 -0600 Charles Kerr (0c1e774)
+
+	* remove unncessary private field 'visible'
+
+2012-02-13 14:15:28 -0600 Charles Kerr (cb4bd9d)
+
+	* consistent use of ICON_POLICY_KEY
+
+2012-02-13 14:14:09 -0600 Charles Kerr (f7d828a)
+
+	* remove unnecessary G_OBJECT() cast
+
+2012-02-13 14:10:22 -0600 Charles Kerr (695ba1e)
+
+	* make prototypes for update_visibility() and should_be_visible()
+          align with the neighboring forward declarations
+
+2012-02-10 15:51:42 -0600 Ted Gould (c8ccec6)
+
+	* Support building coverage targets
+
+2012-02-01 23:00:03 -0600 Charles Kerr (4b5ec3d)
+
+	* add support for icon-policy setting
+
+2012-02-01 22:53:16 -0600 Charles Kerr (f9dc8cc)
+
+	* create the menu at init time s.t. we don't have to keep checking to
+          see if it exists
+
+2012-02-01 22:51:26 -0600 Charles Kerr (33beea0)
+
+	* use g_settings_bind() for the show-time checkbox
+
+2012-02-01 19:33:47 -0600 Charles Kerr (da453ec)
+
+	* better error reporting if g_spawn_command_line_async() fails
+
+2012-02-01 19:28:39 -0600 Charles Kerr (98a2abe)
+
+	* remove redundant #include of glib.h
+
+2012-02-01 19:26:30 -0600 Charles Kerr (aacad61)
+
+	* use g_clear_object() on the proxy_cancel field
+
+2012-02-01 19:24:34 -0600 Charles Kerr (4a6c629)
+
+	* remove unnecessary Priv struct -- the =entire class= is private
+
+2012-02-01 19:05:08 -0600 Charles Kerr (7cc07d1)
+
+	* remove unused struct names
+
+2012-02-01 18:58:48 -0600 Charles Kerr (7c8371d)
+
+	* group the indicator_power lifecycle funcs together
+
+2012-02-01 18:55:19 -0600 Charles Kerr (85a04b4)
+
+	* unref+clear Priv's variant fields in _dispose()
+
+2012-02-01 18:51:17 -0600 Charles Kerr (17626e1)
+
+	* don't leak priv->settings
+
+2012-02-01 18:50:19 -0600 Charles Kerr (c63e1db)
+
+	* don't leak priv->accessible_desc
+
+2012-02-01 18:46:00 -0600 Charles Kerr (aa089d4)
+
+	* remove redundant prototypes
+
+2012-01-25 09:58:45 -0500 Ken VanDine (1566633)
+
+	* releasing version 0.10-0ubuntu2
+
+2012-01-24 22:20:08 -0500 Ken VanDine (ba7c3ca)
+
+	* no change rebuild for libindicator7
+
+2011-12-06 19:04:27 -0600 Allan LeSage (b93d786)
+
+	* Added coverage reporting via gcov config and targets.
+
+2011-11-30 16:03:54 +0000 Marco Trevisan (Treviño) (5e74455)
+
+	* Add name-hint.
+
+2011-11-08 22:38:58 +0100 Marco Trevisan (Treviño) (c4a85b1)
+
+	* Add name-hint.
+
+2011-10-24 12:27:33 -0400 Ken VanDine (36b6a7b)
+
+	* releasing version 0.10-0ubuntu1
+
+2011-10-24 11:07:53 -0400 Ken VanDine (8541fa2)
+
+	* Import upstream version 0.10
+
+2011-10-13 16:15:35 +0100 Javier Jardón (31651dd)
+
+	* 0.10 (tag: 0.10, refs/bzr/origin/tags/0.10)
+
+2011-10-13 15:58:27 +0100 Javier Jardón (15c23be)
+
+	* Do not hardcode icon percentage when discharging
+
+2011-10-13 15:23:49 +0100 Javier Jardón (29f2613)
+
+	* Add support for old name icons
+
+2011-10-13 14:58:14 +0100 Javier Jardón (305a069)
+
+	* Fix icon creation for UP_DEVICE_STATE_CHARGING state
+
+2011-10-04 18:51:45 +0100 Javier Jardón (129c0c9)
+
+	* Only show a red icon when we have less than 30 minutes of battery
+          remainig
+
+2011-10-03 17:31:35 +0100 Javier Jardón (e1abe62)
+
+	* Use battery-with-a-plug when the batttery is fully charged but
+          still on AC
+
+2011-10-03 10:44:23 -0400 Ken VanDine (4518758)
+
+	* releasing version 0.9-0ubuntu2
+
+2011-10-03 15:11:52 +0100 Javier Jardón (2d4b6f0)
+
+	* Show non present batteries in the menu
+
+2011-10-02 18:29:24 +0100 Javier Jardón (f87057a)
+
+	* Add a workaround to fix the case when we get a empty bay as a real
+          battery
+
+2011-09-23 14:13:13 -0400 Ken VanDine (f0c76b8)
+
+	* releasing version 0.9-0ubuntu1
+
+2011-09-23 13:59:55 -0400 Ken VanDine (861bc3a)
+
+	* * po/POTFILES.in   - Fixed gsettings schema filename
+
+2011-09-23 19:25:33 +0200 Ken VanDine (c550405)
+
+	* Fix POTFILES.in to reflect new gsettings schema filename
+
+2011-09-23 13:13:42 -0400 Ken VanDine (7b20f91)
+
+	* fixed filename for gsettings schema
+
+2011-09-23 13:10:03 -0400 Ken VanDine (4596344)
+
+	* * New upstream release.   - Use correct dgettext and g_dngettext
+          calls (LP: #846895)   - Ensure we use the same icon for
+          all charge levels if we are in the     charging status
+          (LP: #824629)   - Fix gap when the power indicator is not
+          show (LP: #842188)   - Do not show (charged) in menu title
+          when fully charged (LP: #850011)   - Do not activate
+          g-s-d, but just watch dbus for g-s-d to     appear (LP:
+          #854717)
+
+2011-09-23 13:03:11 -0400 Ken VanDine (56dd8ea)
+
+	* Import upstream version 0.9
+
+2011-09-23 17:35:01 +0200 Javier Jardón (a93ea52)
+
+	* 0.9 (tag: 0.9, refs/bzr/origin/tags/0.9)
+
+2011-09-21 13:55:02 +0200 Javier Jardón (50bee91)
+
+	* Do not activate g-s-d, but just watch dbus for g-s-d to appear
+
+2011-09-14 15:58:22 +0100 Javier Jardón (8be5a9d)
+
+	* Do not show (charged) in menu title when fully charged
+
+2011-09-12 14:15:57 +0100 Javier Jardón (8c55038)
+
+	* 0.8 (tag: 0.8, refs/bzr/origin/tags/0.8)
+
+2011-09-12 14:13:18 +0100 Javier Jardón (0c0a7b0)
+
+	* Fix a gap in the indicators region when the power indicator is not
+          show
+
+2011-09-12 13:59:15 +0100 Javier Jardón (49ac0f5)
+
+	* Use the same icon for all charge levels if we are in the charging
+          status
+
+2011-09-11 21:56:51 +0100 Gabor Kelemen (0a74520)
+
+	* Use correct dgettext and g_dngettext calls. LP: #846895
+
+2011-09-11 11:32:53 +0200 Gabor Kelemen (8736942)
+
+	* Use correct dgettext and g_dngettext calls. LP: #846895
+
+2011-09-08 14:43:46 +0100 Javier Jardón (14adfe5)
+
+	* Handle the case with broken batteries
+
+2011-09-07 17:21:15 +0100 Javier Jardón (2fb4685)
+
+	* indicator-power.c: Add padding between the icon and the text in the
+          menu items
+
+2011-08-25 18:46:15 +0100 Javier Jardón (1c9c777)
+
+	* Use consistent location for gsettings schema
+
+2011-08-25 09:58:40 -0400 Ken VanDine (589843c)
+
+	* releasing version 0.7-0ubuntu2
+
+2011-08-24 11:55:44 +0100 Javier Jardón (bc4d8d4)
+
+	* Fix a memory leak
+
+2011-08-23 14:44:09 -0400 Ken VanDine (a244894)
+
+	* releasing version 0.7-0ubuntu1
+
+2011-08-23 19:39:30 +0100 Javier Jardón (8f2d9f2)
+
+	* Makefile.am: fix typo to include .gschema.xml.in to the dist
+
+2011-08-23 12:50:05 -0400 Ken VanDine (b72dbbd)
+
+	* * New upstream release.   - Use gsettings to store the status of
+          "Show time in Menu Bar"     option (LP: #829853)   -
+          Follow standard alignment of icons in menus (LP: #829697) 
+           - Do not use a space before an ellipsis at the end of a
+          string. * debian/control   - Added build depends for
+          libglib2.0-dev
+
+2011-08-23 12:44:57 -0400 Ken VanDine (3751cc4)
+
+	* Import upstream version 0.7
+
+2011-08-23 17:40:33 +0100 Javier Jardón (bfa69e3)
+
+	* Fix typo in the gsettings schema: show_time -> show-time
+
+2011-08-23 14:16:20 +0100 Javier Jardón (b1a5f6e)
+
+	* Release 0.7 (tag: help, tag: 0.7, refs/bzr/origin/tags/help,
+          refs/bzr/origin/tags/0.7)
+
+2011-08-23 14:05:38 +0100 Javier Jardón (e7e437b)
+
+	* Makefile.am: some autotools fixes
+
+2011-08-22 21:39:04 +0100 Javier Jardón (ad80098)
+
+	* Add gsettings schema to the translatable files
+
+2011-08-22 20:49:31 +0100 Javier Jardón (b2aec5e)
+
+	* Fix typo in the gsettings schema: show_time -> show-time
+
+2011-08-22 20:38:36 +0100 Javier Jardón (84735ec)
+
+	* Use gsettings to store the status of "Show time in Menu Bar" option
+
+2011-08-22 15:40:07 +0100 Javier Jardón (94b05b3)
+
+	* Follow standard alignment of icons in menus
+
+2011-08-22 12:27:56 +0100 Javier Jardón (bd9dc3e)
+
+	* Do not use a space before an ellipsis at the end of a string.
+
+2011-08-12 16:19:16 -0400 Ken VanDine (62b88ad)
+
+	* releasing version 0.6-0ubuntu2
+
+2011-08-12 21:03:44 +0100 Javier Jardón (37d7b33)
+
+	* Do not show the default icon by default
+
+2011-08-12 16:00:59 -0400 Ken VanDine (593e1b7)
+
+	* releasing version 0.6-0ubuntu1
+
+2011-08-12 20:33:12 +0100 Javier Jardón (d88054a)
+
+	* Free memory in the correct place
+
+2011-08-12 10:03:39 -0400 Ken VanDine (e6361de)
+
+	* * New upstream release.   - Show time left to use without brackets,
+          time left to charge with     brackets. (LP: #824629)   -
+          Fix some memory leaks   - Don't show settings links when
+          used in a greeter   - Use a string when the energy source
+          is not present instead     of 0%   - only batteries status
+          icons are allowed in the menu title * debian/rules:   -
+          run intltool-update to update the translations template
+          (lp: #820705)
+
+2011-08-12 09:57:46 -0400 Ken VanDine (edfb2ab)
+
+	* Import upstream version 0.6
+
+2011-08-12 12:05:04 +0100 Javier Jardón (d5c1b2c)
+
+	* Release 0.6 (tag: 0.6, refs/bzr/origin/tags/0.6)
+
+2011-08-12 12:03:14 +0100 Javier Jardón (9c1a5e9)
+
+	* Show time left to use without brackets, time left to charge with
+          brackets.
+
+2011-08-11 17:39:21 +0100 Javier Jardón (6322445)
+
+	* Fix some memory leaks
+
+2011-08-11 17:10:29 +0100 Michael Terry (7a2c59a)
+
+	* Don't show settings links when used in a greeter
+
+2011-08-11 16:17:29 +0100 Javier Jardón (b36ac87)
+
+	* Use a string when the energy source is not present
+
+2011-08-11 15:52:41 +0100 Javier Jardón (329ed97)
+
+	* Only batteries can be primary devices
+
+2011-08-11 14:48:20 +0100 Javier Jardón (68ee93b)
+
+	* Fix some memory leaks
+
+2011-08-03 13:49:17 -0400 Michael Terry (b62772e)
+
+	* don't show settings links when used in a greeter
+
+2011-08-03 13:29:34 -0400 Ken VanDine (28e2acb)
+
+	* releasing version 0.5-0ubuntu1
+
+2011-08-03 09:59:49 -0400 Ken VanDine (2cb1445)
+
+	* * New upstream release.   - Set GETTEXT_PACKAGE to generate proper
+          templates   - Dropped support for gnome-power-manager *
+          debian/patches/fix_defines.patch   - removed, merged
+          upstream
+
+2011-08-03 09:30:08 -0400 Ken VanDine (e705925)
+
+	* Import upstream version 0.5
+
+2011-08-03 11:42:06 +0100 Javier Jardón (1ad8d1f)
+
+	* Release 0.5 (tag: 0.5, refs/bzr/origin/tags/0.5)
+
+2011-08-03 11:39:57 +0100 Javier Jardón (7d7b78e)
+
+	* Do not support the gnome-power-manager dbus interface anymore
+
+2011-08-03 11:26:00 +0100 Ken VanDine (d58b6ad)
+
+	* Fixed typos on checking for GSD and set the HAVE_GSD defines at
+          build time
+
+2011-08-03 11:15:29 +0100 Javier Jardón (5a3da6b)
+
+	* configure.ac: Set GETTEXT_PACKAGE correctly to generate the expect
+          template
+
+2011-08-01 08:29:42 -0400 Ken VanDine (df3af54)
+
+	* Set GETTEXT_PACKAGE to generate the expect template
+
+2011-07-28 15:02:58 -0400 Ken VanDine (6b8997c)
+
+	* releasing version 0.4-0ubuntu3
+
+2011-07-28 13:02:28 -0400 Ken VanDine (534616d)
+
+	* fixed a syntax error on checking for GSD and set the HAVE_GSD
+          defines at build time
+
+2011-07-28 13:01:35 -0400 Ken VanDine (20013a8)
+
+	* releasing version 0.4-0ubuntu2
+
+2011-07-26 16:35:23 -0400 Ken VanDine (f459bee)
+
+	* releasing version 0.4-0ubuntu1
+
+2011-07-19 13:02:25 -0400 Ken VanDine (f982b44)
+
+	*   - Always select a device (LP: #810872)   - Use the dbus interface
+          provided in g-s-d 3.1.4 * debian/control   - Added build
+          depends for gnome-settings-daemon-dev >= 3.1.4
+
+2011-07-19 12:51:34 -0400 Ken VanDine (dc8de37)
+
+	* New upstream release.
+
+2011-07-19 12:12:26 -0400 Ken VanDine (e9d8efc)
+
+	* Import upstream version 0.4
+
+2011-07-18 16:09:41 +0200 Javier Jardón (13d993e)
+
+	* Do not draw a separator between the configuration options in the
+          menu
+
+2011-07-18 15:40:17 +0200 Javier Jardón (99c94ac)
+
+	* Use the new D-Bus interface if gnome-settings-daemon is new enough
+
+2011-07-15 11:43:00 +0200 Javier Jardón (8b03674)
+
+	* Always select a device, doesnt matter Its charging/discharging or
+          not
+
+2011-07-15 11:26:50 +0200 Javier Jardón (9a7ee8c)
+
+	* Makefile.am: Pass upower _FLAGS and _LIBS
+
+2011-07-14 13:00:38 -0400 Ken VanDine (a847f5b)
+
+	* releasing version 0.3-0ubuntu1
+
+2011-07-14 11:10:43 -0400 Ken VanDine (f4706f0)
+
+	* * New upstream release.   - Refine the text of the items in the
+          menu to follow the specification   - Draw option checkbox
+          as check, not radio   - Show the apropiate icon depending
+          of the status of the devices       Create new function to
+          store the logic to put the primary device
+
+2011-07-14 11:04:21 -0400 Ken VanDine (b891e8b)
+
+	* Import upstream version 0.3
+
+2011-07-14 16:25:14 +0200 Javier Jardón (d442569)
+
+	* Do not show the device name in the menu title
+
+2011-07-14 16:22:10 +0200 Javier Jardón (74a0c13)
+
+	* Release 0.3 (tag: 0.3, refs/bzr/origin/tags/0.3)
+
+2011-07-14 16:19:55 +0200 Javier Jardón (0cdc5de)
+
+	* Show "X (charged)" if it is fully charged and not discharging
+
+2011-07-14 15:13:29 +0200 Javier Jardón (ad01db7)
+
+	* Only show the remaining time if it is discharging with less than 12
+          hours left
+
+2011-07-14 15:03:26 +0200 Javier Jardón (cabdda6)
+
+	* Refine the text of the items in the menu to follow the
+          specification
+
+2011-07-14 13:19:24 +0200 Michael Terry (f152ea5)
+
+	* Draw option checkbox as check, not radio
+
+2011-07-14 12:52:28 +0200 Javier Jardón (d104cd9)
+
+	* Show the apropiate icon depending of the status of the devices
+
+2011-07-13 15:13:46 -0400 Michael Terry (af2a417)
+
+	* draw option checkbox as check, not radio
+
+2011-07-13 15:56:25 +0200 Javier Jardón (4bd6548)
+
+	* Create new function to store the logic to put the primary device
+
+2011-07-08 10:05:25 -0400 Ken VanDine (f3fe8b3)
+
+	* releasing version 0.2-0ubuntu1
+
+2011-07-08 09:59:03 -0400 Ken VanDine (539a65b)
+
+	* New upstream release.
+
+2011-07-08 09:58:13 -0400 Ken VanDine (502f3f9)
+
+	* Import upstream version 0.2
+
+2011-07-08 14:39:48 +0100 Javier Jardón (7652767)
+
+	* configure.ac: Add support for the new indicator3-0.4
+
+2011-07-08 14:34:45 +0100 Javier Jardón (aefbd30)
+
+	* configure.ac: Remove dbus service stuff
+
+2011-07-07 14:22:03 -0400 Ken VanDine (7c7458b)
+
+	* releasing version 0.1-0ubuntu1
+
+2011-07-07 14:12:06 -0400 Ken VanDine (0ad0de3)
+
+	* Import upstream version 0.1
+
+2011-07-07 18:55:03 +0100 unknown (4713039)
+
+	* Packaging fixes
+
+2011-07-07 13:34:52 -0400 Ken VanDine (d215c71)
+
+	* include creating .tar.gz dists as well, we still use these for
+          packaging
+
+2011-07-07 13:34:29 -0400 Ken VanDine (843a1ad)
+
+	* Added COPYING file
+
+2011-07-07 13:23:00 -0400 Ken VanDine (5464206)
+
+	* Removed cruft, we don't include a service
+
+2011-07-07 18:12:36 +0100 Javier Jardón (45f9aac)
+
+	* Do not use indicator_image_helper()
+
+2011-07-07 14:43:57 +0100 Javier Jardón (9b83f48)
+
+	* Add support for multiple devices in the menu
+
+2011-07-07 14:15:23 +0100 Javier Jardón (864d4bd)
+
+	* configure.ac: We only support GTK+3
+
+2011-07-07 13:42:12 +0100 Javier Jardón (86e4b38)
+
+	* Get all the available devices instead the primary one
+
+2011-07-06 11:47:30 +0100 Javier Jardon (5db47ca)
+
+	* Use the 'missing' icon instead the 'empty' icon by default
+
+2011-07-06 11:12:34 +0100 Ted Gould (2cfdbd8)
+
+	* Little things to make distcheck pass.
+
+2011-07-05 11:25:50 -0500 Ted Gould (0ba5df9)
+
+	* Getting missing out of build-aux
+
+2011-07-05 10:46:29 -0500 Ted Gould (28a27ee)
+
+	* Dropping missing because it's missing
+
+2011-07-05 10:35:36 -0500 Ted Gould (e6ea966)
+
+	* Putting in Dummy files for the build scripts
+
+2011-07-05 10:35:24 -0500 Ted Gould (0ee90af)
+
+	* Fixing a cut-and-paste error on POTFILES.in
+
+2011-07-05 16:27:25 +0100 Javier Jardon (8168150)
+
+	* Always show 2 digits for the minutes
+
+2011-07-05 15:58:26 +0100 Javier Jardon (2957a0b)
+
+	* Fix typo
+
+2011-07-05 15:57:49 +0100 Javier Jardon (fb991e3)
+
+	* Use a bigger icon for the menu items
+
+2011-07-05 15:56:19 +0100 Javier Jardon (e0806a7)
+
+	* Use the correct string for the menu item icon
+
+2011-07-05 15:49:19 +0100 Javier Jardon (70ebe79)
+
+	* Do not create a new GtkMenu instance with every change
+
+2011-07-05 15:47:24 +0100 Javier Jardon (fed51c1)
+
+	* Do not use the notify:visible signal to update the menu
+
+2011-07-05 14:44:26 +0100 Javier Jardon (0dce7db)
+
+	* Add po/Makevars file
+
+2011-07-05 13:34:20 +0100 Javier Jardon (b24a9bd)
+
+	* Add translatable files to POTFILES.in
+
+2011-07-05 12:50:30 +0100 Javier Jardón (7c3ed59)
+
+	* Remove debug output
+
+2011-07-05 11:47:31 +0100 Javier Jardón (4de5875)
+
+	* Store the current device in the private structure
+
+2011-07-05 11:47:28 +0100 Javier Jardón (fe2b41f)
+
+	* notify signal
+
+2011-07-04 16:48:53 +0100 Javier Jardón (453148a)
+
+	* Add real info in the menu item
+
+2011-07-04 16:45:40 +0100 Javier Jardón (40b045d)
+
+	* Rebuild menu when there is a change in the DBUS interface
+
+2011-07-04 16:41:09 +0100 Javier Jardón (a6b0041)
+
+	* Move callbacks to the beginning of the file
+
+2011-07-04 15:45:01 +0100 Javier Jardón (dd26fa3)
+
+	* Construct the time details in a separate function
+
+2011-07-04 12:47:09 +0100 Javier Jardón (f29bcda)
+
+	* Build menu dynamically
+
+2011-07-01 23:48:23 +0100 Javier Jardón (420e84d)
+
+	* Bump version to 0.1
+
+2011-07-01 23:48:23 +0100 Javier Jardón (499a09e)
+
+	* configure.ac: advertise if this is a local build
+
+2011-07-01 23:48:23 +0100 Javier Jardón (73d6282)
+
+	* configure.ac: Remove the GTK+2 support
+
+2011-07-01 15:22:50 +0100 Javier Jardón (a3ebc78)
+
+	* configure.ac: Remove not used ido dependency
+
+2011-07-01 15:03:41 +0100 Javier Jardón (95eb2b5)
+
+	* Add some more kind of devices
+
+2011-07-01 13:27:15 +0100 Javier Jardón (942311b)
+
+	* Do not show the device name in the menu title
+
+2011-07-01 12:20:00 +0100 Javier Jardón (c38905e)
+
+	* Activate the use of icons in the menu
+
+2011-07-01 12:01:09 +0100 Javier Jardón (637b5cd)
+
+	* Use "Battery" instead "Laptop Battery"
+
+2011-07-01 11:51:12 +0100 Javier Jardón (866c7d3)
+
+	* Return the correct accessible description
+
+2011-07-01 11:37:31 +0100 Javier Jardón (6d4b1e0)
+
+	* Use the short time string in the label
+
+2011-07-01 11:23:33 +0100 Javier Jardón (353d27d)
+
+	* Get also a short time string
+
+2011-07-01 10:53:42 +0100 Javier Jardón (10050d9)
+
+	* Add device name to the label
+
+2011-06-30 17:45:22 +0100 Javier Jardón (2d3206b)
+
+	* Show the real information about the remaining charge time
+
+2011-06-30 17:14:44 +0100 Javier Jardón (ad775de)
+
+	* Show the remaining time in the status icon depending of the check
+          menu item status
+
+2011-06-30 16:16:21 +0100 Javier Jardón (07ef8e0)
+
+	* Remove "Icon Only" option
+
+2011-06-30 13:10:00 +0100 Javier Jardón (0f3b20e)
+
+	* gnome-power-preferences has been moved to gnome-control-center
+
+2011-06-30 12:11:30 +0100 Javier Jardón (7df8806)
+
+	* Specify what icon we want to show
+
+2011-06-30 11:49:20 +0100 Javier Jardón (950c5a0)
+
+	* Update the icon, not create a new one
+
+2011-06-30 11:28:21 +0100 Javier Jardón (10313d3)
+
+	* Fix default icon
+
+2011-06-30 11:01:24 +0100 Javier Jardón (59ac588)
+
+	* Use device_icon name consistently
+
+2011-06-30 00:18:37 +0100 Javier Jardón (363df28)
+
+	* Change the status icon when the charge changes
+
+2011-06-29 17:12:37 +0100 Javier Jardón (5b5a987)
+
+	* Make the check menu items look like a radio menu item.
+
+2011-06-29 17:11:40 +0100 Javier Jardón (d049d2f)
+
+	* Add options to the indicator menu
+
+2011-06-29 16:43:38 +0100 Javier Jardón (b701513)
+
+	* Show the power statistics when click on the device menu item
+
+2011-06-29 16:43:38 +0100 Javier Jardón (b1d0f0e)
+
+	* Populate menu: Add preferences menu item
+
+2011-06-28 17:23:05 +0100 Javier Jardón (3774122)
+
+	* Fix typo
+
+2011-06-28 16:49:09 +0100 Javier Jardón (88ee892)
+
+	* Process the data received from the gnome-power-manager service
+
+2011-06-28 16:05:23 +0100 Javier Jardón (8c9abf2)
+
+	* indicator-power: connect to the gnome-power-manager service
+          directly
+
+2011-06-28 16:03:17 +0100 Javier Jardón (1e55136)
+
+	* Remove dbus interface in the client side
+
+2011-06-28 16:03:17 +0100 Javier Jardón (ce435ff)
+
+	* Remove libido dependency
+
+2011-06-28 16:03:17 +0100 Javier Jardón (a749786)
+
+	* Remove power service for now
+
+2011-06-28 09:33:39 +0100 Javier Jardón (dcec51a)
+
+	* indicator-power: Create the proxy for the service
+
+2011-06-27 17:43:33 +0100 Javier Jardón (6be2b92)
+
+	* configure.ac: Remove vala dependency
+
+2011-06-27 17:41:09 +0100 Javier Jardón (8775e20)
+
+	* Change copyright to Canonical Ltd
+
+2011-06-27 16:45:26 +0100 Javier Jardón (65ab8e5)
+
+	* Implement power dbus service interface
+
+2011-06-27 12:19:09 +0100 Javier Jardón (e9f91cf)
+
+	* power-service: Add more items to the menu
+
+2011-06-27 11:55:30 +0100 Javier Jardón (998509e)
+
+	* power-service: No need for a global variable
+
+2011-06-27 09:53:33 +0100 Javier Jardón (f348430)
+
+	* Fix some typos
+
+2011-06-27 04:09:40 +0100 Javier Jardón (10f1e36)
+
+	* power-service: Add an item to the menu
+
+2011-06-27 04:00:08 +0100 Javier Jardón (09c4a91)
+
+	* Implement skeleton of power-service
+
+2011-06-27 03:32:11 +0100 Javier Jardón (c6c1156)
+
+	* Implement skeleton of indicator-power
+
+2011-06-24 15:42:53 +0100 Javier Jardón (05c4272)
+
+	* Some build fixes
+
+2011-06-24 15:25:17 +0100 Javier Jardón (e2d0b04)
+
+	* Initial commit
+
