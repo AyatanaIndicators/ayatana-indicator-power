@@ -31,7 +31,7 @@ Files: CMakeLists.txt
  debian/watch
  po/CMakeLists.txt
  po/POTFILES.in
- src/org.ayatana.powerd.xml
+ src/com.canonical.powerd.xml
  tests/Makefile.am.strings
  tests/manual
 Copyright: NONE

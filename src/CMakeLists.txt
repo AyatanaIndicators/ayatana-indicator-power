@@ -20,7 +20,7 @@ set(SERVICE_GENERATED_SOURCES)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-powerd
                                  org.ayatana
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/src/org.ayatana.powerd.xml)
+                                 ${CMAKE_SOURCE_DIR}/src/com.canonical.powerd.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  org.ayatana.indicator.power
                                  Dbus

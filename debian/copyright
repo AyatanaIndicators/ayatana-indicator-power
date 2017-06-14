@@ -32,7 +32,7 @@ Files: CMakeLists.txt
  po/Makevars
  po/POTFILES.in
  src/CMakeLists.txt
- src/org.ayatana.powerd.xml
+ src/com.canonical.powerd.xml
  tests/CMakeLists.txt
  tests/Makefile.am.strings
  tests/manual
