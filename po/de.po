@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-07-21 14:56+0200\n"
-"PO-Revision-Date: 2017-08-26 21:05+0000\n"
+"PO-Revision-Date: 2017-08-26 21:07+0000\n"
 "Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/ayatana-indicators"
 "/power-applet/de/>\n"
@@ -96,12 +96,12 @@ msgstr "Mediaplayer"
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr "Tablet"
+msgstr "Tablet-PC"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
 msgid "Computer"
-msgstr "Computer"
+msgstr "Rechner"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
