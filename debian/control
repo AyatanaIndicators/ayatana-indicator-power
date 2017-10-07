@@ -17,7 +17,7 @@ Build-Depends: cmake,
                dbus-test-runner,
                libdbustest1-dev,
 # for systemd unit
-               systemd,
+               systemd [linux-any],
 Standards-Version: 3.9.8
 Homepage: https://github.com/ArcticaProject/ayatana-indicator-power
 Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git
