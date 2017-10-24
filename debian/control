@@ -19,9 +19,9 @@ Build-Depends: cmake,
 # for systemd unit
                systemd [linux-any],
 Standards-Version: 3.9.8
-Homepage: https://github.com/ArcticaProject/ayatana-indicator-power
-Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git
-Vcs-Browser: https://cgit.arctica-project.org/ayatana/ayatana-indicator-power.git/
+Homepage: https://github.com/AyatanaIndicators/ayatana-indicator-power
+Vcs-Git: https://github.com/AyatanaIndicators/ayatana-indicator-power
+Vcs-Browser: https://github.com/AyatanaIndicators/ayatana-indicator-power
 
 Package: ayatana-indicator-power
 Architecture: any

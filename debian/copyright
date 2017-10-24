@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: ayatana-indicator-power
 Upstream-Contact: Ayatana Indicator Power
-Source: https://github.com/ArcticaProject/ayatana-indicator-power
+Source: https://github.com/AyatanaIndicators/ayatana-indicator-power
 
 Files: CMakeLists.txt
  ChangeLog
