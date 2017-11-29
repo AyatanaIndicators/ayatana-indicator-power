@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2017-07-21 14:56+0200\n"
+"POT-Creation-Date: 2017-11-29 13:04+0100\n"
 "PO-Revision-Date: 2017-07-21 14:55+0200\n"
 "Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
 "Language-Team: Northern Sami\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:1
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
 msgstr ""
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:2
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
 msgstr ""
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:3
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
 msgstr ""
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:4
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
 msgstr ""
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:5
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
 msgstr ""
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:6
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."

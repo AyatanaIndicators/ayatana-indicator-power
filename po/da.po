@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2017-07-21 14:56+0200\n"
+"POT-Creation-Date: 2017-11-29 13:04+0100\n"
 "PO-Revision-Date: 2017-08-27 22:45+0000\n"
 "Last-Translator: Kjetil Fleten <kjetil@fleten.net>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/ayatana-indicators"
-"/power-applet/da/>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/ayatana-"
+"indicators/power-applet/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,33 +20,33 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.17-dev\n"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:1
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
 msgstr "Vis ur i menu linie"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:2
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
 msgstr "Vis eller skjul ur i menu linjen."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:3
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
 msgstr "Vis procent i menu linjen"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:4
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Vis eller skjul procent i menu linjen."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:5
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
 msgstr "Hvornår batteri status skal vises i menu linjen."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:6
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Valgmuligheder for hvornår batteri status skal vises. Vælg mellem \"til\", \""
-"lader\", eller \"fra\"."
+"Valgmuligheder for hvornår batteri status skal vises. Vælg mellem \"til\", "
+"\"lader\", eller \"fra\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524

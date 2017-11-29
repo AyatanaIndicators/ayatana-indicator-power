@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2017-07-21 14:56+0200\n"
+"POT-Creation-Date: 2017-11-29 13:04+0100\n"
 "PO-Revision-Date: 2017-11-23 15:50+0000\n"
 "Last-Translator: Fatih Mert Doğancan <fatihmertdogancan@hotmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
@@ -20,36 +20,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 2.18-dev\n"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:1
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
 msgstr "Menüde zamanı göster"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:2
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 #, fuzzy
 msgid "Whether or not to show the time in the menu bar."
 msgstr "Menüde saati göster ya da gösterme"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:3
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
 msgstr "Menüde yüzdeyi göster"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:4
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 #, fuzzy
 msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Menüde yüzdeyi göster ya da gösterme"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:5
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 #, fuzzy
 msgid "When to show the battery status in the menu bar."
 msgstr "Menüde pil durumunu ne zaman gösterebilirim ?"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:6
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Pil durumunun ne zaman gösterileceği seçenekler. Geçerli seçenekler \""
-"mevcut\", \"ücret\" ve \"hiç\" dir."
+"Pil durumunun ne zaman gösterileceği seçenekler. Geçerli seçenekler \"mevcut"
+"\", \"ücret\" ve \"hiç\" dir."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524

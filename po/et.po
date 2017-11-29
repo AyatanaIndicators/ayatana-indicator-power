@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2017-07-21 14:56+0200\n"
+"POT-Creation-Date: 2017-11-29 13:04+0100\n"
 "PO-Revision-Date: 2017-11-27 17:35+0000\n"
 "Last-Translator: Kristjan Räts <kristjanrats@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/ayatana-"
@@ -20,33 +20,33 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.18-dev\n"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:1
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
 msgstr "Kuva kellaaeg menüüribal"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:2
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
 msgstr "Kas kuvada või peita kellaaeg menüüribal."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:3
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
 msgstr "Kuva menüüribal aku laetuse protsent"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:4
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Kas kuvada või peita aku laetuse protsent menüüribal."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:5
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
 msgstr "Kas kuvada või peita menüüribal aku laetus."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in.h:6
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Valikud kas aku oleku kuvamiseks. Lubatud valikud on \"protsent\", \"laetus\""
-" ja \"peida\"."
+"Valikud kas aku oleku kuvamiseks. Lubatud valikud on \"protsent\", \"laetus"
+"\" ja \"peida\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
