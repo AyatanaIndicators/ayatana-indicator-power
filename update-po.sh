@@ -18,6 +18,8 @@ set -x
 
 GETTEXT_DOMAIN=$(cat CMakeLists.txt | grep 'set.*(.*GETTEXT_PACKAGE' | sed -r -e 's/.*\"([^"]+)\"\)/\1/')
 
+cp po/${GETTEXT_DOMAIN}.pot po/${GETTEXT_DOMAIN}.pot~
+
 cd po/
 cat LINGUAS | while read lingua; do
 	if [ ! -e ${lingua}.po ]; then
@@ -34,3 +36,5 @@ cat LINGUAS | while read lingua; do
 
 done
 cd - 1>/dev/null
+
+mv po/${GETTEXT_DOMAIN}.pot~ po/${GETTEXT_DOMAIN}.pot
