@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2017-11-30 16:09+0000\n"
+"PO-Revision-Date: 2017-12-01 16:46+0000\n"
 "Last-Translator: Olivier Macchioni <olivier.macchioni@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/ayatana-indicators"
 "/power-applet/fr/>\n"
@@ -26,7 +26,7 @@ msgstr "Montrer l'heure dans la Barre de Menu"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Montrer ou non l'heure dans la barre de menu"
+msgstr "Montrer ou non l'heure dans la barre de menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
@@ -34,7 +34,7 @@ msgstr "Montrer le pourcentage dans la Barre de Menu"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Montrer ou non le pourcentage dans la barre de menu"
+msgstr "Montrer ou non le pourcentage dans la barre de menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
