@@ -1,3 +1,9 @@
+ayatana-indicator-power (2.0.91.99-0) UNRELEASED; urgency=medium
+
+  * Continue development...
+
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Mon, 04 Dec 2017 10:09:25 +0100
+
 ayatana-indicator-power (2.0.91-0) unstable; urgency=medium
 
   * Fork from Ubuntu's indicator-power code project.
