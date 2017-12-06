@@ -46,7 +46,7 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 
   /* boilerplate i18n */
   setlocale (LC_ALL, "");
-  bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   textdomain (GETTEXT_PACKAGE);
 
   /* run */
