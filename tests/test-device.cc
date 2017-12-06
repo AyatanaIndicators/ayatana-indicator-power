@@ -53,7 +53,7 @@ class DeviceTest : public ::testing::Test
     virtual void SetUp()
     {
       const GLogLevelFlags flags = GLogLevelFlags(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_WARNING);
-      log_handler_id = g_log_set_handler ("Ayatana-Indicator-Power", flags, log_count_func, this);
+      log_handler_id = g_log_set_handler ("ayatana-indicator-power", flags, log_count_func, this);
       log_count_ipower_expected = 0;
       log_count_ipower_actual = 0;
     }
@@ -61,7 +61,7 @@ class DeviceTest : public ::testing::Test
     virtual void TearDown()
     {
       ASSERT_EQ (log_count_ipower_expected, log_count_ipower_actual);
-      g_log_remove_handler ("Ayatana-Indicator-Power", log_handler_id);
+      g_log_remove_handler ("ayatana-indicator-power", log_handler_id);
     }
 
   protected:
