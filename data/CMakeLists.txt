@@ -86,12 +86,12 @@ configure_file ("${XDG_AUTOSTART_FILE_IN}" "${XDG_AUTOSTART_FILE}")
 install (FILES "${XDG_AUTOSTART_FILE}"
          DESTINATION "${XDG_AUTOSTART_DIR}")
 
-##  Unity Indicator File
+##  Ayatana Indicators File
 ##
 
 # where to install
 set (AYATANA_INDICATOR_DIR "${CMAKE_INSTALL_FULL_DATAROOTDIR}/ayatana/indicators")
-message (STATUS "${AYATANA_INDICATOR_DIR} is the Unity Indicator install dir")
+message (STATUS "${AYATANA_INDICATOR_DIR} is the Ayatana Indicators install dir")
 
 set (AYATANA_INDICATOR_NAME "org.ayatana.indicator.power")
 set (AYATANA_INDICATOR_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${AYATANA_INDICATOR_NAME}")
