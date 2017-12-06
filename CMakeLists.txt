@@ -5,9 +5,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set(PROJECT_VERSION "2.0.91")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
-set(GETTEXT_PACKAGE "ayatana-indicator-power")
-add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
-                 -DGNOMELOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
 
 option (enable_tests "Build the package's automatic tests." ON)
 option (enable_lcov "Generate lcov code coverage reports." ON)
@@ -23,6 +20,14 @@ if (EXISTS "/etc/debian_version") # Workaround for libexecdir on debian
 endif ()
 set (CMAKE_INSTALL_PKGLIBEXECDIR "${CMAKE_INSTALL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
 set (CMAKE_INSTALL_FULL_PKGLIBEXECDIR "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
+
+##
+## Gettext
+##
+
+set(GETTEXT_PACKAGE "ayatana-indicator-power")
+add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
+                 -DGNOMELOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
 
 ##
 ##  Check for prerequisites
