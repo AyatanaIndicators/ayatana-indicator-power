@@ -1,7 +1,7 @@
 set (SERVICE_LIB "ayatanaindicatorpowerservice")
 set (SERVICE_EXEC "ayatana-indicator-power-service")
 
-add_definitions(-DG_LOG_DOMAIN="Ayatana-Indicator-Power")
+add_definitions(-DG_LOG_DOMAIN="ayatana-indicator-power")
 
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
