@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2017-11-25 01:48+0000\n"
+"PO-Revision-Date: 2017-12-08 03:49+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/nb/>\n"
@@ -21,35 +21,39 @@ msgstr ""
 "X-Generator: Weblate 2.18-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
+#, fuzzy
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Vis tid i menylinje"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
+#, fuzzy
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Hvorvidt klokka skal vises i menylinjen."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Vis prosent i menylinje"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Hvorvidt prosent skal vises i menylinjen."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
-msgstr ""
+msgstr "Når batteristatus skal vises i menylinjen."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Valg for når batteristatus skal vises. Gyldige alternativer er \""
+"tilgjeneglig\", \"lader\", og \"aldri\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "Nettlader"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:440
@@ -65,7 +69,7 @@ msgstr "Avbruddsfri strømforsyning"
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Multimeter"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
@@ -80,7 +84,7 @@ msgstr "Tastatur"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
@@ -90,7 +94,7 @@ msgstr "Mobiltelefon"
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Mediaavspiller"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
@@ -110,7 +114,7 @@ msgstr "Ukjent"
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "fastsetter…"
 
 #: ../src/device.c:612
 #, c-format
@@ -121,7 +125,7 @@ msgstr "ukjent"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "Oppladet om %0d:%02d"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
@@ -134,7 +138,7 @@ msgstr "%0d:%02d gjenstår"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "Oppladet om %d %s %d %s"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
@@ -154,27 +158,27 @@ msgstr[1] "minutter"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "Oppladet om %d %s"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "%d %s %d %s igjen"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "%d %s igjen"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (oppladet)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
@@ -202,7 +206,7 @@ msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
-msgstr ""
+msgstr "Lavt batteri"
 
 #: ../src/notifier.c:223
 #, fuzzy
@@ -212,7 +216,7 @@ msgstr "Kritisk batterinivå"
 #: ../src/notifier.c:225
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "%.0f%% ladning gjenstår"
 
 #: ../src/notifier.c:242
 msgid "OK"
@@ -224,19 +228,20 @@ msgstr "Oppladningsnivå"
 
 #: ../src/service.c:633
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "Vis tid i menylinje"
 
 #: ../src/service.c:637
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "Vis prosent i menylinje"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr ""
+msgstr "Energi-innstillinger…"
 
 #: ../src/service.c:667
+#, fuzzy
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Juster lysstyrke automatisk"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
