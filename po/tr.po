@@ -9,16 +9,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2017-11-23 15:50+0000\n"
-"Last-Translator: Fatih Mert Doğancan <fatihmertdogancan@hotmail.com>\n"
+"PO-Revision-Date: 2018-02-05 15:41+0000\n"
+"Last-Translator: Michal Čihař <michal@cihar.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -202,7 +202,7 @@ msgstr "(%s)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr "(%%%.0l)"
+msgstr "(%%%.0lf)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
