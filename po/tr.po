@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-02-05 15:41+0000\n"
-"Last-Translator: Michal Čihař <michal@cihar.com>\n"
+"PO-Revision-Date: 2018-02-08 11:40+0000\n"
+"Last-Translator: Furkan Kalkan <furkan.kalkan3@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/tr/>\n"
 "Language: tr\n"
@@ -39,17 +39,16 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Menüde yüzdeyi göster ya da gösterme"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar."
-msgstr "Menüde pil durumunu ne zaman gösterebilirim ?"
+msgstr "Menüde pil durumunu ne zaman gösterilsin."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Pil durumunun ne zaman gösterileceği seçenekler. Geçerli seçenekler \"mevcut"
-"\", \"ücret\" ve \"hiç\" dir."
+"Pil durumunun ne zaman gösterileceği ile ilgili seçenekler. Geçerli "
+"seçenekler \"her zaman\", \"şarj edilirken\" ve \"hiçbir zaman\" dır."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
