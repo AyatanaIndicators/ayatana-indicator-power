@@ -1,10 +1,257 @@
-2017-06-07 16:27:17 +0200 Mike Gabriel (f712ca5)
+2018-02-28 21:06:17 +0100 Mike Gabriel (1298ede)
 
-	* release 2.0.91 (HEAD -> master, release-builds)
+	* release 2.0.92 (HEAD -> master)
+
+2018-02-28 21:01:18 +0100 Mike Gabriel (ba93f00)
+
+	* NEWS: Move old NEWS file to NEWS.Canonical.
+
+2018-02-28 01:37:45 +0000 Мира Странная (e89a255)
+
+	* Translated using Weblate (Russian) (origin/master)
+
+2018-02-08 11:34:43 +0000 Furkan Kalkan (2dd7450)
+
+	* Translated using Weblate (Turkish)
+
+2018-02-04 15:24:36 +0000 Michal Čihař (25d96d4)
+
+	* Translated using Weblate (Turkish)
+
+2018-01-22 20:48:43 +0000 Марс Ямбар (a08230f)
+
+	* Translated using Weblate (Ukrainian)
+
+2018-01-01 11:56:09 +0000 Anders Jonsson (4a00d8a)
+
+	* Translated using Weblate (Swedish)
+
+2018-01-04 09:51:10 +0000 Yaron Shahrabani (6938cc3)
+
+	* Translated using Weblate (Hebrew)
+
+2017-12-31 15:23:45 +0000 Sebastian Rasmussen (0ea506e)
+
+	* Translated using Weblate (Swedish)
+
+2017-12-07 03:47:30 +0000 Allan Nordhøy (1b0ece7)
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2017-11-30 16:09:24 +0000 Olivier Macchioni (35a79c6)
+
+	* Translated using Weblate (French)
+
+2017-11-30 16:08:57 +0000 Olivier Macchioni (7a18639)
+
+	* Translated using Weblate (French)
+
+2017-12-06 23:33:32 +0100 Mike Gabriel (f1c13c9)
+
+	* data/ayatana-indicator-power.desktop.in: Add XFCE to OnlyShowIn=
+          key.
+
+2017-12-06 12:33:52 +0100 Mike Gabriel (5de104c)
+
+	* tests/test-device.cc: Fix failing tests after we have renamed
+          DG_LOG_DOMAIN.
+
+2017-12-06 11:42:44 +0100 Mike Gabriel (3cf825f)
+
+	* Rename GNOMELOCALEDIR -> LOCALEDIR.
+
+2017-12-06 11:42:14 +0100 Mike Gabriel (5ef27ef)
+
+	* Set DG_LOG_DOMAIN to ayatana-indicator-power (decapitalized
+          spelling).
+
+2017-12-06 11:00:20 +0100 Mike Gabriel (5479b13)
+
+	* CMakeLists.txt: Move gettext initialization below the
+          GNUInstallDirs include. This sets GNOMELOCALEDIR
+          appropriately and probably fixes broken i18n support.
+
+2017-12-06 10:49:54 +0100 Mike Gabriel (17ab6d1)
+
+	* data/CMakeLists.txt: More namespace fixes in comments / output
+          messages.
+
+2017-12-06 10:49:28 +0100 Mike Gabriel (5a59319)
+
+	* tests/CMakeLists.txt: Fix namespace in add_dependencies() call.
+
+2017-12-05 10:29:54 +0100 Mike Gabriel (0058a8b)
+
+	* debian/postinst: Drop file. The libglib2.0-bin package has trigger
+          for schema compilation these days (and this for ages,
+          actually).
+
+2017-12-04 10:09:45 +0100 Mike Gabriel (2f3a761)
+
+	* debian/changelog: Bump upstream to a development version.
+
+2017-12-02 23:40:20 +0100 Mike Gabriel (765806b)
+
+	* debian/control: Fix D (glib2.0-bin -> libglib2.0-bin).
+
+2017-12-02 20:55:20 +0100 Mike Gabriel (e9b7bfe)
+
+	* debian/{control,postinst}: Recompile GSettings schemas at post
+          installation.
+
+2017-11-29 13:23:49 +0100 Mike Gabriel (0f2a468)
+
+	* po/: Update translation files once more.
+
+2017-11-29 13:22:49 +0100 Mike Gabriel (f936fa5)
+
+	* update-po.sh: Preserve .pot file when updating *.po files.
+
+2017-11-29 13:04:48 +0100 Mike Gabriel (01156d3)
+
+	* po/*.po: Update with now correct file names for .xml files.
+
+2017-11-27 17:34:45 +0000 Kristjan Räts (b9c3729)
+
+	* Translated using Weblate (Estonian)
+
+2017-11-24 01:32:05 +0000 Allan Nordhøy (4041646)
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2017-11-22 15:38:40 +0000 Fatih Mert Doğancan (9e16d82)
+
+	* Translated using Weblate (Turkish)
+
+2017-10-12 08:41:05 +0000 Matteo F. Vescovi (9413bdb)
+
+	* Translated using Weblate (Italian)
+
+2017-11-29 13:03:18 +0100 Mike Gabriel (7e7500a)
+
+	* Revert "po/*.po: Update with now correct file names for .xml
+          files."
+
+2017-11-29 12:43:54 +0100 Mike Gabriel (2c40ef0)
+
+	* po/*.po: Update with now correct file names for .xml files.
+
+2017-11-29 12:43:19 +0100 Mike Gabriel (d16056b)
+
+	* po/ayatana-indicator-power.pot: Update with now correct file names
+          for .xml files.
+
+2017-11-29 12:42:59 +0100 Mike Gabriel (bdc25da)
+
+	* update-po.sh: Fix filenames of .ini(.in) and .xml(.in) files in po
+          files.
+
+2017-11-29 12:42:54 +0100 Mike Gabriel (6a07d32)
+
+	* update-pot.sh: Fix filenames of .ini(.in) and .xml(.in) files in po
+          template file.
+
+2017-10-24 21:12:24 +0200 Mike Gabriel (7cae4fb)
+
+	* update-po*.sh: Add license header.
+
+2017-10-24 18:20:08 +0200 Mike Gabriel (1cb6718)
+
+	* debian/{control,copyright,watch}: Update to new upstream URLs.
+
+2017-10-12 07:40:41 +0200 Mike Gabriel (b140fe8)
+
+	* update-po.sh: Add support for creating new LINGUAS.
+
+2017-08-26 22:04:24 +0000 Kjetil Fleten (22c70c0)
+
+	* Translated using Weblate (Danish)
+
+2017-10-07 21:35:36 +0200 Mike Gabriel (977a89d)
+
+	* debian/control: Modify B-D for systemd: only available/required on
+          [linux-any].
+
+2017-10-07 21:35:14 +0200 Mike Gabriel (dac8f77)
+
+	* systemd unit file: Only build+install if systemd is available at
+          build-time.
+
+2017-08-26 21:06:48 +0000 Mike Gabriel (efdc686)
+
+	* Translated using Weblate (German)
+
+2017-08-26 21:05:47 +0000 Mike Gabriel (0db1118)
+
+	* Translated using Weblate (German)
+
+2017-08-18 13:21:35 +0000 Viktar Vauchkevich (b84b921)
+
+	* Translated using Weblate (Belarusian)
+
+2017-07-21 15:19:06 +0200 Mike Gabriel (7a214d4)
+
+	* update-po.sh: Add simple script to update po/*.po files.
+
+2017-07-21 14:57:20 +0200 Mike Gabriel (57f0dfd)
+
+	* po/: Create .po files from .pot file using msginit.
+
+2017-07-21 14:37:09 +0200 Mike Gabriel (5f9ea6f)
+
+	* po/: Add LINGUAS file.
+
+2017-07-21 14:29:58 +0200 Mike Gabriel (1d4c6c4)
+
+	* po/: Create .pot file for ayatana-indicator-power.
+
+2017-07-21 14:29:39 +0200 Mike Gabriel (8049c1b)
+
+	* update-pot.sh: Add mini script to update .pot file.
+
+2017-06-21 16:12:55 +0200 Mike Gabriel (10a06c6)
+
+	* src/CMakeLists.txt: Round up previous commit by fixing
+          dbus-powerd.h codegen call.
+
+2017-06-14 15:06:47 +0200 Mike Gabriel (5949845)
+
+	* Really switch back to com.canonical.powerd.
+
+2017-06-08 00:43:14 +0200 Mike Gabriel (cf69c55)
+
+	* debian/rules: Don't copy removed apport hook into package.
+
+2017-06-08 00:42:39 +0200 Mike Gabriel (c736882)
+
+	* debian/control: Drop full-stop from SYNOPSIS.
+
+2017-06-08 00:21:58 +0200 Mike Gabriel (af0e1a7)
+
+	* debian/copyright: Pull-over copyright files from official Debian
+          package.
+
+2017-06-08 00:18:13 +0200 Mike Gabriel (6850dfe)
+
+	* debian/rules: Pull-over get-orig-source rule from official Debian
+          package.
+
+2017-06-07 23:17:31 +0200 Mike Gabriel (36b5cbb)
+
+	* debian/{watches,upstream/,patches}: Sync in changes from official
+          Debian packaging.
+
+2017-06-07 23:14:51 +0200 Mike Gabriel (034ae2a)
+
+	* debian/source_ayatana-indicator-power.py: Drop apport support.
+
+2017-06-07 16:27:17 +0200 Mike Gabriel (6791d33)
+
+	* release 2.0.91 (tag: 2.0.91, origin/release-builds, release-builds)
 
 2017-06-02 16:09:17 +0200 Mike Gabriel (fb4f8b2)
 
-	* src/brightness.c Fix sed search+replace flaw. (origin/master)
+	* src/brightness.c Fix sed search+replace flaw.
 
 2017-06-02 12:37:42 +0200 Mike Gabriel (ef2ba34)
 
@@ -3372,7 +3619,7 @@
 
 2011-08-23 14:16:20 +0100 Javier Jardón (b1a5f6e)
 
-	* Release 0.7 (tag: help, tag: 0.7, refs/bzr/origin/tags/help,
+	* Release 0.7 (tag: 0.7, refs/bzr/origin/tags/help,
           refs/bzr/origin/tags/0.7)
 
 2011-08-23 14:05:38 +0100 Javier Jardón (e7e437b)
