@@ -18,5 +18,8 @@ override_dh_install:
 	find debian/ayatana-indicator-power -name \*.a -delete
 	dh_install --fail-missing
 
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..
