@@ -1,9 +1,9 @@
-Overview of changes in arctica-greeter 2.0.92
+Overview of changes in ayatana-indicator-power 2.0.92
 
     - Fix broken i18n support.
     - Plenty translation updates. Thanks to translators
       on hosted.weblate.org.
 
-Overview of changes in arctica-greeter 2.0.91 
+Overview of changes in ayatana-indicator-power 2.0.91
 
     - Fork from Ubuntu's Power Indicator.
