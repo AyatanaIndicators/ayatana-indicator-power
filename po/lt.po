@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
 "power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-03-02 22:38+0000\n"
+"PO-Revision-Date: 2018-03-04 20:45+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/lt/>\n"
@@ -47,199 +47,201 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Parametrai kada rodyti baterijos būseną. Teisingi parametrai yra \"present\""
+", \"charge\" ir \"never\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "KS adapteris"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:440
 msgid "Battery"
-msgstr ""
+msgstr "Baterija"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "NMŠ"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Prižiūryklė"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr ""
+msgstr "Pelė"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "Klaviatūra"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "Delninukas"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
 msgid "Cell phone"
-msgstr ""
+msgstr "Mobilusis telefonas"
 
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Medijos leistuvė"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "Planšetė"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
 msgid "Computer"
-msgstr ""
+msgstr "Kompiuteris"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
 msgid "Unknown"
-msgstr ""
+msgstr "Nežinoma"
 
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "apskaičiuojama…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "nežinoma"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d:%02d kol bus įkrauta"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "Liko %0d:%02d"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s kol bus įkrauta"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "valanda"
+msgstr[1] "valandos"
+msgstr[2] "valandų"
 
 #: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
 #: ../src/device.c:708
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "minutė"
+msgstr[1] "minutės"
+msgstr[2] "minučių"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s kol bus įkrauta"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "Liko %d %s %d %s"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "Liko %d %s"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (įkrauta)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
-msgstr ""
+msgstr "Žemas baterijos lygis"
 
 #: ../src/notifier.c:223
 msgid "Battery Critical"
-msgstr ""
+msgstr "Kritinis baterijos lygis"
 
 #: ../src/notifier.c:225
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "Liko %.0f%% įkrovos"
 
 #: ../src/notifier.c:242
 msgid "OK"
-msgstr ""
+msgstr "Gerai"
 
 #: ../src/service.c:565
 msgid "Charge level"
-msgstr ""
+msgstr "Įkrovos lygis"
 
 #: ../src/service.c:633
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "Rodyti laiką meniu juostoje"
 
 #: ../src/service.c:637
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "Rodyti procentinę dalį meniu juostoje"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr ""
+msgstr "Maitinimo nustatymai…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Automatiškai reguliuoti ryškumą"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
-msgstr ""
+msgstr "Baterijos nustatymai…"
