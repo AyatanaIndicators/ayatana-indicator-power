@@ -32,6 +32,10 @@ add_custom_command (OUTPUT gschemas.compiled
                     COMMAND cp -f ${CMAKE_BINARY_DIR}/data/*gschema.xml ${SCHEMA_DIR}
                     COMMAND ${COMPILE_SCHEMA_EXECUTABLE} ${SCHEMA_DIR})
 
+add_custom_target(
+    gschemas-compiled ALL DEPENDS gschemas.compiled
+)
+
 # look for headers in our src dir, and also in the directories where we autogenerate files...
 include_directories (${CMAKE_SOURCE_DIR}/src)
 include_directories (${CMAKE_BINARY_DIR}/src)
@@ -42,9 +46,9 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR})
 
 function(add_test_by_name name)
   set (TEST_NAME ${name})
-  add_executable (${TEST_NAME} ${TEST_NAME}.cc gschemas.compiled)
+  add_executable (${TEST_NAME} ${TEST_NAME}.cc)
   add_test (${TEST_NAME} ${TEST_NAME})
-  add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice)
+  add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice gschemas-compiled)
   target_link_libraries (${TEST_NAME} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS})
 endfunction()
 add_test_by_name(test-notify)
