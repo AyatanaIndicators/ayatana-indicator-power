@@ -41,10 +41,16 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
                   glib-2.0>=2.36
                   gio-2.0>=2.36
                   gio-unix-2.0>=2.36
-                  libnotify>=0.7.6
-                  url-dispatcher-1>=1)
+                  libnotify>=0.7.6)
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
+
+set(URL_DISPATCHER_1_REQUIRED_VERSION 1)
+pkg_check_modules(
+  URLDISPATCHER
+  url-dispatcher-1>=${URL_DISPATCHER_1_REQUIRED_VERSION}
+)
+include_directories(${URLDISPATCHER_INCLUDE_DIRS})
 
 ##
 ##  custom targets

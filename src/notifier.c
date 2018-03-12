@@ -20,8 +20,7 @@
 #include "dbus-battery.h"
 #include "dbus-shared.h"
 #include "notifier.h"
-
-#include <url-dispatcher.h>
+#include "utils.h"
 
 #include <libnotify/notify.h>
 
@@ -172,7 +171,7 @@ on_battery_settings_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
                             char               * action    G_GNUC_UNUSED,
                             gpointer             user_data G_GNUC_UNUSED)
 {
-  url_dispatch_send("settings:///system/battery", NULL, NULL);
+  utils_handle_settings_request();
 }
 
 static void

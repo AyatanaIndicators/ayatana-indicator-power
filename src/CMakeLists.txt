@@ -3,6 +3,10 @@ set (SERVICE_EXEC "ayatana-indicator-power-service")
 
 add_definitions(-DG_LOG_DOMAIN="ayatana-indicator-power")
 
+if(URLDISPATCHER_FOUND)
+    add_definitions( -DHAS_URLDISPATCHER )
+endif()
+
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
@@ -12,7 +16,8 @@ set(SERVICE_MANUAL_SOURCES
     device.c
     notifier.c
     testing.c
-    service.c)
+    service.c
+    utils.c)
 
 # generated sources
 include(GdbusCodegen)
@@ -51,5 +56,5 @@ link_directories(${SERVICE_DEPS_LIBRARY_DIRS})
 # the executable: lib + main()
 add_executable (${SERVICE_EXEC} main.c)
 set_source_files_properties(${SERVICE_SOURCES} main.c PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
-target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${GCOV_LIBS})
+target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${GCOV_LIBS} ${URLDISPATCHER_LIBRARIES})
 install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_PKGLIBEXECDIR})

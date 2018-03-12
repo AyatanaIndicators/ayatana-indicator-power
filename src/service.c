@@ -20,7 +20,6 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <url-dispatcher.h>
 
 #include "brightness.h"
 #include "dbus-shared.h"
@@ -28,6 +27,7 @@
 #include "device-provider.h"
 #include "notifier.h"
 #include "service.h"
+#include "utils.h"
 
 #define BUS_NAME "org.ayatana.indicator.power"
 #define BUS_PATH "/org/ayatana/indicator/power"
@@ -792,62 +792,12 @@ create_menu (IndicatorPowerService * self, int profile)
 ****  GActions
 ***/
 
-/* Run a particular program based on an activation */
-static void
-execute_command (const gchar * cmd)
-{
-  GError * err = NULL;
-
-  g_debug ("Issuing command '%s'", cmd);
-
-  if (!g_spawn_command_line_async (cmd, &err))
-    {
-      g_warning ("Unable to start %s: %s", cmd, err->message);
-      g_error_free (err);
-    }
-}
-
 static void
 on_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                        GVariant      * param  G_GNUC_UNUSED,
                        gpointer        gself  G_GNUC_UNUSED)
 {
-  static const gchar *control_center_cmd = NULL;
-
-  if (control_center_cmd == NULL)
-    {
-      if (g_getenv ("MIR_SOCKET") != NULL)
-        {
-          url_dispatch_send("settings:///system/battery", NULL, NULL);
-          return;
-        }
-      else if ((!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu")) || (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xfce")))
-        {
-          control_center_cmd = "xfce4-power-manager-settings";
-        }
-      else if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "mate"))
-        {
-          control_center_cmd = "mate-power-preferences";
-        }
-      else if (!g_strcmp0 (g_getenv ("XDG_CURRENT_DESKTOP"), "Pantheon"))
-        {
-          control_center_cmd = "switchboard --open-plug system-pantheon-power";
-        }
-      else
-        {
-          gchar *path;
-
-          path = g_find_program_in_path ("unity-control-center");
-          if (path != NULL)
-            control_center_cmd = "unity-control-center power";
-          else
-            control_center_cmd = "gnome-control-center power";
-
-          g_free (path);
-        }
-    }
-
-  execute_command (control_center_cmd);
+  utils_handle_settings_request();
 }
 
 static void
@@ -876,7 +826,7 @@ on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
                              GVariant      * param  G_GNUC_UNUSED,
                              gpointer        gself  G_GNUC_UNUSED)
 {
-  url_dispatch_send("settings:///system/battery", NULL, NULL);
+    utils_handle_settings_request();
 }
 
 /***
