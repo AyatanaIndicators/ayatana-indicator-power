@@ -80,6 +80,15 @@ Copyright: 2011, Canonical Ltd.
   2014, Canonical Ltd.
 License: GPL-3
 
+Files: src/utils.c
+Copyright: 2013, Canonical Ltd.
+  2018, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+License: GPL-3
+
+Files: src/utils.h
+Copyright: 2018, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+License: GPL-3
+
 Files: src/device.c
  src/device.h
 Copyright: 2012, Canonical Ltd.
