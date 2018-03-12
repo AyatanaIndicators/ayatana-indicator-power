@@ -805,14 +805,14 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
                          GVariant      * param,
                          gpointer        gself  G_GNUC_UNUSED)
 {
-  if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "mate"))
+  if (is_mate())
     {
-      char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
+      char *cmd = g_strconcat ("mate-power-statistics", " --device ",
                                g_variant_get_string (param, NULL), NULL);
       execute_command (cmd);
       g_free (cmd);
     }
-  else
+  else if (is_gnome() || is_unity())
     {
       char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
                                g_variant_get_string (param, NULL), NULL);
