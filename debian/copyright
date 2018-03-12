@@ -1,4 +1,4 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: ayatana-indicator-power
 Upstream-Contact: Ayatana Indicator Power
 Source: https://github.com/AyatanaIndicators/ayatana-indicator-power
@@ -7,6 +7,7 @@ Files: CMakeLists.txt
  ChangeLog
  MERGE-REVIEW
  NEWS
+ NEWS.Canonical
  cmake/GCov.cmake
  cmake/GdbusCodegen.cmake
  cmake/Translations.cmake
@@ -31,6 +32,7 @@ Files: CMakeLists.txt
  po/CMakeLists.txt
  po/Makevars
  po/POTFILES.in
+ po/LINGUAS
  src/CMakeLists.txt
  src/com.canonical.powerd.xml
  tests/CMakeLists.txt
@@ -41,6 +43,15 @@ License: GPL-3
 Comment:
  Assuming same license and copyright holdership as found in the
  project files containing a license header.
+
+Files: po/*.po
+ po/ayatana-indicator-power.pot
+Copyright: 2017, THE PACKAGE'S COPYRIGHT HOLDER
+License: GPL-3
+Comment:
+ The po/Makevars file alludes that the Arctica Project is copyright holder.
+ This is false and got amended on the upstream side with commit:
+ https://github.com/AyatanaIndicators/ayatana-indicator-power/commit/5fac6a9beffa5ba50dd72c9e2e2054dc25785fb6
 
 Files: src/brightness.c
  src/brightness.h
@@ -76,6 +87,11 @@ License: GPL-3
 
 Files: tests/test-service.cc
 Copyright: 2013, Canonical Ltd.
+License: GPL-3
+
+Files: update-po.sh
+ update-pot.sh
+Copyright: 2017, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 License: GPL-3
 
 Files: debian/*

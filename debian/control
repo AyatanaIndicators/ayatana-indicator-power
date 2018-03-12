@@ -18,7 +18,7 @@ Build-Depends: cmake,
                libdbustest1-dev,
 # for systemd unit
                systemd [linux-any],
-Standards-Version: 3.9.8
+Standards-Version: 4.1.3
 Homepage: https://github.com/AyatanaIndicators/ayatana-indicator-power
 Vcs-Git: https://github.com/AyatanaIndicators/ayatana-indicator-power
 Vcs-Browser: https://github.com/AyatanaIndicators/ayatana-indicator-power
@@ -29,11 +29,13 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          ayatana-indicator-common,
          upower,
-         libglib2.0-bin,
 Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | switchboard-plug-power | xfce4-power-manager | mate-power-manager,
             mate-indicator-applet | xfce4-indicator-plugin,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
 Description: Ayatana Indicator showing power state
- This indicator displays current power management information and gives 
- the user a way to access power management preferences.
+ This Ayatana Indicator displays current power management information and
+ gives the user a way to access power management preferences.
+ .
+ The Ayatana Indicator provides a generic, multi-desktop-env aware
+ approach of accessing power information and management features.
