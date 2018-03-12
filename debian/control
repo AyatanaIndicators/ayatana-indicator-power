@@ -5,7 +5,6 @@ Maintainer: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 Build-Depends: cmake,
                libnotify-dev (>= 0.7.6),
                libglib2.0-dev (>= 2.36),
-               libgudev-1.0-dev,
                python:any,
 # for packaging
                debhelper (>= 9),
