@@ -23,4 +23,8 @@
 void execute_command (const gchar * cmd);
 void utils_handle_settings_request(void);
 
+gboolean is_unity();
+gboolean is_gnome();
+gboolean is_mate();
+
 #endif /* __INDICATOR_POWER_UTILS_H__ */

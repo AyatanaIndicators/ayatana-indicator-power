@@ -83,3 +83,66 @@ utils_handle_settings_request (void)
 
   execute_command (control_center_cmd);
 }
+
+gboolean
+is_unity ()
+{
+  const gchar *xdg_current_desktop;
+  gchar **desktop_names;
+  int i;
+
+  xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (xdg_current_desktop != NULL) {
+    desktop_names = g_strsplit (xdg_current_desktop, ":", 0);
+    for (i = 0; desktop_names[i]; ++i) {
+      if (!g_strcmp0 (desktop_names[i], "Unity")) {
+        g_strfreev (desktop_names);
+        return TRUE;
+      }
+    }
+    g_strfreev (desktop_names);
+  }
+  return FALSE;
+}
+
+gboolean
+is_gnome ()
+{
+  const gchar *xdg_current_desktop;
+  gchar **desktop_names;
+  int i;
+
+  xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (xdg_current_desktop != NULL) {
+    desktop_names = g_strsplit (xdg_current_desktop, ":", 0);
+    for (i = 0; desktop_names[i]; ++i) {
+      if (!g_strcmp0 (desktop_names[i], "GNOME")) {
+        g_strfreev (desktop_names);
+        return TRUE;
+      }
+    }
+    g_strfreev (desktop_names);
+  }
+  return FALSE;
+}
+
+gboolean
+is_mate ()
+{
+  const gchar *xdg_current_desktop;
+  gchar **desktop_names;
+  int i;
+
+  xdg_current_desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (xdg_current_desktop != NULL) {
+    desktop_names = g_strsplit (xdg_current_desktop, ":", 0);
+    for (i = 0; desktop_names[i]; ++i) {
+      if (!g_strcmp0 (desktop_names[i], "MATE")) {
+        g_strfreev (desktop_names);
+        return TRUE;
+      }
+    }
+    g_strfreev (desktop_names);
+  }
+  return FALSE;
+}
