@@ -41,7 +41,6 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
                   glib-2.0>=2.36
                   gio-2.0>=2.36
                   gio-unix-2.0>=2.36
-                  gudev-1.0>=204
                   libnotify>=0.7.6)
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
