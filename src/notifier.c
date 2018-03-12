@@ -21,6 +21,8 @@
 #include "dbus-shared.h"
 #include "notifier.h"
 
+#include <url-dispatcher.h>
+
 #include <libnotify/notify.h>
 
 #include <glib/gi18n.h>
@@ -166,6 +168,14 @@ notification_clear (IndicatorPowerNotifier * self)
 }
 
 static void
+on_battery_settings_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
+                            char               * action    G_GNUC_UNUSED,
+                            gpointer             user_data G_GNUC_UNUSED)
+{
+  url_dispatch_send("settings:///system/battery", NULL, NULL);
+}
+
+static void
 on_dismiss_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
                    char               * action    G_GNUC_UNUSED,
                    gpointer             user_data G_GNUC_UNUSED)
@@ -240,6 +250,7 @@ notification_show(IndicatorPowerNotifier * self)
       notify_notification_set_hint(nn, "x-canonical-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
       notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
+      notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
     }
 
   /* if we can show it, keep it */
