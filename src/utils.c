@@ -55,19 +55,20 @@ utils_handle_settings_request (void)
         }
       else
 #endif
+      /* XFCE does not set XDG_CURRENT_DESKTOP, it seems... */
       if ((!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xubuntu")) || (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "xfce")))
         {
           control_center_cmd = "xfce4-power-manager-settings";
         }
-      else if (!g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "mate"))
+      else if (is_mate())
         {
           control_center_cmd = "mate-power-preferences";
         }
-      else if (!g_strcmp0 (g_getenv ("XDG_CURRENT_DESKTOP"), "Pantheon"))
+      else if (is_pantheon())
         {
           control_center_cmd = "switchboard --open-plug system-pantheon-power";
         }
-      else
+      else if (is_unity() || is_gnome())
         {
           gchar *path;
 
