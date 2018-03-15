@@ -18,10 +18,13 @@
 #define __INDICATOR_POWER_UTILS_H__
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 void execute_command (const gchar * cmd);
 void utils_handle_settings_request(void);
+
+gboolean zenity_warning (const char * icon_name, const char * title, const char * text);
 
 gboolean is_unity();
 gboolean is_gnome();

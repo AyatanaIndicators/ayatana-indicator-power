@@ -819,6 +819,12 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
       execute_command (cmd);
       g_free (cmd);
     }
+  else
+    {
+      zenity_warning ("dialog-warning",
+                      _("Warning"),
+                      _("The Ayatana Power Indicator does not support evoking the\npower statistics application your desktop environment, yet.\n\nPlease report this to the developers at:\nhttps://github.com/ArcticaProject/ayatana-indicator-power/issues"));
+    }
 }
 
 static void
