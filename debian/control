@@ -31,6 +31,7 @@ Depends: ${shlibs:Depends},
          upower,
 Recommends: unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings | switchboard-plug-power | xfce4-power-manager | mate-power-manager,
             mate-indicator-applet | xfce4-indicator-plugin,
+            zenity,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
 Description: Ayatana Indicator showing power state
