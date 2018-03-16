@@ -1,6 +1,112 @@
-2018-02-28 21:06:17 +0100 Mike Gabriel (1298ede)
+2018-03-16 15:15:20 +0100 Mike Gabriel (8977ba4)
 
-	* release 2.0.92 (HEAD -> master)
+	* release 2.0.93 (HEAD -> master)
+
+2018-03-16 07:45:10 +0100 Mike Gabriel (0c8e7c0)
+
+	* po/CMakeLists.txt: Drop intl_update_potfile(). We don't want this
+          in Ayatana Indicators.
+
+2018-03-16 07:44:36 +0100 Rodney Dawes (59f9f20)
+
+	* Use intltool support from cmake-extras.
+
+2018-03-16 07:33:13 +0100 Rodney Dawes (744720d)
+
+	* Use coverage support from cmake-extras.
+
+2018-03-16 07:28:21 +0100 Rodney Dawes (970f382)
+
+	* Use gmock module from cmake-extras.
+
+2018-03-15 22:37:20 +0100 Mike Gabriel (34b8d5a)
+
+	* debian/control: Add zenity to Recommends: (for issuing warnings).
+          (origin/master)
+
+2018-03-15 22:35:37 +0100 Mike Gabriel (9819c2e)
+
+	* Add fallback code that produces a warning (using zenity), if we
+          don't know how to handle certain actions.
+
+2018-03-15 22:34:45 +0100 Mike Gabriel (32df70e)
+
+	* src/utils.c: Use our desktop detection functions for find a way to
+          open an appropriate power settings dialog.
+
+2018-03-15 22:33:44 +0100 Mike Gabriel (2026ee0)
+
+	* src/utils.c: Add is_pantheon() function.
+
+2018-03-12 19:11:44 +0100 Mike Gabriel (60363ad)
+
+	* src/service.c: Use desktop detection functions in
+          'on_statistics_activated()'.
+
+2018-03-12 19:10:48 +0100 Mike Gabriel (1830c84)
+
+	* src/utils.(c|h): Port is_{mate,gnome,unity}() functions from
+          -session indicator.
+
+2018-03-04 20:45:01 +0000 Moo (4774ba8)
+
+	* Translated using Weblate (Lithuanian)
+
+2018-03-01 22:17:40 +0000 Moo (221cc5a)
+
+	* Translated using Weblate (Lithuanian)
+
+2018-03-12 15:41:05 +0100 Mike Gabriel (0bacdd9)
+
+	* debian/copyright: Update copyright attributions.
+
+2018-03-12 15:39:46 +0100 Mike Gabriel (3be21c5)
+
+	* debian/: Update from latest official Debian package.
+
+2018-03-12 14:34:44 +0100 Mike Gabriel (422443f)
+
+	* Make URL dispatcher build-dependency optional and handle battery
+          settings request appropriately.
+
+2018-03-12 14:03:05 +0100 Mike Gabriel (4d95898)
+
+	* Revert "Drop unnecessary dependency on Ubuntu's url-dispatcher."
+
+2018-03-12 13:54:58 +0100 Mike Gabriel (aff888f)
+
+	* debian/control: Drop from B-D: libgudev-1.0-dev. Not required
+          anymore.
+
+2018-03-12 13:54:41 +0100 Mike Gabriel (009c935)
+
+	* CMakeLists.txt: Drop gudev-1.0 from list of required shared libs.
+          Obviously not used.
+
+2018-03-11 21:32:24 +0100 Mike Gabriel (9a90f93)
+
+	* tests/CMakeLists.txt: Prohibit gschemas.compiled to be generated
+          multiple times.
+
+2018-02-28 21:46:12 +0100 Mike Gabriel (bdfc18a)
+
+	* NEWS: Fix c+p flaw.
+
+2018-02-28 21:23:45 +0100 Mike Gabriel (5fac6a9)
+
+	* po/Makevars: Update copyright holder and upstream bug tracker URL.
+
+2018-02-28 21:12:12 +0100 Mike Gabriel (cf71aef)
+
+	* debian/rules: Ship NEWS file as upstream changelog.
+
+2018-02-28 21:10:41 +0100 Mike Gabriel (1421355)
+
+	* NEWS file: Add for next release.
+
+2018-02-28 21:06:17 +0100 Mike Gabriel (3b1854a)
+
+	* release 2.0.92 (tag: 2.0.92, origin/release-builds, release-builds)
 
 2018-02-28 21:01:18 +0100 Mike Gabriel (ba93f00)
 
@@ -8,7 +114,7 @@
 
 2018-02-28 01:37:45 +0000 Мира Странная (e89a255)
 
-	* Translated using Weblate (Russian) (origin/master)
+	* Translated using Weblate (Russian)
 
 2018-02-08 11:34:43 +0000 Furkan Kalkan (2dd7450)
 
@@ -247,7 +353,7 @@
 
 2017-06-07 16:27:17 +0200 Mike Gabriel (6791d33)
 
-	* release 2.0.91 (tag: 2.0.91, origin/release-builds, release-builds)
+	* release 2.0.91 (tag: 2.0.91)
 
 2017-06-02 16:09:17 +0200 Mike Gabriel (fb4f8b2)
 
