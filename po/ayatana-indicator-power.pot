@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2017-11-29 13:23+0100\n"
+"POT-Creation-Date: 2018-03-16 16:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/device.c:528 ../src/service.c:440
+#: ../src/device.c:528 ../src/service.c:441
 msgid "Battery"
 msgstr ""
 
@@ -198,43 +198,69 @@ msgstr ""
 msgid "(%.0lf%%)"
 msgstr ""
 
-#: ../src/notifier.c:222
+#: ../src/notifier.c:231
 msgid "Battery Low"
 msgstr ""
 
-#: ../src/notifier.c:223
+#: ../src/notifier.c:232
 msgid "Battery Critical"
 msgstr ""
 
-#: ../src/notifier.c:225
+#: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr ""
 
-#: ../src/notifier.c:242
+#: ../src/notifier.c:251
 msgid "OK"
 msgstr ""
 
-#: ../src/service.c:565
+#: ../src/notifier.c:252
+msgid "Battery settings"
+msgstr ""
+
+#: ../src/service.c:566
 msgid "Charge level"
 msgstr ""
 
-#: ../src/service.c:633
+#: ../src/service.c:634
 msgid "Show Time in Menu Bar"
 msgstr ""
 
-#: ../src/service.c:637
+#: ../src/service.c:638
 msgid "Show Percentage in Menu Bar"
 msgstr ""
 
-#: ../src/service.c:641
+#: ../src/service.c:642
 msgid "Power Settings…"
 msgstr ""
 
-#: ../src/service.c:667
+#: ../src/service.c:668
 msgid "Adjust brightness automatically"
 msgstr ""
 
-#: ../src/service.c:673
+#: ../src/service.c:674
 msgid "Battery settings…"
+msgstr ""
+
+#: ../src/service.c:825 ../src/utils.c:132
+msgid "Warning"
+msgstr ""
+
+#: ../src/service.c:826
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power statistics application your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+msgstr ""
+
+#: ../src/utils.c:133
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power settings dialog for your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
