@@ -87,9 +87,6 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
 
 # testing & coverage
 if (${enable_tests})
-  set (GTEST_SOURCE_DIR /usr/src/gtest/src)
-  set (GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/..)
-  set (GTEST_LIBS -lpthread)
   enable_testing ()
   if (${enable_lcov})
     include(GCov)

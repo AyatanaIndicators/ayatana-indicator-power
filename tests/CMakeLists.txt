@@ -1,9 +1,5 @@
-# build libgtest
-add_library (gtest STATIC 
-             ${GTEST_SOURCE_DIR}/gtest-all.cc 
-             ${GTEST_SOURCE_DIR}/gtest_main.cc)
-set_target_properties (gtest PROPERTIES INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} ${GTEST_INCLUDE_DIR})
-set_target_properties (gtest PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} -w)
+find_package(GMock)
+include_directories(${GMOCK_INCLUDE_DIRS})
 
 # dbustest
 pkg_check_modules(DBUSTEST REQUIRED
@@ -49,7 +45,7 @@ function(add_test_by_name name)
   add_executable (${TEST_NAME} ${TEST_NAME}.cc)
   add_test (${TEST_NAME} ${TEST_NAME})
   add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice gschemas-compiled)
-  target_link_libraries (${TEST_NAME} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS} ${URLDISPATCHER_LIBRARIES})
+  target_link_libraries (${TEST_NAME} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS} ${URLDISPATCHER_LIBRARIES} ${GMOCK_LIBRARIES})
 endfunction()
 add_test_by_name(test-notify)
 add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
