@@ -130,7 +130,7 @@ utils_handle_settings_request (void)
        {
          zenity_warning ("dialog-warning",
                          _("Warning"),
-                         _("The Ayatana Power Indicator does not support evoking the\npower settings dialog for your desktop environment, yet.\n\nPlease report this to the developers at:\nhttps://github.com/ArcticaProject/ayatana-indicator-power/issues"));
+                         _("The Ayatana Power Indicator does not support evoking the\npower settings dialog of your desktop environment, yet.\n\nPlease report this to the developers at:\nhttps://github.com/ArcticaProject/ayatana-indicator-power/issues"));
        }
     }
 
