@@ -7,7 +7,7 @@ pkg_check_modules(DBUSTEST REQUIRED
 include_directories (SYSTEM ${DBUSTEST_INCLUDE_DIRS})
 
 # add warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g ${C_WARNING_ARGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${C_WARNING_ARGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables -Wno-global-constructors") # Google Test
 
 # build the necessary schemas
@@ -42,6 +42,7 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR})
 
 function(add_test_by_name name)
   set (TEST_NAME ${name})
+  set (COVERAGE_TEST_TARGETS ${COVERAGE_TEST_TARGETS} ${TEST_NAME} PARENT_SCOPE)
   add_executable (${TEST_NAME} ${TEST_NAME}.cc)
   add_test (${TEST_NAME} ${TEST_NAME})
   add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice gschemas-compiled)
@@ -50,3 +51,8 @@ endfunction()
 add_test_by_name(test-notify)
 add_test(NAME dear-reader-the-next-test-takes-80-seconds COMMAND true)
 add_test_by_name(test-device)
+
+set(COVERAGE_TEST_TARGETS
+  ${COVERAGE_TEST_TARGETS}
+  PARENT_SCOPE
+)

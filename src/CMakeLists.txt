@@ -46,7 +46,7 @@ set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-disabled-macro-expansion") # G_DEFINE
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-assign-enum") # GParamFlags
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-switch-enum")
 set_source_files_properties(${SERVICE_MANUAL_SOURCES}
-                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} ${GCOV_FLAGS} -g -std=c99")
+                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
 
 # the service library for tests to link against (basically, everything except main())
 add_library(${SERVICE_LIB} STATIC ${SERVICE_MANUAL_SOURCES} ${SERVICE_GENERATED_SOURCES})
@@ -55,6 +55,6 @@ link_directories(${SERVICE_DEPS_LIBRARY_DIRS})
 
 # the executable: lib + main()
 add_executable (${SERVICE_EXEC} main.c)
-set_source_files_properties(${SERVICE_SOURCES} main.c PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
-target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${GCOV_LIBS} ${URLDISPATCHER_LIBRARIES})
+set_source_files_properties(${SERVICE_SOURCES} main.c PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -std=c99")
+target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${URLDISPATCHER_LIBRARIES})
 install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_PKGLIBEXECDIR})
