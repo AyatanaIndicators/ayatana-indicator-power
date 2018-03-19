@@ -1,5 +1,5 @@
 <schemalist>
-  <enum id="icon-policy-enum">
+  <enum id="ayatana-indicator-power-icon-policy-enum">
     <value nick="present" value="0" />
     <value nick="charge" value="1" />
     <value nick="never" value="2" />
@@ -15,7 +15,7 @@
       <_summary>Show percentage in Menu Bar</_summary>
       <_description>Whether or not to show the percentage in the menu bar.</_description>
     </key>
-    <key enum="icon-policy-enum" name="icon-policy">
+    <key enum="ayatana-indicator-power-icon-policy-enum" name="icon-policy">
       <default>"present"</default>
       <_summary>When to show the battery status in the menu bar.</_summary>
       <_description>Options for when to show battery status. Valid options are "present", "charge", and "never".</_description>
