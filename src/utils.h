@@ -30,5 +30,6 @@ gboolean is_unity();
 gboolean is_gnome();
 gboolean is_mate();
 gboolean is_pantheon();
+gboolean is_xfce();
 
 #endif /* __INDICATOR_POWER_UTILS_H__ */
