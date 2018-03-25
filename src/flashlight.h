@@ -32,6 +32,9 @@ toggle_flashlight_action(GAction *action,
 int
 flashlight_supported();
 
+gboolean
+flashlight_activated();
+
 G_END_DECLS
 
 #endif /* INDICATOR_POWER_FLASHLIGHT__H */

@@ -31,6 +31,7 @@ const size_t qcom_sysfs_size = 2;
 const char* const qcom_sysfs[] = {"/sys/class/leds/torch-light/brightness", "/sys/class/leds/led:flash_torch/brightness"};
 
 char* flash_sysfs_path = NULL;
+gboolean activated = 0;
 
 int
 set_sysfs_path()
@@ -44,29 +45,34 @@ set_sysfs_path()
   return 0;
 }
 
+gboolean
+flashlight_activated()
+{
+  return activated;
+}
+
 void
 toggle_flashlight_action(GAction *action,
                          GVariant *parameter G_GNUC_UNUSED,
                          gpointer data G_GNUC_UNUSED)
 {
   GVariant *state;
-  gboolean b;
   FILE* fd;
 
   if (!set_sysfs_path())
     return;
 
   state = g_action_get_state(action);
-  b = g_variant_get_boolean(state);
+  activated = g_variant_get_boolean(state);
   g_variant_unref(state);
   fd = fopen(flash_sysfs_path, "w");
   if (fd != NULL){
-      if (b)
+      if (activated)
         fprintf(fd, QCOM_DISABLE);
       else
         fprintf(fd, QCOM_ENABLE);
       fclose(fd);
-      g_action_change_state(action, g_variant_new_boolean(!b));
+      g_action_change_state(action, g_variant_new_boolean(!activated));
   }
 }
 

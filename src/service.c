@@ -678,7 +678,14 @@ create_phone_settings_section(IndicatorPowerService * self)
     g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.indicator.switch");
     g_menu_append_item(section, item);
     g_object_unref(item);
+    if (flashlight_activated())
+    {
+      item = g_menu_item_new(_("Warning: Heavy use can damage the LED!"), "indicator.flashlight");
+      g_menu_append_item(section, item);
+      g_object_unref(item);
+    }
   }
+
   g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
 
   return G_MENU_MODEL(section);
