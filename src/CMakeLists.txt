@@ -14,6 +14,7 @@ set(SERVICE_MANUAL_SOURCES
     device-provider-upower.c
     device-provider.c
     device.c
+    flashlight.c
     notifier.c
     testing.c
     service.c

@@ -27,6 +27,7 @@
 #include "device-provider.h"
 #include "notifier.h"
 #include "service.h"
+#include "flashlight.h"
 #include "utils.h"
 
 #define BUS_NAME "org.ayatana.indicator.power"
@@ -671,6 +672,13 @@ create_phone_settings_section(IndicatorPowerService * self)
       g_object_unref(item);
     }
 
+  if (flashlight_supported())
+  {
+    item = g_menu_item_new(_("Flashlight"), "indicator.flashlight");
+    g_menu_item_set_attribute(item, "x-canonical-type", "s", "com.canonical.indicator.switch");
+    g_menu_append_item(section, item);
+    g_object_unref(item);
+  }
   g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
 
   return G_MENU_MODEL(section);
@@ -908,6 +916,11 @@ init_gactions (IndicatorPowerService * self)
                               convert_auto_state_to_prop,
                               NULL, NULL);
   g_action_map_add_action(G_ACTION_MAP(p->actions), G_ACTION(a));
+
+  /* add the flashlight action */
+  a = g_simple_action_new_stateful("flashlight", NULL, g_variant_new_boolean(FALSE));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
+  g_signal_connect(a, "activate", G_CALLBACK(toggle_flashlight_action), self);
 
   /* add the brightness action */
   a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));
