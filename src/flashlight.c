@@ -38,7 +38,7 @@ set_sysfs_path()
 {
   for (size_t i = 0; i < qcom_sysfs_size; i++) {
     if (access(qcom_sysfs[i], F_OK ) != -1){
-        flash_sysfs_path = qcom_sysfs[i];
+        flash_sysfs_path = (char*)qcom_sysfs[i];
         return 1;
     }
   }
