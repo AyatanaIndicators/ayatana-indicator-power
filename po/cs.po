@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-04-04 04:44+0000\n"
+"PO-Revision-Date: 2018-04-05 05:36+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/cs/>\n"
@@ -236,7 +236,7 @@ msgstr "Nastavení napájení…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr "Automaticky snižovat jas"
+msgstr "Automaticky snižovat jas obrazovky"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
