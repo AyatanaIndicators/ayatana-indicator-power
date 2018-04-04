@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-04-04 04:42+0000\n"
+"PO-Revision-Date: 2018-04-04 04:44+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/cs/>\n"
@@ -148,14 +148,14 @@ msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuta"
 msgstr[1] "minuty"
-msgstr[2] ""
+msgstr[2] "minut"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s do nabití"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
@@ -175,7 +175,7 @@ msgstr ""
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s nabito"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
@@ -232,12 +232,12 @@ msgstr ""
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr ""
+msgstr "Nastavení napájení…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Automaticky snižovat jas"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
-msgstr ""
+msgstr "Nastavení akumulátoru…"
