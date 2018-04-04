@@ -147,7 +147,7 @@ msgstr[2] "hodin"
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuta"
-msgstr[1] ""
+msgstr[1] "minuty"
 msgstr[2] ""
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
