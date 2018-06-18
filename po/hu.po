@@ -6,17 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2017-07-21 14:55+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Hungarian\n"
+"PO-Revision-Date: 2018-06-19 09:39+0000\n"
+"Last-Translator: Doma Gergő <domag02@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.0.1\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -212,7 +214,7 @@ msgstr ""
 
 #: ../src/notifier.c:242
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/service.c:565
 msgid "Charge level"
