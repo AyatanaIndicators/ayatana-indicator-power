@@ -6,20 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-02-28 10:23+0000\n"
-"Last-Translator: Мира Странная <miraityan2004@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/ru/>\n"
+"PO-Revision-Date: 2018-07-17 12:14+0000\n"
+"Last-Translator: Danil Semenov <semenoff.da2018@yandex.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 3.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -46,6 +46,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Параметры отображения состояния батареи. Допустимые значения: \"present\", \""
+"charge\"и \" never\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
@@ -65,7 +67,7 @@ msgstr "ИБП"
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Монитор"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
@@ -80,7 +82,7 @@ msgstr "Клавиатура"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "КПК"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
