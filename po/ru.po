@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-07-17 12:14+0000\n"
-"Last-Translator: Danil Semenov <semenoff.da2018@yandex.ru>\n"
+"PO-Revision-Date: 2018-07-23 14:45+0000\n"
+"Last-Translator: Eugen Wesseloh <auscoder@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/ru/>\n"
 "Language: ru\n"
@@ -219,7 +219,7 @@ msgstr "%.0f%% заряда осталось"
 
 #: ../src/notifier.c:242
 msgid "OK"
-msgstr "OK"
+msgstr "О.К."
 
 #: ../src/service.c:565
 msgid "Charge level"
