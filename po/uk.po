@@ -6,239 +6,241 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-01-24 12:34+0000\n"
-"Last-Translator: Марс Ямбар <mjambarmeta@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/uk/>\n"
+"PO-Revision-Date: 2018-09-28 20:37+0000\n"
+"Last-Translator: Володимир Бриняк <bardvv@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 3.2-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Відображати час у панелі меню"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Відображати чи ні час у панелі меню."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Відображати відсоток у панелі меню"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Відображати чи ні відсоток у панелі меню."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
-msgstr ""
+msgstr "Коли відображати стан батареї на панелі меню."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Опції, коли потрібно показувати стан акумулятора. Дійсні варіанти \"наявний\""
+", \"заряджати\", і \"ніколи\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "Мережевий адаптер"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:440
 msgid "Battery"
-msgstr ""
+msgstr "Акумулятор"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "ДБЖ"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Монітор"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr ""
+msgstr "Миша"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "Клавіатура"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "КПК"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
 msgid "Cell phone"
-msgstr ""
+msgstr "Мобільний телефон"
 
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Медіа плеєр"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "Планшет"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
 msgid "Computer"
-msgstr ""
+msgstr "Комп'ютер"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "визначається…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "невідомо"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d:%02d до зарядки"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "%0d:%02d залишилось"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s до зарядки"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "година"
+msgstr[1] "години"
+msgstr[2] "годин"
 
 #: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
 #: ../src/device.c:708
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "хвилина"
+msgstr[1] "хвилини"
+msgstr[2] "хвилин"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s до зарядки"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "%d %s %d %s залишилось"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "%d %s залишилось"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (заряджено)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
-msgstr ""
+msgstr "Низький заряд акумулятора"
 
 #: ../src/notifier.c:223
 msgid "Battery Critical"
-msgstr ""
+msgstr "Акумулятор критично розряджений"
 
 #: ../src/notifier.c:225
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "%.0f%% залишок заряду"
 
 #: ../src/notifier.c:242
 msgid "OK"
-msgstr "Гаразд"
+msgstr "OK"
 
 #: ../src/service.c:565
 msgid "Charge level"
-msgstr ""
+msgstr "Рівень заряду"
 
 #: ../src/service.c:633
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "Показати час у панелі меню"
 
 #: ../src/service.c:637
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "Показати відсоток у панелі меню"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr ""
+msgstr "Налаштування живлення…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Автоматична настройка яскравості"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
-msgstr ""
+msgstr "Налаштування акумулятора…"
