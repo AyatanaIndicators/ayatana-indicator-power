@@ -163,12 +163,12 @@ get_device_kind_weight (const IndicatorPowerDevice * device)
 }
 
 /* sort devices from most interesting to least interesting on this criteria:
-   1. discharging items from least time remaining until most time remaining
-   2. charging items from most time left to charge to least time left to charge
-   3. charging items with an unknown time remaining
-   4. discharging items with an unknown time remaining, but 10% or below
-   5. batteries, then non-line power, then line-power
-   6. discharging items with an unknown time remaining, but above 10% */
+   1. device that supplied the power to the system
+   2. discharging items from least time remaining until most time remaining
+   3. charging items from most time left to charge to least time left to charge
+   4. charging items with an unknown time remaining
+   5. discharging items with an unknown time remaining
+   6. batteries, then non-line power, then line-power */
 static gint
 device_compare_func (gconstpointer ga, gconstpointer gb)
 {
@@ -600,7 +600,7 @@ create_brightness_menu_item(void)
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
-  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.unity.slider");
+  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
 

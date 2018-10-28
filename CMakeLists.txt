@@ -125,7 +125,7 @@ if (ENABLE_TESTS)
     if (ENABLE_COVERAGE)
         find_package(CoverageReport)
         ENABLE_COVERAGE_REPORT(
-            TARGETS ayatanaindicatorpowerservice ayatana-indicator-power-service
+            TARGETS ${SERVICE_LIB} ${SERVICE_EXEC}
             TESTS ${COVERAGE_TEST_TARGETS}
             FILTER /usr/include ${CMAKE_BINARY_DIR}/*
         )

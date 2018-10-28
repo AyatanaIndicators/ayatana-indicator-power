@@ -48,7 +48,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-bad-function-cast") # g_clear_object()
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-switch-enum")
 set_source_files_properties(${SERVICE_MANUAL_SOURCES}
-                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
+                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -std=c99")
 
 # the service library for tests to link against (basically, everything except main())
 add_library(${SERVICE_LIB} STATIC ${SERVICE_MANUAL_SOURCES} ${SERVICE_GENERATED_SOURCES})
