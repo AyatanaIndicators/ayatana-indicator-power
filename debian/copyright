@@ -8,9 +8,7 @@ Files: CMakeLists.txt
  MERGE-REVIEW
  NEWS
  NEWS.Canonical
- cmake/GCov.cmake
  cmake/GdbusCodegen.cmake
- cmake/Translations.cmake
  cmake/UseGSettings.cmake
  data/CMakeLists.txt
  data/ayatana-indicator-power.conf.in
@@ -36,7 +34,6 @@ Files: CMakeLists.txt
  src/CMakeLists.txt
  src/com.canonical.powerd.xml
  tests/CMakeLists.txt
- tests/Makefile.am.strings
  tests/manual
 Copyright: 2011-2016, Canonical Ltd.
 License: GPL-3
