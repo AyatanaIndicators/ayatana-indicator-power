@@ -33,12 +33,12 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          ayatana-indicator-common,
          upower,
-Recommends: mate-control-center | xfce4-settings | unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings,
-            mate-power-manager | xfce4-power-manager | switchboard-plug-power | gnome-power-statistics,
-            mate-indicator-applet | xfce4-indicator-plugin,
+Recommends: mate-indicator-applet | xfce4-indicator-plugin,
             zenity,
 Suggests: powerd,
           unity-system-compositor (>= 0.0.4),
+          mate-control-center | xfce4-settings | unity-control-center | gnome-control-center (>= 3.1) | ubuntu-system-settings,
+          mate-power-manager | xfce4-power-manager | switchboard-plug-power | gnome-power-statistics,
 Description: Ayatana Indicator showing power state
  This Ayatana Indicator displays current power management information and
  gives the user a way to access power management preferences.
