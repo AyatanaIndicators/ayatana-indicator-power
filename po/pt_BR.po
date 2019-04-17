@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-09-19 05:31+0000\n"
-"Last-Translator: Henrique Combochi <henrique.combochi@gmail.com>\n"
+"PO-Revision-Date: 2019-04-18 15:04+0000\n"
+"Last-Translator: Rui Mendes <xz9@protonmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 3.6-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -45,8 +45,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Opções para quando mostrar status da bateria.Opções válidas são \"presente\","
-"\"carga\" e \"nunca\"."
+"Opções para definir quando mostrar o status da bateria. Opções válidas são \""
+"presente\", \"carga\" e \"nunca\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
@@ -61,12 +61,12 @@ msgstr "Bateria"
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor de voltagem"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
@@ -81,7 +81,7 @@ msgstr "Teclado"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
@@ -135,7 +135,7 @@ msgstr "faltam %0d:%02d"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr "%d %s %d %s para carregar"
+msgstr "%d %s e %d %s para carregar"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
@@ -162,7 +162,7 @@ msgstr "%d %s para carregar"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr "faltam %d %s %d %s"
+msgstr "faltam %d %s e %d %s"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
@@ -232,7 +232,7 @@ msgstr "Mostrar Porcentagem na Barra de Menu"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr "Configurações de Potência…"
+msgstr "Configurações de energia…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
