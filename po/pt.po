@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2018-11-19 22:07+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2019-04-18 15:04+0000\n"
+"Last-Translator: Rui Mendes <xz9@protonmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt/>\n"
 "Language: pt\n"
@@ -18,40 +18,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.3-dev\n"
+"X-Generator: Weblate 3.6-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Mostrar tempo na barra de menus"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Mostrar ou não o tempo na barra de menu."
+msgstr "Mostrar ou não o tempo na barra de menus."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Mostrar percentagem na barra de menus"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Mostrar ou não a porcentagem na barra de menu."
+msgstr "Mostrar ou não a percentagem na barra de menus."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
-msgstr "Quando mostrar o status da bateria na barra de menu."
+msgstr "Quando mostrar o estado da bateria na barra de menus."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Opções para quando mostrar status da bateria.Opções válidas são \"presente\","
-"\"carga\" e \"nunca\"."
+"Opções para definir quando mostrar o estado da bateria. As opções válidas "
+"são \"presente\", \"carga\" e \"nunca\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr "Adaptador CA"
+msgstr "Adaptador de corrente"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:440
@@ -61,17 +61,17 @@ msgstr "Bateria"
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor de voltagem"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr "Mouse"
+msgstr "Rato"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
@@ -81,17 +81,17 @@ msgstr "Teclado"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
 msgid "Cell phone"
-msgstr "Telefone celular"
+msgstr "Telemóvel"
 
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr "Tocador de mídia"
+msgstr "Reprodutor multimédia"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
@@ -106,17 +106,17 @@ msgstr "Computador"
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr "estimando…"
+msgstr "a estimar…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "desconhecido"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
@@ -135,7 +135,7 @@ msgstr "faltam %0d:%02d"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr "%d %s %d %s para carregar"
+msgstr "%d %s e %d %s para carregar"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
@@ -162,7 +162,7 @@ msgstr "%d %s para carregar"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr "faltam %d %s %d %s"
+msgstr "faltam %d %s e %d %s"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
@@ -203,11 +203,11 @@ msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
-msgstr "Bateria Baixa"
+msgstr "Bateria baixa"
 
 #: ../src/notifier.c:223
 msgid "Battery Critical"
-msgstr "Bateria Crítica"
+msgstr "Bateria crítica"
 
 #: ../src/notifier.c:225
 #, c-format
@@ -224,19 +224,19 @@ msgstr "Nível de carga"
 
 #: ../src/service.c:633
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "Mostrar tempo na barra de menus"
 
 #: ../src/service.c:637
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "Mostrar percentagem na barra de menus"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr "Configurações de Potência…"
+msgstr "Configurações da energia…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr "Ajustar brilho automaticamente"
+msgstr "Ajustar luminosidade automaticamente"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
