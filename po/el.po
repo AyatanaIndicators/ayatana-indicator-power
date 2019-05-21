@@ -6,234 +6,238 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2017-11-29 13:23+0100\n"
-"PO-Revision-Date: 2017-07-21 14:54+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Greek\n"
+"PO-Revision-Date: 2019-05-21 12:43+0000\n"
+"Last-Translator: THANOS SIOURDAKIS <siourdakisthanos@gmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/ayatana-indicators/"
+"power-applet/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.7-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Εμφάνιση χρόνου στη γραμμή μενού"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Αν θα εμφανιστεί ή όχι η ώρα στη γραμμή μενού."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Εμφάνιση ποσοστού στη γραμμή μενού"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Αν θα εμφανιστεί ή όχι το ποσοστό στη γραμμή μενού."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar."
-msgstr ""
+msgstr "Πότε να εμφανιστεί η κατάσταση της μπαταρίας στη γραμμή μενού."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Επιλογές για το πότε να δείξει την κατάσταση της μπαταρίας. Έγκυρες επιλογές "
+"είναι \"παρόν\", \"φόρτιση\" και \"ποτέ\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "Προσαρμογέας εναλλασσόμενου ρεύματος"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:440
 msgid "Battery"
-msgstr ""
+msgstr "Μπαταρία"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Οθόνη"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr ""
+msgstr "Ποντίκι"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "Πληκτρολόγιο"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
 msgid "Cell phone"
-msgstr ""
+msgstr "Κινητό τηλέφωνο"
 
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Πρόγραμμα αναπαραγωγής πολυμέσων"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "Ταμπλέτα"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
 msgid "Computer"
-msgstr ""
+msgstr "Υπολογιστής"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
 msgid "Unknown"
-msgstr ""
+msgstr "Άγνωστο"
 
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "Εκτίμηση…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "άγνωστο"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d:%02d για φόρτιση"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "%0d:%02d εναπομείναντα"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s για φόρτιση"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ώρα"
+msgstr[1] "ώρες"
 
 #: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
 #: ../src/device.c:708
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "λεπτό"
+msgstr[1] "λεπτά"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s για φόρτιση"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "%d %s %d %s εναπομείναντα"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "%d %s εναπομείναντα"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (φορτισμένο)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s,%.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:222
 msgid "Battery Low"
-msgstr ""
+msgstr "Χαμηλή μπαταρία"
 
 #: ../src/notifier.c:223
 msgid "Battery Critical"
-msgstr ""
+msgstr "Μπαταρία Κρίσιμη"
 
 #: ../src/notifier.c:225
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "%.0f%% υπόλοιπο"
 
 #: ../src/notifier.c:242
 msgid "OK"
-msgstr ""
+msgstr "ΟΚ"
 
 #: ../src/service.c:565
 msgid "Charge level"
-msgstr ""
+msgstr "Επίπεδο φόρτισης"
 
 #: ../src/service.c:633
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "Εμφάνιση χρόνου στη γραμμή μενού"
 
 #: ../src/service.c:637
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "Εμφάνιση ποσοστού στη γραμμή μενού"
 
 #: ../src/service.c:641
 msgid "Power Settings…"
-msgstr ""
+msgstr "Ρυθμίσεις ενέργειας…"
 
 #: ../src/service.c:667
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Αυτόματη ρύθμιση φωτεινότητας"
 
 #: ../src/service.c:673
 msgid "Battery settings…"
-msgstr ""
+msgstr "Ρυθμίσεις μπαταρίας…"
