@@ -17,7 +17,7 @@
     </key>
     <key enum="ayatana-indicator-power-icon-policy-enum" name="icon-policy">
       <default>"present"</default>
-      <_summary>When to show the battery status in the menu bar.</_summary>
+      <_summary>When to show the battery status in the menu bar?</_summary>
       <_description>Options for when to show battery status. Valid options are "present", "charge", and "never".</_description>
     </key>
   </schema>
