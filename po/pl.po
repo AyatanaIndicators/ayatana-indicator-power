@@ -6,13 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/ArcticaProject/"
-"ayatana-indicator-power/issues\n"
-"POT-Creation-Date: 2017-11-29 13:23+0100\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
+"power/issues\n"
+"POT-Creation-Date: 2019-08-28 20:21+0200\n"
 "PO-Revision-Date: 2018-08-24 18:08+0000\n"
 "Last-Translator: WaldiS <admin@sto.ugu.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/"
-"ayatana-indicators/power-applet/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/ayatana-"
+"indicators/power-applet/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Określa, czy procent ma być widoczny na pasku menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-msgid "When to show the battery status in the menu bar."
+#, fuzzy
+msgid "When to show the battery status in the menu bar?"
 msgstr "Kiedy pokazywać stan baterii na pasku menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
@@ -55,7 +56,7 @@ msgid "AC Adapter"
 msgstr "Zasilacz sieciowy"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/device.c:528 ../src/service.c:440
+#: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
 msgstr "Bateria"
 
@@ -204,43 +205,78 @@ msgstr "(%s)"
 msgid "(%.0lf%%)"
 msgstr "(%.0lf%%)"
 
-#: ../src/notifier.c:222
+#: ../src/notifier.c:231
 msgid "Battery Low"
 msgstr "Niski poziom baterii"
 
-#: ../src/notifier.c:223
+#: ../src/notifier.c:232
 msgid "Battery Critical"
 msgstr "Bateria krytyczna"
 
-#: ../src/notifier.c:225
+#: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr "%.0f%% poziom naładowania"
 
-#: ../src/notifier.c:242
+#: ../src/notifier.c:251
 msgid "OK"
 msgstr "OK"
 
-#: ../src/service.c:565
+#: ../src/notifier.c:252
+#, fuzzy
+msgid "Battery settings"
+msgstr "Ustawienia baterii…"
+
+#: ../src/service.c:567
 msgid "Charge level"
 msgstr "Poziom naładowania"
 
-#: ../src/service.c:633
+#: ../src/service.c:635
 msgid "Show Time in Menu Bar"
 msgstr "Pokaż czas na pasku menu"
 
-#: ../src/service.c:637
+#: ../src/service.c:639
 msgid "Show Percentage in Menu Bar"
 msgstr "Pokaż procent w pasku menu"
 
-#: ../src/service.c:641
+#: ../src/service.c:643
 msgid "Power Settings…"
 msgstr "Ustawienia zasilania…"
 
-#: ../src/service.c:667
+#: ../src/service.c:669
 msgid "Adjust brightness automatically"
 msgstr "Dostosuj jasność automatycznie"
 
-#: ../src/service.c:673
+#: ../src/service.c:677
+msgid "Flashlight"
+msgstr ""
+
+#: ../src/service.c:683
+msgid "Warning: Heavy use can damage the LED!"
+msgstr ""
+
+#: ../src/service.c:689
 msgid "Battery settings…"
 msgstr "Ustawienia baterii…"
+
+#: ../src/service.c:840 ../src/utils.c:132
+msgid "Warning"
+msgstr ""
+
+#: ../src/service.c:841
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power statistics application of your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+msgstr ""
+
+#: ../src/utils.c:133
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power settings dialog of your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+msgstr ""

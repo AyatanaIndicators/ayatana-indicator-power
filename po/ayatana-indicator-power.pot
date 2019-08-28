@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
 "power/issues\n"
-"POT-Creation-Date: 2018-03-16 16:06+0100\n"
+"POT-Creation-Date: 2019-08-28 20:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr ""
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-msgid "When to show the battery status in the menu bar."
+msgid "When to show the battery status in the menu bar?"
 msgstr ""
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
@@ -51,7 +51,7 @@ msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/device.c:528 ../src/service.c:441
+#: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
 msgstr ""
 
@@ -219,35 +219,43 @@ msgstr ""
 msgid "Battery settings"
 msgstr ""
 
-#: ../src/service.c:566
+#: ../src/service.c:567
 msgid "Charge level"
 msgstr ""
 
-#: ../src/service.c:634
+#: ../src/service.c:635
 msgid "Show Time in Menu Bar"
 msgstr ""
 
-#: ../src/service.c:638
+#: ../src/service.c:639
 msgid "Show Percentage in Menu Bar"
 msgstr ""
 
-#: ../src/service.c:642
+#: ../src/service.c:643
 msgid "Power Settings…"
 msgstr ""
 
-#: ../src/service.c:668
+#: ../src/service.c:669
 msgid "Adjust brightness automatically"
 msgstr ""
 
-#: ../src/service.c:674
+#: ../src/service.c:677
+msgid "Flashlight"
+msgstr ""
+
+#: ../src/service.c:683
+msgid "Warning: Heavy use can damage the LED!"
+msgstr ""
+
+#: ../src/service.c:689
 msgid "Battery settings…"
 msgstr ""
 
-#: ../src/service.c:825 ../src/utils.c:132
+#: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
 msgstr ""
 
-#: ../src/service.c:826
+#: ../src/service.c:841
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
