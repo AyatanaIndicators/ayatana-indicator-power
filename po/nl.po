@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2018-05-08 13:08+0000\n"
+"PO-Revision-Date: 2019-08-30 11:24+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/nl/>\n"
@@ -18,28 +18,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr "Tijd weergeven op menubalk"
+msgstr "Tijd tonen op menubalk"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Of de tijd moet worden weergegeven op de menubalk."
+msgstr "Of de tijd moet worden getoond op de menubalk."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr "Percentage weergeven op de menubalk"
+msgstr "Percentage tonen op de menubalk"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Of het percentage moet worden weergegeven op de menubalk."
+msgstr "Of het percentage moet worden getoond op de menubalk."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Wanneer de batterijstatus moet worden weergegeven op de menubalk."
+msgstr "Wanneer de accustatus moet worden getoond op de menubalk."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -57,7 +56,7 @@ msgstr "Stroomadapter"
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
-msgstr "Batterij"
+msgstr "Accu"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
@@ -220,9 +219,8 @@ msgid "OK"
 msgstr "Oké"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Batterij-instellingen…"
+msgstr "Accu-instellingen"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,19 +244,19 @@ msgstr "Helderheid automatisch aanpassen"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Zaklamp"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Waarschuwing: langdurig gebruik kan de LED beschadigen!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
-msgstr "Batterij-instellingen…"
+msgstr "Accu-instellingen…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Waarschuwing"
 
 #: ../src/service.c:841
 msgid ""
