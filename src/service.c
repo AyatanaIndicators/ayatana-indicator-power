@@ -1342,10 +1342,12 @@ create_totalled_battery_device (const GList * devices)
           const time_t t = indicator_power_device_get_time (walk);
           const UpDeviceState state = indicator_power_device_get_state (walk);
 
-          ++n_batteries;
 
           if (percent > 0.01)
-            sum_percent += percent;
+            {
+              sum_percent += percent;
+              ++n_batteries;
+            }
 
           if (state == UP_DEVICE_STATE_CHARGING)
             {
