@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2018-01-24 12:31+0000\n"
+"PO-Revision-Date: 2019-08-30 11:24+0000\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Huruvida procent ska visas i menyfältet."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "När batteristatus ska visas i menyfältet."
+msgstr "När ska batteristatus visas i menyfältet?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -220,9 +219,8 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Batteriinställningar…"
+msgstr "Batteriinställningar"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +244,11 @@ msgstr "Justera ljusstyrka automatiskt"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Ficklampa"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Varning: Överdriven användning kan skada LED-lampan!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -258,7 +256,7 @@ msgstr "Batteriinställningar…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Varning"
 
 #: ../src/service.c:841
 msgid ""
