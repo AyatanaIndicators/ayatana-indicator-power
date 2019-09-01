@@ -6,13 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2018-03-04 20:45+0000\n"
+"PO-Revision-Date: 2019-09-03 20:24+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -39,9 +39,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Rodyti ar nerodyti procentinę dalį meniu juostoje."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Kada meniu juostoje rodyti baterijos būseną."
+msgstr "Kada meniu juostoje rodyti baterijos būseną?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -224,9 +223,8 @@ msgid "OK"
 msgstr "Gerai"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Baterijos nustatymai…"
+msgstr "Baterijos nustatymai"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -250,11 +248,11 @@ msgstr "Automatiškai reguliuoti ryškumą"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Žibintuvėlis"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Įspėjimas: Intensyvus naudojimas gali pažeisti šviesos diodą!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -262,7 +260,7 @@ msgstr "Baterijos nustatymai…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Įspėjimas"
 
 #: ../src/service.c:841
 msgid ""
@@ -272,6 +270,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana maitinimo indikatorius kol kas nepalaiko jūsų darbalaukio aplinkos\n"
+"maitinimo statistikos programos iškvietimo.\n"
+"\n"
+"Praneškite apie tai plėtotojams, adresu:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -281,3 +284,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana maitinimo indikatorius kol kas nepalaiko jūsų darbalaukio aplinkos\n"
+"maitinimo nustatymų dialogo iškvietimo.\n"
+"\n"
+"Praneškite apie tai plėtotojams, adresu:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
