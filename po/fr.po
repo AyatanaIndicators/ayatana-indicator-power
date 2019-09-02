@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2017-12-01 16:46+0000\n"
-"Last-Translator: Olivier Macchioni <olivier.macchioni@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/fr/>\n"
+"PO-Revision-Date: 2019-09-03 20:24+0000\n"
+"Last-Translator: Swann Martinet <swann.ranskassa@laposte.net>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Montrer ou non le pourcentage dans la barre de menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Quand montrer l'état de la batterie dans la barre de menu."
+msgstr "Quand montrer l'état de la batterie dans la barre de menu ?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -220,9 +219,8 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Réglages de la batterie…"
+msgstr "Réglages de la batterie"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +244,11 @@ msgstr "Régler la luminosité automatiquement"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Lampe de poche"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Attention : Un usage intensif peut endommager la DEL !"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -258,7 +256,7 @@ msgstr "Réglages de la batterie…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Attention"
 
 #: ../src/service.c:841
 msgid ""
@@ -268,6 +266,12 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"L'Indicateur de charge Ayatana ne supporte pas encore\n"
+"le fait d'évoquer l'application de statistiques de charge\n"
+"de vote environnement de bureau.\n"
+"\n"
+"Veuillez signaler ceci aux développeurs et développeuses sur :\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -277,3 +281,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"L'Indicateur de charge Ayatana ne supporte pas encore l'évocation\n"
+"du dialogue des paramètres d'alimentation de votre environnement de bureau.\n"
+"\n"
+"Veuillez signaler ceci aux développeurs et développeuses sur :\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
