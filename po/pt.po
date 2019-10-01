@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2019-04-18 15:04+0000\n"
-"Last-Translator: Rui Mendes <xz9@protonmail.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/pt/>\n"
+"PO-Revision-Date: 2019-10-02 02:56+0000\n"
+"Last-Translator: Pedro Alexandre <minimizar340@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.6-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -141,15 +141,15 @@ msgstr "%d %s e %d %s para carregar"
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hora"
+msgstr[1] "horas"
 
 #: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
 #: ../src/device.c:708
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minuto"
+msgstr[1] "minutos"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
@@ -220,9 +220,8 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Configurações da bateria…"
+msgstr "Configurações da bateria"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +245,12 @@ msgstr "Ajustar luminosidade automaticamente"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Lanterna"
 
 #: ../src/service.c:683
+#, fuzzy
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Aviso: Uso intenso pode danificar o LED"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -258,9 +258,10 @@ msgstr "Configurações da bateria…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 #: ../src/service.c:841
+#, fuzzy
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
@@ -268,8 +269,14 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"O Ayatana Power Indicator ainda não suporta a evocação do\n"
+"poder das estatísticas da aplicação do seu ambiente de trabalho.\n"
+"\n"
+"Por favor reporte isto para os desenvolvedores em:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
+#, fuzzy
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power settings dialog of your desktop environment, yet.\n"
@@ -277,3 +284,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"O Ayatana Power Indicator ainda não suporta a evocação do\n"
+"poder do dialogo das preferências do seu ambiente de trabalho.\n"
+"\n"
+"Por favor reporte isto ao desenvolvedor em:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
