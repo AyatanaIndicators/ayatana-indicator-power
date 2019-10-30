@@ -10,7 +10,7 @@ msgstr ""
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
 "PO-Revision-Date: 2019-10-31 15:03+0000\n"
-"Last-Translator: Danjela Hoxha <danjelahoxha@gmail.com>\n"
+"Last-Translator: Marcela Korreshi <celomarcela@gmail.com>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/sq/>\n"
 "Language: sq\n"
@@ -254,7 +254,7 @@ msgstr ""
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Kujdes"
 
 #: ../src/service.c:841
 msgid ""
