@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2019-08-30 11:24+0000\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
+"PO-Revision-Date: 2019-11-13 16:04+0000\n"
+"Last-Translator: Christopher Murach <chris.murach@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/de/>\n"
 "Language: de\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr "Zeit in Menüleiste anzeigen"
+msgstr "Zeit in der Menüleiste anzeigen"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Ob der Prozentwert in der Menüleiste angezeigt werden soll oder nicht."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Wann der Akkustatus in der Menüleiste angezeigt werden soll."
+msgstr "Wann soll der Akkustatus in der Menüleiste angezeigt werden?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -220,9 +219,8 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Akkueinstellungen…"
+msgstr "Akkueinstellungen"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +244,11 @@ msgstr "Helligkeit automatisch anpassen"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Taschenlampe"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Warnung: Zu starke Nutzung kann die LED schädigen!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
