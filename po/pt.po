@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2019-10-02 02:56+0000\n"
-"Last-Translator: Pedro Alexandre <minimizar340@gmail.com>\n"
+"PO-Revision-Date: 2019-11-16 15:04+0000\n"
+"Last-Translator: Theeiss <azaz9a@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt/>\n"
 "Language: pt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Mostrar ou não a percentagem na barra de menus."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Quando mostrar o estado da bateria na barra de menus."
+msgstr "Quando mostrar o estado da bateria na barra de menus?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -248,9 +247,8 @@ msgid "Flashlight"
 msgstr "Lanterna"
 
 #: ../src/service.c:683
-#, fuzzy
 msgid "Warning: Heavy use can damage the LED!"
-msgstr "Aviso: Uso intenso pode danificar o LED"
+msgstr "Aviso: Uso intenso pode danificar o LED!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
