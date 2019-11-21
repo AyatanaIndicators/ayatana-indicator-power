@@ -1,3 +1,15 @@
+Overview of changes in ayatana-indicator-power 2.0.94
+
+    - Add basic flash light support. (Ported from
+      UBports).
+    - Ignore "batt_therm" devices. (Ported from
+      UBports).
+    - Add warning to avoid overheating of the LED. (Ported
+      from UBports).
+    - Add XFCE desktop detection support.
+    - Plenty translation updates. Thanks to translators
+      on hosted.weblate.org.
+
 Overview of changes in ayatana-indicator-power 2.0.93
 
     - Take more advantage of cmake-extras (intltool,

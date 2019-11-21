@@ -1,6 +1,258 @@
-2018-03-16 15:15:20 +0100 Mike Gabriel (8977ba4)
+2019-11-21 11:18:52 +0100 Mike Gabriel
 
-	* release 2.0.93 (HEAD -> master)
+	* release 2.0.94 (HEAD -> master, tag: 2.0.94)
+
+2019-11-15 14:35:56 +0000 Theeiss (4dcda7f)
+
+	* Translated using Weblate (Portuguese)
+
+2019-11-12 15:03:33 +0000 Christopher Murach (f519dae)
+
+	* Translated using Weblate (German)
+
+2019-11-10 09:33:17 +0000 Allan Nordhøy (a3c9d3f)
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2019-10-30 14:09:50 +0000 Marcela Korreshi (ed15e8e)
+
+	* Translated using Weblate (Albanian)
+
+2019-10-29 15:25:09 +0000 Danjela Hoxha (f6afdc7)
+
+	* Translated using Weblate (Albanian)
+
+2019-10-27 19:54:18 +0000 Niara (9f8fce7)
+
+	* Translated using Weblate (Russian)
+
+2019-10-23 14:43:45 +0000 Mattias Münster (e345493)
+
+	* Translated using Weblate (Swedish)
+
+2019-10-13 09:23:14 +0000 Abhay Patel (b4d1bbb)
+
+	* Translated using Weblate (Hindi)
+
+2019-10-07 16:46:16 +0000 Mateusz Rumiński (8049edf)
+
+	* Translated using Weblate (Polish)
+
+2019-10-01 02:00:04 +0000 Pedro Alexandre (1f27606)
+
+	* Translated using Weblate (Portuguese)
+
+2019-09-07 17:59:09 +0000 Abraham Roman (d876789)
+
+	* Translated using Weblate (Spanish)
+
+2019-09-02 19:49:25 +0000 Swann Martinet (832dde6)
+
+	* Translated using Weblate (French)
+
+2019-09-01 15:20:47 +0000 Moo (edce726)
+
+	* Translated using Weblate (Lithuanian)
+
+2019-08-29 10:14:47 +0000 Anders Jonsson (7785fde)
+
+	* Translated using Weblate (Swedish)
+
+2019-08-28 18:57:56 +0000 Heimen Stoffels (ec2e79a)
+
+	* Translated using Weblate (Dutch)
+
+2019-08-29 05:56:04 +0000 Mike Gabriel (e4187da)
+
+	* Translated using Weblate (German)
+
+2019-08-28 20:21:48 +0200 Mike Gabriel (40db8a1)
+
+	* update locale files
+
+2019-08-28 11:08:53 +0200 Mike Gabriel (90d660a)
+
+	* Merge branch 'leela52452-master'
+
+2019-08-25 05:37:36 +0000 leela (e20f85e)
+
+	* Translated using Weblate (Telugu)
+
+2019-08-25 05:37:36 +0000 leela (da9fb29)
+
+	* Translated using Weblate (Telugu)
+
+2019-08-25 05:43:51 +0000 leela (631477a)
+
+	* indicates an interrogative clause or phrase..
+
+2019-08-10 08:36:46 +0000 M Ramani Priya (d09a535)
+
+	* Translated using Weblate (Telugu)
+
+2019-07-01 19:51:55 +0000 Elizabeth Sherrock (f010e51)
+
+	* Translated using Weblate (Chinese (Simplified))
+
+2019-05-21 12:15:41 +0000 THANOS SIOURDAKIS (6bd06b1)
+
+	* Translated using Weblate (Greek)
+
+2019-04-17 14:39:55 +0000 Rui Mendes (289a58e)
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2019-04-17 14:36:09 +0000 Rui Mendes (82ed6d4)
+
+	* Translated using Weblate (Portuguese)
+
+2019-01-11 11:49:23 +0000 Louies (3c1dc7b)
+
+	* Translated using Weblate (Chinese (Traditional))
+
+2018-11-18 21:11:42 +0000 ssantos (9654d07)
+
+	* Translated using Weblate (Portuguese)
+
+2018-10-31 07:00:47 +0000 Petter Reinholdtsen (71274db)
+
+	* Translated using Weblate (Norwegian Bokmål)
+
+2018-10-23 15:59:30 +0000 Iván Seoane (a99a775)
+
+	* Translated using Weblate (Galician)
+
+2018-09-27 18:54:38 +0000 Володимир Бриняк (7927536)
+
+	* Translated using Weblate (Ukrainian)
+
+2018-09-27 08:04:29 +0000 Pavel Borecki (379fa6c)
+
+	* Translated using Weblate (Czech)
+
+2018-09-18 04:55:19 +0000 Henrique Combochi (fafe18f)
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2018-08-24 17:54:00 +0000 WaldiS (3deb5d2)
+
+	* Translated using Weblate (Polish)
+
+2018-08-23 17:17:08 +0000 WaldiS (bf2d57d)
+
+	* Translated using Weblate (Polish)
+
+2018-07-22 14:24:56 +0000 Eugen Wesseloh (9c5277c)
+
+	* Translated using Weblate (Russian)
+
+2018-07-17 12:13:52 +0000 Danil Semenov (3416130)
+
+	* Translated using Weblate (Russian)
+
+2018-06-18 08:52:36 +0000 Doma Gergő (738a297)
+
+	* Translated using Weblate (Hungarian)
+
+2018-06-17 10:29:41 +0000 advocatux (0f0013c)
+
+	* Translated using Weblate (Spanish)
+
+2018-05-08 12:49:58 +0000 Heimen Stoffels (0902e9a)
+
+	* Translated using Weblate (Dutch)
+
+2018-05-02 18:32:35 +0000 Adolfo Jayme Barrientos (f7b76c0)
+
+	* Translated using Weblate (Spanish)
+
+2018-04-04 04:44:14 +0000 Pavel Borecki (a0ac1c4)
+
+	* Translated using Weblate (Czech)
+
+2018-04-04 04:42:46 +0000 Pavel Borecki (8c96052)
+
+	* Translated using Weblate (Czech)
+
+2018-04-04 04:42:45 +0000 Pavel Borecki (1558d80)
+
+	* Translated using Weblate (Czech)
+
+2018-04-04 04:42:39 +0000 Pavel Borecki (56377ab)
+
+	* Translated using Weblate (Czech)
+
+2018-04-04 04:42:37 +0000 Pavel Borecki (b4bc9d5)
+
+	* Translated using Weblate (Czech)
+
+2018-04-04 04:33:18 +0000 Pavel Borecki (2fee033)
+
+	* Translated using Weblate (Czech)
+
+2018-11-16 09:58:09 +0100 Mike Gabriel (ce113ed)
+
+	* debian/control: Radically move control-center and power-manager
+          recommendations to Suggests: field. Pulling in too many
+          dependencies otherwise.
+
+2018-11-16 09:43:50 +0100 Mike Gabriel (aeb856b)
+
+	* debian/control: Re-sort packages under R. Add mate-control-center
+          alternative.
+
+2018-11-16 08:40:32 +0100 Mike Gabriel (30820ed)
+
+	* debian/*: Sync in relevant changes from official Debian packaging.
+
+2018-03-25 22:43:52 +0200 Mike Gabriel (6e7dad1)
+
+	* src/service.c: Adapt indicator attribute for flashlight switch to
+          ayatana-ido.
+
+2018-03-25 22:37:00 +0200 Mike Gabriel (6021c3a)
+
+	* tests/glib-fixture.h: Fix printf macro (%d -> %lu).
+
+2018-03-25 22:29:08 +0200 Mike Gabriel (1d4e6c3)
+
+	* src/flashlight.c: Cast char* from const char* when assigning
+          flash_sysfs_path.
+
+2018-03-25 22:18:55 +0200 Jan Sprinz (NeoTheThird) (868fa16)
+
+	* Added warning to avoid overheating of the LED.
+
+2018-03-25 22:15:43 +0200 Marius Gripsgard (cf33215)
+
+	* Ignore batt_therm devices.
+
+2018-03-25 22:10:45 +0200 Marius Gripsgard (cf7ae8a)
+
+	* Add basic flashlight support.
+
+2018-03-21 07:13:29 +0100 Mike Gabriel (1872fc5)
+
+	* src/utils.(c|h): Use XDG_CURRENT_DESKTOP for XFCE as well, in order
+          to detect that -power indicator is used on an XFCE
+          desktop.
+
+2018-03-19 09:24:52 +0100 Mike Gabriel (41bf160)
+
+	* data/org.ayatana.indicator.power.gschema.xml.in: Prepend project
+          namespace to enum id.
+
+2018-03-16 16:06:33 +0100 Mike Gabriel (06ef51a)
+
+	* src/{service.c,utils.c}: Fix grammar flaw in zenity warning.
+
+2018-03-16 16:04:37 +0100 Mike Gabriel (6f4bf8f)
+
+	* po/: Update ayatana-indicator-power.pot.
+
+2018-03-16 15:15:20 +0100 Mike Gabriel (8dd5cd8)
+
+	* release 2.0.93 (tag: 2.0.93)
 
 2018-03-16 07:45:10 +0100 Mike Gabriel (0c8e7c0)
 
@@ -22,7 +274,6 @@
 2018-03-15 22:37:20 +0100 Mike Gabriel (34b8d5a)
 
 	* debian/control: Add zenity to Recommends: (for issuing warnings).
-          (origin/master)
 
 2018-03-15 22:35:37 +0100 Mike Gabriel (9819c2e)
 
@@ -106,7 +357,7 @@
 
 2018-02-28 21:06:17 +0100 Mike Gabriel (3b1854a)
 
-	* release 2.0.92 (tag: 2.0.92, origin/release-builds, release-builds)
+	* release 2.0.92 (tag: 2.0.92)
 
 2018-02-28 21:01:18 +0100 Mike Gabriel (ba93f00)
 
@@ -494,8 +745,6 @@
 2015-10-05 18:44:21 +0000 CI Train Bot (511915f)
 
 	* Releasing 12.10.6+15.10.20151005.1-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.10.20151005.1-0ubuntu1,
-          refs/bzr/origin/heads/master)
 
 2015-10-05 18:44:19 +0000 Sebastien Bacher (5d36e8d)
 
@@ -509,7 +758,6 @@
 2015-05-22 17:54:53 +0000 CI Train Bot (ff85d7e)
 
 	* Releasing 12.10.6+15.10.20150522-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.10.20150522-0ubuntu1)
 
 2015-05-22 17:54:50 +0000 Charles Kerr (cb5ebdb)
 
@@ -547,7 +795,6 @@
 2015-05-15 16:40:33 +0000 CI Train Bot (a7c6825)
 
 	* Releasing 12.10.6+15.10.20150515-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.10.20150515-0ubuntu1)
 
 2015-05-15 16:40:29 +0000 Charles Kerr (dcf21a7)
 
@@ -558,7 +805,6 @@
 2015-05-15 16:39:51 +0000 CI Train Bot (65f5646)
 
 	* Releasing 12.10.6+15.04.20150515-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20150515-0ubuntu1)
 
 2015-05-15 16:39:47 +0000 Charles Kerr (e0a33ec)
 
@@ -573,7 +819,6 @@
 2015-04-02 20:31:02 +0000 CI Train Bot (05d07c8)
 
 	* Releasing 12.10.6+15.04.20150402-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20150402-0ubuntu1)
 
 2015-04-02 20:30:59 +0000 Marc Deslauriers (a3cf499)
 
@@ -588,7 +833,6 @@
 2015-03-31 20:24:46 +0000 CI Train Bot (e7a6c33)
 
 	* Releasing 12.10.6+15.04.20150331-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20150331-0ubuntu1)
 
 2015-03-31 20:24:43 +0000 Charles Kerr (c16921a)
 
@@ -621,7 +865,6 @@
 2015-02-12 22:45:30 +0000 CI Train Bot (ae9a41c)
 
 	* Releasing 12.10.6+15.04.20150212-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20150212-0ubuntu1)
 
 2015-02-12 22:45:24 +0000 Charles Kerr (8e3fb8c)
 
@@ -632,7 +875,6 @@
 2015-01-30 22:51:50 +0000 CI Train Bot (55104b7)
 
 	* Releasing 12.10.6+15.04.20150130-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20150130-0ubuntu1)
 
 2015-01-30 22:51:41 +0000 Charles Kerr (e759c85)
 
@@ -672,7 +914,6 @@
 2014-12-03 16:26:05 +0000 CI bot (4f07f00)
 
 	* Releasing 12.10.6+15.04.20141203-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20141203-0ubuntu1)
 
 2014-12-03 16:25:52 +0000 Christopher Lee (29058f3)
 
@@ -698,7 +939,6 @@
 2014-11-03 20:55:53 +0000 CI bot (d5a8d0a)
 
 	* Releasing 12.10.6+15.04.20141103-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+15.04.20141103-0ubuntu1)
 
 2014-11-03 20:55:42 +0000 Sebastien Bacher (d0ee781)
 
@@ -707,7 +947,6 @@
 2014-10-15 02:46:03 +0000 CI bot (3209f1a)
 
 	* Releasing 12.10.6+14.10.20141015-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20141015-0ubuntu1)
 
 2014-10-15 02:45:50 +0000 Charles Kerr (2496678)
 
@@ -759,7 +998,6 @@
 2014-10-09 13:42:16 +0000 CI bot (7251f3d)
 
 	* Releasing 12.10.6+14.10.20141009-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20141009-0ubuntu1)
 
 2014-10-09 13:42:03 +0000 Cody Garver (939cea2)
 
@@ -784,7 +1022,6 @@
 2014-10-06 17:31:07 +0000 CI bot (c73b4b9)
 
 	* Releasing 12.10.6+14.10.20141006-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20141006-0ubuntu1)
 
 2014-10-06 17:30:53 +0000 Charles Kerr (969a970)
 
@@ -802,7 +1039,6 @@
 2014-09-12 18:49:45 +0000 CI bot (0dc696d)
 
 	* Releasing 12.10.6+14.10.20140912-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140912-0ubuntu1)
 
 2014-09-12 18:49:31 +0000 Charles Kerr (2982ab5)
 
@@ -867,7 +1103,6 @@
 2014-09-09 04:22:52 +0000 CI bot (dd89ffe)
 
 	* Releasing 12.10.6+14.10.20140909-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140909-0ubuntu1)
 
 2014-09-09 04:22:39 +0000 Charles Kerr (c91ba6b)
 
@@ -946,7 +1181,6 @@
 2014-08-22 16:15:52 +0000 CI bot (059246d)
 
 	* Releasing 12.10.6+14.10.20140822-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140822-0ubuntu1)
 
 2014-08-22 16:15:36 +0000 Charles Kerr (575a5a1)
 
@@ -966,7 +1200,6 @@
 2014-08-14 14:51:03 +0000 CI bot (c7e1740)
 
 	* Releasing 12.10.6+14.10.20140814-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140814-0ubuntu1)
 
 2014-08-14 14:50:53 +0000 Charles Kerr (7c2aed0)
 
@@ -980,7 +1213,6 @@
 2014-07-30 10:52:39 +0000 CI bot (42414e0)
 
 	* Releasing 12.10.6+14.10.20140730-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140730-0ubuntu1)
 
 2014-07-30 10:52:30 +0000 Charles Kerr (b4f91b1)
 
@@ -1188,7 +1420,6 @@
 2014-07-18 21:33:31 +0000 CI bot (967a547)
 
 	* Releasing 12.10.6+14.10.20140718-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140718-0ubuntu1)
 
 2014-07-18 21:33:19 +0000 Charles Kerr (512426b)
 
@@ -1241,7 +1472,6 @@
 2014-06-24 09:45:57 +0000 CI bot (2d06cbb)
 
 	* Releasing 12.10.6+14.10.20140624-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140624-0ubuntu1)
 
 2014-06-24 09:45:47 +0000 Iain Lane (724900e)
 
@@ -1287,7 +1517,6 @@
 2014-06-11 17:21:30 +0000 CI bot (3982a33)
 
 	* Releasing 12.10.6+14.10.20140611-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140611-0ubuntu1)
 
 2014-06-11 17:21:20 +0000 Charles Kerr (defec1d)
 
@@ -1314,7 +1543,6 @@
 2014-04-28 23:25:54 +0000 CI bot (34cda47)
 
 	* Releasing 12.10.6+14.10.20140428-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.10.20140428-0ubuntu1)
 
 2014-04-28 23:25:45 +0000 Ricardo Salveti de Araujo (7aaf31b)
 
@@ -1340,7 +1568,6 @@
 2014-04-11 14:01:37 +0000 CI bot (58ed2f8)
 
 	* Releasing 12.10.6+14.04.20140411-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140411-0ubuntu1)
 
 2014-04-11 14:01:27 +0000 Sebastien Bacher (d12706e)
 
@@ -1366,7 +1593,6 @@
 2014-03-28 16:10:45 +0000 CI bot (ca89fdd)
 
 	* Releasing 12.10.6+14.04.20140328-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140328-0ubuntu1)
 
 2014-03-28 16:10:35 +0000 Lars Uebernickel (fc86e4d)
 
@@ -1385,7 +1611,6 @@
 2014-03-26 18:50:46 +0000 CI bot (39ab6b3)
 
 	* Releasing 12.10.6+14.04.20140326-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140326-0ubuntu1)
 
 2014-03-26 18:50:37 +0000 Y.C cheng (ebf3030)
 
@@ -1427,7 +1652,6 @@
 2014-03-14 14:14:07 +0000 CI bot (6b9e3d4)
 
 	* Releasing 12.10.6+14.04.20140314-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140314-0ubuntu1)
 
 2014-03-14 14:13:58 +0000 Charles Kerr (fe4849e)
 
@@ -1468,7 +1692,6 @@
 2014-03-11 18:33:10 +0000 CI bot (2596b05)
 
 	* Releasing 12.10.6+14.04.20140311-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140311-0ubuntu1)
 
 2014-03-11 18:33:00 +0000 Lars Uebernickel (c67067b)
 
@@ -1481,7 +1704,6 @@
 2014-03-06 11:51:54 +0000 CI bot (24f2ab3)
 
 	* Releasing 12.10.6+14.04.20140306-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140306-0ubuntu1)
 
 2014-03-06 11:51:46 +0000 Simon Steinbeiß (0e381b4)
 
@@ -1544,7 +1766,6 @@
 2014-02-07 16:32:36 +0000 CI bot (8c96b02)
 
 	* Releasing 12.10.6+14.04.20140207-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6+14.04.20140207-0ubuntu1)
 
 2014-02-07 16:32:26 +0000 CI bot (aea3f06)
 
@@ -2417,7 +2638,6 @@
 2013-01-17 18:15:56 -0500 Mathieu Trudel-Lapierre (040e7a8)
 
 	* releasing version 12.10.6daily13.01.17-0ubuntu1
-          (refs/bzr/origin/tags/12.10.6daily13.01.17-0ubuntu1)
 
 2013-01-17 23:01:37 +0000 Charles Kerr (a399017)
 
@@ -2567,7 +2787,7 @@
 
 2012-11-13 14:44:16 -0600 Charles Kerr (7c335dd)
 
-	* 12.10.5 (refs/bzr/origin/tags/12.10.5)
+	* 12.10.5
 
 2012-11-13 14:40:47 -0600 Charles Kerr (f6075f0)
 
@@ -2633,7 +2853,7 @@
 
 2012-11-04 11:48:11 -0600 Charles Kerr (014fbc2)
 
-	* 12.10.4 (refs/bzr/origin/tags/12.10.4)
+	* 12.10.4
 
 2012-11-04 11:46:50 -0600 Charles Kerr (2fa0264)
 
@@ -2678,7 +2898,7 @@
 
 2012-10-26 15:20:16 +0200 Charles Kerr (681e4e9)
 
-	* 12.10.3 (refs/bzr/origin/tags/12.10.3)
+	* 12.10.3
 
 2012-10-26 15:14:30 +0200 Charles Kerr (880f44e)
 
@@ -2743,7 +2963,7 @@
 
 2012-10-03 11:51:08 -0500 Charles Kerr (3a0758a)
 
-	* 12.10.2 (refs/bzr/origin/tags/12.10.2)
+	* 12.10.2
 
 2012-10-03 11:46:15 -0500 Charles Kerr (af699e1)
 
@@ -2795,7 +3015,7 @@
 
 2012-08-21 23:44:51 -0500 Charles Kerr (fb058d4)
 
-	* 12.10.1 (refs/bzr/origin/tags/12.10.1)
+	* 12.10.1
 
 2012-08-21 21:05:49 -0500 Charles Kerr (300b1cc)
 
@@ -2820,7 +3040,7 @@
 
 2012-07-11 12:12:35 -0500 Charles Kerr (7bc1a48)
 
-	* bump version to 12.10.0 (refs/bzr/origin/tags/12.10.0)
+	* bump version to 12.10.0
 
 2012-07-11 12:10:21 -0500 Charles Kerr (6401fdd)
 
@@ -3240,7 +3460,7 @@
 
 2012-04-11 10:02:18 -0500 Charles Kerr (3242c72)
 
-	* 2.0 (tag: 2.0, refs/bzr/origin/tags/2.0)
+	* 2.0 (tag: 2.0)
 
 2012-04-10 14:54:47 -0500 Charles Kerr (f1c836c)
 
@@ -3306,7 +3526,7 @@
 
 2012-03-21 12:34:38 -0500 Charles Kerr (aec0158)
 
-	* 1.93 (tag: 1.93, refs/bzr/origin/tags/1.93)
+	* 1.93 (tag: 1.93)
 
 2012-03-17 14:48:58 -0500 Charles Kerr (22a82f6)
 
@@ -3345,7 +3565,7 @@
 
 2012-03-14 10:41:52 -0500 Charles Kerr (af5642f)
 
-	* 1.91 (tag: 1.92, refs/bzr/origin/tags/1.92)
+	* 1.91 (tag: 1.92)
 
 2012-02-23 02:47:47 -0500 Ken VanDine (eecdfb2)
 
@@ -3377,7 +3597,7 @@
 
 2012-02-23 00:19:11 -0600 Ted Gould (f1c5931)
 
-	* 1.91 (tag: 1.91, refs/bzr/origin/tags/1.91)
+	* 1.91 (tag: 1.91)
 
 2012-02-22 23:07:44 -0600 Ted Gould (500b6ee)
 
@@ -3433,7 +3653,7 @@
 
 2012-02-14 16:11:20 -0600 Ted Gould (1651ec1)
 
-	* 1.90 (tag: 1.90, refs/bzr/origin/tags/1.90)
+	* 1.90 (tag: 1.90)
 
 2012-02-14 16:11:10 -0600 Ted Gould (e9cd101)
 
@@ -3575,7 +3795,7 @@
 
 2011-10-13 16:15:35 +0100 Javier Jardón (31651dd)
 
-	* 0.10 (tag: 0.10, refs/bzr/origin/tags/0.10)
+	* 0.10 (tag: 0.10)
 
 2011-10-13 15:58:27 +0100 Javier Jardón (15c23be)
 
@@ -3645,7 +3865,7 @@
 
 2011-09-23 17:35:01 +0200 Javier Jardón (a93ea52)
 
-	* 0.9 (tag: 0.9, refs/bzr/origin/tags/0.9)
+	* 0.9 (tag: 0.9)
 
 2011-09-21 13:55:02 +0200 Javier Jardón (50bee91)
 
@@ -3657,7 +3877,7 @@
 
 2011-09-12 14:15:57 +0100 Javier Jardón (8c55038)
 
-	* 0.8 (tag: 0.8, refs/bzr/origin/tags/0.8)
+	* 0.8 (tag: 0.8)
 
 2011-09-12 14:13:18 +0100 Javier Jardón (0c0a7b0)
 
@@ -3725,8 +3945,7 @@
 
 2011-08-23 14:16:20 +0100 Javier Jardón (b1a5f6e)
 
-	* Release 0.7 (tag: 0.7, refs/bzr/origin/tags/help,
-          refs/bzr/origin/tags/0.7)
+	* Release 0.7 (tag: 0.7)
 
 2011-08-23 14:05:38 +0100 Javier Jardón (e7e437b)
 
@@ -3785,7 +4004,7 @@
 
 2011-08-12 12:05:04 +0100 Javier Jardón (d5c1b2c)
 
-	* Release 0.6 (tag: 0.6, refs/bzr/origin/tags/0.6)
+	* Release 0.6 (tag: 0.6)
 
 2011-08-12 12:03:14 +0100 Javier Jardón (9c1a5e9)
 
@@ -3833,7 +4052,7 @@
 
 2011-08-03 11:42:06 +0100 Javier Jardón (1ad8d1f)
 
-	* Release 0.5 (tag: 0.5, refs/bzr/origin/tags/0.5)
+	* Release 0.5 (tag: 0.5)
 
 2011-08-03 11:39:57 +0100 Javier Jardón (7d7b78e)
 
@@ -3924,7 +4143,7 @@
 
 2011-07-14 16:22:10 +0200 Javier Jardón (74a0c13)
 
-	* Release 0.3 (tag: 0.3, refs/bzr/origin/tags/0.3)
+	* Release 0.3 (tag: 0.3)
 
 2011-07-14 16:19:55 +0200 Javier Jardón (0cdc5de)
 
