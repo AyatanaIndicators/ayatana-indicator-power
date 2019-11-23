@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2019-10-28 20:53+0000\n"
+"PO-Revision-Date: 2019-11-24 18:04+0000\n"
 "Last-Translator: Niara <kitekatkek@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/ru/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -247,11 +247,11 @@ msgstr "Автоматическая настройка яркости"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Фонарь"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Внимание: Частое использование может повредить светодиод!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
