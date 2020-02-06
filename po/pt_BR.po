@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2019-04-18 15:04+0000\n"
-"Last-Translator: Rui Mendes <xz9@protonmail.com>\n"
+"PO-Revision-Date: 2020-02-07 14:50+0000\n"
+"Last-Translator: Laércio Cordeiro <efs.laee@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.6-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -217,7 +217,7 @@ msgstr "%.0f%% de carga restante"
 
 #: ../src/notifier.c:251
 msgid "OK"
-msgstr "OK"
+msgstr "Correto"
 
 #: ../src/notifier.c:252
 #, fuzzy
