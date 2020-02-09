@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2019-05-21 12:43+0000\n"
+"PO-Revision-Date: 2020-02-10 13:50+0000\n"
 "Last-Translator: THANOS SIOURDAKIS <siourdakisthanos@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/el/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.7-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Αν θα εμφανιστεί ή όχι το ποσοστό στη γραμμή μενού."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Πότε να εμφανιστεί η κατάσταση της μπαταρίας στη γραμμή μενού."
+msgstr "Πότε να εμφανιστεί η κατάσταση της μπαταρίας στη γραμμή μενού;"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -220,9 +219,8 @@ msgid "OK"
 msgstr "ΟΚ"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Ρυθμίσεις μπαταρίας…"
+msgstr "Ρυθμίσεις μπαταρίας"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +244,11 @@ msgstr "Αυτόματη ρύθμιση φωτεινότητας"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Φακός"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "ΠΡΟΣΟΧΗ: η βαριά χρήση μπορεί να βλάψει το LED!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -258,7 +256,7 @@ msgstr "Ρυθμίσεις μπαταρίας…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Προειδοποίηση"
 
 #: ../src/service.c:841
 msgid ""
