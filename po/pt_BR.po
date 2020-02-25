@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-02-07 14:50+0000\n"
-"Last-Translator: Laércio Cordeiro <efs.laee@gmail.com>\n"
+"PO-Revision-Date: 2020-02-26 17:33+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -37,9 +37,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Mostrar ou não a porcentagem na barra de menu."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Quando mostrar o status da bateria na barra de menu."
+msgstr "Quando exibir a condição da bateria na barra de menu?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -217,12 +216,11 @@ msgstr "%.0f%% de carga restante"
 
 #: ../src/notifier.c:251
 msgid "OK"
-msgstr "Correto"
+msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Configurações da bateria…"
+msgstr "Configurações da bateria"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -246,11 +244,11 @@ msgstr "Ajustar brilho automaticamente"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Lanterna"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Aviso: O uso demasiado pode danificar o LED!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -258,7 +256,7 @@ msgstr "Configurações da bateria…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 #: ../src/service.c:841
 msgid ""
@@ -268,6 +266,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"O Indicador de Energia Ayatana ainda não suporta ser evocado pelo\n"
+"aplicação de estatísticas de energia do seu ambiente de trabalho.\n"
+"\n"
+"Por favor, denuncie isso aos desenvolvedores em:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -277,3 +280,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"O Indicador de Energia Ayatana ainda não suporta ser evocado pelo\n"
+"configurador de energia do seu ambiente de trabalho.\n"
+"\n"
+"Por favor, denuncie isso aos desenvolvedores em:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
