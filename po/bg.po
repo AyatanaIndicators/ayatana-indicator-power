@@ -6,33 +6,36 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2017-07-21 14:54+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Bulgarian\n"
+"PO-Revision-Date: 2020-03-25 17:46+0000\n"
+"Last-Translator: Violeta Uzunova <violeta.uzunova@gmail.com>\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
+#, fuzzy
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Показване на време в лентата с менюта"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Дали да се показва времето в лентата с менюта."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Показване на процент в лентата с менюта"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Дали да се покаже процентът в лентата на менюто или не."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
