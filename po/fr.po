@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2019-09-03 20:24+0000\n"
-"Last-Translator: Swann Martinet <swann.ranskassa@laposte.net>\n"
+"PO-Revision-Date: 2020-04-16 00:11+0000\n"
+"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/fr/>\n"
 "Language: fr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -45,8 +45,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Dans quel cas montrer l'état de la batterie. Les options valides sont "
-"\"present\", \"charge\" et \"never\"."
+"Dans quel cas montrer l'état de la batterie. Les options valides sont « "
+"présent », « en charge » et « jamais »."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
@@ -81,7 +81,7 @@ msgstr "Clavier"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr "Assistant Digital Portatif"
+msgstr "Assistant personnel numérique"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
@@ -228,11 +228,11 @@ msgstr "Niveau de charge"
 
 #: ../src/service.c:635
 msgid "Show Time in Menu Bar"
-msgstr "Montrer l'heure dans la Barre de Menu"
+msgstr "Montrer l'heure dans la barre de menu"
 
 #: ../src/service.c:639
 msgid "Show Percentage in Menu Bar"
-msgstr "Montrer le Pourcentage dans la Barre de Menu"
+msgstr "Montrer le pourcentage dans la barre menu"
 
 #: ../src/service.c:643
 msgid "Power Settings…"
