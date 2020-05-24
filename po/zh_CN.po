@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2019-07-02 20:01+0000\n"
-"Last-Translator: Elizabeth Sherrock <lizzyd710@gmail.com>\n"
+"PO-Revision-Date: 2020-05-25 06:41+0000\n"
+"Last-Translator: wdggg <wdggg7@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18,68 +18,68 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.8-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "在菜单栏中显示时间"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "是否在菜单栏中显示时间."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "在菜单栏中显示电池百分比"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "是否在菜单栏中显示电池百分比."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
-msgstr ""
+msgstr "什么时候在菜单栏中显示电池状态?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
-msgstr ""
+msgstr "何时显示电池状态的选项. 选项有 \"总是显示\", \"充电时显示\" 和 \"从不显示\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "AC适配器"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
-msgstr ""
+msgstr "电池"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "UPS不间断电源设备"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "监视器"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr ""
+msgstr "鼠标"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "键盘"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "便携式设备"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
@@ -89,12 +89,12 @@ msgstr "手机"
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "媒体播放器"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "平板设备"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
@@ -104,36 +104,36 @@ msgstr "电脑"
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
 msgid "Unknown"
-msgstr ""
+msgstr "未知设备"
 
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "正在估计…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "未知"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "剩余充电时间 %0d:%02d"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "还剩 %0d%02d"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "还需充电%d%s%d%s"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
@@ -151,64 +151,64 @@ msgstr[0] "分钟"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "还需充电%d%s"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "还剩%d%s%d%s"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "还剩%d%s"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s(已充电)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s(%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:231
 msgid "Battery Low"
-msgstr ""
+msgstr "电量低"
 
 #: ../src/notifier.c:232
 msgid "Battery Critical"
-msgstr ""
+msgstr "电量过低"
 
 #: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "还需充电 %.0f%%"
 
 #: ../src/notifier.c:251
 msgid "OK"
@@ -216,43 +216,43 @@ msgstr "好的"
 
 #: ../src/notifier.c:252
 msgid "Battery settings"
-msgstr ""
+msgstr "电池设置"
 
 #: ../src/service.c:567
 msgid "Charge level"
-msgstr ""
+msgstr "电量"
 
 #: ../src/service.c:635
 msgid "Show Time in Menu Bar"
-msgstr ""
+msgstr "在菜单栏显示时间"
 
 #: ../src/service.c:639
 msgid "Show Percentage in Menu Bar"
-msgstr ""
+msgstr "在菜单栏显示电量百分比"
 
 #: ../src/service.c:643
 msgid "Power Settings…"
-msgstr ""
+msgstr "电源设定…"
 
 #: ../src/service.c:669
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "自动调整亮度"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "闪光灯"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "警告: 过量使用会损坏LED灯!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
-msgstr ""
+msgstr "电池设置…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: ../src/service.c:841
 msgid ""
@@ -262,6 +262,10 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana电源指示器暂不支持调用您的桌面环境下的耗电统计程序.\n"
+"\n"
+"请将此情况报告给开发者:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -271,3 +275,7 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana电源指示器暂不支持调用您的桌面环境下的电源设置对话框.\n"
+"\n"
+"请将此情况报告给开发者:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
