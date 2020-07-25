@@ -6,6 +6,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(PROJECT_VERSION "2.0.94")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
 
+option (enable_tests "Build the package's automatic tests." ON)
+
 ##
 ##  GNU standard installation directories
 ## 
@@ -82,11 +84,13 @@ add_subdirectory(po)
 
 
 # testing & coverage
-enable_testing ()
-add_subdirectory(tests)
-find_package(CoverageReport)
-ENABLE_COVERAGE_REPORT(
-  TARGETS ${SERVICE_LIB} ${SERVICE_EXEC}
-  TESTS ${COVERAGE_TEST_TARGETS}
-  FILTER /usr/include ${CMAKE_BINARY_DIR}/*
-)
+if (${enable_tests})
+    enable_testing ()
+    add_subdirectory(tests)
+    find_package(CoverageReport)
+    ENABLE_COVERAGE_REPORT(
+        TARGETS ${SERVICE_LIB} ${SERVICE_EXEC}
+        TESTS ${COVERAGE_TEST_TARGETS}
+        FILTER /usr/include ${CMAKE_BINARY_DIR}/*
+    )
+endif ()
