@@ -1,3 +1,10 @@
+Overview of changes in ayatana-indicator-power 2.0.95
+
+    - Allow one to disable unit tests at build time.
+    - Drop workaround for missing libexec dir on Debian.
+    - Translation updates. (Cudos to Hosted Weblate and
+      all its translators).
+
 Overview of changes in ayatana-indicator-power 2.0.94
 
     - Add basic flash light support. (Ported from

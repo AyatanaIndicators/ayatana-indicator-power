@@ -1,6 +1,140 @@
-2019-11-21 11:18:52 +0100 Mike Gabriel
+2020-07-25 13:22:28 +0200 Mike Gabriel
 
-	* release 2.0.94 (HEAD -> master, tag: 2.0.94)
+	* release 2.0.95 (HEAD -> master, tag: 2.0.95)
+
+2020-07-25 13:17:52 +0200 Mike Gabriel (42600ab)
+
+	* Merge branch 'tari01-master'
+
+2020-07-25 02:11:19 +0200 Robert Tari (0b63b9c)
+
+	* Added option to disable Testing/Coverage
+
+2020-07-24 12:08:07 +0200 Mike Gabriel (653137a)
+
+	* CMakeLists.txt: Drop workaround for missing libexec dir on Debian.
+          Debian moved forward and now supports FHS 3.0 (since
+          Debian Policy 4.1.5).
+
+2020-07-03 22:44:59 +0000 Tobias p (97d211a)
+
+	* Translated using Weblate (Danish)
+
+2020-06-24 13:37:04 +0000 Milo Ivir (0751254)
+
+	* Translated using Weblate (German)
+
+2020-06-14 04:31:25 +0000 MarongHappy (eaeeb83)
+
+	* Translated using Weblate (Korean)
+
+2020-05-30 22:23:46 +0000 Juraj Liso (e0ce238)
+
+	* Translated using Weblate (Slovak)
+
+2020-05-24 05:15:49 +0000 wdggg (08d68ba)
+
+	* Translated using Weblate (Chinese (Simplified))
+
+2020-05-08 06:05:22 +0000 Abdusalam (bec791a)
+
+	* Translated using Weblate (Uyghur)
+
+2020-05-09 04:21:33 +0000 iNetRoos (4cd7268)
+
+	* Translated using Weblate (Afrikaans)
+
+2020-04-30 06:44:24 +0000 Mingun (bdeb547)
+
+	* Translated using Weblate (Russian)
+
+2020-04-27 10:00:26 +0000 Jeannette L (2bf068e)
+
+	* Translated using Weblate (Italian)
+
+2020-04-27 10:18:56 +0000 Jeannette L (ee4390a)
+
+	* Translated using Weblate (French (Canada))
+
+2020-04-27 09:27:48 +0000 Jeannette L (3ce36fd)
+
+	* Translated using Weblate (English (United Kingdom))
+
+2020-04-27 09:39:21 +0000 Jeannette L (80ab0bc)
+
+	* Translated using Weblate (English (Canada))
+
+2020-04-27 09:43:21 +0000 Jeannette L (5d8fad3)
+
+	* Translated using Weblate (English (Australia))
+
+2020-04-16 15:41:58 +0000 george k (f917031)
+
+	* Translated using Weblate (Greek)
+
+2020-04-14 23:59:20 +0000 Jeannette L (c566844)
+
+	* Translated using Weblate (French)
+
+2020-04-04 06:04:38 +0000 Kristjan Räts (e51b166)
+
+	* Translated using Weblate (Estonian)
+
+2020-04-04 05:54:35 +0000 Kristjan Räts (82ccfe4)
+
+	* Translated using Weblate (Estonian)
+
+2020-04-01 20:24:05 +0000 Davit Mayilyan (8fde3eb)
+
+	* Translated using Weblate (Armenian)
+
+2020-03-30 07:59:18 +0000 ferhad.necef (de28bf2)
+
+	* Translated using Weblate (Russian)
+
+2020-03-24 17:18:12 +0000 Violeta Uzunova (b10c322)
+
+	* Translated using Weblate (Bulgarian)
+
+2020-03-16 05:01:41 +0000 Grace Guo (c888564)
+
+	* Translated using Weblate (Japanese)
+
+2020-02-25 16:34:09 +0000 Wellington Terumi Uemura (f714149)
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-02-22 14:41:26 +0000 Amr Karajah (c330d69)
+
+	* Translated using Weblate (Arabic)
+
+2020-02-09 13:47:50 +0000 THANOS SIOURDAKIS (fa432ab)
+
+	* Translated using Weblate (Greek)
+
+2020-02-06 14:44:37 +0000 Laércio Cordeiro (50c95bc)
+
+	* Translated using Weblate (Portuguese (Brazil))
+
+2020-01-18 13:34:48 +0000 Heimen Stoffels (54e099b)
+
+	* Translated using Weblate (Dutch)
+
+2020-01-04 15:22:33 +0000 ssantos (53f947a)
+
+	* Translated using Weblate (Portuguese)
+
+2020-01-02 22:56:31 +0000 Milo Ivir (4dc16fa)
+
+	* Translated using Weblate (Croatian)
+
+2019-11-23 17:04:46 +0000 Niara (56b5bc6)
+
+	* Translated using Weblate (Russian)
+
+2019-11-21 11:18:52 +0100 Mike Gabriel (9d30e39)
+
+	* release 2.0.94 (tag: 2.0.94)
 
 2019-11-15 14:35:56 +0000 Theeiss (4dcda7f)
 
