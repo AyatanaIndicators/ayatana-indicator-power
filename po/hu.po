@@ -6,23 +6,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2018-06-19 09:39+0000\n"
-"Last-Translator: Doma Gergő <domag02@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/hu/>\n"
+"PO-Revision-Date: 2020-07-30 10:41+0000\n"
+"Last-Translator: Ács Zoltán <acszoltan111@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Idő megjelenítése a menüsorban"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
@@ -30,7 +30,7 @@ msgstr ""
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Százalék megjelenítése a menüsoron"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
@@ -38,7 +38,7 @@ msgstr ""
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
-msgstr ""
+msgstr "Mikor jelenjen meg az akkumulátorállapot a menüsoron?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -54,7 +54,7 @@ msgstr ""
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
-msgstr ""
+msgstr "Akkumulátor"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
@@ -69,12 +69,12 @@ msgstr ""
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
 msgid "Mouse"
-msgstr ""
+msgstr "Egér"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "Billentyűzet"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
