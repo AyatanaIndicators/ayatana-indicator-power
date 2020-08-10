@@ -11,7 +11,7 @@ DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/buildflags.mk
 
 %:
-	dh $@
+	dh $@ --with systemd
 
 override_dh_install:
 	find debian/ayatana-indicator-power -name \*.la -delete
