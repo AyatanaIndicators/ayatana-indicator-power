@@ -357,7 +357,7 @@ calculate_battery_level_action_state (IndicatorPowerService * self)
 {
   const priv_t * const p = self->priv;
   guint32 battery_level;
-  
+
   if (p->primary_device == NULL)
     battery_level = 0;
   else
@@ -512,7 +512,7 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int pr
     item = g_menu_item_new (label, NULL);
     g_free (label);
 
-    g_menu_item_set_attribute (item, "x-canonical-type", "s", "org.ayatana.indicator.basic");
+    g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.basic");
 
     if ((icon = indicator_power_device_get_gicon (device)))
       {
@@ -565,7 +565,7 @@ create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
   menu = g_menu_new ();
 
   item = g_menu_item_new (_("Charge level"), "indicator.battery-level");
-  g_menu_item_set_attribute (item, "x-canonical-type", "s", "org.ayatana.indicator.progress");
+  g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
   g_menu_append_item (menu, item);
   g_object_unref (item);
 
@@ -586,7 +586,7 @@ create_brightness_menu_item(void)
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
-  g_menu_item_set_attribute(item, "x-canonical-type", "s", "org.ayatana.unity.slider");
+  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.unity.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
 
@@ -667,7 +667,7 @@ create_phone_settings_section(IndicatorPowerService * self)
   if (ab_supported)
     {
       item = g_menu_item_new(_("Adjust brightness automatically"), "indicator.auto-brightness");
-      g_menu_item_set_attribute(item, "x-canonical-type", "s", "org.ayatana.indicator.switch");
+      g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
       g_menu_append_item(section, item);
       g_object_unref(item);
     }
@@ -675,7 +675,7 @@ create_phone_settings_section(IndicatorPowerService * self)
   if (flashlight_supported())
   {
     item = g_menu_item_new(_("Flashlight"), "indicator.flashlight");
-    g_menu_item_set_attribute(item, "x-canonical-type", "s", "org.ayatana.indicator.switch");
+    g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
     g_menu_append_item(section, item);
     g_object_unref(item);
     if (flashlight_activated())
@@ -789,7 +789,7 @@ create_menu (IndicatorPowerService * self, int profile)
 
   /* add submenu to the header */
   header = g_menu_item_new (NULL, "indicator._header");
-  g_menu_item_set_attribute (header, "x-canonical-type",
+  g_menu_item_set_attribute (header, "x-ayatana-type",
                              "s", "org.ayatana.indicator.root");
   g_menu_item_set_submenu (header, G_MENU_MODEL (submenu));
   g_object_unref (submenu);

@@ -69,7 +69,7 @@ protected:
   static constexpr char const * METHOD_GET_INFO {"GetServerInformation"};
   static constexpr char const * SIGNAL_CLOSED {"NotificationClosed"};
 
-  static constexpr char const * HINT_TIMEOUT {"x-canonical-snap-decisions-timeout"};
+  static constexpr char const * HINT_TIMEOUT {"x-ayatana-snap-decisions-timeout"};
 
 protected:
 
@@ -88,8 +88,8 @@ protected:
                                          NOTIFY_INTERFACE,
                                          &error);
     g_assert_no_error (error);
-  
-    // METHOD_GET_INFO 
+
+    // METHOD_GET_INFO
     dbus_test_dbus_mock_object_add_method(mock, obj, METHOD_GET_INFO,
                                           nullptr,
                                           G_VARIANT_TYPE("(ssss)"),
@@ -113,7 +113,7 @@ protected:
     g_assert_no_error (error);
     g_free (str);
 
-    // METHOD_CLOSE 
+    // METHOD_CLOSE
     str = g_strdup_printf("self.EmitSignal('%s', '%s', 'uu', [ args[0], %d ])",
                           NOTIFY_INTERFACE,
                           SIGNAL_CLOSED,
@@ -293,7 +293,7 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
                                                      nullptr);
 
   // confirm that draining the battery puts
-  // the power_level change through its paces                                                              
+  // the power_level change through its paces
   for (int i=100; i>=0; --i)
     {
       changed_params = ChangedParams();
