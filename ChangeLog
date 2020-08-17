@@ -1,6 +1,72 @@
-2020-07-25 13:22:28 +0200 Mike Gabriel
+2020-08-17 22:31:34 +0200 Mike Gabriel
 
-	* release 2.0.95 (HEAD -> master, tag: 2.0.95)
+	* release 2.1.0 (HEAD -> master, tag: 2.1.0)
+
+2020-08-11 20:23:11 +0200 Mike Gabriel (592a667)
+
+	* Merge branch 'tari01-pr/replace-x-canonical-attributes'
+
+2020-08-11 20:02:44 +0200 Robert Tari (20f7780)
+
+	* Replace x-canonical attributes
+
+2020-08-11 08:03:20 +0200 Robert Tari (2fe548a)
+
+	* Merge branch 'sunweaver-pr/drop-upstart-support' Attributes GH PR
+          #8:
+          https://github.com/AyatanaIndicators/ayatana-indicator-power/pull/8
+
+2020-08-10 12:38:38 +0200 Mike Gabriel (1fb52f0)
+
+	* Drop all references to upstart.
+
+2020-08-10 08:52:17 +0200 Mike Gabriel (d37997e)
+
+	* debian/ayatana-indicator-power.links: Add FIXME/reminder to drop
+          manual symlinking of systemd user service file once DH
+          compat level is raised to a level above 12.
+
+2020-08-10 08:49:59 +0200 Mike Gabriel (b1ad978)
+
+	* Merge branch 'ubports-fix-systemd'
+
+2020-08-09 22:00:36 +0200 Marius Gripsgard (c011884)
+
+	* Start indicator in systemd when ayatana-indicators.target is
+          started
+
+2020-08-06 20:58:44 +0000 Nazim-ua (09e8477)
+
+	* Translated using Weblate (Ukrainian)
+
+2020-07-15 18:14:26 +0200 Florian Leeber (4aaddc4)
+
+	* Try to detect if flash needs to be enabled (latched) separately
+
+2020-02-16 20:08:48 +0100 Alfred Neumayer (215c6dd)
+
+	* flashlight: Add more brightness file paths
+
+2019-08-29 13:40:58 +0800 BirdZhang (9d40332)
+
+	* Do not divide by battery size if percent less than 0.01
+
+2020-08-06 15:02:25 +0200 Mike Gabriel (960b4ec)
+
+	* debian/control: Drop from B-D: python:any. In fact, a totally
+          superfluous B-D.
+
+2020-08-03 18:37:27 +0000 Abbas Baharforoosh (4ddb778)
+
+	* Translated using Weblate (Persian)
+
+2020-07-29 10:34:31 +0000 Ács Zoltán (6b9cb69)
+
+	* Translated using Weblate (Hungarian)
+
+2020-07-25 13:22:28 +0200 Mike Gabriel (6974c37)
+
+	* release 2.0.95 (tag: 2.0.95)
 
 2020-07-25 13:17:52 +0200 Mike Gabriel (42600ab)
 

@@ -1,3 +1,13 @@
+Overview of changes in ayatana-indicator-power 2.1.0
+
+  - Rename 'x-canonical-type' attribute to 'x-ayatana-type'
+    (and others) to allow using system indicators from
+    Ayatana Indicators on Ubuntu.
+  - Start the indicator with the ayatana-indicators.target.
+  - Drop upstart support.
+  - Flashlight improvements ported from UBports.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 2.0.95
 
     - Allow one to disable unit tests at build time.

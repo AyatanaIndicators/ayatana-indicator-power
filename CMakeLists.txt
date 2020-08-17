@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.9)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(PROJECT_VERSION "2.0.95")
+set(PROJECT_VERSION "2.1.0")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
 
 option (enable_tests "Build the package's automatic tests." ON)
