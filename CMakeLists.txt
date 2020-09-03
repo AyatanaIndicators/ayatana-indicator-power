@@ -10,7 +10,7 @@ option (enable_tests "Build the package's automatic tests." ON)
 
 ##
 ##  GNU standard installation directories
-## 
+##
 
 include (GNUInstallDirs)
 set (CMAKE_INSTALL_PKGLIBEXECDIR "${CMAKE_INSTALL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")

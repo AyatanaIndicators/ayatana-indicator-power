@@ -744,11 +744,11 @@ time_is_relevant (const IndicatorPowerDevice * device)
  *  * “X (charged)” if it is fully charged and not discharging;
  *  * “X (expanded time-remaining string)” if it is charging,
  *    or discharging with less than 24 hours left;
- *  * “X” if it is discharging with 24 hours or more left. 
+ *  * “X” if it is discharging with 24 hours or more left.
  *
  * The accessible label for the menu item should be the same as the
  * visible label, except with the accessible time-remaining string
- * instead of the expanded time-remaining string. 
+ * instead of the expanded time-remaining string.
  */
 static char *
 get_menuitem_text (const IndicatorPowerDevice * device,
@@ -817,7 +817,7 @@ indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device)
  * If “Show Percentage in Menu Bar” is checked (as it should not be by default),
  * the brackets should contain the percentage charge for that device.
  *
- * If both conditions are true, the time and percentage should be separated by a space. 
+ * If both conditions are true, the time and percentage should be separated by a space.
  */
 char*
 indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
@@ -873,7 +873,7 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
 
 /**
  * Regardless, the accessible name for the whole menu title should be the same
- * as the accessible name for that thing’s component inside the menu itself. 
+ * as the accessible name for that thing’s component inside the menu itself.
  */
 char *
 indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device,
