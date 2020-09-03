@@ -69,15 +69,13 @@ static void set_property (GObject*, guint prop_id, const GValue*, GParamSpec* );
 static void get_property (GObject*, guint prop_id,       GValue*, GParamSpec* );
 
 /* LCOV_EXCL_START */
-G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT)
 /* LCOV_EXCL_STOP */
 
 static void
 indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (IndicatorPowerDevicePrivate));
 
   object_class->dispose = indicator_power_device_dispose;
   object_class->finalize = indicator_power_device_finalize;
@@ -133,8 +131,7 @@ indicator_power_device_init (IndicatorPowerDevice *self)
 {
   IndicatorPowerDevicePrivate * priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (self, INDICATOR_POWER_DEVICE_TYPE,
-                                            IndicatorPowerDevicePrivate);
+  priv = indicator_power_device_get_instance_private(self);
   priv->kind = UP_DEVICE_KIND_UNKNOWN;
   priv->state = UP_DEVICE_STATE_UNKNOWN;
   priv->object_path = NULL;
@@ -449,6 +446,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
         break;
 
       case UP_DEVICE_STATE_CHARGING:
+
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_closest_10_percent_percentage (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str));

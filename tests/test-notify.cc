@@ -150,8 +150,8 @@ protected:
     while ((bus != nullptr) && (cleartry < 50))
       {
         g_usleep(100000);
-        while (g_main_pending())
-          g_main_iteration(true);
+        while (g_main_context_pending(NULL))
+          g_main_context_iteration(NULL, true);
         cleartry++;
       }
 

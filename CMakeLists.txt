@@ -69,7 +69,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-c++98-compat -Wno-padded") # these are annoying
   set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-documentation") # gtk-doc != doxygen
 else()
-  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wall -Wextra -Wpedantic -Wformat=2")
+  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wall -Wformat=2") # Use -Wextra and -Wpedantic explicitly if needed
 endif()
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-missing-field-initializers") # GActionEntry
 

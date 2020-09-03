@@ -37,10 +37,6 @@
 #define SETTINGS_ICON_POLICY_S "icon-policy"
 #define SETTINGS_SHOW_PERCENTAGE_S "show-percentage"
 
-G_DEFINE_TYPE (IndicatorPowerService,
-               indicator_power_service,
-               G_TYPE_OBJECT)
-
 enum
 {
   SIGNAL_NAME_LOST,
@@ -128,6 +124,8 @@ struct _IndicatorPowerServicePrivate
 };
 
 typedef IndicatorPowerServicePrivate priv_t;
+
+G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerService, indicator_power_service, G_TYPE_OBJECT)
 
 /***
 ****
@@ -967,7 +965,7 @@ on_bus_acquired (GDBusConnection * connection,
 
   g_debug ("bus acquired: %s", name);
 
-  p->conn = g_object_ref (G_OBJECT (connection));
+  p->conn = (GDBusConnection*)g_object_ref(G_OBJECT (connection));
   g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_BUS]);
 
   /* export the battery properties */
@@ -1188,9 +1186,7 @@ indicator_power_service_init (IndicatorPowerService * self)
   priv_t * p;
   int i;
 
-  p = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                   INDICATOR_TYPE_POWER_SERVICE,
-                                   IndicatorPowerServicePrivate);
+  p = indicator_power_service_get_instance_private(self);
   self->priv = p;
 
   p->cancellable = g_cancellable_new ();
@@ -1232,8 +1228,6 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
   object_class->dispose = my_dispose;
   object_class->get_property = my_get_property;
   object_class->set_property = my_set_property;
-
-  g_type_class_add_private (klass, sizeof (IndicatorPowerServicePrivate));
 
   signals[SIGNAL_NAME_LOST] = g_signal_new (
     INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
