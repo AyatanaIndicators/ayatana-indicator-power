@@ -69,15 +69,13 @@ static void set_property (GObject*, guint prop_id, const GValue*, GParamSpec* );
 static void get_property (GObject*, guint prop_id,       GValue*, GParamSpec* );
 
 /* LCOV_EXCL_START */
-G_DEFINE_TYPE (IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(IndicatorPowerDevice, indicator_power_device, G_TYPE_OBJECT)
 /* LCOV_EXCL_STOP */
 
 static void
 indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (IndicatorPowerDevicePrivate));
 
   object_class->dispose = indicator_power_device_dispose;
   object_class->finalize = indicator_power_device_finalize;
@@ -133,8 +131,7 @@ indicator_power_device_init (IndicatorPowerDevice *self)
 {
   IndicatorPowerDevicePrivate * priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (self, INDICATOR_POWER_DEVICE_TYPE,
-                                            IndicatorPowerDevicePrivate);
+  priv = indicator_power_device_get_instance_private(self);
   priv->kind = UP_DEVICE_KIND_UNKNOWN;
   priv->state = UP_DEVICE_STATE_UNKNOWN;
   priv->object_path = NULL;
@@ -449,6 +446,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
         break;
 
       case UP_DEVICE_STATE_CHARGING:
+
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_closest_10_percent_percentage (percentage);
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str));
@@ -744,11 +742,11 @@ time_is_relevant (const IndicatorPowerDevice * device)
  *  * “X (charged)” if it is fully charged and not discharging;
  *  * “X (expanded time-remaining string)” if it is charging,
  *    or discharging with less than 24 hours left;
- *  * “X” if it is discharging with 24 hours or more left. 
+ *  * “X” if it is discharging with 24 hours or more left.
  *
  * The accessible label for the menu item should be the same as the
  * visible label, except with the accessible time-remaining string
- * instead of the expanded time-remaining string. 
+ * instead of the expanded time-remaining string.
  */
 static char *
 get_menuitem_text (const IndicatorPowerDevice * device,
@@ -817,7 +815,7 @@ indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device)
  * If “Show Percentage in Menu Bar” is checked (as it should not be by default),
  * the brackets should contain the percentage charge for that device.
  *
- * If both conditions are true, the time and percentage should be separated by a space. 
+ * If both conditions are true, the time and percentage should be separated by a space.
  */
 char*
 indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
@@ -873,7 +871,7 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
 
 /**
  * Regardless, the accessible name for the whole menu title should be the same
- * as the accessible name for that thing’s component inside the menu itself. 
+ * as the accessible name for that thing’s component inside the menu itself.
  */
 char *
 indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device,

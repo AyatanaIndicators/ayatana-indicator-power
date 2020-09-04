@@ -8,7 +8,6 @@ include_directories (SYSTEM ${DBUSTEST_INCLUDE_DIRS})
 
 # add warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${C_WARNING_ARGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-weak-vtables -Wno-global-constructors") # Google Test
 
 # build the necessary schemas
 set_directory_properties (PROPERTIES
