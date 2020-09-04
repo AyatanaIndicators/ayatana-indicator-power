@@ -134,7 +134,10 @@ utils_handle_settings_request (void)
        }
     }
 
-  execute_command (control_center_cmd);
+    if (control_center_cmd)
+    {
+        execute_command(control_center_cmd);
+    }
 }
 
 gboolean
