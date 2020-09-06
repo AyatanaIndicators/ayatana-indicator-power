@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-03-17 05:36+0000\n"
-"Last-Translator: Grace Guo <grace@appest.com>\n"
+"PO-Revision-Date: 2020-09-07 07:36+0000\n"
+"Last-Translator: Baka Gaijin <lewdwarrior@waifu.club>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/ja/>\n"
 "Language: ja\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 #, fuzzy
@@ -224,9 +224,8 @@ msgid "%.0f%% charge remaining"
 msgstr "%.0f%% 電池残量"
 
 #: ../src/notifier.c:251
-#, fuzzy
 msgid "OK"
-msgstr "OK"
+msgstr "了解"
 
 #: ../src/notifier.c:252
 #, fuzzy
