@@ -1,5 +1,13 @@
 Overview of changes in ayatana-indicator-power 2.1.0
 
+  - Do not call the power settings handler if the command is unknown.
+    Fixes crash after zenity dialog call.
+  - Fix deprecations and other build warnings.
+  - DEB packaging: Break: and Replace: indicator-power.
+  - Translation updates.
+
+Overview of changes in ayatana-indicator-power 2.1.0
+
   - Rename 'x-canonical-type' attribute to 'x-ayatana-type'
     (and others) to allow using system indicators from
     Ayatana Indicators on Ubuntu.

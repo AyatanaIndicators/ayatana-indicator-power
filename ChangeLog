@@ -1,6 +1,56 @@
-2020-08-17 22:31:34 +0200 Mike Gabriel
+2020-09-10 21:35:22 +0200 Mike Gabriel
 
-	* release 2.1.0 (HEAD -> master, tag: 2.1.0)
+	* release 2.1.1 (HEAD -> master, tag: 2.1.1)
+
+2020-09-07 19:07:31 +0000 Tundzhay Mollov (c41b3b6)
+
+	* Translated using Weblate (Bulgarian)
+
+2020-09-06 06:37:04 +0000 Baka Gaijin (6e03179)
+
+	* Translated using Weblate (Japanese)
+
+2020-09-05 22:23:52 +0200 Robert Tari (30d1a7d)
+
+	* Merge branch 'sunweaver-pr/break-ubuntu-indicator' into master
+          Attributes GH PR
+          #16:https://github.com/AyatanaIndicators/ayatana-indicator-power/pull/16
+
+2020-09-04 10:59:59 +0000 antuketot76 (d0d8857)
+
+	* Translated using Weblate (Malay)
+
+2020-09-04 10:59:59 +0000 antuketot76 (5bb3145)
+
+	* Translated using Weblate (Malay)
+
+2020-09-05 12:53:07 +0200 Mike Gabriel (859c780)
+
+	* debian/control: Add B:/R: indicator-power.
+
+2020-09-04 21:24:20 +0200 Mike Gabriel (2820cb8)
+
+	* Merge branch 'tari01-pr/power-settings-crash'
+
+2020-09-03 19:24:58 +0200 Robert Tari (d6a07da)
+
+	* Do not call the power settings handler if the command is unknown
+
+2020-09-04 21:17:12 +0200 Mike Gabriel (527bbe4)
+
+	* Merge branch 'tari01-pr/deprecations-warnings'
+
+2020-09-03 18:43:57 +0200 Robert Tari (147130a)
+
+	* Fix deprecations and build warnings.
+
+2020-09-03 18:40:39 +0200 Robert Tari (2849569)
+
+	* Whitespace fix
+
+2020-08-17 22:31:34 +0200 Mike Gabriel (ca5a779)
+
+	* release 2.1.0 (tag: 2.1.0)
 
 2020-08-11 20:23:11 +0200 Mike Gabriel (592a667)
 
