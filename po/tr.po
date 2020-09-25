@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/ayatana-indicator-"
-"power/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2018-02-08 11:40+0000\n"
-"Last-Translator: Furkan Kalkan <furkan.kalkan3@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/tr/>\n"
+"PO-Revision-Date: 2020-09-26 14:40+0000\n"
+"Last-Translator: Talking Panda <memredogan3626@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -260,7 +260,7 @@ msgstr "Pil ayarları…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr ""
+msgstr "Uyarı"
 
 #: ../src/service.c:841
 msgid ""
