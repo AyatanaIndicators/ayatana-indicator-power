@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2019-09-08 18:24+0000\n"
-"Last-Translator: Abraham Roman <abrahiv666@gmail.com>\n"
+"PO-Revision-Date: 2020-09-29 05:40+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/es/>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -38,7 +38,7 @@ msgstr "Define si se debe mostrar o no el porcentaje en la barra de menús."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
-msgstr "Cuándo mostrar el estado de la batería en la barra de menús?"
+msgstr "¿Cuándo debe mostrarse el estado de la batería en la barra de menús?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -240,23 +240,23 @@ msgstr "Configuración de energía…"
 
 #: ../src/service.c:669
 msgid "Adjust brightness automatically"
-msgstr "Ajustar el brillo automáticamente"
+msgstr "Ajustar brillo automáticamente"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr "Destello"
+msgstr "Linterna"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr "Advertencia: ¡El uso intensivo puede dañar el LED!"
+msgstr "Atención: el uso intensivo puede dañar el LED."
 
 #: ../src/service.c:689
 msgid "Battery settings…"
-msgstr "Configuración de la batería…"
+msgstr "Configuración de batería…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
-msgstr "Advertencia"
+msgstr "Alerta"
 
 #: ../src/service.c:841
 msgid ""
@@ -266,11 +266,10 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"El indicador de encendido de Ayatana no es compatible con evocar el\n"
-"aplicación de estadísticas de potencia de su entorno de escritorio, todavía."
+"El menú de encendido/apagado de Ayatana aún no permite invocar\n"
+"la aplicación de estadísticas de energía del entorno de escritorio.\n"
 "\n"
-"\n"
-"Informe esto a los desarrolladores en:\n"
+"Informe del problema a los desarrolladores en:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
@@ -281,8 +280,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"El indicador de encendido de Ayatana no es compatible con evocar el\n"
-"diálogo de configuración de energía de su entorno de escritorio, todavía.\n"
+"El menú de encendido/apagado de Ayatana aún no permite invocar\n"
+"la ventana de configuración de energía del entorno de escritorio.\n"
 "\n"
-"Informe esto a los desarrolladores en:\n"
+"Informe del problema a los desarrolladores en:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
