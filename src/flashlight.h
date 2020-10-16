@@ -24,6 +24,12 @@
 
 G_BEGIN_DECLS
 
+int
+toggle_flashlight_action_qcom();
+
+int
+toggle_flashlight_action_simple();
+
 void
 toggle_flashlight_action(GAction *action,
                          GVariant *parameter G_GNUC_UNUSED,
@@ -34,6 +40,9 @@ flashlight_supported();
 
 gboolean
 flashlight_activated();
+
+enum
+TorchType { SIMPLE = 1, QCOM };
 
 G_END_DECLS
 

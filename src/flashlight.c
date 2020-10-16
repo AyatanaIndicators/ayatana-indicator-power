@@ -26,6 +26,8 @@
 
 #define QCOM_ENABLE "255"
 #define QCOM_DISABLE "0"
+#define SIMPLE_ENABLE "1"
+#define SIMPLE_DISABLE "0"
 
 const size_t qcom_sysfs_size = 5;
 const char* const qcom_sysfs[] = {"/sys/class/leds/torch-light/brightness",
@@ -33,10 +35,14 @@ const char* const qcom_sysfs[] = {"/sys/class/leds/torch-light/brightness",
                                   "/sys/class/leds/flashlight/brightness",
                                   "/sys/class/leds/torch-light0/brightness",
                                   "/sys/class/leds/torch-light1/brightness"};
-
 const char* qcom_torch_enable = "/sys/class/leds/led:switch/brightness";
 
+const size_t simple_sysfs_size = 2;
+const char* const simple_sysfs[] = {"/sys/class/flashlight_core/flashlight/flashlight_torch",
+                                    "/sys/class/leds/white:flash/brightness"};
+
 char* flash_sysfs_path = NULL;
+enum TorchType torch_type = SIMPLE;
 gboolean activated = 0;
 
 int
@@ -45,6 +51,13 @@ set_sysfs_path()
   for (size_t i = 0; i < qcom_sysfs_size; i++) {
     if (access(qcom_sysfs[i], F_OK ) != -1){
         flash_sysfs_path = (char*)qcom_sysfs[i];
+        torch_type = QCOM;
+        return 1;
+    }
+  }
+  for (size_t i = 0; i < simple_sysfs_size; i++) {
+    if (access(simple_sysfs[i], F_OK ) != -1){
+        flash_sysfs_path = (char*)simple_sysfs[i];
         return 1;
     }
   }
@@ -57,22 +70,12 @@ flashlight_activated()
   return activated;
 }
 
-void
-toggle_flashlight_action(GAction *action,
-                         GVariant *parameter G_GNUC_UNUSED,
-                         gpointer data G_GNUC_UNUSED)
+int
+toggle_flashlight_action_qcom()
 {
-  GVariant *state;
   FILE *fd1 = NULL, *fd2 = NULL;
-
   int needs_enable;
 
-  if (!set_sysfs_path())
-    return;
-
-  state = g_action_get_state(action);
-  activated = g_variant_get_boolean(state);
-  g_variant_unref(state);
   fd1 = fopen(flash_sysfs_path, "w");
   if (fd1 != NULL) {
     needs_enable = access(qcom_torch_enable, F_OK ) != -1;
@@ -91,8 +94,47 @@ toggle_flashlight_action(GAction *action,
     fclose(fd1);
     if (fd2 !=NULL)
       fclose(fd2);
-    g_action_change_state(action, g_variant_new_boolean(!activated));
+    return 1;
   }
+  return 0;
+}
+
+int
+toggle_flashlight_action_simple()
+{
+  FILE *fd = NULL;
+
+  fd = fopen(flash_sysfs_path, "w");
+  if (fd != NULL) {
+    fprintf(fd, activated ? SIMPLE_DISABLE : SIMPLE_ENABLE);
+    fclose(fd);
+    return 1;
+  }
+  return 0;
+}
+
+void
+toggle_flashlight_action(GAction *action,
+                         GVariant *parameter G_GNUC_UNUSED,
+                         gpointer data G_GNUC_UNUSED)
+{
+  GVariant *state;
+  int toggled;
+
+  if (!set_sysfs_path())
+    return;
+
+  state = g_action_get_state(action);
+  activated = g_variant_get_boolean(state);
+  g_variant_unref(state);
+
+  if (torch_type == QCOM)
+    toggled = toggle_flashlight_action_qcom();
+  else
+    toggled = toggle_flashlight_action_simple();
+
+  if (toggled)
+    g_action_change_state(action, g_variant_new_boolean(!activated));
 }
 
 int
