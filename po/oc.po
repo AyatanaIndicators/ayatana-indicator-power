@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-09-26 14:40+0000\n"
+"PO-Revision-Date: 2020-10-19 17:26+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
 "Language-Team: Occitan <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/oc/>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Mostrar l’ora dins la barra de menú"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Mostrar o pas l’ora dins la barra de menú."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
@@ -38,13 +38,15 @@ msgstr "Indica se cal afichar lo percentatge dins la barra de menú."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
-msgstr ""
+msgstr "Quand mostrar l’estat de la batariá dins la barra de menú ?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Dins quin cas mostrar l’estat de la batariá. Las opcions validas son « "
+"present », « en carga » e « jamai »."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
@@ -179,7 +181,7 @@ msgstr "%s (cargat)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
@@ -191,7 +193,7 @@ msgstr "(%s, %.0lf%%)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
@@ -242,11 +244,11 @@ msgstr "Ajustar automaticament la luminositat"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Lampa de pòcha"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Avertiment : l’utilizacion intensiva pòt damatjar la DEL !"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
