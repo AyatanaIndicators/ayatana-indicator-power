@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-09-26 14:40+0000\n"
-"Last-Translator: Talking Panda <memredogan3626@gmail.com>\n"
+"PO-Revision-Date: 2020-11-12 20:28+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/tr/>\n"
 "Language: tr\n"
@@ -18,30 +18,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
 msgstr "Menüde zamanı göster"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
-#, fuzzy
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Menüde saati göster ya da gösterme"
+msgstr "Menü çubuğunda saatin gösterilip gösterilmeyeceği."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
 msgstr "Menüde yüzdeyi göster"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
-#, fuzzy
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Menüde yüzdeyi göster ya da gösterme"
+msgstr "Menü çubuğunda yüzde değerinin gösterilip gösterilmeyeceği."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Menüde pil durumunu ne zaman gösterilsin."
+msgstr "Menü çubuğunda pil durumu ne zaman gösterilsin?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
@@ -99,7 +96,7 @@ msgstr "Medya Oynatıcı"
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "Tablet"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
@@ -190,7 +187,7 @@ msgstr "%s (%s)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %%%.0lf)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
@@ -215,16 +212,15 @@ msgstr "Pil Kritik"
 #: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr "%%%.0f kalan şarj."
+msgstr "%%%.0f şarj kaldı"
 
 #: ../src/notifier.c:251
 msgid "OK"
 msgstr "Tamam"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Pil ayarları…"
+msgstr "Pil ayarları"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -240,7 +236,7 @@ msgstr "Menüde yüzdeyi göster"
 
 #: ../src/service.c:643
 msgid "Power Settings…"
-msgstr "Güç Ayarları"
+msgstr "Güç Ayarları…"
 
 #: ../src/service.c:669
 msgid "Adjust brightness automatically"
@@ -248,11 +244,11 @@ msgstr "Parlaklığı otomatik olarak ayarla"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "El feneri"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Uyarı: Aşırı kullanım LED'e zarar verebilir!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -270,6 +266,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana Güç Göstergesi henüz masaüstü ortamınızın güç\n"
+"istatistikleri uygulamasının çağrılmasını desteklemiyor.\n"
+"\n"
+"Lütfen bunu aşağıdaki adresten geliştiricilere bildirin:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -279,3 +280,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana Güç Göstergesi henüz masaüstü ortamınızın güç\n"
+"ayarları iletişim kutusunun çağrılmasını desteklemiyor.\n"
+"\n"
+"Lütfen bunu aşağıdaki adresten geliştiricilere bildirin:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
