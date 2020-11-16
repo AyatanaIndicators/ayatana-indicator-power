@@ -630,14 +630,6 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
   GMenu * menu = g_menu_new ();
 
   g_menu_append (menu,
-                 _("Show Time in Menu Bar"),
-                 "indicator.show-time");
-
-  g_menu_append (menu,
-                 _("Show Percentage in Menu Bar"),
-                 "indicator.show-percentage");
-
-  g_menu_append (menu,
                  _("Power Settings…"),
                  "indicator.activate-settings");
 
