@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-11-07 14:26+0000\n"
+"PO-Revision-Date: 2020-11-27 14:29+0000\n"
 "Last-Translator: Ács Zoltán <acszoltan111@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/hu/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -26,7 +26,7 @@ msgstr "Idő megjelenítése a menüsorban"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Megjelenjen-e az idő a menüsorban."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
@@ -34,7 +34,7 @@ msgstr "Százalék megjelenítése a menüsorban"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Megjelenjen-e a százalék a menüsorban."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
@@ -45,11 +45,13 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Lehetőségek, hogy mikor jelenjen meg az akkumulátorállapot. Érvényes opciók: "
+"a \"jelenleg\", a \"töltés\" és a \"soha\"."
 
 #. TRANSLATORS: system power cord
 #: ../src/device.c:524
 msgid "AC Adapter"
-msgstr ""
+msgstr "Hálózati adapter"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:442
@@ -59,12 +61,12 @@ msgstr "Akkumulátor"
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
@@ -79,27 +81,27 @@ msgstr "Billentyűzet"
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/device.c:552
 msgid "Cell phone"
-msgstr ""
+msgstr "Mobiltelefon"
 
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Médialejátszó"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
 msgid "Tablet"
-msgstr ""
+msgstr "Tablet"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:564
 msgid "Computer"
-msgstr ""
+msgstr "Számítógép"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:568
@@ -109,108 +111,108 @@ msgstr "Ismeretlen"
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "becslés…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "ismeretlen"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d óra %02d perc a feltöltésig"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: ../src/device.c:646
-#, c-format
+#, c-format, fuzzy
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "%0d:%02d van vissza"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: ../src/device.c:681
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s a feltöltésig"
 
 #: ../src/device.c:682 ../src/device.c:700
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "óra"
+msgstr[1] "óra"
 
 #: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
 #: ../src/device.c:708
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "perc"
+msgstr[1] "perc"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: ../src/device.c:689
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s a feltöltésig"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: ../src/device.c:699
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "%d %s %d %s van vissza"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: ../src/device.c:707
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "%d %s van vissza"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (feltöltve)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:231
 msgid "Battery Low"
-msgstr ""
+msgstr "Alacsony akkumulátorszint"
 
 #: ../src/notifier.c:232
 msgid "Battery Critical"
-msgstr ""
+msgstr "Az akkumulátorszint kritikus"
 
 #: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "%.0f%% töltés van vissza"
 
 #: ../src/notifier.c:251
 msgid "OK"
@@ -218,11 +220,11 @@ msgstr "OK"
 
 #: ../src/notifier.c:252
 msgid "Battery settings"
-msgstr ""
+msgstr "Akkumulátor beállítások"
 
 #: ../src/service.c:567
 msgid "Charge level"
-msgstr ""
+msgstr "Töltési szint"
 
 #: ../src/service.c:635
 msgid "Show Time in Menu Bar"
@@ -234,29 +236,30 @@ msgstr "Százalék megjelenítése a menüsorban"
 
 #: ../src/service.c:643
 msgid "Power Settings…"
-msgstr ""
+msgstr "Energiabeállítások…"
 
 #: ../src/service.c:669
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Automatikusan állítsa be a fényerőt"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Flashlight"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Figyelem: A nagy igénybevétel károsíthatja a LED-et!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
-msgstr ""
+msgstr "Akkumulátor beállítások…"
 
 #: ../src/service.c:840 ../src/utils.c:132
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
 #: ../src/service.c:841
+#, fuzzy
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
@@ -264,6 +267,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Az Ayatana energia-indikátor eddig nem támogatja a\n"
+"az asztali környezet teljesítménystatisztikai alkalmazása.\n"
+"\n"
+"Jelentse ezt a fejlesztőknek a következő címen:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
