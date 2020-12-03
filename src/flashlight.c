@@ -29,19 +29,25 @@
 #define SIMPLE_ENABLE "1"
 #define SIMPLE_DISABLE "0"
 
-const size_t qcom_sysfs_size = 5;
+const size_t qcom_sysfs_size = 7;
 const char* const qcom_sysfs[] = {"/sys/class/leds/torch-light/brightness",
                                   "/sys/class/leds/led:flash_torch/brightness",
                                   "/sys/class/leds/flashlight/brightness",
                                   "/sys/class/leds/torch-light0/brightness",
-                                  "/sys/class/leds/torch-light1/brightness"};
-const char* qcom_torch_enable = "/sys/class/leds/led:switch/brightness";
+                                  "/sys/class/leds/torch-light1/brightness",
+                                  "/sys/class/leds/led:torch_0/brightness",
+                                  "/sys/class/leds/led:torch_1/brightness"};
+const size_t qcom_switch_size = 2;
+const char* const qcom_switch[] = {"/sys/class/leds/led:switch/brightness",
+                                   "/sys/class/leds/led:switch_0/brightness"};
 
 const size_t simple_sysfs_size = 2;
 const char* const simple_sysfs[] = {"/sys/class/flashlight_core/flashlight/flashlight_torch",
                                     "/sys/class/leds/white:flash/brightness"};
 
 char* flash_sysfs_path = NULL;
+char* qcom_switch_path = NULL;
+
 enum TorchType torch_type = SIMPLE;
 gboolean activated = 0;
 
@@ -52,6 +58,11 @@ set_sysfs_path()
     if (access(qcom_sysfs[i], F_OK ) != -1){
         flash_sysfs_path = (char*)qcom_sysfs[i];
         torch_type = QCOM;
+        /* Qualcomm torch; determine switch file (if one is needed) */
+        for (size_t i = 0; i < qcom_switch_size; i++) {
+          if (access(qcom_switch[i], F_OK ) != -1)
+              qcom_switch_path = (char*)qcom_switch[i];
+        }
         return 1;
     }
   }
@@ -78,9 +89,9 @@ toggle_flashlight_action_qcom()
 
   fd1 = fopen(flash_sysfs_path, "w");
   if (fd1 != NULL) {
-    needs_enable = access(qcom_torch_enable, F_OK ) != -1;
+    needs_enable = access(qcom_switch_path, F_OK ) != -1;
     if (needs_enable)
-      fd2 = fopen(qcom_torch_enable, "w");
+      fd2 = fopen(qcom_switch_path, "w");
     if (activated)
       if (needs_enable && fd2 != NULL)
         fprintf(fd2, "0");
