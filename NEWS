@@ -1,4 +1,9 @@
-Overview of changes in ayatana-indicator-power 2.1.0
+Overview of changes in ayatana-indicator-power 2.1.2
+
+  - service.c: Drop indicator settings items.
+  - Translation updates.
+
+Overview of changes in ayatana-indicator-power 2.1.1
 
   - Do not call the power settings handler if the command is unknown.
     Fixes crash after zenity dialog call.

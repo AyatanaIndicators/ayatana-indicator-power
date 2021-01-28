@@ -1,6 +1,162 @@
-2020-09-10 21:35:22 +0200 Mike Gabriel
+2021-01-28 17:06:18 +0100 Mike Gabriel
 
-	* release 2.1.1 (HEAD -> master, tag: 2.1.1)
+	* release 2.1.2 (HEAD -> master, tag: 2.1.2)
+
+2020-11-26 13:30:40 +0000 Ács Zoltán (c7a589f)
+
+	* Translated using Weblate (Hungarian)
+
+2020-11-16 15:09:38 +0100 Mike Gabriel (6423a59)
+
+	* Merge branch 'tari01-pr/drop-panel-settings'
+
+2020-11-16 11:36:04 +0100 Robert Tari (c265c17)
+
+	* service.c: Drop indicator settings items
+
+2020-11-11 19:52:55 +0000 Oğuz Ersen (194d74c)
+
+	* Translated using Weblate (Turkish)
+
+2020-11-07 20:52:57 +0000 Quentin PAGÈS (8740c00)
+
+	* Translated using Weblate (Occitan)
+
+2020-11-06 14:09:27 +0000 Ács Zoltán (7fa6077)
+
+	* Translated using Weblate (Hungarian)
+
+2020-11-02 01:03:05 +0000 Joan CiberSheep (6427a99)
+
+	* Translated using Weblate (Catalan)
+
+2020-11-01 12:26:36 +0100 Hosted Weblate (9ffc597)
+
+	* Update translation files
+
+2020-10-31 03:46:23 +0000 Joan CiberSheep (604db38)
+
+	* Translated using Weblate (Catalan)
+
+2020-10-31 12:27:19 +0100 Weblate (dfc2785)
+
+	* Added translation using Weblate (Italian)
+
+2020-10-31 12:27:10 +0100 Weblate (f1e81c0)
+
+	* Added translation using Weblate (Tamil (Sri Lanka))
+
+2020-10-31 12:27:08 +0100 Weblate (c553c39)
+
+	* Added translation using Weblate (Dhivehi)
+
+2020-10-31 12:27:00 +0100 Weblate (232994a)
+
+	* Added translation using Weblate (Venetian)
+
+2020-10-31 12:26:58 +0100 Weblate (9d82f29)
+
+	* Added translation using Weblate (Kashubian)
+
+2020-10-31 12:26:55 +0100 Weblate (08c1f08)
+
+	* Added translation using Weblate (Macedonian)
+
+2020-10-31 12:26:53 +0100 Weblate (27b5a20)
+
+	* Added translation using Weblate (Friulian)
+
+2020-10-31 12:26:48 +0100 Weblate (3fa2dc7)
+
+	* Added translation using Weblate (Tatar)
+
+2020-10-28 23:16:17 +0000 Milan Korecky (9d4cf5d)
+
+	* Translated using Weblate (Czech)
+
+2020-10-28 21:26:43 +0000 Joan CiberSheep (1ecd008)
+
+	* Translated using Weblate (Catalan)
+
+2020-10-26 21:40:39 +0000 Adrià Martín (09941ba)
+
+	* Translated using Weblate (Sardinian)
+
+2020-10-27 12:26:35 +0100 Hosted Weblate (13408db)
+
+	* Update translation files
+
+2020-10-26 12:44:27 +0100 Weblate (e173265)
+
+	* Added translation using Weblate (Manx)
+
+2020-10-26 12:44:25 +0100 Weblate (bdca3dc)
+
+	* Added translation using Weblate (Afar)
+
+2020-10-26 12:44:18 +0100 Weblate (02fdb2b)
+
+	* Added translation using Weblate (Nyanja)
+
+2020-10-26 12:44:16 +0100 Weblate (2150273)
+
+	* Added translation using Weblate (Assamese)
+
+2020-10-26 12:44:11 +0100 Weblate (ec5f83e)
+
+	* Added translation using Weblate (Wolof)
+
+2020-10-24 21:27:28 +0000 Ács Zoltán (bdd39ab)
+
+	* Translated using Weblate (Hungarian)
+
+2020-10-23 15:28:44 +0000 Quentin PAGÈS (61c95c2)
+
+	* Translated using Weblate (Occitan)
+
+2020-10-18 16:43:29 +0000 Quentin PAGÈS (f655568)
+
+	* Translated using Weblate (Occitan)
+
+2020-10-04 11:27:43 +0000 Michal Čihař (efee0e5)
+
+	* Translated using Weblate (Hungarian)
+
+2020-09-30 22:02:17 +0000 Yaron Shahrabani (6754015)
+
+	* Translated using Weblate (Hebrew)
+
+2020-09-29 11:38:47 +0000 Yaron Shahrabani (9bfb0db)
+
+	* Translated using Weblate (Hebrew)
+
+2020-09-27 18:57:15 +0000 Artem (71a2498)
+
+	* Translated using Weblate (Russian)
+
+2020-09-28 05:30:13 +0000 Adolfo Jayme Barrientos (b7e2379)
+
+	* Translated using Weblate (Spanish)
+
+2020-09-25 14:30:55 +0000 Talking Panda (b36ddd0)
+
+	* Translated using Weblate (Turkish)
+
+2020-09-24 18:39:23 +0000 Quentin PAGÈS (3d3d56e)
+
+	* Translated using Weblate (Occitan)
+
+2020-09-23 20:12:31 +0000 Viktar Vauchkevich (dfd79f9)
+
+	* Translated using Weblate (Belarusian)
+
+2020-09-24 18:27:23 +0000 Quentin PAGÈS (d8b1135)
+
+	* Translated using Weblate (Occitan)
+
+2020-09-10 21:35:22 +0200 Mike Gabriel (193a475)
+
+	* release 2.1.1 (tag: 2.1.1)
 
 2020-09-07 19:07:31 +0000 Tundzhay Mollov (c41b3b6)
 
