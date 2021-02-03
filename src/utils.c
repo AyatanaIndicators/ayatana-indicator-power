@@ -22,7 +22,7 @@
 #include "utils.h"
 
 #ifdef HAS_URLDISPATCHER
-# include <url-dispatcher.h>
+# include <lomiri-url-dispatcher.h>
 #endif
 
 /* Run a particular program based on an activation */
@@ -96,7 +96,7 @@ utils_handle_settings_request (void)
 #ifdef HAS_URLDISPATCHER
       if (g_getenv ("MIR_SOCKET") != NULL)
         {
-          url_dispatch_send("settings:///system/battery", NULL, NULL);
+          lomiri_url_dispatch_send("settings:///system/battery", NULL, NULL);
           return;
         }
       else
