@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-
+#include <ayatana/common/utils.h>
 #include "brightness.h"
 #include "dbus-shared.h"
 #include "device.h"

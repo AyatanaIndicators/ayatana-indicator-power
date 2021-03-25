@@ -36,7 +36,8 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
                   glib-2.0>=2.36
                   gio-2.0>=2.36
                   gio-unix-2.0>=2.36
-                  libnotify>=0.7.6)
+                  libnotify>=0.7.6
+                  libayatana-common>=0.9.0)
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
 
