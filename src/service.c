@@ -819,7 +819,7 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
       execute_command (cmd);
       g_free (cmd);
     }
-  else if (is_gnome() || is_unity())
+  else if (is_budgie() || is_gnome() || is_unity())
     {
       char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
                                g_variant_get_string (param, NULL), NULL);
