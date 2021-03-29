@@ -401,6 +401,11 @@ count_batteries (GList * devices, int *total, int *inuse)
 static gboolean
 should_be_visible (IndicatorPowerService * self)
 {
+  if (!is_lomiri())
+  {
+      return TRUE;
+  }
+
   gboolean visible = TRUE;
   priv_t * p = self->priv;
 
