@@ -27,52 +27,6 @@
 # include <lomiri-url-dispatcher.h>
 #endif
 
-gboolean
-zenity_warning (const char * icon_name,
-                const char * title,
-                const char * text)
-{
-  char * command_line;
-  int exit_status;
-  GError * error;
-  gboolean confirmed;
-  char * zenity;
-
-  confirmed = FALSE;
-  zenity = g_find_program_in_path ("zenity");
-
-  if (zenity)
-    {
-      command_line = g_strdup_printf ("%s"
-                                      " --warning"
-                                      " --icon-name=\"%s\""
-                                      " --title=\"%s\""
-                                      " --text=\"%s\""
-                                      " --no-wrap",
-                                      zenity,
-                                      icon_name,
-                                      title,
-                                      text);
-
-      /* Treat errors as user confirmation.
-         Otherwise how will the user ever log out? */
-      exit_status = -1;
-      error = NULL;
-      if (!g_spawn_command_line_sync (command_line, NULL, NULL, &exit_status, &error))
-        {
-          confirmed = TRUE;
-        }
-      else
-        {
-          confirmed = g_spawn_check_exit_status (exit_status, &error);
-        }
-
-      g_free (command_line);
-    }
-  g_free (zenity);
-  return confirmed;
-}
-
 void
 utils_handle_settings_request (void)
 {
