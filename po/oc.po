@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-11-08 21:26+0000\n"
+"PO-Revision-Date: 2021-04-24 18:32+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
 "Language-Team: Occitan <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/oc/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -111,12 +111,12 @@ msgstr "Desconegut"
 #: ../src/device.c:608
 #, c-format
 msgid "estimating…"
-msgstr "Estimacion…"
+msgstr "estimacion…"
 
 #: ../src/device.c:612
 #, c-format
 msgid "unknown"
-msgstr "Desconegut"
+msgstr "desconegut"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: ../src/device.c:641
@@ -212,15 +212,15 @@ msgstr "Nivèl de batariá critic"
 #: ../src/notifier.c:234
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr "%.0f%% restants"
+msgstr "%.0f%% de carga restanta"
 
 #: ../src/notifier.c:251
 msgid "OK"
-msgstr "D'ACÒRDI"
+msgstr "D’acòrdi"
 
 #: ../src/notifier.c:252
 msgid "Battery settings"
-msgstr "Paramètres batariá"
+msgstr "Paramètres de batariá"
 
 #: ../src/service.c:567
 msgid "Charge level"
