@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2020-10-29 23:26+0000\n"
-"Last-Translator: Milan Korecky <milan.korecky@gmail.com>\n"
+"PO-Revision-Date: 2021-05-02 16:32+0000\n"
+"Last-Translator: Tomáš Marný <tomik.marny@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/cs/>\n"
 "Language: cs\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
-msgstr "Zobrazit čas v liště nabídek"
+msgstr "Zobrazovat čas v panelu nabídek"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Zda se má či ne zobrazovat čas v panelu nabídek."
+msgstr "Zda zobrazovat čas v panelu nabídek."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
-msgstr "Zobrazit procenta v panelu nabídek"
+msgstr "Zobrazovat procenta v panelu nabídek"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Zda se mají či ne, zobrazovat procenta v panelu nabídek."
+msgstr "Zda se mají v panelu nabídek zobrazovat procenta."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
 msgid "When to show the battery status in the menu bar?"
