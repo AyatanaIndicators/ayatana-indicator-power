@@ -1,6 +1,8 @@
 find_package(GMock)
 include_directories(${GMOCK_INCLUDE_DIRS})
 
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -no-pie")
+
 # dbustest
 pkg_check_modules(DBUSTEST REQUIRED
                   dbustest-1>=14.04.0)
