@@ -101,7 +101,7 @@ utils_handle_settings_request (void)
         {
           control_center_cmd = "switchboard --open-plug system-pantheon-power";
         }
-      else if (is_unity() || is_gnome())
+      else if (is_budgie() || is_unity() || is_gnome())
         {
           gchar *path;
 
