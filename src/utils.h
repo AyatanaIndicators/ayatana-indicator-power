@@ -1,5 +1,6 @@
 /*
  * Copytight 2018 Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+ * Copytight 2021 Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -21,15 +22,8 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-void execute_command (const gchar * cmd);
 void utils_handle_settings_request(void);
 
 gboolean zenity_warning (const char * icon_name, const char * title, const char * text);
-
-gboolean is_unity();
-gboolean is_gnome();
-gboolean is_mate();
-gboolean is_pantheon();
-gboolean is_xfce();
 
 #endif /* __INDICATOR_POWER_UTILS_H__ */

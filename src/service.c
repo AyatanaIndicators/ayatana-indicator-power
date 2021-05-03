@@ -1,9 +1,11 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copytight 2021 AyatanaIndicators
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
  *   Ted Gould <ted@canonical.com>
+ *   Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -20,7 +22,7 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-
+#include <ayatana/common/utils.h>
 #include "brightness.h"
 #include "dbus-shared.h"
 #include "device.h"
