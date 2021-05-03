@@ -3,9 +3,11 @@
 A simple Device structure used internally by indicator-power
 
 Copyright 2012 Canonical Ltd.
+Copyright 2021 AyatanaIndicators
 
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
+    Robert Tari <robert@tari.in>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -773,6 +775,15 @@ get_menuitem_text (const IndicatorPowerDevice * device,
             time_str = get_expanded_time_remaining (device);
         }
 
+      if (p->percentage > 0.01 && time_str != NULL)
+      {
+          if (g_str_equal(time_str, _("estimating…")) || g_str_equal(time_str, _("unknown")))
+          {
+              g_free(time_str);
+              time_str = NULL;
+          }
+      }
+
       if (time_str && *time_str)
         {
           /* TRANSLATORS: example: "battery (time remaining)" */
@@ -780,7 +791,14 @@ get_menuitem_text (const IndicatorPowerDevice * device,
         }
       else
         {
-          str = g_strdup (kind_str);
+          if (p->percentage > 0.01)
+          {
+            str = g_strdup_printf("%s (%.0lf%%)", kind_str, p->percentage);
+          }
+          else
+          {
+            str = g_strdup (kind_str);
+          }
         }
 
       g_free (time_str);
