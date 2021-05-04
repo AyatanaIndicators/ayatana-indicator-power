@@ -24,6 +24,4 @@
 
 void utils_handle_settings_request(void);
 
-gboolean zenity_warning (const char * icon_name, const char * title, const char * text);
-
 #endif /* __INDICATOR_POWER_UTILS_H__ */
