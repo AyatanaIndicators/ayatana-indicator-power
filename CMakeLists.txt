@@ -6,7 +6,16 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(PROJECT_VERSION "2.1.2")
 set(PACKAGE ${CMAKE_PROJECT_NAME})
 
-option (enable_tests "Build the package's automatic tests." ON)
+# Options
+option(ENABLE_TESTS "Enable all tests and checks" OFF)
+option(ENABLE_COVERAGE "Enable coverage reports (includes enabling all tests and checks)" OFF)
+
+if(ENABLE_COVERAGE)
+    set(ENABLE_TESTS ON)
+    set(CMAKE_BUILD_TYPE "Coverage")
+else()
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
 
 ##
 ##  GNU standard installation directories
@@ -85,13 +94,15 @@ add_subdirectory(po)
 
 
 # testing & coverage
-if (${enable_tests})
+if (ENABLE_TESTS)
     enable_testing ()
     add_subdirectory(tests)
-    find_package(CoverageReport)
-    ENABLE_COVERAGE_REPORT(
-        TARGETS ${SERVICE_LIB} ${SERVICE_EXEC}
-        TESTS ${COVERAGE_TEST_TARGETS}
-        FILTER /usr/include ${CMAKE_BINARY_DIR}/*
-    )
+    if (ENABLE_COVERAGE)
+        find_package(CoverageReport)
+        ENABLE_COVERAGE_REPORT(
+            TARGETS ayatanaindicatorpowerservice ayatana-indicator-power-service
+            TESTS ${COVERAGE_TEST_TARGETS}
+            FILTER /usr/include ${CMAKE_BINARY_DIR}/*
+        )
+    endif ()
 endif ()
