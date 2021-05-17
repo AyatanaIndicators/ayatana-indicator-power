@@ -401,7 +401,7 @@ count_batteries (GList * devices, int *total, int *inuse)
 static gboolean
 should_be_visible (IndicatorPowerService * self)
 {
-  if (!is_lomiri())
+  if (!ayatana_common_utils_is_lomiri())
   {
       return TRUE;
   }
@@ -817,23 +817,23 @@ on_statistics_activated (GSimpleAction * a      G_GNUC_UNUSED,
                          GVariant      * param,
                          gpointer        gself  G_GNUC_UNUSED)
 {
-  if (is_mate())
+  if (ayatana_common_utils_is_mate())
     {
       char *cmd = g_strconcat ("mate-power-statistics", " --device ",
                                g_variant_get_string (param, NULL), NULL);
-      execute_command (cmd);
+      ayatana_common_utils_execute_command (cmd);
       g_free (cmd);
     }
-  else if (is_budgie() || is_gnome() || is_unity())
+  else if (ayatana_common_utils_is_budgie() || ayatana_common_utils_is_gnome() || ayatana_common_utils_is_unity())
     {
       char *cmd = g_strconcat ("gnome-power-statistics", " --device ",
                                g_variant_get_string (param, NULL), NULL);
-      execute_command (cmd);
+      ayatana_common_utils_execute_command (cmd);
       g_free (cmd);
     }
   else
     {
-      zenity_warning ("dialog-warning",
+      ayatana_common_utils_zenity_warning ("dialog-warning",
                       _("Warning"),
                       _("The Ayatana Power Indicator does not support evoking the\npower statistics application of your desktop environment, yet.\n\nPlease report this to the developers at:\nhttps://github.com/ArcticaProject/ayatana-indicator-power/issues"));
     }
