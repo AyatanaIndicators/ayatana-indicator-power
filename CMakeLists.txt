@@ -1,6 +1,10 @@
 project(ayatana-indicator-power C CXX)
 cmake_minimum_required(VERSION 3.13)
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "..." FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set(PROJECT_VERSION "2.1.2")
@@ -106,3 +110,8 @@ if (ENABLE_TESTS)
         )
     endif ()
 endif ()
+
+# Display config info
+
+message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Unit tests: ${ENABLE_TESTS}")
