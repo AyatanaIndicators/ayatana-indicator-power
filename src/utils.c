@@ -43,19 +43,19 @@ utils_handle_settings_request (void)
       else
 #endif
       /* XFCE does not set XDG_CURRENT_DESKTOP, it seems... */
-      if (is_xfce())
+      if (ayatana_common_utils_is_xfce())
         {
           control_center_cmd = "xfce4-power-manager-settings";
         }
-      else if (is_mate())
+      else if (ayatana_common_utils_is_mate())
         {
           control_center_cmd = "mate-power-preferences";
         }
-      else if (is_pantheon())
+      else if (ayatana_common_utils_is_pantheon())
         {
           control_center_cmd = "switchboard --open-plug system-pantheon-power";
         }
-      else if (is_budgie() || is_unity() || is_gnome())
+      else if (ayatana_common_utils_is_budgie() || ayatana_common_utils_is_unity() || ayatana_common_utils_is_gnome())
         {
           gchar *path;
 
@@ -69,7 +69,7 @@ utils_handle_settings_request (void)
         }
       else
        {
-         zenity_warning ("dialog-warning",
+         ayatana_common_utils_zenity_warning ("dialog-warning",
                          _("Warning"),
                          _("The Ayatana Power Indicator does not support evoking the\npower settings dialog of your desktop environment, yet.\n\nPlease report this to the developers at:\nhttps://github.com/ArcticaProject/ayatana-indicator-power/issues"));
        }
@@ -77,6 +77,6 @@ utils_handle_settings_request (void)
 
     if (control_center_cmd)
     {
-        execute_command(control_center_cmd);
+        ayatana_common_utils_execute_command(control_center_cmd);
     }
 }
