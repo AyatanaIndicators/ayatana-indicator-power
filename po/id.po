@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2021-03-18 17:29+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"PO-Revision-Date: 2021-05-21 05:33+0000\n"
+"Last-Translator: Jacque Fresco <aidter@use.startmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/id/>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -126,7 +126,7 @@ msgstr ""
 #: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "tinggal %0d:%02d"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
@@ -185,7 +185,7 @@ msgstr ""
 #: ../src/device.c:853
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: ../src/device.c:858
@@ -197,7 +197,7 @@ msgstr ""
 #: ../src/device.c:863
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: ../src/notifier.c:231
 msgid "Battery Low"
