@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
+"ayatana-indicator-power/issues\n"
+"POT-Creation-Date: 2019-08-28 20:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: zh_Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
+msgid "Show time in Menu Bar"
+msgstr ""
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
+msgid "Whether or not to show the time in the menu bar."
+msgstr ""
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
+msgid "Show percentage in Menu Bar"
+msgstr ""
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
+msgid "Whether or not to show the percentage in the menu bar."
+msgstr ""
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
+msgid "When to show the battery status in the menu bar?"
+msgstr ""
+
+#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
+msgid ""
+"Options for when to show battery status. Valid options are \"present\", "
+"\"charge\", and \"never\"."
+msgstr ""
+
+#. TRANSLATORS: system power cord
+#: ../src/device.c:524
+msgid "AC Adapter"
+msgstr ""
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/device.c:528 ../src/service.c:442
+msgid "Battery"
+msgstr ""
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/device.c:532
+msgid "UPS"
+msgstr ""
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/device.c:536
+msgid "Monitor"
+msgstr ""
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/device.c:540
+msgid "Mouse"
+msgstr ""
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/device.c:544
+msgid "Keyboard"
+msgstr ""
+
+#. TRANSLATORS: portable device
+#: ../src/device.c:548
+msgid "PDA"
+msgstr ""
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/device.c:552
+msgid "Cell phone"
+msgstr ""
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/device.c:556
+msgid "Media player"
+msgstr ""
+
+#. TRANSLATORS: tablet device
+#: ../src/device.c:560
+msgid "Tablet"
+msgstr ""
+
+#. TRANSLATORS: tablet device
+#: ../src/device.c:564
+msgid "Computer"
+msgstr ""
+
+#. TRANSLATORS: unknown device
+#: ../src/device.c:568
+msgid "Unknown"
+msgstr ""
+
+#: ../src/device.c:608
+#, c-format
+msgid "estimating…"
+msgstr ""
+
+#: ../src/device.c:612
+#, c-format
+msgid "unknown"
+msgstr ""
+
+#. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
+#: ../src/device.c:641
+#, c-format
+msgid "%0d:%02d to charge"
+msgstr ""
+
+#. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
+#: ../src/device.c:646
+#, c-format
+msgid "%0d:%02d left"
+msgstr ""
+
+#. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
+#. Example: "1 hour 10 minutes to charge"
+#: ../src/device.c:681
+#, c-format
+msgid "%d %s %d %s to charge"
+msgstr ""
+
+#: ../src/device.c:682 ../src/device.c:700
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+
+#: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
+#: ../src/device.c:708
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+
+#. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
+#. Example: "59 minutes to charge"
+#: ../src/device.c:689
+#, c-format
+msgid "%d %s to charge"
+msgstr ""
+
+#. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
+#. Example: "1 hour 10 minutes left"
+#: ../src/device.c:699
+#, c-format
+msgid "%d %s %d %s left"
+msgstr ""
+
+#. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
+#. Example: "59 minutes left"
+#: ../src/device.c:707
+#, c-format
+msgid "%d %s left"
+msgstr ""
+
+#. TRANSLATORS: example: "battery (charged)"
+#: ../src/device.c:764
+#, c-format
+msgid "%s (charged)"
+msgstr ""
+
+#. TRANSLATORS: example: "battery (time remaining)"
+#: ../src/device.c:781
+#, c-format
+msgid "%s (%s)"
+msgstr ""
+
+#. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
+#: ../src/device.c:853
+#, c-format
+msgid "(%s, %.0lf%%)"
+msgstr ""
+
+#. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
+#: ../src/device.c:858
+#, c-format
+msgid "(%s)"
+msgstr ""
+
+#. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
+#: ../src/device.c:863
+#, c-format
+msgid "(%.0lf%%)"
+msgstr ""
+
+#: ../src/notifier.c:231
+msgid "Battery Low"
+msgstr ""
+
+#: ../src/notifier.c:232
+msgid "Battery Critical"
+msgstr ""
+
+#: ../src/notifier.c:234
+#, c-format
+msgid "%.0f%% charge remaining"
+msgstr ""
+
+#: ../src/notifier.c:251
+msgid "OK"
+msgstr ""
+
+#: ../src/notifier.c:252
+msgid "Battery settings"
+msgstr ""
+
+#: ../src/service.c:567
+msgid "Charge level"
+msgstr ""
+
+#: ../src/service.c:635
+msgid "Show Time in Menu Bar"
+msgstr ""
+
+#: ../src/service.c:639
+msgid "Show Percentage in Menu Bar"
+msgstr ""
+
+#: ../src/service.c:643
+msgid "Power Settings…"
+msgstr ""
+
+#: ../src/service.c:669
+msgid "Adjust brightness automatically"
+msgstr ""
+
+#: ../src/service.c:677
+msgid "Flashlight"
+msgstr ""
+
+#: ../src/service.c:683
+msgid "Warning: Heavy use can damage the LED!"
+msgstr ""
+
+#: ../src/service.c:689
+msgid "Battery settings…"
+msgstr ""
+
+#: ../src/service.c:840 ../src/utils.c:132
+msgid "Warning"
+msgstr ""
+
+#: ../src/service.c:841
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power statistics application of your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+msgstr ""
+
+#: ../src/utils.c:133
+msgid ""
+"The Ayatana Power Indicator does not support evoking the\n"
+"power settings dialog of your desktop environment, yet.\n"
+"\n"
+"Please report this to the developers at:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+msgstr ""
