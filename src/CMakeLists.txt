@@ -19,10 +19,10 @@ set(SERVICE_MANUAL_SOURCES
 # generated sources
 include(GdbusCodegen)
 set(SERVICE_GENERATED_SOURCES)
-add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-powerd
-                                 com.canonical
+add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-repowerd
+                                 com.lomiri
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/src/com.canonical.powerd.xml)
+                                 ${CMAKE_SOURCE_DIR}/src/com.lomiri.Repowerd.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  org.ayatana.indicator.power
                                  Dbus
