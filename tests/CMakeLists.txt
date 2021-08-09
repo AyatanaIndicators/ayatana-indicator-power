@@ -1,8 +1,6 @@
 find_package(GMock)
 include_directories(${GMOCK_INCLUDE_DIRS})
 
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -no-pie")
-
 # dbustest
 pkg_check_modules(DBUSTEST REQUIRED
                   dbustest-1>=14.04.0)
@@ -45,6 +43,7 @@ function(add_test_by_name name)
   set (TEST_NAME ${name})
   set (COVERAGE_TEST_TARGETS ${COVERAGE_TEST_TARGETS} ${TEST_NAME} PARENT_SCOPE)
   add_executable (${TEST_NAME} ${TEST_NAME}.cc)
+  target_link_options(${TEST_NAME} PRIVATE -no-pie)
   add_test (${TEST_NAME} ${TEST_NAME})
   add_dependencies (${TEST_NAME} ayatanaindicatorpowerservice gschemas-compiled)
   target_link_libraries (${TEST_NAME} ayatanaindicatorpowerservice gtest ${DBUSTEST_LIBRARIES} ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS} ${URLDISPATCHER_LIBRARIES} ${GMOCK_LIBRARIES})
