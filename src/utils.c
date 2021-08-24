@@ -23,25 +23,20 @@
 #include <ayatana/common/utils.h>
 #include "utils.h"
 
-#ifdef HAS_URLDISPATCHER
-# include <lomiri-url-dispatcher.h>
-#endif
-
 void
 utils_handle_settings_request (void)
 {
   static const gchar *control_center_cmd = NULL;
 
+  if (ayatana_common_utils_is_lomiri())
+  {
+    ayatana_common_utils_open_url("settings:///system/battery");
+
+    return;
+  }
+
   if (control_center_cmd == NULL)
     {
-#ifdef HAS_URLDISPATCHER
-      if (g_getenv ("MIR_SOCKET") != NULL)
-        {
-          lomiri_url_dispatch_send("settings:///system/battery", NULL, NULL);
-          return;
-        }
-      else
-#endif
       /* XFCE does not set XDG_CURRENT_DESKTOP, it seems... */
       if (ayatana_common_utils_is_xfce())
         {
