@@ -68,13 +68,6 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
 
-set(URL_DISPATCHER_REQUIRED_VERSION 0)
-pkg_check_modules(
-  URLDISPATCHER
-  lomiri-url-dispatcher>=${URL_DISPATCHER_REQUIRED_VERSION}
-)
-include_directories(${URLDISPATCHER_INCLUDE_DIRS})
-
 if(EXISTS "/usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml")
   set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS ON)
   add_definitions ( -DHAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS )

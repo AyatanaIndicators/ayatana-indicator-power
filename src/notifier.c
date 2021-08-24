@@ -28,10 +28,6 @@
 #include "notifier.h"
 #include "utils.h"
 
-#ifdef HAS_URLDISPATCHER
-#include <lomiri-url-dispatcher.h>
-#endif
-
 #include <libnotify/notify.h>
 
 #include <glib/gi18n.h>
