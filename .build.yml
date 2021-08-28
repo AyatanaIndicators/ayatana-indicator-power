@@ -14,6 +14,8 @@ requires:
     - cmake-extras
     - mate-common
     - intltool
+#    - libayatana-common
+    - vala
     - glib2
     - libnotify
     - systemd
@@ -31,29 +33,11 @@ requires:
     - cmake-extras
     - mate-common
     - intltool
+#    - libayatana-common-dev
+    - valac
     - libglib2.0-dev
     - libnotify-dev
     - liblomiri-url-dispatcher-dev
-    - libgtest-dev
-    - python3-dbusmock
-    - dbus-test-runner
-    - libdbustest1-dev
-    - systemd
-    - libgstreamer1.0-dev
-
-  debian:stable:
-    - autopoint
-    - clang
-    - clang-tools
-    - g++
-    - cppcheck
-    - git
-    - cmake
-    - cmake-extras
-    - mate-common
-    - intltool
-    - libglib2.0-dev
-    - libnotify-dev
     - libgtest-dev
     - python3-dbusmock
     - dbus-test-runner
@@ -71,28 +55,11 @@ requires:
     - cmake-extras
     - mate-common
     - intltool
+#    - libayatana-common-dev
+    - valac
     - libglib2.0-dev
     - libnotify-dev
     - liblomiri-url-dispatcher-dev
-    - libgtest-dev
-    - python3-dbusmock
-    - dbus-test-runner
-    - libdbustest1-dev
-    - systemd
-    - libgstreamer1.0-dev
-
-  ubuntu:focal:
-    - autopoint
-    - clang
-    - clang-tools
-    - g++
-    - git
-    - cmake
-    - cmake-extras
-    - mate-common
-    - intltool
-    - libglib2.0-dev
-    - libnotify-dev
     - libgtest-dev
     - python3-dbusmock
     - dbus-test-runner
