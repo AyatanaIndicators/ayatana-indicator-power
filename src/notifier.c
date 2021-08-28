@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Canonical Ltd.
+ * Copyright 2014-2016 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -17,10 +17,20 @@
  *   Charles Kerr <charles.kerr@canonical.com>
  */
 
+#include "datafiles.h"
+
+#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+#include "dbus-accounts-sound.h"
+#endif
+
 #include "dbus-battery.h"
 #include "dbus-shared.h"
 #include "notifier.h"
 #include "utils.h"
+
+#ifdef HAS_URLDISPATCHER
+#include <lomiri-url-dispatcher.h>
+#endif
 
 #include <libnotify/notify.h>
 
@@ -76,6 +86,12 @@ typedef struct
 
   gboolean caps_queried;
   gboolean actions_supported;
+
+  GCancellable * cancellable;
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  DbusAccountsServiceSound * accounts_service_sound_proxy;
+  gboolean accounts_service_sound_proxy_pending;
+  #endif
 }
 IndicatorPowerNotifierPrivate;
 
@@ -128,6 +144,58 @@ get_battery_power_level (IndicatorPowerDevice * battery)
 
   return ret;
 }
+
+/***
+****  Sounds
+***/
+
+#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+static void
+on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
+                      GAsyncResult * res,
+                      gpointer       gself)
+{
+  GError * error;
+  error = NULL;
+
+  DbusAccountsServiceSound * proxy;
+  proxy = dbus_accounts_service_sound_proxy_new_for_bus_finish (res, &error);
+
+  if (error != NULL)
+    {
+      if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          get_priv(gself)->accounts_service_sound_proxy_pending = FALSE;
+          g_debug("%s Couldn't find accounts service sound proxy: %s", G_STRLOC, error->message);
+        }
+
+      g_clear_error(&error);
+    }
+  else
+    {
+      IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(gself);
+      priv_t * const p = get_priv (self);
+      g_clear_object (&p->accounts_service_sound_proxy);
+      p->accounts_service_sound_proxy = proxy;
+      p->accounts_service_sound_proxy_pending = FALSE;
+    }
+}
+
+
+static gboolean
+silent_mode (IndicatorPowerNotifier * self)
+{
+  priv_t * const p = get_priv (self);
+
+  /* if we don't have a proxy yet, assume we're in silent mode
+     as a "do no harm" level of response */
+  if (p->accounts_service_sound_proxy_pending)
+    return TRUE;
+
+  return (p->accounts_service_sound_proxy != NULL)
+      && dbus_accounts_service_sound_get_silent_mode(p->accounts_service_sound_proxy);
+}
+#endif
 
 /***
 ****  Notifications
@@ -243,6 +311,23 @@ notification_show(IndicatorPowerNotifier * self)
 
   if (are_actions_supported(self))
     {
+      #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+      if (!silent_mode(self))
+      #endif
+        {
+          gchar* filename = datafile_find(DATAFILE_TYPE_SOUND, LOW_BATTERY_SOUND);
+          if (filename != NULL)
+            {
+              gchar * uri = g_filename_to_uri(filename, NULL, NULL);
+              notify_notification_set_hint(nn, "sound-file", g_variant_new_take_string(uri));
+              g_clear_pointer(&filename, g_free);
+            }
+          else
+            {
+              g_warning("Unable to find '%s' in XDG data dirs", LOW_BATTERY_SOUND);
+            }
+        }
+
       notify_notification_set_hint(nn, "x-canonical-snap-decisions", g_variant_new_string("true"));
       notify_notification_set_hint(nn, "x-canonical-non-shaped-icon", g_variant_new_string("true"));
       notify_notification_set_hint(nn, "x-canonical-private-affirmative-tint", g_variant_new_string("true"));
@@ -359,10 +444,20 @@ my_dispose (GObject * o)
   IndicatorPowerNotifier * const self = INDICATOR_POWER_NOTIFIER(o);
   priv_t * const p = get_priv (self);
 
+  if (p->cancellable != NULL)
+    {
+      g_cancellable_cancel(p->cancellable);
+      g_clear_object(&p->cancellable);
+    }
+
   indicator_power_notifier_set_bus (self, NULL);
   notification_clear (self);
   indicator_power_notifier_set_battery (self, NULL);
   g_clear_object (&p->dbus_battery);
+
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  g_clear_object (&p->accounts_service_sound_proxy);
+  #endif
 
   G_OBJECT_CLASS (indicator_power_notifier_parent_class)->dispose (o);
 }
@@ -370,7 +465,7 @@ my_dispose (GObject * o)
 static void
 my_finalize (GObject * o G_GNUC_UNUSED)
 {
-  /* FIXME: This is an awkward place to put this. 
+  /* FIXME: This is an awkward place to put this.
      Ordinarily something like this would go in main(), but we need libnotify
      to clean itself up before shutting down the bus in the unit tests as well. */
   if (!--instance_count)
@@ -380,7 +475,6 @@ my_finalize (GObject * o G_GNUC_UNUSED)
 /***
 ****  Instantiation
 ***/
-
 
 static void
 indicator_power_notifier_init (IndicatorPowerNotifier * self)
@@ -393,8 +487,24 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
 
   p->power_level = POWER_LEVEL_OK;
 
-  if (!instance_count++ && !notify_init("ayatana-indicator-power-service"))
+  p->cancellable = g_cancellable_new();
+
+  if (!instance_count++ && !notify_init(SERVICE_EXEC))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
+
+  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  p->accounts_service_sound_proxy_pending = TRUE;
+  gchar* object_path = g_strdup_printf("/org/freedesktop/Accounts/User%lu", (gulong)getuid());
+  dbus_accounts_service_sound_proxy_new_for_bus(
+    G_BUS_TYPE_SYSTEM,
+    G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+    "org.freedesktop.Accounts",
+    object_path,
+    p->cancellable,
+    on_sound_proxy_ready,
+    self);
+  g_clear_pointer(&object_path, g_free);
+  #endif
 }
 
 static void
@@ -425,7 +535,6 @@ IndicatorPowerNotifier *
 indicator_power_notifier_new (void)
 {
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_NOTIFIER, NULL);
-
   return INDICATOR_POWER_NOTIFIER (o);
 }
 

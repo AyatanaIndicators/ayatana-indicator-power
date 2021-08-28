@@ -1,8 +1,5 @@
 /*
- * Copyright 2013 Canonical Ltd.
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
+ * Copyright 2013-2016 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +12,9 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
  */
 
 #include <locale.h>
@@ -23,6 +23,7 @@
 #include <glib/gi18n.h>
 
 #include "device.h"
+#include "notifier.h"
 #include "service.h"
 #include "testing.h"
 
@@ -40,6 +41,7 @@ on_name_lost (gpointer instance G_GNUC_UNUSED, gpointer loop)
 int
 main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 {
+  IndicatorPowerNotifier * notifier;
   IndicatorPowerService * service;
   IndicatorPowerTesting * testing;
   GMainLoop * loop;
@@ -50,7 +52,8 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
   textdomain (GETTEXT_PACKAGE);
 
   /* run */
-  service = indicator_power_service_new (NULL);
+  notifier = indicator_power_notifier_new();
+  service = indicator_power_service_new(NULL, notifier);
   testing = indicator_power_testing_new (service);
   loop = g_main_loop_new (NULL, FALSE);
   g_signal_connect (service, INDICATOR_POWER_SERVICE_SIGNAL_NAME_LOST,
@@ -59,7 +62,8 @@ main (int argc G_GNUC_UNUSED, char ** argv G_GNUC_UNUSED)
 
   /* cleanup */
   g_main_loop_unref (loop);
-  g_clear_object (&service);
   g_clear_object (&testing);
+  g_clear_object (&service);
+  g_clear_object (&notifier);
   return 0;
 }

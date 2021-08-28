@@ -1,8 +1,3 @@
-set (SERVICE_LIB "ayatanaindicatorpowerservice")
-set (SERVICE_EXEC "ayatana-indicator-power-service")
-
-add_definitions(-DG_LOG_DOMAIN="ayatana-indicator-power")
-
 if(URLDISPATCHER_FOUND)
     add_definitions( -DHAS_URLDISPATCHER )
 endif()
@@ -10,6 +5,7 @@ endif()
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
+    datafiles.c
     device-provider-mock.c
     device-provider-upower.c
     device-provider.c
@@ -23,10 +19,10 @@ set(SERVICE_MANUAL_SOURCES
 # generated sources
 include(GdbusCodegen)
 set(SERVICE_GENERATED_SOURCES)
-add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-powerd
-                                 com.canonical
+add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-repowerd
+                                 com.lomiri
                                  Dbus
-                                 ${CMAKE_SOURCE_DIR}/src/com.canonical.powerd.xml)
+                                 ${CMAKE_SOURCE_DIR}/src/com.lomiri.Repowerd.xml)
 add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-battery
                                  org.ayatana.indicator.power
                                  Dbus
@@ -35,6 +31,14 @@ add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-testing
                                  org.ayatana.indicator.power
                                  Dbus
                                  ${CMAKE_SOURCE_DIR}/data/org.ayatana.indicator.power.Testing.xml)
+
+if (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS)
+    add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-accounts-sound
+                                     com.ubuntu.touch
+                                     Dbus
+                                     /usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml)
+endif()
+
 # add the bin dir to our include path so the code can find the generated header files
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -44,7 +48,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-bad-function-cast") # g_clear_object()
 set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-switch-enum")
 set_source_files_properties(${SERVICE_MANUAL_SOURCES}
-                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -g -std=c99")
+                            PROPERTIES COMPILE_FLAGS "${C_WARNING_ARGS} -std=c99")
 
 # the service library for tests to link against (basically, everything except main())
 add_library(${SERVICE_LIB} STATIC ${SERVICE_MANUAL_SOURCES} ${SERVICE_GENERATED_SOURCES})

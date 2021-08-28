@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Canonical Ltd.
+ * Copyright 2014-2016 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -61,8 +61,6 @@ protected:
   static constexpr int NOTIFICATION_CLOSED_API       {3};
   static constexpr int NOTIFICATION_CLOSED_UNDEFINED {4};
 
-  static constexpr char const * APP_NAME {"ayatana-indicator-power-service"};
-
   static constexpr char const * METHOD_CLOSE {"CloseNotification"};
   static constexpr char const * METHOD_NOTIFY {"Notify"};
   static constexpr char const * METHOD_GET_CAPS {"GetCapabilities"};
@@ -76,6 +74,8 @@ protected:
   void SetUp()
   {
     super::SetUp();
+
+    g_setenv ("XDG_DATA_HOME", XDG_DATA_HOME, TRUE);
 
     // init DBusMock / dbus-test-runner
 
@@ -133,7 +133,7 @@ protected:
     g_dbus_connection_set_exit_on_close(bus, FALSE);
     g_object_add_weak_pointer(G_OBJECT(bus), reinterpret_cast<gpointer*>(&bus));
 
-    notify_init(APP_NAME);
+    notify_init(SERVICE_EXEC);
   }
 
   virtual void TearDown()
@@ -156,6 +156,50 @@ protected:
       }
 
     super::TearDown();
+  }
+
+  /***
+  ****
+  ***/
+
+  int get_notify_call_count() const
+  {
+    guint len {0u};
+    GError* error {nullptr};
+    dbus_test_dbus_mock_object_get_method_calls(mock, obj, METHOD_NOTIFY, &len, &error);
+    g_assert_no_error(error);
+    return len;
+  }
+
+  std::string get_notify_call_sound_file(int call_number)
+  {
+    std::string ret;
+
+    guint len {0u};
+    GError* error {nullptr};
+    auto calls = dbus_test_dbus_mock_object_get_method_calls(mock, obj, METHOD_NOTIFY, &len, &error);
+    g_return_val_if_fail(int(len) > call_number, ret);
+    g_assert_no_error(error);
+
+    constexpr int HINTS_PARAM_POSITION {6};
+    const auto& call = calls[call_number];
+    g_return_val_if_fail(g_variant_n_children(call.params) > HINTS_PARAM_POSITION, ret);
+    auto hints = g_variant_get_child_value(call.params, HINTS_PARAM_POSITION);
+    const gchar* sound_file = nullptr;
+    auto success = g_variant_lookup(hints, "sound-file", "&s", &sound_file);
+    g_return_val_if_fail(success, ret);
+    if (sound_file != nullptr)
+      ret = sound_file;
+    g_clear_pointer(&hints, g_variant_unref);
+
+    return ret;
+  }
+
+  void clear_method_calls()
+  {
+    GError* error{nullptr};
+    ASSERT_TRUE(dbus_test_dbus_mock_object_clear_method_calls(mock, obj, &error));
+    g_assert_no_error(error);
   }
 };
 
@@ -317,8 +361,8 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 
   // cleanup
   g_dbus_connection_signal_unsubscribe (bus, sub_tag);
-  g_object_unref (notifier);
   g_object_unref (battery);
+  g_object_unref (notifier);
 }
 
 /***
@@ -345,6 +389,12 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
                                              UP_DEVICE_STATE_DISCHARGING,
                                              30,
                                              TRUE);
+
+  // the file we expect to play on a low battery notification...
+  const char* expected_file = XDG_DATA_HOME "/" GETTEXT_PACKAGE "/sounds/" LOW_BATTERY_SOUND;
+  char* tmp = g_filename_to_uri(expected_file, nullptr, nullptr);
+  const std::string low_power_uri {tmp};
+  g_clear_pointer(&tmp, g_free);
 
   // set up a notifier and give it the battery so changing the battery's
   // charge should show up on the bus.
@@ -376,6 +426,9 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_EQ (indicator_power_notifier_get_power_level(battery), changed_params.power_level);
   EXPECT_TRUE (changed_params.is_warning);
+  EXPECT_EQ (1, get_notify_call_count());
+  EXPECT_EQ (low_power_uri, get_notify_call_sound_file(0));
+  clear_method_calls();
 
   // now test that the warning changes if the level goes down even lower...
   changed_params = ChangedParams();
@@ -383,6 +436,9 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   wait_msec();
   EXPECT_EQ (FIELD_POWER_LEVEL, changed_params.fields);
   EXPECT_STREQ (POWER_LEVEL_STR_VERY_LOW, changed_params.power_level.c_str());
+  EXPECT_EQ (1, get_notify_call_count());
+  EXPECT_EQ (low_power_uri, get_notify_call_sound_file(0));
+  clear_method_calls();
 
   // ...and that the warning is taken down if the battery is plugged back in...
   changed_params = ChangedParams();
@@ -390,6 +446,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   wait_msec();
   EXPECT_EQ (FIELD_IS_WARNING, changed_params.fields);
   EXPECT_FALSE (changed_params.is_warning);
+  EXPECT_EQ (0, get_notify_call_count());
 
   // ...and that it comes back if we unplug again...
   changed_params = ChangedParams();
@@ -397,6 +454,9 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   wait_msec();
   EXPECT_EQ (FIELD_IS_WARNING, changed_params.fields);
   EXPECT_TRUE (changed_params.is_warning);
+  EXPECT_EQ (1, get_notify_call_count());
+  EXPECT_EQ (low_power_uri, get_notify_call_sound_file(0));
+  clear_method_calls();
 
   // ...and that it's taken down if the power level is OK
   changed_params = ChangedParams();
@@ -405,6 +465,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
   EXPECT_EQ (FIELD_POWER_LEVEL|FIELD_IS_WARNING, changed_params.fields);
   EXPECT_STREQ (POWER_LEVEL_STR_OK, changed_params.power_level.c_str());
   EXPECT_FALSE (changed_params.is_warning);
+  EXPECT_EQ (0, get_notify_call_count());
 
   // cleanup
   g_dbus_connection_signal_unsubscribe (bus, sub_tag);

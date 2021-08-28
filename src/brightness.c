@@ -18,7 +18,7 @@
  */
 
 #include "brightness.h"
-#include "dbus-powerd.h"
+#include "dbus-repowerd.h"
 
 #include <gio/gio.h>
 
@@ -46,7 +46,7 @@ typedef struct
 
   GSettings * settings;
 
-  DbusPowerd * powerd_proxy;
+  DbusRepowerd * powerd_proxy;
   char * powerd_name_owner;
 
   double percentage;
@@ -198,7 +198,7 @@ percentage_to_brightness(IndicatorPowerBrightness * self, double percentage)
 }
 
 /**
- * DBus Chatter: com.canonical.powerd
+ * DBus Chatter: com.lomiri.Repowerd
  *
  * This is used to get default value, and upper and lower bounds,
  * of the brightness setting
@@ -217,7 +217,7 @@ on_powerd_brightness_params_ready(GObject      * oproxy,
 
   v = NULL;
   error = NULL;
-  if (dbus_powerd_call_get_brightness_params_finish(DBUS_POWERD(oproxy), &v, res, &error))
+  if (dbus_repowerd_call_get_brightness_params_finish(DBUS_REPOWERD(oproxy), &v, res, &error))
     {
       IndicatorPowerBrightness * self = INDICATOR_POWER_BRIGHTNESS(gself);
       priv_t * p = get_priv(self);
@@ -235,12 +235,12 @@ on_powerd_brightness_params_ready(GObject      * oproxy,
               p->powerd_max,
               p->powerd_default_value,
               (int)p->powerd_ab_supported);
- 
+
       if (old_ab_supported != p->powerd_ab_supported)
         g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_AUTO_SUPPORTED]);
 
       if (p->settings != NULL)
-        { 
+        {
           if (g_settings_get_boolean(p->settings, KEY_NEED_DEFAULT))
             {
               /* user's first session, so init the schema's default
@@ -282,7 +282,7 @@ on_powerd_name_owner_changed(GDBusProxy * powerd_proxy,
 
       if (owner != NULL)
         {
-          dbus_powerd_call_get_brightness_params(DBUS_POWERD(powerd_proxy),
+          dbus_repowerd_call_get_brightness_params(DBUS_REPOWERD(powerd_proxy),
                                                  p->cancellable,
                                                  on_powerd_brightness_params_ready,
                                                  gself);
@@ -294,11 +294,11 @@ on_powerd_name_owner_changed(GDBusProxy * powerd_proxy,
 }
 
 static void
-on_powerd_brightness_changed(DbusPowerd * powerd_proxy,
+on_powerd_brightness_changed(DbusRepowerd * powerd_proxy,
                              GParamSpec * pspec         G_GNUC_UNUSED,
                              gpointer     gself)
 {
-  set_brightness_local(gself, dbus_powerd_get_brightness(powerd_proxy));
+  set_brightness_local(gself, dbus_repowerd_get_brightness(powerd_proxy));
 }
 
 static void
@@ -307,10 +307,10 @@ on_powerd_proxy_ready(GObject      * source_object G_GNUC_UNUSED,
                       gpointer       gself)
 {
   GError * error;
-  DbusPowerd * powerd_proxy;
+  DbusRepowerd * powerd_proxy;
 
   error = NULL;
-  powerd_proxy = dbus_powerd_proxy_new_for_bus_finish(res, &error);
+  powerd_proxy = dbus_repowerd_proxy_new_for_bus_finish(res, &error);
 
   if (powerd_proxy != NULL)
     {
@@ -461,10 +461,10 @@ indicator_power_brightness_init(IndicatorPowerBrightness * self)
       g_settings_schema_unref(schema);
     }
 
-  dbus_powerd_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+  dbus_repowerd_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
                                  G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
-                                 "com.canonical.powerd",
-                                 "/com/canonical/powerd",
+                                 "com.lomiri.Repowerd",
+                                 "/com/lomiri/Repowerd",
                                  p->cancellable,
                                  on_powerd_proxy_ready,
                                  self);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 The UBports project
+ * Copyright 2016 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -14,36 +14,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors:
- *   Marius Gripsgard <marius@ubports.com>
+ *   Charles Kerr <charles.kerr@canonical.com>
  */
 
-#ifndef INDICATOR_POWER_FLASHLIGHT__H
-#define INDICATOR_POWER_FLASHLIGHT__H
+#ifndef __INDICATOR_POWER_DATAFILES_H__
+#define __INDICATOR_POWER_DATAFILES_H__
 
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-int
-toggle_flashlight_action_qcom();
+typedef enum 
+{
+  DATAFILE_TYPE_SOUND
+}
+DatafileType;
 
-int
-toggle_flashlight_action_simple();
-
-void
-toggle_flashlight_action(GAction *action,
-                         GVariant *parameter G_GNUC_UNUSED,
-                         gpointer data G_GNUC_UNUSED);
-
-int
-flashlight_supported();
-
-gboolean
-flashlight_activated();
-
-enum
-TorchType { SIMPLE = 1, QCOM };
+gchar* datafile_find(DatafileType type, const char * basename);
 
 G_END_DECLS
 
-#endif /* INDICATOR_POWER_FLASHLIGHT__H */
+#endif /* __INDICATOR_POWER_DATAFILES_H__ */

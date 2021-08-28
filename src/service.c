@@ -1,11 +1,6 @@
 /*
- * Copyright 2013 Canonical Ltd.
+ * Copyright 2013-2016 Canonical Ltd.
  * Copytight 2021 AyatanaIndicators
- *
- * Authors:
- *   Charles Kerr <charles.kerr@canonical.com>
- *   Ted Gould <ted@canonical.com>
- *   Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -18,6 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors:
+ *   Charles Kerr <charles.kerr@canonical.com>
+ *   Ted Gould <ted@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include <glib/gi18n.h>
@@ -52,6 +52,7 @@ enum
   PROP_0,
   PROP_BUS,
   PROP_DEVICE_PROVIDER,
+  PROP_NOTIFIER,
   LAST_PROP
 };
 
@@ -199,6 +200,14 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
     }
 
   state = UP_DEVICE_STATE_DISCHARGING;
+
+  /* discharging items with more than 10% remaining always lose */
+  if (!ret && (((a_state == state) && !a_time && (a_percentage > 10))))
+      ret = 1;
+
+  if (!ret && (((b_state == state) && !b_time && (b_percentage > 10))))
+      ret = -1;
+
   if (!ret && (((a_state == state) && a_time) ||
                ((b_state == state) && b_time)))
     {
@@ -591,7 +600,7 @@ create_brightness_menu_item(void)
   GMenuItem * item;
 
   item = g_menu_item_new(NULL, "indicator.brightness");
-  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.unity.slider");
+  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.slider");
   g_menu_item_set_attribute(item, "min-value", "d", 0.0);
   g_menu_item_set_attribute(item, "max-value", "d", 1.0);
 
@@ -968,7 +977,8 @@ on_bus_acquired (GDBusConnection * connection,
   g_object_notify_by_pspec (G_OBJECT(self), properties[PROP_BUS]);
 
   /* export the battery properties */
-  indicator_power_notifier_set_bus (p->notifier, connection);
+  if (p->notifier != NULL)
+    indicator_power_notifier_set_bus (p->notifier, connection);
 
   /* export the actions */
   if ((id = g_dbus_connection_export_action_group (connection,
@@ -1110,6 +1120,10 @@ my_get_property (GObject     * o,
         g_value_set_object (value, p->device_provider);
         break;
 
+      case PROP_NOTIFIER:
+        g_value_set_object (value, p->notifier);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (o, property_id, pspec);
     }
@@ -1127,6 +1141,10 @@ my_set_property (GObject       * o,
     {
       case PROP_DEVICE_PROVIDER:
         indicator_power_service_set_device_provider (self, g_value_get_object (value));
+        break;
+
+      case PROP_NOTIFIER:
+        indicator_power_service_set_notifier (self, g_value_get_object (value));
         break;
 
       default:
@@ -1171,6 +1189,7 @@ my_dispose (GObject * o)
   g_clear_object (&p->conn);
 
   indicator_power_service_set_device_provider (self, NULL);
+  indicator_power_service_set_notifier (self, NULL);
 
   G_OBJECT_CLASS (indicator_power_service_parent_class)->dispose (o);
 }
@@ -1191,8 +1210,6 @@ indicator_power_service_init (IndicatorPowerService * self)
   p->cancellable = g_cancellable_new ();
 
   p->settings = g_settings_new ("org.ayatana.indicator.power");
-
-  p->notifier = indicator_power_notifier_new ();
 
   p->brightness = indicator_power_brightness_new();
   g_signal_connect_swapped(p->brightness, "notify::percentage",
@@ -1253,6 +1270,13 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
     G_TYPE_OBJECT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_NOTIFIER] = g_param_spec_object (
+    "notifier",
+    "Notifier",
+    "Notifies user of important battery changes",
+    G_TYPE_OBJECT,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -1261,10 +1285,12 @@ indicator_power_service_class_init (IndicatorPowerServiceClass * klass)
 ***/
 
 IndicatorPowerService *
-indicator_power_service_new (IndicatorPowerDeviceProvider * device_provider)
+indicator_power_service_new (IndicatorPowerDeviceProvider * device_provider,
+                             IndicatorPowerNotifier * notifier)
 {
   GObject * o = g_object_new (INDICATOR_TYPE_POWER_SERVICE,
                               "device-provider", device_provider,
+                              "notifier", notifier,
                               NULL);
 
   return INDICATOR_POWER_SERVICE (o);
@@ -1302,6 +1328,29 @@ indicator_power_service_set_device_provider (IndicatorPowerService * self,
       on_devices_changed (self);
     }
 }
+
+void
+indicator_power_service_set_notifier (IndicatorPowerService  * self,
+                                      IndicatorPowerNotifier * notifier)
+{
+  priv_t * p;
+
+  g_return_if_fail (INDICATOR_IS_POWER_SERVICE (self));
+  g_return_if_fail (!notifier || INDICATOR_IS_POWER_NOTIFIER (notifier));
+  p = self->priv;
+
+  if (p->notifier == notifier)
+    return;
+
+  g_clear_object (&p->notifier);
+
+  if (notifier != NULL)
+    {
+      p->notifier = g_object_ref (notifier);
+      indicator_power_notifier_set_bus (p->notifier, p->conn);
+    }
+}
+
 
 /* If a device has multiple batteries and uses only one of them at a time,
    they should be presented as separate items inside the battery menu,

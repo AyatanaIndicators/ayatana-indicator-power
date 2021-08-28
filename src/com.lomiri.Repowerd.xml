@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <interface name="com.canonical.powerd">
+  <interface name="com.lomiri.Repowerd">
     <!-- Properties -->
 
     <property name="brightness" type="i" access="readwrite">

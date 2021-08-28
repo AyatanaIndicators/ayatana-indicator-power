@@ -40,12 +40,20 @@ set (CMAKE_INSTALL_FULL_PKGLIBEXECDIR "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_
 ##
 
 set(GETTEXT_PACKAGE "ayatana-indicator-power")
-add_definitions (-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
-                 -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
+add_definitions(
+  -DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
+  -DG_LOG_DOMAIN="${GETTEXT_PACKAGE}"
+  -DLOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}"
+  -DLOW_BATTERY_SOUND="Low battery.ogg"
+)
 
 ##
 ##  Check for prerequisites
 ##
+
+set(SERVICE_LIB "ayatanaindicatorpowerservice")
+set(SERVICE_EXEC "ayatana-indicator-power-service")
+add_definitions(-DSERVICE_EXEC="${SERVICE_EXEC}")
 
 find_package (PkgConfig REQUIRED)
 include (CheckIncludeFile)
@@ -66,6 +74,13 @@ pkg_check_modules(
   lomiri-url-dispatcher>=${URL_DISPATCHER_REQUIRED_VERSION}
 )
 include_directories(${URLDISPATCHER_INCLUDE_DIRS})
+
+if(EXISTS "/usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml")
+  set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS ON)
+  add_definitions ( -DHAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS )
+else()
+  set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS OFF)
+endif()
 
 ##
 ##  custom targets
@@ -110,7 +125,7 @@ if (ENABLE_TESTS)
     if (ENABLE_COVERAGE)
         find_package(CoverageReport)
         ENABLE_COVERAGE_REPORT(
-            TARGETS ayatanaindicatorpowerservice ayatana-indicator-power-service
+            TARGETS ${SERVICE_LIB} ${SERVICE_EXEC}
             TESTS ${COVERAGE_TEST_TARGETS}
             FILTER /usr/include ${CMAKE_BINARY_DIR}/*
         )
