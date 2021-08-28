@@ -9,7 +9,6 @@ Build-Depends: cmake,
                libayatana-common-dev (>= 0.9.1),
                libnotify-dev (>= 0.7.6),
                libglib2.0-dev (>= 2.36),
-               liblomiri-url-dispatcher-dev | hello,
                accountsservice-ubuntu-schemas | hello,
 # for packaging
                debhelper (>= 9),
