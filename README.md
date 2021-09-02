@@ -1,4 +1,4 @@
-# Ayatana System Indicator &mdash; Power [![Build Status](https://travis-ci.com/AyatanaIndicators/ayatana-indicator-power.svg)](https://travis-ci.com/AyatanaIndicators/ayatana-indicator-power)
+# Ayatana System Indicator &mdash; Power [![Build Status](https://api.travis-ci.com/AyatanaIndicators/ayatana-indicator-power.svg)](https://travis-ci.com/github/AyatanaIndicators/ayatana-indicator-power)
 
 ## About Ayatana Indicators
 
