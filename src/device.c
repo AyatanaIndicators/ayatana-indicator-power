@@ -3,7 +3,7 @@
 A simple Device structure used internally by indicator-power
 
 Copyright 2012 Canonical Ltd.
-Copyright 2021 AyatanaIndicators
+Copyright 2021 Robert Tari
 
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
