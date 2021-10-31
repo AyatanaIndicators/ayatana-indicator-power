@@ -28,7 +28,7 @@ add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-testing
                                  Dbus
                                  ${CMAKE_SOURCE_DIR}/data/org.ayatana.indicator.power.Testing.xml)
 
-if (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS)
+if (HAS_LOMIRI_ACCTSERVICE_SOUND)
     add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-accounts-sound
                                      com.lomiri.touch
                                      Dbus
