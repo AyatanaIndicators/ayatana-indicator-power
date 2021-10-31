@@ -68,7 +68,7 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
 
-if(EXISTS "/usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml")
+if(EXISTS "/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml")
   set (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS ON)
   add_definitions ( -DHAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS )
 else()
