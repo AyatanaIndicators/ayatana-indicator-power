@@ -28,11 +28,11 @@ add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-testing
                                  Dbus
                                  ${CMAKE_SOURCE_DIR}/data/org.ayatana.indicator.power.Testing.xml)
 
-if (HAVE_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS)
+if (HAS_LOMIRI_ACCTSERVICE_SOUND)
     add_gdbus_codegen_with_namespace(SERVICE_GENERATED_SOURCES dbus-accounts-sound
-                                     com.ubuntu.touch
+                                     com.lomiri.touch
                                      Dbus
-                                     /usr/share/accountsservice/interfaces/com.ubuntu.touch.AccountsService.Sound.xml)
+                                     /usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml)
 endif()
 
 # add the bin dir to our include path so the code can find the generated header files

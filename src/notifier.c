@@ -21,7 +21,7 @@
 
 #include "datafiles.h"
 
-#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+#ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
 #include "dbus-accounts-sound.h"
 #endif
 
@@ -86,7 +86,7 @@ typedef struct
   gboolean actions_supported;
 
   GCancellable * cancellable;
-  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  #ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
   DbusAccountsServiceSound * accounts_service_sound_proxy;
   gboolean accounts_service_sound_proxy_pending;
   #endif
@@ -147,7 +147,7 @@ get_battery_power_level (IndicatorPowerDevice * battery)
 ****  Sounds
 ***/
 
-#ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+#ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
 static void
 on_sound_proxy_ready (GObject      * source_object G_GNUC_UNUSED,
                       GAsyncResult * res,
@@ -309,7 +309,7 @@ notification_show(IndicatorPowerNotifier * self)
 
   if (are_actions_supported(self))
     {
-      #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+      #ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
       if (!silent_mode(self))
       #endif
         {
@@ -453,7 +453,7 @@ my_dispose (GObject * o)
   indicator_power_notifier_set_battery (self, NULL);
   g_clear_object (&p->dbus_battery);
 
-  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  #ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
   g_clear_object (&p->accounts_service_sound_proxy);
   #endif
 
@@ -490,7 +490,7 @@ indicator_power_notifier_init (IndicatorPowerNotifier * self)
   if (!instance_count++ && !notify_init(SERVICE_EXEC))
     g_critical("Unable to initialize libnotify! Notifications might not be shown.");
 
-  #ifdef HAS_UT_ACCTSERVICE_SYSTEMSOUND_SETTINGS
+  #ifdef HAS_LOMIRI_ACCTSERVICE_SOUND
   p->accounts_service_sound_proxy_pending = TRUE;
   gchar* object_path = g_strdup_printf("/org/freedesktop/Accounts/User%lu", (gulong)getuid());
   dbus_accounts_service_sound_proxy_new_for_bus(
