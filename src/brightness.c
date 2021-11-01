@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 Canonical Ltd.
+ * Copyright 2021 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "brightness.h"
@@ -22,7 +24,7 @@
 
 #include <gio/gio.h>
 
-#define SCHEMA_NAME "com.ubuntu.touch.system"
+#define SCHEMA_NAME "com.lomiri.touch.system"
 #define KEY_AUTO "auto-brightness"
 #define KEY_AUTO_SUPPORTED "auto-brightness-supported"
 #define KEY_BRIGHTNESS "brightness"
