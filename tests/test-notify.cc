@@ -1,5 +1,6 @@
 /*
  * Copyright 2014-2016 Canonical Ltd.
+ * Copyright 2021 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 
@@ -67,7 +69,7 @@ protected:
   static constexpr char const * METHOD_GET_INFO {"GetServerInformation"};
   static constexpr char const * SIGNAL_CLOSED {"NotificationClosed"};
 
-  static constexpr char const * HINT_TIMEOUT {"x-canonical-snap-decisions-timeout"};
+  static constexpr char const * HINT_TIMEOUT {"x-ayatana-snap-decisions-timeout"};
 
 protected:
 
