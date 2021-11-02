@@ -127,7 +127,6 @@ License: UNKNOWN
 
 Files: CMakeLists.txt
  ChangeLog
- MERGE-REVIEW
  NEWS.Canonical
  cmake/GCov.cmake
  cmake/GdbusCodegen.cmake

@@ -5,7 +5,6 @@ Source: https://github.com/AyatanaIndicators/ayatana-indicator-power
 
 Files: CMakeLists.txt
  ChangeLog
- MERGE-REVIEW
  NEWS
  NEWS.Canonical
  cmake/GdbusCodegen.cmake
