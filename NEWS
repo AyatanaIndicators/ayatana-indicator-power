@@ -1,3 +1,22 @@
+Overview of changes in ayatana-indicator-power 2.2.0
+
+  - Rename Lomiri-specific properties to x-lomiri.
+  - Rename com.ubuntu.touch.AccountsService.Sound to
+    com.lomiri.touch.AccountsService.Sound.
+  - Rename com.ubuntu.touch.system to com.lomiri.touch.system.
+  - Rename x-canonical properties to x-ayatana.
+  - Drop lomiri-url-dispatcher as a build requirement.
+  - Fix Lomiri power setting.
+  - Rename com.canonical.powerd -> com.lomiri.Repowerd.
+  - flashlight: Add support for PM8998 based SoCs.
+  - flashlight: Add support for simpler sysfs toggles.
+  - Pay attention to $SNAP prefix.
+  - Give sorting priority to devices with power supplies.
+  - Update/add documentation.
+  - Port to CMake.
+  - Add Travis CI configuration.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 2.1.2
 
   - service.c: Drop indicator settings items.
