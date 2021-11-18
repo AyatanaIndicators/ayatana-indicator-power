@@ -1,7 +1,7 @@
 /*
  * Copyright 2013 Canonical Ltd.
- * Copytight 2018 Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
- * Copytight 2021 Robert Tari <robert@tari.in>
+ * Copyright 2018 Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+ * Copyright 2021 Robert Tari <robert@tari.in>
  *
  * Authors (@Canonical):
  *   Charles Kerr <charles.kerr@canonical.com>

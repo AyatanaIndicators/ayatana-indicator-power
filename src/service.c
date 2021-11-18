@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Canonical Ltd.
- * Copytight 2021 AyatanaIndicators
+ * Copyright 2021 AyatanaIndicators
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published

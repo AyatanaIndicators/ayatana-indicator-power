@@ -1,6 +1,6 @@
 /*
- * Copytight 2018 Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
- * Copytight 2021 Robert Tari <robert@tari.in>
+ * Copyright 2018 Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+ * Copyright 2021 Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
