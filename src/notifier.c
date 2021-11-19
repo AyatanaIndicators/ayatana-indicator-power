@@ -322,7 +322,8 @@ notification_show(IndicatorPowerNotifier * self)
             }
           else
             {
-              g_warning("Unable to find '%s' in XDG data dirs", LOW_BATTERY_SOUND);
+              g_message("Unable to find '%s' in XDG data dirs, falling back to /usr/share/sounds/lomiri/notifications/", LOW_BATTERY_SOUND);
+              notify_notification_set_hint(nn, "sound-file", g_variant_new_string("file:///usr/share/sounds/lomiri/notifications/" LOW_BATTERY_SOUND));
             }
         }
 

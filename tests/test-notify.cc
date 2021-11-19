@@ -77,8 +77,6 @@ protected:
   {
     super::SetUp();
 
-    g_setenv ("XDG_DATA_HOME", XDG_DATA_HOME, TRUE);
-
     // init DBusMock / dbus-test-runner
 
     service = dbus_test_service_new(nullptr);
@@ -393,7 +391,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
                                              TRUE);
 
   // the file we expect to play on a low battery notification...
-  const char* expected_file = XDG_DATA_HOME "/" GETTEXT_PACKAGE "/sounds/" LOW_BATTERY_SOUND;
+  const char* expected_file = "/usr/share/sounds/lomiri/notifications/" LOW_BATTERY_SOUND;
   char* tmp = g_filename_to_uri(expected_file, nullptr, nullptr);
   const std::string low_power_uri {tmp};
   g_clear_pointer(&tmp, g_free);
