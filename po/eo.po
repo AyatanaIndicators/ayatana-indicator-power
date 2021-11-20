@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2021-11-20 00:51+0000\n"
+"PO-Revision-Date: 2021-11-21 02:50+0000\n"
 "Last-Translator: phlostically <phlostically@mailinator.com>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/eo/>\n"
@@ -26,7 +26,7 @@ msgstr "Montri tempon en la menubreto"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Ĉu montri la tempon en la menubreto."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:3
 msgid "Show percentage in Menu Bar"
@@ -54,17 +54,17 @@ msgstr "Adaptilo al alterna kurento"
 #. TRANSLATORS: laptop primary battery
 #: ../src/device.c:528 ../src/service.c:442
 msgid "Battery"
-msgstr ""
+msgstr "Baterio"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/device.c:532
 msgid "UPS"
-msgstr ""
+msgstr "Daŭra elektrofonto"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/device.c:536
 msgid "Monitor"
-msgstr "Ekrano"
+msgstr "Monitoro"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/device.c:540
@@ -89,7 +89,7 @@ msgstr "Poŝtelefono"
 #. TRANSLATORS: media player, mp3 etc
 #: ../src/device.c:556
 msgid "Media player"
-msgstr ""
+msgstr "Spektilo"
 
 #. TRANSLATORS: tablet device
 #: ../src/device.c:560
@@ -173,7 +173,7 @@ msgstr ""
 #: ../src/device.c:764
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (ŝargita)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: ../src/device.c:781
