@@ -14,11 +14,6 @@ set_directory_properties (PROPERTIES
                           ADDITIONAL_MAKE_CLEAN_FILES gschemas.compiled)
 set_source_files_properties (gschemas.compiled GENERATED)
 
-# make a XDG_DATA_HOME for sounds/
-set(XDG_DATA_HOME "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}")
-add_definitions(-DXDG_DATA_HOME="${XDG_DATA_HOME}")
-file(COPY "${CMAKE_SOURCE_DIR}/data/sounds" DESTINATION "${XDG_DATA_HOME}/${CMAKE_PROJECT_NAME}")
-
 # GSettings:
 # compile the ayatana-indicator-power schema into a gschemas.compiled file in this directory,
 # and help the tests to find that file by setting -DSCHEMA_DIR
