@@ -68,11 +68,10 @@ pkg_check_modules(SERVICE_DEPS REQUIRED
 
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
 
-if(EXISTS "/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml")
-  set (HAS_LOMIRI_ACCTSERVICE_SOUND ON)
-  add_definitions ( -DHAS_LOMIRI_ACCTSERVICE_SOUND )
-else()
-  set (HAS_LOMIRI_ACCTSERVICE_SOUND OFF)
+pkg_check_modules(LOMIRI_SCHEMAS lomiri-schemas)
+
+if(LOMIRI_SCHEMAS_FOUND)
+  add_definitions ( -DHAS_LOMIRI_SCHEMAS )
 endif()
 
 ##
