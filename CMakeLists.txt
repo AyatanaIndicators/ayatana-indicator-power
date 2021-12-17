@@ -23,9 +23,16 @@ else()
 endif()
 
 if(ENABLE_WERROR)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+    add_definitions("-Werror")
 endif()
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_definitions("-Weverything")
+else()
+    add_definitions("-Wall")
+endif()
+
+add_definitions("-Wno-sign-compare") # Needed for GTest on Ubuntu
 
 ##
 ##  GNU standard installation directories
@@ -87,20 +94,6 @@ add_custom_target (cppcheck COMMAND cppcheck --enable=all -q --error-exitcode=2 
                    ${CMAKE_SOURCE_DIR}/src
                    ${CMAKE_SOURCE_DIR}/tests)
 
-##
-##  Actual building
-##
-
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Weverything")
-  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-c++98-compat -Wno-padded") # these are annoying
-  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-documentation") # gtk-doc != doxygen
-else()
-  set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wall -Wformat=2") # Use -Wextra and -Wpedantic explicitly if needed
-endif()
-set(C_WARNING_ARGS "${C_WARNING_ARGS} -Wno-missing-field-initializers") # GActionEntry
-
-
 include_directories (${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
 
@@ -108,7 +101,6 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
 add_subdirectory(src)
 add_subdirectory(data)
 add_subdirectory(po)
-
 
 # testing & coverage
 if (ENABLE_TESTS)
