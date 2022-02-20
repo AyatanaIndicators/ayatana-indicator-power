@@ -14,6 +14,7 @@ set(PACKAGE ${CMAKE_PROJECT_NAME})
 option(ENABLE_TESTS "Enable all tests and checks" OFF)
 option(ENABLE_COVERAGE "Enable coverage reports (includes enabling all tests and checks)" OFF)
 option(ENABLE_WERROR "Treat all build warnings as errors" OFF)
+option(ENABLE_LOMIRI_FEATURES "Build with Lomiri-specific libraries, schemas and media" OFF)
 
 if(ENABLE_COVERAGE)
     set(ENABLE_TESTS ON)
@@ -64,20 +65,26 @@ find_package (PkgConfig REQUIRED)
 include (CheckIncludeFile)
 include (FindPkgConfig)
 
-pkg_check_modules(SERVICE_DEPS REQUIRED
-                  glib-2.0>=2.36
-                  gio-2.0>=2.36
-                  gio-unix-2.0>=2.36
-                  libnotify>=0.7.6
-                  libayatana-common>=0.9.1)
+set(
+    SERVICE_DEPS REQUIRED
+    glib-2.0>=2.36
+    gio-2.0>=2.36
+    gio-unix-2.0>=2.36
+    libnotify>=0.7.6
+    libayatana-common>=0.9.1
+)
 
+if (ENABLE_LOMIRI_FEATURES)
+    list (
+        APPEND
+        SERVICE_DEPS
+        lomiri-schemas
+    )
+    add_definitions (-DLOMIRI_FEATURES_ENABLED)
+endif ()
+
+pkg_check_modules (SERVICE_DEPS REQUIRED ${SERVICE_DEPS})
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
-
-pkg_check_modules(LOMIRI_SCHEMAS lomiri-schemas)
-
-if(LOMIRI_SCHEMAS_FOUND)
-  add_definitions ( -DHAS_LOMIRI_SCHEMAS )
-endif()
 
 ##
 ##  custom targets
@@ -119,3 +126,4 @@ endif ()
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "Unit tests: ${ENABLE_TESTS}")
 message(STATUS "Build with -Werror: ${ENABLE_WERROR}")
+message(STATUS "Build with Lomiri features: ${ENABLE_LOMIRI_FEATURES}")

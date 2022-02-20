@@ -33,6 +33,7 @@ requires:
     - cmake-extras
     - intltool
 #    - libayatana-common-dev
+#    - lomiri-schemas
     - liblomiri-url-dispatcher-dev
     - gobject-introspection
     - libgirepository1.0-dev
@@ -123,6 +124,17 @@ before_scripts:
   - make install
   - cd -
   - rm -Rf libayatana-common-build/
+  -
+  - cd ${START_DIR}
+  - if [ ! -d lomiri-schemas-build ]; then
+  -     git clone --depth 1  https://gitlab.com/ubports/core/lomiri-schemas.git lomiri-schemas-build
+  - fi
+  - cd lomiri-schemas-build
+  - cmake . -DCMAKE_INSTALL_PREFIX=/usr
+  - make
+  - make install
+  - cd -
+  - rm -Rf lomiri-schemas-build/
 
 build_scripts:
   - if [ ${DISTRO_NAME} == "debian" ];then
@@ -130,7 +142,9 @@ build_scripts:
   - fi
   -
   - if [ -e ./CMakeLists.txt ]; then
-  -     if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ]; then
+  -     if [ ${DISTRO_NAME} == "debian" ]; then
+  -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_WERROR=ON -DENABLE_TESTS=ON -DENABLE_LOMIRI_FEATURES=ON
+  -     elif [ ${DISTRO_NAME} == "ubuntu" ]; then
   -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_WERROR=ON -DENABLE_TESTS=ON
   -     else
   -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_WERROR=ON
