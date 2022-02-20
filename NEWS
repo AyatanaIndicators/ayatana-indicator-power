@@ -1,3 +1,15 @@
+Overview of changes in ayatana-indicator-power 22.2.0
+
+  - Make Lomiri features configurable at build time.
+  - Drop pkglibexecdir and use native CMake file configuration.
+  - Clean up compilation flags.
+  - Check for lomiri-schemas package instead of individual files.
+  - Drop Low battery.ogg and adapt code to use Lomiri sounds.
+  - src/service.c: Assign copyright to Robert Tari, not AyatanaIndicators
+    project.
+  - src/: Typo fix in license header.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 2.2.0
 
   - Rename Lomiri-specific properties to x-lomiri.

@@ -1,6 +1,96 @@
+2022-02-20 Mike Gabriel
+
+        * release 22.2.0 (HEAD -> main, tag: 22.2.0)
+        * Merge branch 'tari01-pr/add-lomiri-features-flag' (bc16de1)
+
+2022-02-18 Robert Tari
+
+        * .build.yml: Add ENABLE_LOMIRI_FEATURES flag and adapt build flow
+          (e6f52e9)
+        * Make Lomiri features configurable at build time (627d685)
+
+2022-02-16 Mike Gabriel
+
+        * Merge branch 'tari01-pr/drop-cmake-install-full-pkglibexecdir'
+          (b12fb0e)
+
+2022-02-14 Robert Tari
+
+        * Drop pkglibexecdir and use native CMake file configuration
+          (a9e3f58)
+
+2022-02-08 Robert Tari
+
+        * .travis.yml: Run CI builds on Travis CI's Ubuntu focal base system
+          (47544b8)
+
+2022-01-27 Mike Gabriel
+
+        * Merge branch 'tari01-pr/cleanup-compile-flags' (d70bd10)
+
+2021-12-17 Robert Tari
+
+        * .build.yml: Drop extra compilation flags and build with -Werror
+          (6cf7604)
+        * Clean up compilation flags (f342689)
+
+2021-12-15 Mike Gabriel
+
+        * Merge branch
+          'tari01-pr/build-libayatana-common-with-enable-lomiri-features'
+          (eeb9ddc)
+
+2021-12-06 Robert Tari
+
+        * .build.yml: Build libayatana-common with ENABLE_LOMIRI_FEATURES
+          (0d84ced)
+
+2021-12-15 Mike Gabriel
+
+        * Merge branch 'tari01-pr/detect-lomiri-schemas' (809fa0a)
+
+2021-11-24 Robert Tari
+
+        * Check for lomiri-schemas package instead of individual files
+          (14726b0)
+
+2021-12-15 Mike Gabriel
+
+        * Merge branch 'tari01-pr/drop-makevars' (01b36c8)
+
+2021-11-23 Robert Tari
+
+        * po/Makevars: Drop file (d52a3d7)
+
+2021-11-21 phlostically
+
+        * Translated using Weblate (Esperanto) (cf5df47)
+
+2021-11-22 Mike Gabriel
+
+        * Merge branch 'tari01-pr/drop-sounds' (ddd9347)
+
+2021-11-19 Robert Tari
+
+        * Drop Low battery.ogg and adapt code to use Lomiri sounds (c8591cc)
+
+2021-11-20 phlostically
+
+        * Translated using Weblate (Esperanto) (f71a7c1)
+
+2021-11-18 phlostically
+
+        * Translated using Weblate (Esperanto) (3bd0e41)
+
+2021-11-18 Mike Gabriel
+
+        * src/service.c: Assign copyright to Robert Tari, not
+          AyatanaIndicators project. (3572663)
+        * src/: Typo fix in license header. (084f344)
+
 2021-11-17 Mike Gabriel
 
-        * release 2.2.0 (HEAD -> main, tag: 2.2.0)
+        * release 2.2.0 (9e26f76) (tag: 2.2.0)
 
 2021-11-10 Mike Gabriel
 
