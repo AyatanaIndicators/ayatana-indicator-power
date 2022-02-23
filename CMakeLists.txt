@@ -79,8 +79,13 @@ if (ENABLE_LOMIRI_FEATURES)
         APPEND
         SERVICE_DEPS
         lomiri-schemas
+        lomiri-sounds
     )
-    add_definitions (-DLOMIRI_FEATURES_ENABLED)
+    pkg_get_variable(LOMIRI_SOUNDSDIR lomiri-sounds soundsdir)
+    add_definitions (
+        -DLOMIRI_FEATURES_ENABLED
+        -DLOMIRI_SOUNDSDIR="${LOMIRI_SOUNDSDIR}"
+    )
 endif ()
 
 pkg_check_modules (SERVICE_DEPS REQUIRED ${SERVICE_DEPS})
