@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Canonical Ltd.
- * Copyright 2021 Robert Tari
+ * Copyright 2021-2022 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -22,7 +22,11 @@
 #include "datafiles.h"
 
 #ifdef LOMIRI_FEATURES_ENABLED
-#include "dbus-accounts-sound.h"
+    #include "dbus-accounts-sound.h"
+#endif
+
+#ifndef LOMIRI_SOUNDSDIR
+    #define LOMIRI_SOUNDSDIR ""
 #endif
 
 #include "dbus-battery.h"
@@ -322,8 +326,8 @@ notification_show(IndicatorPowerNotifier * self)
             }
           else
             {
-              g_message("Unable to find '%s' in XDG data dirs, falling back to /usr/share/sounds/lomiri/notifications/", LOW_BATTERY_SOUND);
-              notify_notification_set_hint(nn, "sound-file", g_variant_new_string("file:///usr/share/sounds/lomiri/notifications/" LOW_BATTERY_SOUND));
+              g_message("Unable to find '%s' in XDG data dirs, falling back to %s/notifications/", LOMIRI_SOUNDSDIR, LOW_BATTERY_SOUND);
+              notify_notification_set_hint(nn, "sound-file", g_variant_new_string("file://" LOMIRI_SOUNDSDIR "/notifications/" LOW_BATTERY_SOUND));
             }
         }
 

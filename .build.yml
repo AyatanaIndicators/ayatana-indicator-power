@@ -34,6 +34,7 @@ requires:
     - intltool
 #    - libayatana-common-dev
 #    - lomiri-schemas
+#    - lomiri-sounds
     - liblomiri-url-dispatcher-dev
     - gobject-introspection
     - libgirepository1.0-dev
@@ -135,6 +136,17 @@ before_scripts:
   - make install
   - cd -
   - rm -Rf lomiri-schemas-build/
+  -
+  - cd ${START_DIR}
+  - if [ ! -d lomiri-sounds-build ]; then
+  -     git clone --depth 1  https://gitlab.com/ubports/core/lomiri-sounds.git lomiri-sounds-build
+  - fi
+  - cd lomiri-sounds-build
+  - cmake . -DCMAKE_INSTALL_PREFIX=/usr
+  - make
+  - make install
+  - cd -
+  - rm -Rf lomiri-sounds-build/
 
 build_scripts:
   - if [ ${DISTRO_NAME} == "debian" ];then
