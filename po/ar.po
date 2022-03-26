@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:20+0200\n"
-"PO-Revision-Date: 2020-02-23 15:32+0000\n"
-"Last-Translator: Amr Karajah <amrkarajah12341234@gmail.com>\n"
+"PO-Revision-Date: 2022-03-27 20:09+0000\n"
+"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/ar/>\n"
 "Language: ar\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -75,7 +75,7 @@ msgstr ""
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/device.c:544
 msgid "Keyboard"
-msgstr ""
+msgstr "لوحة المفاتيح"
 
 #. TRANSLATORS: portable device
 #: ../src/device.c:548
