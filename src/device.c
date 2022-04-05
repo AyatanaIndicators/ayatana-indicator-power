@@ -387,6 +387,7 @@ device_kind_to_string (UpDeviceKind kind)
       case UP_DEVICE_KIND_MEDIA_PLAYER: return "media-player";
       case UP_DEVICE_KIND_TABLET: return "tablet";
       case UP_DEVICE_KIND_COMPUTER: return "computer";
+      case UP_DEVICE_KIND_GAMING_INPUT: return "gaming-input";
       default: return "unknown";
     }
 }
@@ -562,6 +563,10 @@ device_kind_to_localised_string (UpDeviceKind kind)
     case UP_DEVICE_KIND_COMPUTER:
       /* TRANSLATORS: tablet device */
       text = _("Computer");
+      break;
+    case UP_DEVICE_KIND_GAMING_INPUT:
+      /* TRANSLATORS: game controller/joystick with internal batteries */
+      text = _("Gaming input");
       break;
     case UP_DEVICE_KIND_UNKNOWN:
       /* TRANSLATORS: unknown device */
