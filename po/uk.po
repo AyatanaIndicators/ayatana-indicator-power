@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2022-04-23 10:54+0000\n"
+"PO-Revision-Date: 2022-04-23 12:18+0000\n"
 "Last-Translator: Sergii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/uk/>\n"
@@ -222,9 +222,8 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/notifier.c:252
-#, fuzzy
 msgid "Battery settings"
-msgstr "Налаштування акумулятора…"
+msgstr "Налаштування акумулятора"
 
 #: ../src/service.c:567
 msgid "Charge level"
@@ -248,11 +247,11 @@ msgstr "Автоматична настройка яскравості"
 
 #: ../src/service.c:677
 msgid "Flashlight"
-msgstr ""
+msgstr "Ліхтарик"
 
 #: ../src/service.c:683
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Попередження: Інтенсивне використання може пошкодити світлодіод!"
 
 #: ../src/service.c:689
 msgid "Battery settings…"
@@ -270,6 +269,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Індикатор живлення Ayatana наразі не підтримує\n"
+"програму для статистики використання живлення\n"
+"вашого робочого середовища.\n"
+"Будь ласка, повідомте про це розробників за адресою:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: ../src/utils.c:133
 msgid ""
@@ -279,3 +283,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Індикатор живлення Ayatana наразі не підтримує\n"
+"діалогове вікно параметрів живлення\n"
+"вашого робочого середовища.\n"
+"Будь ласка, повідомте про це розробників за адресою:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
