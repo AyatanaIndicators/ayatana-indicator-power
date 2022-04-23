@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
 "ayatana-indicator-power/issues\n"
 "POT-Creation-Date: 2019-08-28 20:21+0200\n"
-"PO-Revision-Date: 2020-08-07 21:32+0000\n"
-"Last-Translator: Nazim-ua <nazim-ua@ukr.net>\n"
+"PO-Revision-Date: 2022-04-23 10:54+0000\n"
+"Last-Translator: Sergii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/uk/>\n"
 "Language: uk\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -38,9 +38,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Відображати чи ні відсоток у панелі меню."
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "Коли відображати стан батареї на панелі меню."
+msgstr "Коли відображати стан батареї на панелі меню?"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:6
 msgid ""
