@@ -455,6 +455,8 @@ create_header_state (IndicatorPowerService * self)
 
   g_variant_builder_add (&b, "{sv}", "title", g_variant_new_string (_("Battery")));
 
+  g_variant_builder_add (&b, "{sv}", "tooltip", g_variant_new_string (_("Battery status and power management")));
+
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
