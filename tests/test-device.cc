@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2016 Canonical Ltd.
+ * Copyright 2022 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "device.h"
@@ -22,7 +24,7 @@
 
 #include <gio/gio.h>
 #include <gtest/gtest.h>
-
+#include <array>
 #include <algorithm>
 #include <cmath> // ceil()
 #include <string>
