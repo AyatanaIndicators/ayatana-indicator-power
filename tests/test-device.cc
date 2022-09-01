@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2016 Canonical Ltd.
+ * Copyright 2022 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "device.h"
@@ -22,7 +24,7 @@
 
 #include <gio/gio.h>
 #include <gtest/gtest.h>
-
+#include <array>
 #include <algorithm>
 #include <cmath> // ceil()
 #include <string>
@@ -535,7 +537,7 @@ TEST_F(DeviceTest, IconNames)
       EXPECT_ICON_NAMES_EQ(expected->str, device);
 
       // if we know the charge level, but not that it’s charging,
-      // then we should use the same icons as when it’s discharging. 
+      // then we should use the same icons as when it’s discharging.
       // https://wiki.ubuntu.com/Power?action=diff&rev2=78&rev1=77
       // https://bugs.launchpad.net/ubuntu/+source/indicator-power/+bug/1470080
       g_object_set (o, INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_UNKNOWN,
@@ -949,7 +951,7 @@ TEST_F(DeviceTest, ChoosePrimary)
       { "phone unknown 0m 61% phone01 1" }
     }
   };
-  
+
   for(const auto& test : tests)
   {
     // build the device list
