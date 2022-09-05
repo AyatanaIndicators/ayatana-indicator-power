@@ -6,9 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/AyatanaIndicators/"
-"ayatana-indicator-power/issues\n"
-"POT-Creation-Date: 2019-08-28 20:21+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-05 13:35+0200\n"
 "PO-Revision-Date: 2020-01-19 14:21+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/ayatana-indicators/"
@@ -45,106 +44,111 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Opties voor het tonen van de accustatus. Geldige opties zijn \"present\", \""
-"charge\" en \"never\"."
+"Opties voor het tonen van de accustatus. Geldige opties zijn \"present\", "
+"\"charge\" en \"never\"."
 
 #. TRANSLATORS: system power cord
-#: ../src/device.c:524
+#: ../src/device.c:525
 msgid "AC Adapter"
 msgstr "Stroomadapter"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/device.c:528 ../src/service.c:442
+#: ../src/device.c:529 ../src/service.c:456
 msgid "Battery"
 msgstr "Accu"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/device.c:532
+#: ../src/device.c:533
 msgid "UPS"
 msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/device.c:536
+#: ../src/device.c:537
 msgid "Monitor"
 msgstr "Monitor"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/device.c:540
+#: ../src/device.c:541
 msgid "Mouse"
 msgstr "Muis"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/device.c:544
+#: ../src/device.c:545
 msgid "Keyboard"
 msgstr "Toetsenbord"
 
 #. TRANSLATORS: portable device
-#: ../src/device.c:548
+#: ../src/device.c:549
 msgid "PDA"
 msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/device.c:552
+#: ../src/device.c:553
 msgid "Cell phone"
 msgstr "Mobiele telefoon"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/device.c:556
+#: ../src/device.c:557
 msgid "Media player"
 msgstr "Mediaspeler"
 
 #. TRANSLATORS: tablet device
-#: ../src/device.c:560
+#: ../src/device.c:561
 msgid "Tablet"
 msgstr "Tablet"
 
 #. TRANSLATORS: tablet device
-#: ../src/device.c:564
+#: ../src/device.c:565
 msgid "Computer"
 msgstr "Computer"
 
+#. TRANSLATORS: game controller/joystick with internal batteries
+#: ../src/device.c:569
+msgid "Gaming input"
+msgstr ""
+
 #. TRANSLATORS: unknown device
-#: ../src/device.c:568
+#: ../src/device.c:573
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../src/device.c:608
+#: ../src/device.c:613
 #, c-format
 msgid "estimating…"
 msgstr "bezig met berekenen…"
 
-#: ../src/device.c:612
+#: ../src/device.c:617
 #, c-format
 msgid "unknown"
 msgstr "onbekend"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
-#: ../src/device.c:641
+#: ../src/device.c:646
 #, c-format
 msgid "%0d:%02d to charge"
 msgstr "nog %0d:%02d bezig met opladen"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
-#: ../src/device.c:646
+#: ../src/device.c:651
 #, c-format
 msgid "%0d:%02d left"
 msgstr "%0d:%02d resterend"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
-#: ../src/device.c:681
+#: ../src/device.c:686
 #, c-format
 msgid "%d %s %d %s to charge"
 msgstr "nog %d%s%d%s bezig met opladen"
 
-#: ../src/device.c:682 ../src/device.c:700
+#: ../src/device.c:687 ../src/device.c:705
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "uur"
 msgstr[1] "uur"
 
-#: ../src/device.c:683 ../src/device.c:690 ../src/device.c:701
-#: ../src/device.c:708
+#: ../src/device.c:688 ../src/device.c:695 ../src/device.c:706
+#: ../src/device.c:713
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuut"
@@ -152,113 +156,109 @@ msgstr[1] "minuten"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
-#: ../src/device.c:689
+#: ../src/device.c:694
 #, c-format
 msgid "%d %s to charge"
 msgstr "nog %d%s bezig met opladen"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
-#: ../src/device.c:699
+#: ../src/device.c:704
 #, c-format
 msgid "%d %s %d %s left"
 msgstr "%d%s%d%s resterend"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
-#: ../src/device.c:707
+#: ../src/device.c:712
 #, c-format
 msgid "%d %s left"
 msgstr "%d%s resterend"
 
 #. TRANSLATORS: example: "battery (charged)"
-#: ../src/device.c:764
+#: ../src/device.c:769
 #, c-format
 msgid "%s (charged)"
 msgstr "%s (opgeladen)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
-#: ../src/device.c:781
+#: ../src/device.c:786
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
-#: ../src/device.c:853
+#: ../src/device.c:858
 #, c-format
 msgid "(%s, %.0lf%%)"
 msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
-#: ../src/device.c:858
+#: ../src/device.c:863
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
-#: ../src/device.c:863
+#: ../src/device.c:868
 #, c-format
 msgid "(%.0lf%%)"
 msgstr "(%.0lf%%)"
 
-#: ../src/notifier.c:231
+#: ../src/notifier.c:301
 msgid "Battery Low"
 msgstr "Laag accuniveau"
 
-#: ../src/notifier.c:232
+#: ../src/notifier.c:302
 msgid "Battery Critical"
 msgstr "Kritiek accuniveau"
 
-#: ../src/notifier.c:234
+#: ../src/notifier.c:304
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr "%.0f%% resterend"
 
-#: ../src/notifier.c:251
+#: ../src/notifier.c:339
 msgid "OK"
 msgstr "Oké"
 
-#: ../src/notifier.c:252
+#: ../src/notifier.c:340
 msgid "Battery settings"
 msgstr "Accu-instellingen"
 
-#: ../src/service.c:567
+#: ../src/service.c:458
+msgid "Battery status and power management"
+msgstr ""
+
+#: ../src/service.c:583
 msgid "Charge level"
 msgstr "Oplaadniveau"
 
-#: ../src/service.c:635
-msgid "Show Time in Menu Bar"
-msgstr "Tijd tonen op menubalk"
-
-#: ../src/service.c:639
-msgid "Show Percentage in Menu Bar"
-msgstr "Percentage tonen op menubalk"
-
-#: ../src/service.c:643
+#: ../src/service.c:651
 msgid "Power Settings…"
 msgstr "Energie-instellingen…"
 
-#: ../src/service.c:669
+#: ../src/service.c:677
 msgid "Adjust brightness automatically"
 msgstr "Helderheid automatisch aanpassen"
 
-#: ../src/service.c:677
+#: ../src/service.c:685
 msgid "Flashlight"
 msgstr "Zaklamp"
 
-#: ../src/service.c:683
+#: ../src/service.c:691
 msgid "Warning: Heavy use can damage the LED!"
 msgstr "Waarschuwing: langdurig gebruik kan de LED beschadigen!"
 
-#: ../src/service.c:689
+#: ../src/service.c:697
 msgid "Battery settings…"
 msgstr "Accu-instellingen…"
 
-#: ../src/service.c:840 ../src/utils.c:132
+#: ../src/service.c:848 ../src/utils.c:68
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../src/service.c:841
+#: ../src/service.c:849
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
@@ -272,7 +272,7 @@ msgstr ""
 "Meld dit aan de ontwikkelaars:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
-#: ../src/utils.c:133
+#: ../src/utils.c:69
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power settings dialog of your desktop environment, yet.\n"
@@ -285,3 +285,9 @@ msgstr ""
 "\n"
 "Meld dit aan de ontwikkelaars:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
+
+#~ msgid "Show Time in Menu Bar"
+#~ msgstr "Tijd tonen op menubalk"
+
+#~ msgid "Show Percentage in Menu Bar"
+#~ msgstr "Percentage tonen op menubalk"
