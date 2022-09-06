@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-05 13:35+0200\n"
-"PO-Revision-Date: 2020-02-26 17:33+0000\n"
+"PO-Revision-Date: 2022-09-07 03:22+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -105,7 +105,7 @@ msgstr "Computador"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: ../src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "Entrada de jogos"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:573
@@ -228,7 +228,7 @@ msgstr "Configurações da bateria"
 
 #: ../src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Condição da bateria e gerenciamento de energia"
 
 #: ../src/service.c:583
 msgid "Charge level"
