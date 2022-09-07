@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-05 13:35+0200\n"
-"PO-Revision-Date: 2019-09-03 20:24+0000\n"
+"PO-Revision-Date: 2022-09-08 18:17+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../data/org.ayatana.indicator.power.gschema.xml.in:1
 msgid "Show time in Menu Bar"
@@ -107,7 +107,7 @@ msgstr "Kompiuteris"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: ../src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "Žaidimų manipuliatoriaus įvestis"
 
 #. TRANSLATORS: unknown device
 #: ../src/device.c:573
@@ -232,7 +232,7 @@ msgstr "Baterijos nustatymai"
 
 #: ../src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Baterijos būsena ir maitinimo valdymas"
 
 #: ../src/service.c:583
 msgid "Charge level"
