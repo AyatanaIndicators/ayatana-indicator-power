@@ -1,4 +1,4 @@
-data/org.ayatana.indicator.power.gschema.xml.in
+data/org.ayatana.indicator.power.gschema.xml
 src/device.c
 src/notifier.c
 src/service.c

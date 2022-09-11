@@ -1,0 +1,24 @@
+<schemalist>
+  <enum id="ayatana-indicator-power-icon-policy-enum">
+    <value nick="present" value="0" />
+    <value nick="charge" value="1" />
+    <value nick="never" value="2" />
+  </enum>
+  <schema gettext-domain="ayatana-indicator-power" id="org.ayatana.indicator.power" path="/org/ayatana/indicator/power/">
+    <key name="show-time" type="b">
+      <default>false</default>
+      <summary>Show time in Menu Bar</summary>
+      <description>Whether or not to show the time in the menu bar.</description>
+    </key>
+    <key name="show-percentage" type="b">
+      <default>false</default>
+      <summary>Show percentage in Menu Bar</summary>
+      <description>Whether or not to show the percentage in the menu bar.</description>
+    </key>
+    <key enum="ayatana-indicator-power-icon-policy-enum" name="icon-policy">
+      <default>"present"</default>
+      <summary>When to show the battery status in the menu bar?</summary>
+      <description>Options for when to show battery status. Valid options are "present", "charge", and "never".</description>
+    </key>
+  </schema>
+</schemalist>
