@@ -22,4 +22,5 @@ sed -e 's/\.xml\.in\.h:/.xml.in:/g'	\
     -e 's/\.ini\.in\.h:/.ini.in:/g'	\
     -e 's/\.xml\.h:/.xml:/g'		\
     -e 's/\.ini\.h:/.ini:/g'		\
+    -e 's@#: \.\./@#: @g'		\
     -i po/${GETTEXT_DOMAIN}.pot
