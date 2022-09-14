@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-05 13:35+0200\n"
+"POT-Creation-Date: 2022-09-14 08:53+0200\n"
 "PO-Revision-Date: 2022-09-08 18:17+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
-"Language-Team: Occitan <https://hosted.weblate.org/projects/"
-"ayatana-indicators/power-applet/oc/>\n"
+"Language-Team: Occitan <https://hosted.weblate.org/projects/ayatana-"
+"indicators/power-applet/oc/>\n"
 "Language: oc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,27 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.14.1-dev\n"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:1
+#: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
 msgstr "Mostrar lo temps dins la barra de menú"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:2
+#: data/org.ayatana.indicator.power.gschema.xml:2
 msgid "Whether or not to show the time in the menu bar."
 msgstr "Mostrar o pas lo temps dins la barra de menú."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:3
+#: data/org.ayatana.indicator.power.gschema.xml:3
 msgid "Show percentage in Menu Bar"
 msgstr "Mostrar lo percentatge dins la barra de menú"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:4
+#: data/org.ayatana.indicator.power.gschema.xml:4
 msgid "Whether or not to show the percentage in the menu bar."
 msgstr "Indica se cal afichar lo percentatge dins la barra de menú."
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:5
+#: data/org.ayatana.indicator.power.gschema.xml:5
 msgid "When to show the battery status in the menu bar?"
 msgstr "Quand mostrar l’estat de la batariá dins la barra de menú ?"
 
-#: ../data/org.ayatana.indicator.power.gschema.xml.in:6
+#: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
@@ -48,107 +48,107 @@ msgstr ""
 "« present », « en carga » e « jamai »."
 
 #. TRANSLATORS: system power cord
-#: ../src/device.c:525
+#: src/device.c:525
 msgid "AC Adapter"
 msgstr "Adaptador sector"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/device.c:529 ../src/service.c:456
+#: src/device.c:529 src/service.c:456
 msgid "Battery"
 msgstr "Batariá"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/device.c:533
+#: src/device.c:533
 msgid "UPS"
 msgstr "Ondulador"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/device.c:537
+#: src/device.c:537
 msgid "Monitor"
 msgstr "Monitor"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/device.c:541
+#: src/device.c:541
 msgid "Mouse"
 msgstr "Mirga"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/device.c:545
+#: src/device.c:545
 msgid "Keyboard"
 msgstr "Clavièr"
 
 #. TRANSLATORS: portable device
-#: ../src/device.c:549
+#: src/device.c:549
 msgid "PDA"
 msgstr "Assistent personal"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/device.c:553
+#: src/device.c:553
 msgid "Cell phone"
 msgstr "Telefonet"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/device.c:557
+#: src/device.c:557
 msgid "Media player"
 msgstr "Lector multimèdia"
 
 #. TRANSLATORS: tablet device
-#: ../src/device.c:561
+#: src/device.c:561
 msgid "Tablet"
 msgstr "Tauleta"
 
 #. TRANSLATORS: tablet device
-#: ../src/device.c:565
+#: src/device.c:565
 msgid "Computer"
 msgstr "Ordenador"
 
 #. TRANSLATORS: game controller/joystick with internal batteries
-#: ../src/device.c:569
+#: src/device.c:569
 msgid "Gaming input"
 msgstr "Entrada jòc"
 
 #. TRANSLATORS: unknown device
-#: ../src/device.c:573
+#: src/device.c:573
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../src/device.c:613
+#: src/device.c:613
 #, c-format
 msgid "estimating…"
 msgstr "estimacion…"
 
-#: ../src/device.c:617
+#: src/device.c:617
 #, c-format
 msgid "unknown"
 msgstr "desconegut"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
-#: ../src/device.c:646
+#: src/device.c:646
 #, c-format
 msgid "%0d:%02d to charge"
 msgstr "%0d:%02d per recargar"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
-#: ../src/device.c:651
+#: src/device.c:651
 #, c-format
 msgid "%0d:%02d left"
 msgstr "%0d:%02d restantas"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
-#: ../src/device.c:686
+#: src/device.c:686
 #, c-format
 msgid "%d %s %d %s to charge"
 msgstr "%d %s %d %s per recargar"
 
-#: ../src/device.c:687 ../src/device.c:705
+#: src/device.c:687 src/device.c:705
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ora"
 msgstr[1] "oras"
 
-#: ../src/device.c:688 ../src/device.c:695 ../src/device.c:706
-#: ../src/device.c:713
+#: src/device.c:688 src/device.c:695 src/device.c:706
+#: src/device.c:713
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuta"
@@ -156,109 +156,109 @@ msgstr[1] "minutas"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
-#: ../src/device.c:694
+#: src/device.c:694
 #, c-format
 msgid "%d %s to charge"
 msgstr "%d %s per recargar"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
-#: ../src/device.c:704
+#: src/device.c:704
 #, c-format
 msgid "%d %s %d %s left"
 msgstr "%d %s %d %s restantas"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
-#: ../src/device.c:712
+#: src/device.c:712
 #, c-format
 msgid "%d %s left"
 msgstr "%d %s restantas"
 
 #. TRANSLATORS: example: "battery (charged)"
-#: ../src/device.c:769
+#: src/device.c:769
 #, c-format
 msgid "%s (charged)"
 msgstr "%s (cargat)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
-#: ../src/device.c:786
+#: src/device.c:786
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
-#: ../src/device.c:858
+#: src/device.c:858
 #, c-format
 msgid "(%s, %.0lf%%)"
 msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
-#: ../src/device.c:863
+#: src/device.c:863
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
-#: ../src/device.c:868
+#: src/device.c:868
 #, c-format
 msgid "(%.0lf%%)"
 msgstr "(%.0lf%%)"
 
-#: ../src/notifier.c:301
+#: src/notifier.c:301
 msgid "Battery Low"
 msgstr "Batariá febla"
 
-#: ../src/notifier.c:302
+#: src/notifier.c:302
 msgid "Battery Critical"
 msgstr "Nivèl de batariá critic"
 
-#: ../src/notifier.c:304
+#: src/notifier.c:304
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr "%.0f%% de carga restanta"
 
-#: ../src/notifier.c:339
+#: src/notifier.c:339
 msgid "OK"
 msgstr "D’acòrdi"
 
-#: ../src/notifier.c:340
+#: src/notifier.c:340
 msgid "Battery settings"
 msgstr "Paramètres de batariá"
 
-#: ../src/service.c:458
+#: src/service.c:458
 msgid "Battery status and power management"
 msgstr "Gestion de l’estat de la batariá e de l’energia"
 
-#: ../src/service.c:583
+#: src/service.c:583
 msgid "Charge level"
 msgstr "Nivèl de carga"
 
-#: ../src/service.c:651
+#: src/service.c:651
 msgid "Power Settings…"
 msgstr "Reglatges de la gestion de l'energia…"
 
-#: ../src/service.c:677
+#: src/service.c:677
 msgid "Adjust brightness automatically"
 msgstr "Ajustar automaticament la luminositat"
 
-#: ../src/service.c:685
+#: src/service.c:685
 msgid "Flashlight"
 msgstr "Lampa de pòcha"
 
-#: ../src/service.c:691
+#: src/service.c:691
 msgid "Warning: Heavy use can damage the LED!"
 msgstr "Avertiment : l’utilizacion intensiva pòt damatjar la DEL !"
 
-#: ../src/service.c:697
+#: src/service.c:697
 msgid "Battery settings…"
 msgstr "Reglatges de la batariá…"
 
-#: ../src/service.c:848 ../src/utils.c:68
+#: src/service.c:848 src/utils.c:68
 msgid "Warning"
 msgstr "Alèrta"
 
-#: ../src/service.c:849
+#: src/service.c:849
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
@@ -273,7 +273,7 @@ msgstr ""
 "Mercés d'o senhalar als desvolopaires a :\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
-#: ../src/utils.c:69
+#: src/utils.c:69
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power settings dialog of your desktop environment, yet.\n"

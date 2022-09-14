@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 14:01+0200\n"
+"POT-Creation-Date: 2022-09-14 08:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:529 ../src/service.c:456
+#: src/device.c:529 src/service.c:456
 msgid "Battery"
 msgstr ""
 
@@ -138,13 +138,13 @@ msgstr ""
 msgid "%d %s %d %s to charge"
 msgstr ""
 
-#: src/device.c:687 ../src/device.c:705
+#: src/device.c:687 src/device.c:705
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/device.c:688 ../src/device.c:695 ../src/device.c:706
+#: src/device.c:688 src/device.c:695 src/device.c:706
 #: src/device.c:713
 msgid "minute"
 msgid_plural "minutes"
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Battery settings…"
 msgstr ""
 
-#: src/service.c:848 ../src/utils.c:68
+#: src/service.c:848 src/utils.c:68
 msgid "Warning"
 msgstr ""
 
