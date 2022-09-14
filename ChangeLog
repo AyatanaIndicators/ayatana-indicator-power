@@ -1,6 +1,133 @@
+2022-09-14 Mike Gabriel
+
+        * release 22.9.0 (HEAD -> main, tag: 22.9.0)
+
+2022-09-14 Milan Korecky
+
+        * Translated using Weblate (Czech) (0aa1bc1)
+
+2022-09-14 Mike Gabriel
+
+        * po/*.po{,t}: Translation strings update (esp. source file
+          references). (4e13213)
+        * update-po{,t}.sh: Also catch multi-file source file references.
+          (069e953)
+
+2022-09-13 Robert Tari
+
+        * Merge branch 'sunweaver-pr/fix-and-update-translation-template'
+          (ee9f029)
+
+2022-09-07 Quentin PAGÈS
+
+        * Translated using Weblate (Occitan) (b0aa902)
+
+2022-09-07 Moo
+
+        * Translated using Weblate (Lithuanian) (4f44d07)
+
+2022-09-06 Wellington Terumi Uemura
+
+        * Translated using Weblate (Portuguese (Brazil)) (0374202)
+
+2022-09-05 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (64497ab)
+
+2022-09-05 Mike Gabriel
+
+        * Translated using Weblate (German) (7a83794)
+
+2022-09-11 Mike Gabriel
+
+        * po/*.pot: Update translation template file. (55df6ad)
+        * data/: Fix translation of .gschema.xml file. (5482074)
+        * update-po{,t}.sh: Omit ../ at beginning of file names in .po(t)
+          file(s). (4e1ed14)
+
+2022-09-07 Quentin PAGÈS
+
+        * Translated using Weblate (Occitan) (beaa19f)
+
+2022-09-07 Moo
+
+        * Translated using Weblate (Lithuanian) (ca3d681)
+
+2022-09-06 Wellington Terumi Uemura
+
+        * Translated using Weblate (Portuguese (Brazil)) (1df012e)
+
+2022-09-05 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (7bbf4e9)
+
+2022-09-05 Mike Gabriel
+
+        * Translated using Weblate (German) (67d732c)
+        * po/*.po{,t}: Translation strings update. (d5fd034)
+
+2022-09-02 Robert Tari
+
+        * Merge branch 'sunweaver-pr/tooltip-support' (16cae61)
+        * tests/test-device.cc: Add missing header (de77370)
+        * Whitespace fix (ebaf72c)
+
+2022-07-22 Mike Gabriel
+
+        * src/service.c: Add tooltip support. (322f63b)
+
+2022-07-14 Teitei
+
+        * Translated using Weblate (Burmese) (dabd41d)
+
+2022-04-23 Sergii Horichenko
+
+        * Translated using Weblate (Ukrainian) (08b4c59)
+        * Translated using Weblate (Ukrainian) (30ae76c)
+
+2022-04-05 Mike Gabriel
+
+        * Merge branch 'flexiondotorg-gaming-input' (5ade5c4)
+
+2022-04-05 Martin Wimpress
+
+        * Add support for gaming-input devices with internal batteries
+          (dbc0a8d)
+
+2022-03-29 Quentin PAGÈS
+
+        * Translated using Weblate (Occitan) (56a3011)
+
+2022-03-29 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (4045fcc)
+
+2022-03-26 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (a332c27)
+
+2022-03-26 ButterflyOfFire
+
+        * Translated using Weblate (Arabic) (fa1d4af)
+
+2022-03-21 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (f81c217)
+
+2022-02-28 Mike Gabriel
+
+        * Merge branch 'tari01-pr/get-sounds-path-from-lomniri-sounds'
+          (fb42e14)
+
+2022-02-23 Robert Tari
+
+        * .build.yml: Add lomiri-sounds dependency and pull it from git
+          (0a4e2ee)
+        * Get Lomiri sounds path from lomiri-sounds pkg-config (cbf17a5)
+
 2022-02-20 Mike Gabriel
 
-        * release 22.2.0 (HEAD -> main, tag: 22.2.0)
+        * release 22.2.0 (8e990c9) (tag: 22.2.0)
         * Merge branch 'tari01-pr/add-lomiri-features-flag' (bc16de1)
 
 2022-02-18 Robert Tari

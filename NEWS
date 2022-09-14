@@ -1,3 +1,11 @@
+Overview of changes in ayatana-indicator-power 22.9.0
+
+  - Add tooltip support.
+  - data/: Fix translation of .gschema.xml file.
+  - tests/test-device.cc: Add missing header.
+  - Get Lomiri sounds path from lomiri-sounds pkg-config.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 22.2.0
 
   - Make Lomiri features configurable at build time.
