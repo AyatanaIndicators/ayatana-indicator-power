@@ -8,37 +8,37 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2022-04-23 12:18+0000\n"
+"PO-Revision-Date: 2022-09-15 23:18+0000\n"
 "Last-Translator: Sergii Horichenko <m@sgg.im>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
-msgstr "Відображати час у панелі меню"
+msgstr "Відображати час у рядку меню"
 
 #: data/org.ayatana.indicator.power.gschema.xml:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "Відображати чи ні час у панелі меню."
+msgstr "Відображати чи ні час у рядку меню."
 
 #: data/org.ayatana.indicator.power.gschema.xml:3
 msgid "Show percentage in Menu Bar"
-msgstr "Відображати відсоток у панелі меню"
+msgstr "Відображати відсоток у рядку меню"
 
 #: data/org.ayatana.indicator.power.gschema.xml:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr "Відображати чи ні відсоток у панелі меню."
+msgstr "Відображати чи ні відсоток у рядку меню."
 
 #: data/org.ayatana.indicator.power.gschema.xml:5
 msgid "When to show the battery status in the menu bar?"
-msgstr "Коли відображати стан батареї на панелі меню?"
+msgstr "Коли відображати стан батареї у рядку меню?"
 
 #: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
@@ -106,7 +106,7 @@ msgstr "Комп'ютер"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "Ігровий вхід"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:573
@@ -231,7 +231,7 @@ msgstr "Налаштування акумулятора"
 
 #: src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Стан акумулятора та керування живленням"
 
 #: src/service.c:583
 msgid "Charge level"
