@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2021-01-28 17:32+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/tr/>\n"
+"PO-Revision-Date: 2022-09-26 13:23+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -105,7 +105,7 @@ msgstr "Bilgisayar"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "Oyun girişi"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:573
@@ -228,7 +228,7 @@ msgstr "Pil ayarları"
 
 #: src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Pil durumu ve güç yönetimi"
 
 #: src/service.c:583
 msgid "Charge level"
