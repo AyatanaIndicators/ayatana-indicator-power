@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2020-06-15 05:41+0000\n"
-"Last-Translator: MarongHappy <daemul72@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/ko/>\n"
+"PO-Revision-Date: 2022-09-30 18:18+0000\n"
+"Last-Translator: 이정희 <daemul72@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -105,7 +105,7 @@ msgstr "컴퓨터"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "게임 입력"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:573
@@ -226,7 +226,7 @@ msgstr "배터리 설정"
 
 #: src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "배터리 상태 및 전원 관리"
 
 #: src/service.c:583
 msgid "Charge level"
