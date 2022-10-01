@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2017-07-21 14:56+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Tigrinya\n"
+"PO-Revision-Date: 2022-10-01 12:18+0000\n"
+"Last-Translator: Mubarek Seyd Juhar <mubareksd@gmail.com>\n"
+"Language-Team: Tigrinya <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/ti/>\n"
 "Language: ti\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -106,7 +108,7 @@ msgstr ""
 #. TRANSLATORS: unknown device
 #: src/device.c:573
 msgid "Unknown"
-msgstr ""
+msgstr "ዘይፍለጥ"
 
 #: src/device.c:613
 #, c-format
