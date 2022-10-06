@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Canonical Ltd.
- * Copyright 2021 Robert Tari
+ * Copyright 2021-2022 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -489,7 +489,7 @@ create_header_state (IndicatorPowerService * self)
             g_free (title);
         }
 
-      if ((icon = indicator_power_device_get_gicon (p->primary_device)))
+      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE)))
         {
           GVariant * serialized_icon = g_icon_serialize (icon);
 
@@ -530,7 +530,7 @@ append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int pr
 
     g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.basic");
 
-    if ((icon = indicator_power_device_get_gicon (device)))
+    if ((icon = indicator_power_device_get_gicon (device, FALSE)))
       {
         GVariant * serialized_icon = g_icon_serialize (icon);
 

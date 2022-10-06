@@ -3,7 +3,7 @@
 A simple Device structure used internally by indicator-power
 
 Copyright 2012 Canonical Ltd.
-Copyright 2021 Robert Tari
+Copyright 2021-2022 Robert Tari
 
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
@@ -395,6 +395,7 @@ device_kind_to_string (UpDeviceKind kind)
 /**
   indicator_power_device_get_icon_names:
   @device: #IndicatorPowerDevice from which to generate the icon names
+  @panel: Whether to prefer panel icons
 
   See also indicator_power_device_get_gicon().
 
@@ -403,7 +404,7 @@ device_kind_to_string (UpDeviceKind kind)
   Free with g_strfreev() when done.
 */
 GStrv
-indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
+indicator_power_device_get_icon_names (const IndicatorPowerDevice * device, gboolean panel)
 {
   const gchar *suffix_str;
   const gchar *index_str;
@@ -422,26 +423,43 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
   if (kind == UP_DEVICE_KIND_LINE_POWER)
     {
-      g_ptr_array_add (names, g_strdup("ac-adapter-symbolic"));
+      if (panel)
+      {
+        g_ptr_array_add (names, g_strdup("ac-adapter-panel"));
+      }
+
       g_ptr_array_add (names, g_strdup("ac-adapter"));
     }
   else if (kind == UP_DEVICE_KIND_MONITOR)
     {
-      g_ptr_array_add (names, g_strdup("gpm-monitor-symbolic"));
+      if (panel)
+      {
+        g_ptr_array_add (names, g_strdup("gpm-monitor-panel"));
+      }
+
       g_ptr_array_add (names, g_strdup("gpm-monitor"));
     }
   else switch (state)
     {
       case UP_DEVICE_STATE_EMPTY:
-        g_ptr_array_add (names, g_strdup_printf("%s-empty-symbolic", kind_str));
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf("%s-empty-panel", kind_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-empty", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-000", kind_str));
         g_ptr_array_add (names, g_strdup_printf("%s-empty", kind_str));
         break;
 
       case UP_DEVICE_STATE_FULLY_CHARGED:
-        g_ptr_array_add (names, g_strdup_printf("%s-full-charged-symbolic", kind_str));
-        g_ptr_array_add (names, g_strdup_printf("%s-full-charging-symbolic", kind_str));
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf("%s-full-charged-panel", kind_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-full", kind_str));
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-100", kind_str));
         g_ptr_array_add (names, g_strdup_printf("%s-full-charged", kind_str));
@@ -452,15 +470,31 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_closest_10_percent_percentage (percentage);
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-panel", kind_str, index_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s-charging", kind_str, index_str));
         index_str_2 = get_fallback_device_icon_index (percentage);
         if (g_strcmp0 (index_str, index_str_2))
           {
+            if (panel)
+            {
+              g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-panel", kind_str, index_str_2));
+            }
+
             g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, index_str_2));
             g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s-charging", kind_str, index_str_2));
           }
-        g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-symbolic", kind_str, suffix_str));
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging-panel", kind_str, suffix_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf ("%s-%s-charging", kind_str, suffix_str));
         // NB: fallthrough to use foo-bar as a fallback for foo-bar-charging
 
@@ -470,20 +504,41 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
       case UP_DEVICE_STATE_UNKNOWN: /* http://pad.lv/1470080 */
         suffix_str = get_device_icon_suffix (percentage);
         index_str = get_closest_10_percent_percentage (percentage);
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf ("%s-%s-panel", kind_str, index_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str));
         g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str));
         index_str_2 = get_fallback_device_icon_index (percentage);
         if (g_strcmp0 (index_str, index_str_2))
           {
+            if (panel)
+            {
+              g_ptr_array_add (names, g_strdup_printf ("%s-%s-panel", kind_str, index_str_2));
+            }
+
             g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, index_str_2));
             g_ptr_array_add (names, g_strdup_printf ("gpm-%s-%s", kind_str, index_str_2));
           }
-        g_ptr_array_add (names, g_strdup_printf ("%s-%s-symbolic", kind_str, suffix_str));
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf ("%s-%s-panel", kind_str, suffix_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf ("%s-%s", kind_str, suffix_str));
         break;
 
       default:
-        g_ptr_array_add (names, g_strdup_printf("%s-missing-symbolic", kind_str));
+
+        if (panel)
+        {
+          g_ptr_array_add (names, g_strdup_printf("%s-missing-panel", kind_str));
+        }
+
         g_ptr_array_add (names, g_strdup_printf("gpm-%s-missing", kind_str));
         g_ptr_array_add (names, g_strdup_printf("%s-missing", kind_str));
     }
@@ -495,6 +550,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
 /**
   indicator_power_device_get_gicon:
   @device: #IndicatorPowerDevice to generate the icon names from
+  @panel: Whether to prefer panel icons
 
   A convenience function to call g_themed_icon_new_from_names()
   with the names returned by indicator_power_device_get_icon_names()
@@ -502,9 +558,9 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device)
   Return value: (transfer full): A themed GIcon
 */
 GIcon *
-indicator_power_device_get_gicon (const IndicatorPowerDevice * device)
+indicator_power_device_get_gicon (const IndicatorPowerDevice * device, gboolean panel)
 {
-  GStrv names = indicator_power_device_get_icon_names (device);
+  GStrv names = indicator_power_device_get_icon_names (device, panel);
   GIcon * icon = g_themed_icon_new_from_names (names, -1);
   g_strfreev (names);
   return icon;

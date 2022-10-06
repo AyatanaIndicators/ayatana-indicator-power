@@ -302,7 +302,7 @@ notification_show(IndicatorPowerNotifier * self)
         : _("Battery Critical");
   pct = indicator_power_device_get_percentage(p->battery);
   body = g_strdup_printf(_("%.0f%% charge remaining"), pct);
-  icon_names = indicator_power_device_get_icon_names(p->battery);
+  icon_names = indicator_power_device_get_icon_names(p->battery, FALSE);
   if (icon_names && *icon_names)
     icon_name = icon_names[0];
   else
