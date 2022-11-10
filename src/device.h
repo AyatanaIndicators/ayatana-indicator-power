@@ -3,9 +3,11 @@
 A simple Device structure used internally by indicator-power
 
 Copyright 2012 Canonical Ltd.
+Copyright 2022 Robert Tari
 
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
+    Robert Tari <robert@tari.in>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -126,8 +128,8 @@ gdouble       indicator_power_device_get_percentage        (const IndicatorPower
 time_t        indicator_power_device_get_time              (const IndicatorPowerDevice * device);
 gboolean      indicator_power_device_get_power_supply      (const IndicatorPowerDevice * device);
 
-GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device);
-GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device);
+GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device, gboolean panel);
+GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device, gboolean panel);
 
 
 char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device);

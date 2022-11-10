@@ -71,7 +71,7 @@ class DeviceTest : public ::testing::Test
     static std::string get_icon_names_from_device(const IndicatorPowerDevice* device)
     {
       std::string ret;
-      char ** names = indicator_power_device_get_icon_names (device);
+      char ** names = indicator_power_device_get_icon_names (device, TRUE);
       char * str = g_strjoinv (";", names);
       if (str != nullptr)
         ret = str;
@@ -282,7 +282,7 @@ TEST_F(DeviceTest, IconNames)
 
   // bad arguments
   log_count_ipower_expected++;
-  ASSERT_TRUE (indicator_power_device_get_icon_names (NULL) == NULL);
+  ASSERT_TRUE (indicator_power_device_get_icon_names (NULL, TRUE) == NULL);
 
   // power
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
