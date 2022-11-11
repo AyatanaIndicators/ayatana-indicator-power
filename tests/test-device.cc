@@ -287,14 +287,14 @@ TEST_F(DeviceTest, IconNames)
   // power
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_LINE_POWER,
                    NULL);
-  EXPECT_ICON_NAMES_EQ("ac-adapter-symbolic;"
+  EXPECT_ICON_NAMES_EQ("ac-adapter-panel;"
                        "ac-adapter",
                        device);
 
   // monitor
   g_object_set (o, INDICATOR_POWER_DEVICE_KIND, UP_DEVICE_KIND_MONITOR,
                    NULL);
-  EXPECT_ICON_NAMES_EQ("gpm-monitor-symbolic;"
+  EXPECT_ICON_NAMES_EQ("gpm-monitor-panel;"
                        "gpm-monitor",
                        device);
 
@@ -320,7 +320,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_EMPTY,
                        NULL);
-      g_string_append_printf (expected, "%s-empty-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-empty-panel;", kind_str);
       g_string_append_printf (expected, "gpm-%s-empty;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
       g_string_append_printf (expected, "%s-empty", kind_str);
@@ -331,8 +331,7 @@ TEST_F(DeviceTest, IconNames)
       g_object_set (o, INDICATOR_POWER_DEVICE_KIND, kind,
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_FULLY_CHARGED,
                        NULL);
-      g_string_append_printf (expected, "%s-full-charged-symbolic;", kind_str);
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-charged-panel;", kind_str);
       g_string_append_printf (expected, "gpm-%s-full;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100;", kind_str);
       g_string_append_printf (expected, "%s-full-charged;", kind_str);
@@ -345,13 +344,15 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                        NULL);
+      g_string_append_printf (expected, "%s-100-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-100-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100-charging;", kind_str);
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-full-charging;", kind_str);
+      g_string_append_printf (expected, "%s-100-panel;", kind_str);
       g_string_append_printf (expected, "%s-100;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100;", kind_str);
-      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-panel;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -361,17 +362,21 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
                        NULL);
+      g_string_append_printf (expected, "%s-090-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-090-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-090-charging;", kind_str);
+      g_string_append_printf (expected, "%s-080-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-080-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080-charging;", kind_str);
-      g_string_append_printf (expected, "%s-full-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-full-charging;", kind_str);
+      g_string_append_printf (expected, "%s-090-panel;", kind_str);
       g_string_append_printf (expected, "%s-090;", kind_str);
       g_string_append_printf (expected, "gpm-%s-090;", kind_str);
+      g_string_append_printf (expected, "%s-080-panel;", kind_str);
       g_string_append_printf (expected, "%s-080;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080;", kind_str);
-      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-panel;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -381,17 +386,21 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                        NULL);
+      g_string_append_printf (expected, "%s-050-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-050-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-050-charging;", kind_str);
+      g_string_append_printf (expected, "%s-060-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-060-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060-charging;", kind_str);
-      g_string_append_printf (expected, "%s-good-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-good-charging;", kind_str);
+      g_string_append_printf (expected, "%s-050-panel;", kind_str);
       g_string_append_printf (expected, "%s-050;", kind_str);
       g_string_append_printf (expected, "gpm-%s-050;", kind_str);
+      g_string_append_printf (expected, "%s-060-panel;", kind_str);
       g_string_append_printf (expected, "%s-060;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good-panel;", kind_str);
       g_string_append_printf (expected, "%s-good", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -401,17 +410,21 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        NULL);
+      g_string_append_printf (expected, "%s-030-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-030-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030-charging;", kind_str);
+      g_string_append_printf (expected, "%s-040-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-040-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-040-charging;", kind_str);
-      g_string_append_printf (expected, "%s-low-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-low-charging;", kind_str);
+      g_string_append_printf (expected, "%s-030-panel;", kind_str);
       g_string_append_printf (expected, "%s-030;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030;", kind_str);
+      g_string_append_printf (expected, "%s-040-panel;", kind_str);
       g_string_append_printf (expected, "%s-040;", kind_str);
       g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low-panel;", kind_str);
       g_string_append_printf (expected, "%s-low", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -421,17 +434,21 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_CHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        NULL);
+      g_string_append_printf (expected, "%s-010-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-010-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-010-charging;", kind_str);
+      g_string_append_printf (expected, "%s-000-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-000-charging;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000-charging;", kind_str);
-      g_string_append_printf (expected, "%s-caution-charging-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution-charging-panel;", kind_str);
       g_string_append_printf (expected, "%s-caution-charging;", kind_str);
+      g_string_append_printf (expected, "%s-010-panel;", kind_str);
       g_string_append_printf (expected, "%s-010;", kind_str);
       g_string_append_printf (expected, "gpm-%s-010;", kind_str);
+      g_string_append_printf (expected, "%s-000-panel;", kind_str);
       g_string_append_printf (expected, "%s-000;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
-      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution-panel;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -441,9 +458,10 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 95.0,
                    NULL);
+      g_string_append_printf (expected, "%s-100-panel;", kind_str);
       g_string_append_printf (expected, "%s-100;", kind_str);
       g_string_append_printf (expected, "gpm-%s-100;", kind_str);
-      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-panel;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -453,11 +471,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_STATE, UP_DEVICE_STATE_DISCHARGING,
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 85.0,
                        NULL);
+      g_string_append_printf (expected, "%s-090-panel;", kind_str);
       g_string_append_printf (expected, "%s-090;", kind_str);
       g_string_append_printf (expected, "gpm-%s-090;", kind_str);
+      g_string_append_printf (expected, "%s-080-panel;", kind_str);
       g_string_append_printf (expected, "%s-080;", kind_str);
       g_string_append_printf (expected, "gpm-%s-080;", kind_str);
-      g_string_append_printf (expected, "%s-full-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-full-panel;", kind_str);
       g_string_append_printf (expected, "%s-full", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -468,11 +488,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 50.0,
                        INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                        NULL);
+      g_string_append_printf (expected, "%s-050-panel;", kind_str);
       g_string_append_printf (expected, "%s-050;", kind_str);
       g_string_append_printf (expected, "gpm-%s-050;", kind_str);
+      g_string_append_printf (expected, "%s-060-panel;", kind_str);
       g_string_append_printf (expected, "%s-060;", kind_str);
       g_string_append_printf (expected, "gpm-%s-060;", kind_str);
-      g_string_append_printf (expected, "%s-good-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-good-panel;", kind_str);
       g_string_append_printf (expected, "%s-good", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -483,11 +505,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                        NULL);
+      g_string_append_printf (expected, "%s-030-panel;", kind_str);
       g_string_append_printf (expected, "%s-030;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030;", kind_str);
+      g_string_append_printf (expected, "%s-040-panel;", kind_str);
       g_string_append_printf (expected, "%s-040;", kind_str);
       g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low-panel;", kind_str);
       g_string_append_printf (expected, "%s-low", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -498,11 +522,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 25.0,
                        INDICATOR_POWER_DEVICE_TIME, guint64(60*15),
                        NULL);
+      g_string_append_printf (expected, "%s-030-panel;", kind_str);
       g_string_append_printf (expected, "%s-030;", kind_str);
       g_string_append_printf (expected, "gpm-%s-030;", kind_str);
+      g_string_append_printf (expected, "%s-040-panel;", kind_str);
       g_string_append_printf (expected, "%s-040;", kind_str);
       g_string_append_printf (expected, "gpm-%s-040;", kind_str);
-      g_string_append_printf (expected, "%s-low-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-low-panel;", kind_str);
       g_string_append_printf (expected, "%s-low", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -513,11 +539,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        INDICATOR_POWER_DEVICE_TIME, guint64(60*60),
                    NULL);
+      g_string_append_printf (expected, "%s-010-panel;", kind_str);
       g_string_append_printf (expected, "%s-010;", kind_str);
       g_string_append_printf (expected, "gpm-%s-010;", kind_str);
+      g_string_append_printf (expected, "%s-000-panel;", kind_str);
       g_string_append_printf (expected, "%s-000;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
-      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution-panel;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
       g_string_truncate (expected, 0);
@@ -528,11 +556,13 @@ TEST_F(DeviceTest, IconNames)
                        INDICATOR_POWER_DEVICE_PERCENTAGE, 5.0,
                        INDICATOR_POWER_DEVICE_TIME, guint64(60*15),
                        NULL);
+      g_string_append_printf (expected, "%s-010-panel;", kind_str);
       g_string_append_printf (expected, "%s-010;", kind_str);
       g_string_append_printf (expected, "gpm-%s-010;", kind_str);
+      g_string_append_printf (expected, "%s-000-panel;", kind_str);
       g_string_append_printf (expected, "%s-000;", kind_str);
       g_string_append_printf (expected, "gpm-%s-000;", kind_str);
-      g_string_append_printf (expected, "%s-caution-symbolic;", kind_str);
+      g_string_append_printf (expected, "%s-caution-panel;", kind_str);
       g_string_append_printf (expected, "%s-caution", kind_str);
       EXPECT_ICON_NAMES_EQ(expected->str, device);
 
