@@ -1,6 +1,24 @@
 2022-11-12 Mike Gabriel
 
-        * release 22.9.1 (HEAD -> main, tag: 22.9.1)
+        * release 22.9.2 (HEAD -> main, tag: 22.9.2)
+        * Merge branch 'fredldotme-sargo-battery' (a87015b)
+
+2022-11-12 Alfred Neumayer
+
+        * Revert "Don't prioritize discharging items with no time estimate
+          that have more than 10% power remaining." (cdf2459)
+
+2022-11-12 Mike Gabriel
+
+        * Merge branch 'tari01-pr/fix-tests' (ce3cef1)
+
+2022-11-11 Robert Tari
+
+        * tests/test-device.cc: Fix icon tests (350a210)
+
+2022-11-12 Mike Gabriel
+
+        * release 22.9.1 (b72b14c) (tag: 22.9.1)
         * Merge branch 'tari01-pr/fix-flashlight-toggle' (009e1b6)
 
 2022-11-11 Robert Tari

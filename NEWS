@@ -1,3 +1,9 @@
+Overview of changes in ayatana-indicator-power 22.9.2
+
+  - Fix unit tests after introducing panel icons.
+  - Revert "Don't prioritize discharging items with no time
+    estimate that have more than 10% power remaining.
+
 Overview of changes in ayatana-indicator-power 22.9.1
 
   - src/service.c: Fix flashlight toggle.
