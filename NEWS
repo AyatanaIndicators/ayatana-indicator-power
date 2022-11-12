@@ -1,3 +1,9 @@
+Overview of changes in ayatana-indicator-power 22.9.1
+
+  - src/service.c: Fix flashlight toggle.
+  - Theming fix: Separate panel icons from the power menu icon.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 22.9.0
 
   - Add tooltip support.

@@ -1,6 +1,45 @@
+2022-11-12 Mike Gabriel
+
+        * release 22.9.1 (HEAD -> main, tag: 22.9.1)
+        * Merge branch 'tari01-pr/fix-flashlight-toggle' (009e1b6)
+
+2022-11-11 Robert Tari
+
+        * src/service.c: Fix flashlight toggle (f4bbf9d)
+
+2022-11-10 Mike Gabriel
+
+        * Merge branch 'tari01-pr/fix-theming' (47feef0)
+
+2022-10-06 Robert Tari
+
+        * Theming fix: Separate panel icons from the power menu icons
+          (1b8c12e)
+
+2022-10-19 Kristjan Räts
+
+        * Translated using Weblate (Estonian) (2b2ee5a)
+
+2022-10-01 Mubarek Seyd Juhar
+
+        * Translated using Weblate (Tigrinya) (9918096)
+
+2022-09-29 이정희
+
+        * Translated using Weblate (Korean) (c5d5de4)
+
+2022-09-25 Oğuz Ersen
+
+        * Translated using Weblate (Turkish) (835f256)
+
+2022-09-14 Sergii Horichenko
+
+        * Translated using Weblate (Ukrainian) (e1f32cf)
+        * Translated using Weblate (Russian) (2997ed4)
+
 2022-09-14 Mike Gabriel
 
-        * release 22.9.0 (HEAD -> main, tag: 22.9.0)
+        * release 22.9.0 (7f9bbcb) (tag: 22.9.0)
 
 2022-09-14 Milan Korecky
 
