@@ -682,13 +682,13 @@ create_phone_settings_section(IndicatorPowerService * self)
 
   if (flashlight_supported())
   {
-    item = g_menu_item_new(_("Flashlight"), "indicator.flashlight");
+    item = g_menu_item_new(_("Flashlight"), "indicator.flashlight(true)");
     g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
     g_menu_append_item(section, item);
     g_object_unref(item);
     if (flashlight_activated())
     {
-      item = g_menu_item_new(_("Warning: Heavy use can damage the LED!"), "indicator.flashlight");
+      item = g_menu_item_new(_("Warning: Heavy use can damage the LED!"), "indicator.flashlight(true)");
       g_menu_append_item(section, item);
       g_object_unref(item);
     }
@@ -933,7 +933,9 @@ init_gactions (IndicatorPowerService * self)
   g_action_map_add_action(G_ACTION_MAP(p->actions), G_ACTION(a));
 
   /* add the flashlight action */
-  a = g_simple_action_new_stateful("flashlight", NULL, g_variant_new_boolean(FALSE));
+  GVariantType *pType = g_variant_type_new ("b");
+  a = g_simple_action_new_stateful ("flashlight", pType, g_variant_new_boolean (FALSE));
+  g_variant_type_free (pType);
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   g_signal_connect(a, "activate", G_CALLBACK(toggle_flashlight_action), self);
 
