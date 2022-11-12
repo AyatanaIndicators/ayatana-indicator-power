@@ -200,14 +200,6 @@ device_compare_func (gconstpointer ga, gconstpointer gb)
     }
 
   state = UP_DEVICE_STATE_DISCHARGING;
-
-  /* discharging items with more than 10% remaining always lose */
-  if (!ret && (((a_state == state) && !a_time && (a_percentage > 10))))
-      ret = 1;
-
-  if (!ret && (((b_state == state) && !b_time && (b_percentage > 10))))
-      ret = -1;
-
   if (!ret && (((a_state == state) && a_time) ||
                ((b_state == state) && b_time)))
     {
