@@ -666,7 +666,7 @@ create_phone_settings_section(IndicatorPowerService * self)
 
   if (ab_supported)
     {
-      item = g_menu_item_new(_("Adjust brightness automatically"), "indicator.auto-brightness");
+      item = g_menu_item_new(_("Adjust brightness automatically"), "indicator.auto-brightness(true)");
       g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
       g_menu_append_item(section, item);
       g_object_unref(item);
@@ -915,7 +915,9 @@ init_gactions (IndicatorPowerService * self)
   p->device_state_action = a;
 
   /* add the auto-brightness action */
-  a = g_simple_action_new_stateful("auto-brightness", NULL, g_variant_new_boolean(FALSE));
+  GVariantType *pType = g_variant_type_new ("b");
+  a = g_simple_action_new_stateful ("auto-brightness", pType, g_variant_new_boolean (FALSE));
+  g_variant_type_free (pType);
   g_object_bind_property_full(p->brightness, "auto-brightness",
                               a,  "state",
                               G_BINDING_SYNC_CREATE|G_BINDING_BIDIRECTIONAL,
@@ -925,7 +927,7 @@ init_gactions (IndicatorPowerService * self)
   g_action_map_add_action(G_ACTION_MAP(p->actions), G_ACTION(a));
 
   /* add the flashlight action */
-  GVariantType *pType = g_variant_type_new ("b");
+  pType = g_variant_type_new ("b");
   a = g_simple_action_new_stateful ("flashlight", pType, g_variant_new_boolean (FALSE));
   g_variant_type_free (pType);
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
