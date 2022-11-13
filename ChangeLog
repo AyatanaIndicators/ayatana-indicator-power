@@ -1,6 +1,15 @@
+2022-11-13 Mike Gabriel
+
+        * release 22.9.3 (HEAD -> main, tag: 22.9.3)
+        * Merge branch 'tari01-pr/fix-auto-brightness-toggle' (d744550)
+
+2022-11-13 Robert Tari
+
+        * src/service.c: Fix auto brightness switch (ddb6073)
+
 2022-11-12 Mike Gabriel
 
-        * release 22.9.2 (HEAD -> main, tag: 22.9.2)
+        * release 22.9.2 (8038312) (tag: 22.9.2)
         * Merge branch 'fredldotme-sargo-battery' (a87015b)
 
 2022-11-12 Alfred Neumayer

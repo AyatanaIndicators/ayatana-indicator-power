@@ -1,3 +1,10 @@
+ayatana-indicator-power (22.9.3-0) unstable; urgency=medium
+
+  * Upstream-provided Debian package for ayatana-indicator-power.
+    See upstream ChangeLog for recent changes.
+
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Sun, 13 Nov 2022 10:10:28 +0100
+
 ayatana-indicator-power (22.9.2-0) unstable; urgency=medium
 
   * Upstream-provided Debian package for ayatana-indicator-power.

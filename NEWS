@@ -1,3 +1,7 @@
+Overview of changes in ayatana-indicator-power 22.9.3
+
+  - src/service.c: Fix auto-brightness switch.
+
 Overview of changes in ayatana-indicator-power 22.9.2
 
   - Fix unit tests after introducing panel icons.
