@@ -1,6 +1,40 @@
+2023-02-12 Mike Gabriel
+
+        * release 22.9.4 (HEAD -> main, tag: 22.9.4)
+        * Merge branch 'tari01-pr/flashlight-change-state' (a19e4d9)
+
+2023-02-10 Luna Jernberg
+
+        * Translated using Weblate (Swedish) (d2569c7)
+
+2023-02-11 Robert Tari
+
+        * Handle state changes for flashlight switch (8ec14e2)
+
+2023-02-10 Luna Jernberg
+
+        * Translated using Weblate (Swedish) (5ff62e2)
+
+2023-01-06 Andy Chiang
+
+        * Translated using Weblate (Chinese (Simplified) (zh_LATN@pinyin))
+          (a7c39af)
+
+2022-12-30 Milo Ivir
+
+        * Translated using Weblate (Croatian) (670d4d3)
+
+2022-11-23 Mike Gabriel
+
+        * Merge branch 'tari01-pr/fix-lomiri-schemas-name' (1354d99)
+
+2022-11-14 Robert Tari
+
+        * debian/control: Correct lomiri-schemas name (ff3449d)
+
 2022-11-13 Mike Gabriel
 
-        * release 22.9.3 (HEAD -> main, tag: 22.9.3)
+        * release 22.9.3 (d1e4bc6) (tag: 22.9.3)
         * Merge branch 'tari01-pr/fix-auto-brightness-toggle' (d744550)
 
 2022-11-13 Robert Tari
