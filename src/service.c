@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Canonical Ltd.
- * Copyright 2021-2022 Robert Tari
+ * Copyright 2021-2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -931,7 +931,7 @@ init_gactions (IndicatorPowerService * self)
   a = g_simple_action_new_stateful ("flashlight", pType, g_variant_new_boolean (FALSE));
   g_variant_type_free (pType);
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
-  g_signal_connect(a, "activate", G_CALLBACK(toggle_flashlight_action), self);
+  g_signal_connect(a, "change-state", G_CALLBACK(toggle_flashlight_action), self);
 
   /* add the brightness action */
   a = g_simple_action_new_stateful ("brightness", NULL, action_state_for_brightness (self));

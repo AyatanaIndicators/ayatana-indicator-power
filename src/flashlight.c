@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 The UBports project
+ * Copyright 2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Marius Gripsgard <marius@ubports.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "flashlight.h"
@@ -145,7 +147,7 @@ toggle_flashlight_action(GAction *action,
     toggled = toggle_flashlight_action_simple();
 
   if (toggled)
-    g_action_change_state(action, g_variant_new_boolean(!activated));
+    g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean(!activated));
 }
 
 int
