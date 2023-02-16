@@ -494,6 +494,16 @@ create_header_state (IndicatorPowerService * self)
           g_object_unref (icon);
         }
     }
+    else if (ayatana_common_utils_is_lomiri())
+    {
+        g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string ("Fake battery"));
+        g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_string ("Fake battery"));
+        GIcon *pIcon = g_themed_icon_new_with_default_fallbacks ("battery-missing-symbolic");
+        GVariant *pIconSerialised = g_icon_serialize (pIcon);
+        g_object_unref (pIcon);
+        g_variant_builder_add (&b, "{sv}", "icon", pIconSerialised);
+        g_variant_unref (pIconSerialised);
+    }
 
   return g_variant_builder_end (&b);
 }
