@@ -1,6 +1,16 @@
+2023-02-28 Mike Gabriel
+
+        * release 22.9.5 (HEAD -> main, tag: 22.9.5)
+        * Merge branch 'tari01-pr/lomiri-fake-battery' (b173fa1)
+
+2023-02-16 Robert Tari
+
+        * src/service.c: Create a fake primary device icon on Lomiri if no
+          device is present (8a22354)
+
 2023-02-12 Mike Gabriel
 
-        * release 22.9.4 (HEAD -> main, tag: 22.9.4)
+        * release 22.9.4 (7f0e2f5) (tag: 22.9.4)
         * Merge branch 'tari01-pr/flashlight-change-state' (a19e4d9)
 
 2023-02-10 Luna Jernberg

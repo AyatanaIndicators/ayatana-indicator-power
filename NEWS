@@ -1,3 +1,8 @@
+Overview of changes in ayatana-indicator-power 22.9.5
+
+  - src/service.c: Create a fake primary device icon on Lomiri if no device is
+    present
+
 Overview of changes in ayatana-indicator-power 22.9.4
 
   - src/service.c: Fix flashlight toggle switch.
