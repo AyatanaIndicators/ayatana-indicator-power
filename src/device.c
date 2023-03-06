@@ -3,7 +3,7 @@
 A simple Device structure used internally by indicator-power
 
 Copyright 2012 Canonical Ltd.
-Copyright 2021-2022 Robert Tari
+Copyright 2021-2023 Robert Tari
 
 Authors:
     Charles Kerr <charles.kerr@canonical.com>
@@ -388,6 +388,22 @@ device_kind_to_string (UpDeviceKind kind)
       case UP_DEVICE_KIND_TABLET: return "tablet";
       case UP_DEVICE_KIND_COMPUTER: return "computer";
       case UP_DEVICE_KIND_GAMING_INPUT: return "gaming-input";
+      case UP_DEVICE_KIND_PEN: return "pen";
+      case UP_DEVICE_KIND_TOUCHPAD: return "touchpad";
+      case UP_DEVICE_KIND_MODEM: return "modem";
+      case UP_DEVICE_KIND_NETWORK: return "network";
+      case UP_DEVICE_KIND_HEADSET: return "headset";
+      case UP_DEVICE_KIND_SPEAKERS: return "speakers";
+      case UP_DEVICE_KIND_HEADPHONES: return "headphones";
+      case UP_DEVICE_KIND_VIDEO: return "video";
+      case UP_DEVICE_KIND_OTHER_AUDIO: return "audio-device";
+      case UP_DEVICE_KIND_REMOTE_CONTROL: return "remote-control";
+      case UP_DEVICE_KIND_PRINTER: return "printer";
+      case UP_DEVICE_KIND_SCANNER: return "scanner";
+      case UP_DEVICE_KIND_CAMERA: return "camera";
+      case UP_DEVICE_KIND_WEARABLE: return "wearable";
+      case UP_DEVICE_KIND_TOY: return "toy";
+      case UP_DEVICE_KIND_BLUETOOTH_GENERIC: return "bluetooth-generic";
       default: return "unknown";
     }
 }
@@ -623,6 +639,57 @@ device_kind_to_localised_string (UpDeviceKind kind)
     case UP_DEVICE_KIND_GAMING_INPUT:
       /* TRANSLATORS: game controller/joystick with internal batteries */
       text = _("Gaming input");
+      break;
+    case UP_DEVICE_KIND_PEN:
+      /* TRANSLATORS: graphic tablet pen with internal battery */
+      text = _("Pen");
+      break;
+    case UP_DEVICE_KIND_TOUCHPAD:
+      text = _("Touchpad");
+      break;
+    case UP_DEVICE_KIND_MODEM:
+      text = _("Modem");
+      break;
+    case UP_DEVICE_KIND_NETWORK:
+      text = _("Network device");
+      break;
+    case UP_DEVICE_KIND_HEADSET:
+      text = _("Headset");
+      break;
+    case UP_DEVICE_KIND_SPEAKERS:
+      /* TRANSLATORS: loudspeakers with internal batteries */
+      text = _("Speakers");
+      break;
+    case UP_DEVICE_KIND_HEADPHONES:
+      text = _("Headphones");
+      break;
+    case UP_DEVICE_KIND_VIDEO:
+      text = _("Video device");
+      break;
+    case UP_DEVICE_KIND_OTHER_AUDIO:
+      text = _("Audio device");
+      break;
+    case UP_DEVICE_KIND_REMOTE_CONTROL:
+      /* TRANSLATORS: remote control device with internal battery */
+      text = _("Remote control");
+      break;
+    case UP_DEVICE_KIND_PRINTER:
+      text = _("Printer");
+      break;
+    case UP_DEVICE_KIND_SCANNER:
+      text = _("Scanner");
+      break;
+    case UP_DEVICE_KIND_CAMERA:
+      text = _("Camera");
+      break;
+    case UP_DEVICE_KIND_WEARABLE:
+      text = _("Wearable");
+      break;
+    case UP_DEVICE_KIND_TOY:
+      text = _("Toy");
+      break;
+    case UP_DEVICE_KIND_BLUETOOTH_GENERIC:
+      text = _("Bluetooth device");
       break;
     case UP_DEVICE_KIND_UNKNOWN:
       /* TRANSLATORS: unknown device */
