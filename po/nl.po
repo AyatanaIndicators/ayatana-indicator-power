@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2020-01-19 14:21+0000\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"PO-Revision-Date: 2023-03-16 10:41+0000\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.2\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -44,8 +44,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Opties voor het tonen van de accustatus. Geldige opties zijn \"present\", "
-"\"charge\" en \"never\"."
+"Opties voor het tonen van de accustatus. Geldige opties zijn ‘present’, "
+"‘charge’ en ‘never’."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:525
@@ -105,7 +105,7 @@ msgstr "Computer"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:569
 msgid "Gaming input"
-msgstr ""
+msgstr "Game-invoer"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:573
@@ -126,7 +126,7 @@ msgstr "onbekend"
 #: src/device.c:646
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr "nog %0d:%02d bezig met opladen"
+msgstr "nog %0d:%02d tot volledig opgeladen"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: src/device.c:651
@@ -139,7 +139,7 @@ msgstr "%0d:%02d resterend"
 #: src/device.c:686
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr "nog %d%s%d%s bezig met opladen"
+msgstr "nog %d%s%d%s tot volledig opgeladen"
 
 #: src/device.c:687 src/device.c:705
 msgid "hour"
@@ -159,7 +159,7 @@ msgstr[1] "minuten"
 #: src/device.c:694
 #, c-format
 msgid "%d %s to charge"
-msgstr "nog %d%s bezig met opladen"
+msgstr "nog %d%s tot volledig opgeladen"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
@@ -228,7 +228,7 @@ msgstr "Accu-instellingen"
 
 #: src/service.c:458
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Accustatus en energiebeheer"
 
 #: src/service.c:583
 msgid "Charge level"
