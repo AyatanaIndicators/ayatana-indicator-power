@@ -353,21 +353,6 @@ calculate_device_state_action_state (IndicatorPowerService * self)
   return g_variant_new_string(device_state_to_string(device_state));
 }
 
-static GVariant*
-calculate_battery_level_action_state (IndicatorPowerService * self)
-{
-  const priv_t * const p = self->priv;
-  guint32 battery_level;
-
-  if (p->primary_device == NULL)
-    battery_level = 0;
-  else
-    battery_level = (guint32)(indicator_power_device_get_percentage (p->primary_device) + 0.5);
-
-  return g_variant_new_uint32 (battery_level);
-}
-
-
 /***
 ****
 ****  HEADER SECTION
@@ -515,81 +500,72 @@ create_header_state (IndicatorPowerService * self)
 ****
 ***/
 
-static void
-append_device_to_menu (GMenu * menu, const IndicatorPowerDevice * device, int profile)
-{
-  const UpDeviceKind kind = indicator_power_device_get_kind (device);
-
-  if (kind != UP_DEVICE_KIND_LINE_POWER)
-  {
-    char * label;
-    GMenuItem * item;
-    GIcon * icon;
-
-    label = indicator_power_device_get_readable_text (device);
-    item = g_menu_item_new (label, NULL);
-    g_free (label);
-
-    g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.basic");
-
-    if ((icon = indicator_power_device_get_gicon (device, FALSE)))
-      {
-        GVariant * serialized_icon = g_icon_serialize (icon);
-
-        if (serialized_icon != NULL)
-          {
-            g_menu_item_set_attribute_value (item,
-                                             G_MENU_ATTRIBUTE_ICON,
-                                             serialized_icon);
-            g_variant_unref (serialized_icon);
-          }
-
-        g_object_unref (icon);
-      }
-
-    if (profile == PROFILE_DESKTOP)
-      {
-        g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s",
-                                          indicator_power_device_get_object_path (device));
-      }
-
-    g_menu_append_item (menu, item);
-    g_object_unref (item);
-  }
-}
-
-
 static GMenuModel *
-create_desktop_devices_section (IndicatorPowerService * self, int profile)
+create_devices_section (IndicatorPowerService * self, int profile)
 {
-  GList * l;
-  GMenu * menu = g_menu_new ();
+    GMenu * menu = g_menu_new ();
 
-  for (l=self->priv->devices; l!=NULL; l=l->next)
-    append_device_to_menu (menu, l->data, profile);
+    if (self->priv->primary_device != NULL)
+    {
+        GMenuItem * item = g_menu_item_new (_("Charge level"), NULL);
+        g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
+        guint16 battery_level = (guint16)(indicator_power_device_get_percentage (self->priv->primary_device) + 0.5);
+        g_menu_item_set_attribute (item, "x-ayatana-progress", "q", battery_level);
+        g_menu_append_item (menu, item);
+        g_object_unref (item);
+    }
 
-  return G_MENU_MODEL (menu);
+    GList * l;
+
+    for (l=self->priv->devices; l!=NULL; l=l->next)
+    {
+        IndicatorPowerDevice *device = l->data;
+        const UpDeviceKind kind = indicator_power_device_get_kind (device);
+
+        if (kind != UP_DEVICE_KIND_LINE_POWER)
+        {
+            if (device == self->priv->primary_device)
+            {
+                continue;
+            }
+
+            char * label = indicator_power_device_get_readable_text (device);
+            GMenuItem * item = g_menu_item_new (label, NULL);
+            g_free (label);
+            g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
+            guint16 battery_level = (guint16)(indicator_power_device_get_percentage (device) + 0.5);
+            g_menu_item_set_attribute (item, "x-ayatana-progress", "q", battery_level);
+
+            if (profile != PROFILE_PHONE)
+            {
+                GIcon * icon = indicator_power_device_get_gicon (device, FALSE);
+
+                if (icon)
+                {
+                    GVariant * serialized_icon = g_icon_serialize (icon);
+
+                    if (serialized_icon != NULL)
+                    {
+                        g_menu_item_set_attribute_value (item, G_MENU_ATTRIBUTE_ICON, serialized_icon);
+                        g_variant_unref (serialized_icon);
+                    }
+
+                    g_object_unref (icon);
+                }
+
+                if (profile == PROFILE_DESKTOP)
+                {
+                    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s", indicator_power_device_get_object_path (device));
+                }
+            }
+
+            g_menu_append_item (menu, item);
+            g_object_unref (item);
+        }
+    }
+
+    return G_MENU_MODEL (menu);
 }
-
-/* https://wiki.ubuntu.com/Power#Phone
- * The spec also discusses including an item for any connected bluetooth
- * headset, but bluez doesn't appear to support Battery Level at this time */
-static GMenuModel *
-create_phone_devices_section (IndicatorPowerService * self G_GNUC_UNUSED)
-{
-  GMenu * menu;
-  GMenuItem *item;
-
-  menu = g_menu_new ();
-
-  item = g_menu_item_new (_("Charge level"), "indicator.battery-level");
-  g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
-  g_menu_append_item (menu, item);
-  g_object_unref (item);
-
-  return G_MENU_MODEL (menu);
-}
-
 
 /***
 ****
@@ -738,8 +714,8 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_DEVICES)
     {
-      rebuild_section (desktop->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP));
-      rebuild_section (greeter->submenu, 0, create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER));
+      rebuild_section (desktop->submenu, 0, create_devices_section (self, PROFILE_DESKTOP));
+      rebuild_section (greeter->submenu, 0, create_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -773,17 +749,17 @@ create_menu (IndicatorPowerService * self, int profile)
   switch (profile)
     {
       case PROFILE_PHONE:
-        sections[n++] = create_phone_devices_section (self);
+        sections[n++] = create_devices_section (self, PROFILE_PHONE);
         sections[n++] = create_phone_settings_section (self);
         break;
 
       case PROFILE_DESKTOP:
-        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP);
+        sections[n++] = create_devices_section (self, PROFILE_DESKTOP);
         sections[n++] = create_desktop_settings_section (self);
         break;
 
       case PROFILE_DESKTOP_GREETER:
-        sections[n++] = create_desktop_devices_section (self, PROFILE_DESKTOP_GREETER);
+        sections[n++] = create_devices_section (self, PROFILE_DESKTOP_GREETER);
         break;
     }
 
@@ -911,12 +887,6 @@ init_gactions (IndicatorPowerService * self)
   a = g_simple_action_new_stateful ("_header", NULL, create_header_state (self));
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   p->header_action = a;
-
-  /* add the power-level action */
-  a = g_simple_action_new_stateful ("battery-level", NULL, calculate_battery_level_action_state(self));
-  g_simple_action_set_enabled (a, FALSE);
-  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
-  p->battery_level_action = a;
 
   /* add the charge state action */
   a = g_simple_action_new_stateful ("device-state", NULL, calculate_device_state_action_state(self));
@@ -1088,9 +1058,6 @@ on_devices_changed (IndicatorPowerService * self)
     indicator_power_notifier_set_battery (p->notifier, p->primary_device);
   else
     indicator_power_notifier_set_battery (p->notifier, NULL);
-
-  /* update the battery-level action's state */
-  g_simple_action_set_state (p->battery_level_action, calculate_battery_level_action_state(self));
 
   /* update the device-state action's state */
   g_simple_action_set_state (p->device_state_action, calculate_device_state_action_state(self));
