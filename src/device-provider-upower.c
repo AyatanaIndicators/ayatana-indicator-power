@@ -1,8 +1,10 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -108,6 +110,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
   else
     {
       guint32 kind = 0;
+      gchar *model;
       guint32 state = 0;
       gdouble percentage = 0;
       gint64 time_to_empty = 0;
@@ -119,6 +122,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
       GVariant * dict = g_variant_get_child_value (response, 0);
 
       g_variant_lookup (dict, "Type", "u", &kind);
+      g_variant_lookup (dict, "Model", "s", &model);
       g_variant_lookup (dict, "State", "u", &state);
       g_variant_lookup (dict, "Percentage", "d", &percentage);
       g_variant_lookup (dict, "TimeToEmpty", "x", &time_to_empty);
@@ -129,6 +133,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
       if ((device = g_hash_table_lookup (p->devices, data->path)))
         {
           g_object_set (device, INDICATOR_POWER_DEVICE_KIND, (gint)kind,
+                                INDICATOR_POWER_DEVICE_MODEL, model,
                                 INDICATOR_POWER_DEVICE_STATE, (gint)state,
                                 INDICATOR_POWER_DEVICE_OBJECT_PATH, data->path,
                                 INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
@@ -140,6 +145,7 @@ on_get_all_response (GObject * o, GAsyncResult * res, gpointer gdata)
         {
           device = indicator_power_device_new (data->path,
                                                kind,
+                                               model,
                                                percentage,
                                                state,
                                                (time_t)time,
@@ -341,6 +347,14 @@ on_device_properties_changed(GDBusConnection * connection     G_GNUC_UNUSED,
               const guint32 u = g_variant_get_uint32(value);
               g_object_set(device,
                            INDICATOR_POWER_DEVICE_KIND, (gint)u,
+                           NULL);
+              changed = TRUE;
+            }
+          else if (!g_strcmp0(key, "Model"))
+            {
+              const gchar *s = g_variant_get_string(value, NULL);
+              g_object_set(device,
+                           INDICATOR_POWER_DEVICE_MODEL, s,
                            NULL);
               changed = TRUE;
             }

@@ -517,11 +517,18 @@ create_devices_section (IndicatorPowerService * self, int profile)
 
             if (kind == UP_DEVICE_KIND_BATTERY)
             {
-                sLabel = g_strdup (_("Charge level"));
+                if (!ayatana_common_utils_is_lomiri())
+                {
+                    sLabel = indicator_power_device_get_readable_text (device, FALSE);
+                }
+                else
+                {
+                    sLabel = g_strdup (_("Charge level"));
+                }
             }
             else
             {
-                sLabel = indicator_power_device_get_readable_text (device);
+                sLabel = indicator_power_device_get_readable_text (device, TRUE);
             }
 
             gchar *sIndicator = NULL;
@@ -1418,6 +1425,7 @@ create_totalled_battery_device (const GList * devices)
 
       device = indicator_power_device_new (NULL,
                                            UP_DEVICE_KIND_BATTERY,
+                                           NULL,
                                            percent,
                                            state,
                                            time_left,

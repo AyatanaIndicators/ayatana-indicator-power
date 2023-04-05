@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "dbus-shared.h"
@@ -299,6 +301,7 @@ indicator_power_testing_init (IndicatorPowerTesting * self)
 
   p->battery_mock = indicator_power_device_new("/some/path",
                                                UP_DEVICE_KIND_BATTERY,
+                                               "Some Model",
                                                50.0,
                                                UP_DEVICE_STATE_DISCHARGING,
                                                60*30,

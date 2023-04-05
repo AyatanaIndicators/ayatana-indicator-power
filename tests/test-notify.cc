@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Canonical Ltd.
- * Copyright 2021-2022 Robert Tari
+ * Copyright 2021-2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -236,6 +236,7 @@ TEST_F(NotifyFixture, PercentageToLevel)
 {
   auto battery = indicator_power_device_new ("/object/path",
                                              UP_DEVICE_KIND_BATTERY,
+                                             "Some Model",
                                              50.0,
                                              UP_DEVICE_STATE_DISCHARGING,
                                              30,
@@ -315,6 +316,7 @@ TEST_F(NotifyFixture, LevelsDuringBatteryDrain)
 {
   auto battery = indicator_power_device_new ("/object/path",
                                              UP_DEVICE_KIND_BATTERY,
+                                             "Some Model",
                                              50.0,
                                              UP_DEVICE_STATE_DISCHARGING,
                                              30,
@@ -388,6 +390,7 @@ TEST_F(NotifyFixture, EventsThatChangeNotifications)
 
   auto battery = indicator_power_device_new ("/object/path",
                                              UP_DEVICE_KIND_BATTERY,
+                                             "Some Model",
                                              percent_low + 1.0,
                                              UP_DEVICE_STATE_DISCHARGING,
                                              30,
