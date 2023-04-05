@@ -148,7 +148,7 @@ time_t        indicator_power_device_get_time              (const IndicatorPower
 gboolean      indicator_power_device_get_power_supply      (const IndicatorPowerDevice * device);
 
 GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device, gboolean panel);
-GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device, gboolean panel);
+GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device, gboolean panel, gboolean bShowCharge);
 
 
 char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device, gboolean bModelName);

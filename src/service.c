@@ -466,7 +466,7 @@ create_header_state (IndicatorPowerService * self)
             g_free (title);
         }
 
-      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE)))
+      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE, TRUE)))
         {
           GVariant * serialized_icon = g_icon_serialize (icon);
 
@@ -553,7 +553,7 @@ create_devices_section (IndicatorPowerService * self, int profile)
 
             if (!ayatana_common_utils_is_lomiri())
             {
-                GIcon * icon = indicator_power_device_get_gicon (device, FALSE);
+                GIcon * icon = indicator_power_device_get_gicon (device, FALSE, FALSE);
 
                 if (icon)
                 {

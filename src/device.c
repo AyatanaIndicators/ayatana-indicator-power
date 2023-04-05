@@ -436,6 +436,42 @@ device_kind_to_string (UpDeviceKind kind)
     }
 }
 
+static const char *device_kind_to_icon_name (UpDeviceKind kind)
+{
+  switch (kind)
+  {
+      case UP_DEVICE_KIND_LINE_POWER: return "ac-adapter";
+      case UP_DEVICE_KIND_BATTERY: return "battery";
+      case UP_DEVICE_KIND_UPS: return "gpm-ups-charged";
+      case UP_DEVICE_KIND_MONITOR: return "display";
+      case UP_DEVICE_KIND_MOUSE: return "mouse";
+      case UP_DEVICE_KIND_KEYBOARD: return "keyboard";
+      case UP_DEVICE_KIND_PDA: return "pda";
+      case UP_DEVICE_KIND_PHONE: return "phone";
+      case UP_DEVICE_KIND_MEDIA_PLAYER: return "multimedia-player";
+      case UP_DEVICE_KIND_TABLET: return "tablet";
+      case UP_DEVICE_KIND_COMPUTER: return "computer";
+      case UP_DEVICE_KIND_GAMING_INPUT: return "input-gaming";
+      case UP_DEVICE_KIND_PEN: return "input-tablet";
+      case UP_DEVICE_KIND_TOUCHPAD: return "input-touchpad";
+      case UP_DEVICE_KIND_MODEM: return "modem";
+      case UP_DEVICE_KIND_NETWORK: return "network-wireless";
+      case UP_DEVICE_KIND_HEADSET: return "audio-headset";
+      case UP_DEVICE_KIND_SPEAKERS: return "audio-speakers";
+      case UP_DEVICE_KIND_HEADPHONES: return "audio-headphones";
+      case UP_DEVICE_KIND_VIDEO: return "camera-video";
+      case UP_DEVICE_KIND_OTHER_AUDIO: return "audio-card";
+      case UP_DEVICE_KIND_REMOTE_CONTROL: return "remote-control";
+      case UP_DEVICE_KIND_PRINTER: return "printer";
+      case UP_DEVICE_KIND_SCANNER: return "scanner";
+      case UP_DEVICE_KIND_CAMERA: return "camera-photo";
+      case UP_DEVICE_KIND_WEARABLE: return "wearable";
+      case UP_DEVICE_KIND_TOY: return "toy";
+      case UP_DEVICE_KIND_BLUETOOTH_GENERIC: return "blueman-device";
+      default: return "unknown";
+  }
+}
+
 /**
   indicator_power_device_get_icon_names:
   @device: #IndicatorPowerDevice from which to generate the icon names
@@ -595,6 +631,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device, gboo
   indicator_power_device_get_gicon:
   @device: #IndicatorPowerDevice to generate the icon names from
   @panel: Whether to prefer panel icons
+  @bShowCharge: Whether to return a charge-aware icon
 
   A convenience function to call g_themed_icon_new_from_names()
   with the names returned by indicator_power_device_get_icon_names()
@@ -602,11 +639,23 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device, gboo
   Return value: (transfer full): A themed GIcon
 */
 GIcon *
-indicator_power_device_get_gicon (const IndicatorPowerDevice * device, gboolean panel)
+indicator_power_device_get_gicon (const IndicatorPowerDevice * device, gboolean panel, gboolean bShowCharge)
 {
-  GStrv names = indicator_power_device_get_icon_names (device, panel);
-  GIcon * icon = g_themed_icon_new_from_names (names, -1);
-  g_strfreev (names);
+  GIcon * icon = NULL;
+
+  if (!bShowCharge)
+  {
+    const UpDeviceKind nKind = indicator_power_device_get_kind (device);
+    const gchar *sIcon = device_kind_to_icon_name (nKind);
+    icon = g_themed_icon_new_with_default_fallbacks (sIcon);
+  }
+  else
+  {
+      GStrv names = indicator_power_device_get_icon_names (device, panel);
+      icon = g_themed_icon_new_from_names (names, -1);
+      g_strfreev (names);
+  }
+
   return icon;
 }
 
