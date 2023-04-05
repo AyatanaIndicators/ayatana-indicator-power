@@ -185,7 +185,7 @@ on_bus_changed(IndicatorPowerService * service,
                IndicatorPowerTesting * self)
 {
   GObject * bus = NULL;
-  g_object_get(service, "bus", &bus, NULL);  
+  g_object_get(service, "bus", &bus, NULL);
   set_bus(self, G_DBUS_CONNECTION(bus));
   g_clear_object(&bus);
 }
@@ -296,7 +296,7 @@ indicator_power_testing_init (IndicatorPowerTesting * self)
                    G_CALLBACK(on_mock_battery_minutes_left_changed), self);
 
   /* Mock Battery */
-  
+
   p->battery_mock = indicator_power_device_new("/some/path",
                                                UP_DEVICE_KIND_BATTERY,
                                                50.0,
