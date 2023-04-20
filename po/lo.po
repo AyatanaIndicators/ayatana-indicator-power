@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-14 08:53+0200\n"
-"PO-Revision-Date: 2017-07-21 14:55+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Laotian\n"
+"PO-Revision-Date: 2023-04-21 15:52+0000\n"
+"Last-Translator: Vilakone Thammavong <vilakone.thammavong@foodpanda.la>\n"
+"Language-Team: Lao <https://hosted.weblate.org/projects/ayatana-indicators/"
+"power-applet/lo/>\n"
 "Language: lo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -106,7 +108,7 @@ msgstr ""
 #. TRANSLATORS: unknown device
 #: src/device.c:573
 msgid "Unknown"
-msgstr ""
+msgstr "ບໍ່ຮູ້ຈັກ"
 
 #: src/device.c:613
 #, c-format
