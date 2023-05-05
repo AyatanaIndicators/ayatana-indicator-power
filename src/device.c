@@ -35,6 +35,7 @@ License along with this library. If not, see
 struct _IndicatorPowerDevicePrivate
 {
   UpDeviceKind kind;
+  gchar *model;
   UpDeviceState state;
   gchar * object_path;
   gdouble percentage;
@@ -52,6 +53,7 @@ struct _IndicatorPowerDevicePrivate
 enum {
   PROP_0,
   PROP_KIND,
+  PROP_MODEL,
   PROP_STATE,
   PROP_OBJECT_PATH,
   PROP_PERCENTAGE,
@@ -89,6 +91,12 @@ indicator_power_device_class_init (IndicatorPowerDeviceClass *klass)
                                             "The device's UpDeviceKind",
                                             UP_DEVICE_KIND_UNKNOWN, UP_DEVICE_KIND_LAST,
                                             UP_DEVICE_KIND_UNKNOWN,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_MODEL] = g_param_spec_string (INDICATOR_POWER_DEVICE_MODEL,
+                                            "model",
+                                            "The device's model",
+                                            NULL,
                                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_STATE] = g_param_spec_int (INDICATOR_POWER_DEVICE_STATE,
@@ -135,6 +143,7 @@ indicator_power_device_init (IndicatorPowerDevice *self)
 
   priv = indicator_power_device_get_instance_private(self);
   priv->kind = UP_DEVICE_KIND_UNKNOWN;
+  priv->model = NULL;
   priv->state = UP_DEVICE_STATE_UNKNOWN;
   priv->object_path = NULL;
   priv->percentage = 0.0;
@@ -182,6 +191,10 @@ get_property (GObject * o, guint  prop_id, GValue * value, GParamSpec * pspec)
         g_value_set_int (value, priv->kind);
         break;
 
+      case PROP_MODEL:
+        g_value_set_string (value, priv->model);
+        break;
+
       case PROP_STATE:
         g_value_set_int (value, priv->state);
         break;
@@ -218,6 +231,11 @@ set_property (GObject * o, guint prop_id, const GValue * value, GParamSpec * psp
     {
       case PROP_KIND:
         p->kind = (UpDeviceKind) g_value_get_int (value);
+        break;
+
+      case PROP_MODEL:
+        g_free (p->model);
+        p->model = g_value_dup_string (value);
         break;
 
       case PROP_STATE:
@@ -278,6 +296,16 @@ indicator_power_device_get_kind  (const IndicatorPowerDevice * device)
   /* LCOV_EXCL_STOP */
 
   return device->priv->kind;
+}
+
+const gchar *
+indicator_power_device_get_model  (const IndicatorPowerDevice * device)
+{
+  /* LCOV_EXCL_START */
+  g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
+  /* LCOV_EXCL_STOP */
+
+  return device->priv->model;
 }
 
 UpDeviceState
@@ -406,6 +434,42 @@ device_kind_to_string (UpDeviceKind kind)
       case UP_DEVICE_KIND_BLUETOOTH_GENERIC: return "bluetooth-generic";
       default: return "unknown";
     }
+}
+
+static const char *device_kind_to_icon_name (UpDeviceKind kind)
+{
+  switch (kind)
+  {
+      case UP_DEVICE_KIND_LINE_POWER: return "ac-adapter";
+      case UP_DEVICE_KIND_BATTERY: return "battery";
+      case UP_DEVICE_KIND_UPS: return "gpm-ups-charged";
+      case UP_DEVICE_KIND_MONITOR: return "display";
+      case UP_DEVICE_KIND_MOUSE: return "mouse";
+      case UP_DEVICE_KIND_KEYBOARD: return "keyboard";
+      case UP_DEVICE_KIND_PDA: return "pda";
+      case UP_DEVICE_KIND_PHONE: return "phone";
+      case UP_DEVICE_KIND_MEDIA_PLAYER: return "multimedia-player";
+      case UP_DEVICE_KIND_TABLET: return "tablet";
+      case UP_DEVICE_KIND_COMPUTER: return "computer";
+      case UP_DEVICE_KIND_GAMING_INPUT: return "input-gaming";
+      case UP_DEVICE_KIND_PEN: return "input-tablet";
+      case UP_DEVICE_KIND_TOUCHPAD: return "input-touchpad";
+      case UP_DEVICE_KIND_MODEM: return "modem";
+      case UP_DEVICE_KIND_NETWORK: return "network-wireless";
+      case UP_DEVICE_KIND_HEADSET: return "audio-headset";
+      case UP_DEVICE_KIND_SPEAKERS: return "audio-speakers";
+      case UP_DEVICE_KIND_HEADPHONES: return "audio-headphones";
+      case UP_DEVICE_KIND_VIDEO: return "camera-video";
+      case UP_DEVICE_KIND_OTHER_AUDIO: return "audio-card";
+      case UP_DEVICE_KIND_REMOTE_CONTROL: return "remote-control";
+      case UP_DEVICE_KIND_PRINTER: return "printer";
+      case UP_DEVICE_KIND_SCANNER: return "scanner";
+      case UP_DEVICE_KIND_CAMERA: return "camera-photo";
+      case UP_DEVICE_KIND_WEARABLE: return "wearable";
+      case UP_DEVICE_KIND_TOY: return "toy";
+      case UP_DEVICE_KIND_BLUETOOTH_GENERIC: return "blueman-device";
+      default: return "unknown";
+  }
 }
 
 /**
@@ -567,6 +631,7 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device, gboo
   indicator_power_device_get_gicon:
   @device: #IndicatorPowerDevice to generate the icon names from
   @panel: Whether to prefer panel icons
+  @bShowCharge: Whether to return a charge-aware icon
 
   A convenience function to call g_themed_icon_new_from_names()
   with the names returned by indicator_power_device_get_icon_names()
@@ -574,11 +639,23 @@ indicator_power_device_get_icon_names (const IndicatorPowerDevice * device, gboo
   Return value: (transfer full): A themed GIcon
 */
 GIcon *
-indicator_power_device_get_gicon (const IndicatorPowerDevice * device, gboolean panel)
+indicator_power_device_get_gicon (const IndicatorPowerDevice * device, gboolean panel, gboolean bShowCharge)
 {
-  GStrv names = indicator_power_device_get_icon_names (device, panel);
-  GIcon * icon = g_themed_icon_new_from_names (names, -1);
-  g_strfreev (names);
+  GIcon * icon = NULL;
+
+  if (!bShowCharge)
+  {
+    const UpDeviceKind nKind = indicator_power_device_get_kind (device);
+    const gchar *sIcon = device_kind_to_icon_name (nKind);
+    icon = g_themed_icon_new_with_default_fallbacks (sIcon);
+  }
+  else
+  {
+      GStrv names = indicator_power_device_get_icon_names (device, panel);
+      icon = g_themed_icon_new_from_names (names, -1);
+      g_strfreev (names);
+  }
+
   return icon;
 }
 
@@ -880,16 +957,25 @@ time_is_relevant (const IndicatorPowerDevice * device)
  */
 static char *
 get_menuitem_text (const IndicatorPowerDevice * device,
-                   gboolean                     accessible)
+                   gboolean                     accessible, gboolean bModelName)
 {
   char * str = NULL;
   const IndicatorPowerDevicePrivate * p = device->priv;
-  const char * kind_str = device_kind_to_localised_string (p->kind);
+  const char * sLabel = NULL;
+
+  if (bModelName)
+  {
+      sLabel = p->model;
+  }
+  else
+  {
+      sLabel = device_kind_to_localised_string (p->kind);
+  }
 
   if (p->state == UP_DEVICE_STATE_FULLY_CHARGED)
     {
       /* TRANSLATORS: example: "battery (charged)" */
-      str = g_strdup_printf (_("%s (charged)"), kind_str);
+      str = g_strdup_printf (_("%s (charged)"), sLabel);
     }
   else
     {
@@ -906,11 +992,11 @@ get_menuitem_text (const IndicatorPowerDevice * device,
       if (time_str && *time_str)
         {
           /* TRANSLATORS: example: "battery (time remaining)" */
-          str = g_strdup_printf (_("%s (%s)"), kind_str, time_str);
+          str = g_strdup_printf (_("%s (%s)"), sLabel, time_str);
         }
       else
         {
-          str = g_strdup (kind_str);
+          str = g_strdup (sLabel);
         }
 
       g_free (time_str);
@@ -920,11 +1006,11 @@ get_menuitem_text (const IndicatorPowerDevice * device,
 }
 
 char *
-indicator_power_device_get_readable_text (const IndicatorPowerDevice * device)
+indicator_power_device_get_readable_text (const IndicatorPowerDevice * device, gboolean bModelName)
 {
   g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
 
-  return get_menuitem_text (device, FALSE);
+  return get_menuitem_text (device, FALSE, bModelName);
 }
 
 char *
@@ -932,7 +1018,7 @@ indicator_power_device_get_accessible_text (const IndicatorPowerDevice * device)
 {
   g_return_val_if_fail (INDICATOR_IS_POWER_DEVICE(device), NULL);
 
-  return get_menuitem_text (device, TRUE);
+  return get_menuitem_text (device, TRUE, FALSE);
 }
 
 /**
@@ -1020,6 +1106,7 @@ indicator_power_device_get_accessible_title (const IndicatorPowerDevice * device
 IndicatorPowerDevice *
 indicator_power_device_new (const gchar * object_path,
                             UpDeviceKind  kind,
+                            const gchar * model,
                             gdouble percentage,
                             UpDeviceState state,
                             time_t timestamp,
@@ -1027,6 +1114,7 @@ indicator_power_device_new (const gchar * object_path,
 {
   GObject * o = g_object_new (INDICATOR_POWER_DEVICE_TYPE,
     INDICATOR_POWER_DEVICE_KIND, kind,
+    INDICATOR_POWER_DEVICE_MODEL, model,
     INDICATOR_POWER_DEVICE_STATE, state,
     INDICATOR_POWER_DEVICE_OBJECT_PATH, object_path,
     INDICATOR_POWER_DEVICE_PERCENTAGE, percentage,
@@ -1039,9 +1127,10 @@ indicator_power_device_new (const gchar * object_path,
 IndicatorPowerDevice *
 indicator_power_device_new_from_variant (GVariant * v)
 {
-  g_return_val_if_fail (g_variant_is_of_type (v, G_VARIANT_TYPE("(susdutb)")), NULL);
+  g_return_val_if_fail (g_variant_is_of_type (v, G_VARIANT_TYPE("(sussdutb)")), NULL);
 
   UpDeviceKind kind = UP_DEVICE_KIND_UNKNOWN;
+  const gchar *model = NULL;
   UpDeviceState state = UP_DEVICE_STATE_UNKNOWN;
   const gchar * icon = NULL;
   const gchar * object_path = NULL;
@@ -1049,9 +1138,10 @@ indicator_power_device_new_from_variant (GVariant * v)
   guint64 time = 0;
   gboolean power_supply = FALSE;
 
-  g_variant_get (v, "(&su&sdutb)",
+  g_variant_get (v, "(&sus&sdutb)",
                  &object_path,
                  &kind,
+                 &model,
                  &icon,
                  &percentage,
                  &state,
@@ -1060,6 +1150,7 @@ indicator_power_device_new_from_variant (GVariant * v)
 
   return indicator_power_device_new (object_path,
                                      kind,
+                                     model,
                                      percentage,
                                      state,
                                      (time_t)time,

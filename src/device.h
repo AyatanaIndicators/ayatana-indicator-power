@@ -42,6 +42,7 @@ typedef struct _IndicatorPowerDeviceClass IndicatorPowerDeviceClass;
 typedef struct _IndicatorPowerDevicePrivate IndicatorPowerDevicePrivate;
 
 #define INDICATOR_POWER_DEVICE_KIND         "kind"
+#define INDICATOR_POWER_DEVICE_MODEL        "model"
 #define INDICATOR_POWER_DEVICE_STATE        "state"
 #define INDICATOR_POWER_DEVICE_OBJECT_PATH  "object-path"
 #define INDICATOR_POWER_DEVICE_PERCENTAGE   "percentage"
@@ -125,6 +126,7 @@ GType indicator_power_device_get_type (void);
 
 IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
                                                   UpDeviceKind     kind,
+                                                  const gchar    * model,
                                                   gdouble          percentage,
                                                   UpDeviceState    state,
                                                   time_t           time,
@@ -132,12 +134,13 @@ IndicatorPowerDevice* indicator_power_device_new (const gchar    * object_path,
 
 /**
  * Convenience wrapper around indicator_power_device_new()
- * @variant holds the same args as indicator_power_device_new() in "(susdut)"
+ * @variant holds the same args as indicator_power_device_new() in "(sussdut)"
  */
 IndicatorPowerDevice* indicator_power_device_new_from_variant (GVariant * variant);
 
 
 UpDeviceKind  indicator_power_device_get_kind              (const IndicatorPowerDevice * device);
+const gchar * indicator_power_device_get_model             (const IndicatorPowerDevice * device);
 UpDeviceState indicator_power_device_get_state             (const IndicatorPowerDevice * device);
 const gchar * indicator_power_device_get_object_path       (const IndicatorPowerDevice * device);
 gdouble       indicator_power_device_get_percentage        (const IndicatorPowerDevice * device);
@@ -145,10 +148,10 @@ time_t        indicator_power_device_get_time              (const IndicatorPower
 gboolean      indicator_power_device_get_power_supply      (const IndicatorPowerDevice * device);
 
 GStrv         indicator_power_device_get_icon_names        (const IndicatorPowerDevice * device, gboolean panel);
-GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device, gboolean panel);
+GIcon       * indicator_power_device_get_gicon             (const IndicatorPowerDevice * device, gboolean panel, gboolean bShowCharge);
 
 
-char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device);
+char        * indicator_power_device_get_readable_text     (const IndicatorPowerDevice * device, gboolean bModelName);
 
 char        * indicator_power_device_get_accessible_text   (const IndicatorPowerDevice * device);
 

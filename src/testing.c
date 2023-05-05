@@ -1,5 +1,6 @@
 /*
  * Copyright 2014 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  */
 
 #include "dbus-shared.h"
@@ -185,7 +187,7 @@ on_bus_changed(IndicatorPowerService * service,
                IndicatorPowerTesting * self)
 {
   GObject * bus = NULL;
-  g_object_get(service, "bus", &bus, NULL);  
+  g_object_get(service, "bus", &bus, NULL);
   set_bus(self, G_DBUS_CONNECTION(bus));
   g_clear_object(&bus);
 }
@@ -296,9 +298,10 @@ indicator_power_testing_init (IndicatorPowerTesting * self)
                    G_CALLBACK(on_mock_battery_minutes_left_changed), self);
 
   /* Mock Battery */
-  
+
   p->battery_mock = indicator_power_device_new("/some/path",
                                                UP_DEVICE_KIND_BATTERY,
+                                               "Some Model",
                                                50.0,
                                                UP_DEVICE_STATE_DISCHARGING,
                                                60*30,

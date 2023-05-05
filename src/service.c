@@ -466,7 +466,7 @@ create_header_state (IndicatorPowerService * self)
             g_free (title);
         }
 
-      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE)))
+      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE, TRUE)))
         {
           GVariant * serialized_icon = g_icon_serialize (icon);
 
@@ -504,17 +504,6 @@ static GMenuModel *
 create_devices_section (IndicatorPowerService * self, int profile)
 {
     GMenu * menu = g_menu_new ();
-
-    if (self->priv->primary_device != NULL)
-    {
-        GMenuItem * item = g_menu_item_new (_("Charge level"), NULL);
-        g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
-        guint16 battery_level = (guint16)(indicator_power_device_get_percentage (self->priv->primary_device) + 0.5);
-        g_menu_item_set_attribute (item, "x-ayatana-progress", "q", battery_level);
-        g_menu_append_item (menu, item);
-        g_object_unref (item);
-    }
-
     GList * l;
 
     for (l=self->priv->devices; l!=NULL; l=l->next)
@@ -524,21 +513,47 @@ create_devices_section (IndicatorPowerService * self, int profile)
 
         if (kind != UP_DEVICE_KIND_LINE_POWER)
         {
-            if (device == self->priv->primary_device)
+            gchar *sLabel = NULL;
+
+            if (kind == UP_DEVICE_KIND_BATTERY)
             {
-                continue;
+                if (!ayatana_common_utils_is_lomiri())
+                {
+                    sLabel = indicator_power_device_get_readable_text (device, FALSE);
+                }
+                else
+                {
+                    sLabel = g_strdup (_("Charge level"));
+                }
+            }
+            else
+            {
+                sLabel = indicator_power_device_get_readable_text (device, TRUE);
             }
 
-            char * label = indicator_power_device_get_readable_text (device);
-            GMenuItem * item = g_menu_item_new (label, NULL);
-            g_free (label);
-            g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.progress");
-            guint16 battery_level = (guint16)(indicator_power_device_get_percentage (device) + 0.5);
-            g_menu_item_set_attribute (item, "x-ayatana-progress", "q", battery_level);
+            gchar *sIndicator = NULL;
+            gchar *sProperty = NULL;
 
-            if (profile != PROFILE_PHONE)
+            if (!ayatana_common_utils_is_lomiri())
             {
-                GIcon * icon = indicator_power_device_get_gicon (device, FALSE);
+                sIndicator = "org.ayatana.indicator.level";
+                sProperty = "x-ayatana-level";
+            }
+            else
+            {
+                sIndicator = "org.ayatana.indicator.progress";
+                sProperty = "x-ayatana-progress";
+            }
+
+            GMenuItem * item = g_menu_item_new (sLabel, NULL);
+            g_free (sLabel);
+            g_menu_item_set_attribute (item, "x-ayatana-type", "s", sIndicator);
+            guint16 battery_level = (guint16)(indicator_power_device_get_percentage (device) + 0.5);
+            g_menu_item_set_attribute (item, sProperty, "q", battery_level);
+
+            if (!ayatana_common_utils_is_lomiri())
+            {
+                GIcon * icon = indicator_power_device_get_gicon (device, FALSE, FALSE);
 
                 if (icon)
                 {
@@ -553,10 +568,7 @@ create_devices_section (IndicatorPowerService * self, int profile)
                     g_object_unref (icon);
                 }
 
-                if (profile == PROFILE_DESKTOP)
-                {
-                    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s", indicator_power_device_get_object_path (device));
-                }
+                g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s", indicator_power_device_get_object_path (device));
             }
 
             g_menu_append_item (menu, item);
@@ -1413,6 +1425,7 @@ create_totalled_battery_device (const GList * devices)
 
       device = indicator_power_device_new (NULL,
                                            UP_DEVICE_KIND_BATTERY,
+                                           NULL,
                                            percent,
                                            state,
                                            time_left,
