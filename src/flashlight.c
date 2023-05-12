@@ -31,6 +31,11 @@
 #define SIMPLE_ENABLE "1"
 #define SIMPLE_DISABLE "0"
 
+#ifdef ENABLE_LIBDEVICEINFO
+extern char* flashlight_path();
+extern char* flashlight_switch_path();
+#endif
+
 const size_t qcom_sysfs_size = 7;
 const char* const qcom_sysfs[] = {"/sys/class/leds/torch-light/brightness",
                                   "/sys/class/leds/led:flash_torch/brightness",
@@ -56,24 +61,41 @@ gboolean activated = 0;
 int
 set_sysfs_path()
 {
-  for (size_t i = 0; i < qcom_sysfs_size; i++) {
-    if (access(qcom_sysfs[i], F_OK ) != -1){
-        flash_sysfs_path = (char*)qcom_sysfs[i];
-        torch_type = QCOM;
-        /* Qualcomm torch; determine switch file (if one is needed) */
-        for (size_t i = 0; i < qcom_switch_size; i++) {
-          if (access(qcom_switch[i], F_OK ) != -1)
-              qcom_switch_path = (char*)qcom_switch[i];
+# ifdef ENABLE_LIBDEVICEINFO
+  if (strcmp(flashlight_path(), "")) {
+    if (access(flashlight_path(), F_OK) != -1) {
+        flash_sysfs_path = flashlight_path();
+        if (strcmp(flashlight_switch_path(), "")) {
+          if (access(flashlight_switch_path(), F_OK) != -1) {
+              qcom_switch_path = flashlight_switch_path();
+              torch_type = QCOM;
+          }
         }
         return 1;
     }
-  }
-  for (size_t i = 0; i < simple_sysfs_size; i++) {
-    if (access(simple_sysfs[i], F_OK ) != -1){
-        flash_sysfs_path = (char*)simple_sysfs[i];
-        return 1;
+  } else {
+# endif
+    for (size_t i = 0; i < qcom_sysfs_size; i++) {
+      if (access(qcom_sysfs[i], F_OK ) != -1){
+          flash_sysfs_path = (char*)qcom_sysfs[i];
+          torch_type = QCOM;
+          /* Qualcomm torch; determine switch file (if one is needed) */
+          for (size_t i = 0; i < qcom_switch_size; i++) {
+            if (access(qcom_switch[i], F_OK ) != -1)
+                qcom_switch_path = (char*)qcom_switch[i];
+          }
+          return 1;
+      }
     }
+    for (size_t i = 0; i < simple_sysfs_size; i++) {
+      if (access(simple_sysfs[i], F_OK ) != -1){
+          flash_sysfs_path = (char*)simple_sysfs[i];
+          return 1;
+      }
+    }
+# ifdef ENABLE_LIBDEVICEINFO
   }
+# endif
   return 0;
 }
 
