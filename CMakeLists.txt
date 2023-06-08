@@ -15,6 +15,7 @@ option(ENABLE_TESTS "Enable all tests and checks" OFF)
 option(ENABLE_COVERAGE "Enable coverage reports (includes enabling all tests and checks)" OFF)
 option(ENABLE_WERROR "Treat all build warnings as errors" OFF)
 option(ENABLE_LOMIRI_FEATURES "Build with Lomiri-specific libraries, schemas and media" OFF)
+option(ENABLE_DEVICEINFO "Build with deviceinfo integration" OFF)
 
 if(ENABLE_COVERAGE)
     set(ENABLE_TESTS ON)
@@ -90,6 +91,11 @@ endif ()
 
 pkg_check_modules (SERVICE_DEPS REQUIRED ${SERVICE_DEPS})
 include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
+
+if (ENABLE_DEVICEINFO)
+    pkg_check_modules (DEVICEINFO IMPORTED_TARGET "deviceinfo")
+    include_directories (${DEVICEINFO_INCLUDE_DIRS})
+endif ()
 
 ##
 ##  custom targets

@@ -1,7 +1,14 @@
+if (ENABLE_DEVICEINFO)
+    set(FLASHLIGHT_DEVICEINFO
+        deviceinfo-flashlight.c)
+    add_definitions(-DENABLE_LIBDEVICEINFO)
+endif ()
+
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
     datafiles.c
+    ${FLASHLIGHT_DEVICEINFO}
     device-provider-mock.c
     device-provider-upower.c
     device-provider.c
@@ -45,5 +52,5 @@ link_directories(${SERVICE_DEPS_LIBRARY_DIRS})
 
 # the executable: lib + main()
 add_executable (${SERVICE_EXEC} main.c)
-target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES})
+target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${DEVICEINFO_LIBRARIES})
 install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
