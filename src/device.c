@@ -27,6 +27,7 @@ License along with this library. If not, see
  #include "config.h"
 #endif
 
+#include <ayatana/common/utils.h>
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
@@ -1063,18 +1064,42 @@ indicator_power_device_get_readable_title (const IndicatorPowerDevice * device,
 
   if (want_time && want_percent)
     {
-      /* TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)" */
-      str = g_strdup_printf (_("(%s, %.0lf%%)"), time_str, p->percentage);
+      /* Don't show parentheses around text values in Lomiri */
+      if (ayatana_common_utils_is_lomiri())
+      {
+        /* TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%" */
+        str = g_strdup_printf (_("%s %.0lf%%"), time_str, p->percentage);
+      }
+      else {
+        /* TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)" */
+        str = g_strdup_printf (_("(%s, %.0lf%%)"), time_str, p->percentage);
+      }
     }
   else if (want_time)
     {
-      /* TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)" */
-      str = g_strdup_printf (_("(%s)"), time_str);
+      /* Don't show parentheses around text values in Lomiri */
+      if (ayatana_common_utils_is_lomiri())
+      {
+        /* TRANSLATORS: after the icon, a time-remaining string Example: "0:59" */
+        str = g_strdup_printf (_("%s"), time_str);
+      }
+      else {
+        /* TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)" */
+        str = g_strdup_printf (_("(%s)"), time_str);
+      }
     }
   else if (want_percent)
     {
-      /* TRANSLATORS: after the icon, a battery %. Example: "(33%)" */
-      str = g_strdup_printf (_("(%.0lf%%)"), p->percentage);
+      /* Don't show parentheses around text values in Lomiri */
+      if (ayatana_common_utils_is_lomiri())
+      {
+        /* TRANSLATORS: after the icon, a battery %. Example: "(33%)" */
+        str = g_strdup_printf (_("%.0lf%%"), p->percentage);
+      }
+      else {
+        /* TRANSLATORS: after the icon, a battery %. Example: "(33%)" */
+        str = g_strdup_printf (_("(%.0lf%%)"), p->percentage);
+      }
     }
   else
     {
