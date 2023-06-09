@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 08:53+0200\n"
+"POT-Creation-Date: 2023-06-09 08:13+0200\n"
 "PO-Revision-Date: 2020-05-10 13:12+0000\n"
 "Last-Translator: Abdusalam <1810010207@s.upc.edu.cn>\n"
 "Language-Team: Uyghur <https://hosted.weblate.org/projects/ayatana-"
@@ -46,107 +46,174 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: system power cord
-#: src/device.c:525
+#: src/device.c:675
 msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:529 src/service.c:456
+#: src/device.c:679 src/service.c:433
 msgid "Battery"
 msgstr ""
 
 #. TRANSLATORS: battery-backed AC power source
-#: src/device.c:533
+#: src/device.c:683
 msgid "UPS"
 msgstr ""
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: src/device.c:537
+#: src/device.c:687
 msgid "Monitor"
 msgstr ""
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: src/device.c:541
+#: src/device.c:691
 msgid "Mouse"
 msgstr ""
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: src/device.c:545
+#: src/device.c:695
 msgid "Keyboard"
 msgstr ""
 
 #. TRANSLATORS: portable device
-#: src/device.c:549
+#: src/device.c:699
 msgid "PDA"
 msgstr ""
 
 #. TRANSLATORS: cell phone (mobile...)
-#: src/device.c:553
+#: src/device.c:703
 msgid "Cell phone"
 msgstr ""
 
 #. TRANSLATORS: media player, mp3 etc
-#: src/device.c:557
+#: src/device.c:707
 msgid "Media player"
 msgstr ""
 
 #. TRANSLATORS: tablet device
-#: src/device.c:561
+#: src/device.c:711
 msgid "Tablet"
 msgstr ""
 
 #. TRANSLATORS: tablet device
-#: src/device.c:565
+#: src/device.c:715
 msgid "Computer"
 msgstr ""
 
 #. TRANSLATORS: game controller/joystick with internal batteries
-#: src/device.c:569
+#: src/device.c:719
 msgid "Gaming input"
 msgstr ""
 
+#. TRANSLATORS: graphic tablet pen with internal battery
+#: src/device.c:723
+msgid "Pen"
+msgstr ""
+
+#: src/device.c:726
+msgid "Touchpad"
+msgstr ""
+
+#: src/device.c:729
+msgid "Modem"
+msgstr ""
+
+#: src/device.c:732
+msgid "Network device"
+msgstr ""
+
+#: src/device.c:735
+msgid "Headset"
+msgstr ""
+
+#. TRANSLATORS: loudspeakers with internal batteries
+#: src/device.c:739
+msgid "Speakers"
+msgstr ""
+
+#: src/device.c:742
+msgid "Headphones"
+msgstr ""
+
+#: src/device.c:745
+msgid "Video device"
+msgstr ""
+
+#: src/device.c:748
+msgid "Audio device"
+msgstr ""
+
+#. TRANSLATORS: remote control device with internal battery
+#: src/device.c:752
+msgid "Remote control"
+msgstr ""
+
+#: src/device.c:755
+msgid "Printer"
+msgstr ""
+
+#: src/device.c:758
+msgid "Scanner"
+msgstr ""
+
+#: src/device.c:761
+msgid "Camera"
+msgstr ""
+
+#: src/device.c:764
+msgid "Wearable"
+msgstr ""
+
+#: src/device.c:767
+msgid "Toy"
+msgstr ""
+
+#: src/device.c:770
+msgid "Bluetooth device"
+msgstr ""
+
 #. TRANSLATORS: unknown device
-#: src/device.c:573
+#: src/device.c:774
 msgid "Unknown"
 msgstr ""
 
-#: src/device.c:613
+#: src/device.c:814
 #, c-format
 msgid "estimating…"
 msgstr ""
 
-#: src/device.c:617
+#: src/device.c:818
 #, c-format
 msgid "unknown"
 msgstr ""
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
-#: src/device.c:646
+#: src/device.c:847
 #, c-format
 msgid "%0d:%02d to charge"
 msgstr ""
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
-#: src/device.c:651
+#: src/device.c:852
 #, c-format
 msgid "%0d:%02d left"
 msgstr ""
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
-#: src/device.c:686
+#: src/device.c:887
 #, c-format
 msgid "%d %s %d %s to charge"
 msgstr ""
 
-#: src/device.c:687 src/device.c:705
+#: src/device.c:888 src/device.c:906
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/device.c:688 src/device.c:695 src/device.c:706
-#: src/device.c:713
+#: src/device.c:889 src/device.c:896 src/device.c:907
+#: src/device.c:914
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
@@ -154,51 +221,69 @@ msgstr[1] ""
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
-#: src/device.c:694
+#: src/device.c:895
 #, c-format
 msgid "%d %s to charge"
 msgstr ""
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
-#: src/device.c:704
+#: src/device.c:905
 #, c-format
 msgid "%d %s %d %s left"
 msgstr ""
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
-#: src/device.c:712
+#: src/device.c:913
 #, c-format
 msgid "%d %s left"
 msgstr ""
 
 #. TRANSLATORS: example: "battery (charged)"
-#: src/device.c:769
+#: src/device.c:979
 #, c-format
 msgid "%s (charged)"
 msgstr ""
 
 #. TRANSLATORS: example: "battery (time remaining)"
-#: src/device.c:786
+#: src/device.c:996
 #, c-format
 msgid "%s (%s)"
 msgstr ""
 
+#. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
+#: src/device.c:1071
+#, c-format
+msgid "%s %.0lf%%"
+msgstr ""
+
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
-#: src/device.c:858
+#: src/device.c:1075
 #, c-format
 msgid "(%s, %.0lf%%)"
 msgstr ""
 
+#. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
+#: src/device.c:1084
+#, c-format
+msgid "%s"
+msgstr ""
+
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
-#: src/device.c:863
+#: src/device.c:1088
 #, c-format
 msgid "(%s)"
 msgstr ""
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
-#: src/device.c:868
+#: src/device.c:1097
+#, c-format
+msgid "%.0lf%%"
+msgstr ""
+
+#. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
+#: src/device.c:1101
 #, c-format
 msgid "(%.0lf%%)"
 msgstr ""
@@ -224,39 +309,39 @@ msgstr "ماقۇل"
 msgid "Battery settings"
 msgstr ""
 
-#: src/service.c:458
+#: src/service.c:435
 msgid "Battery status and power management"
 msgstr ""
 
-#: src/service.c:583
+#: src/service.c:526
 msgid "Charge level"
 msgstr ""
 
-#: src/service.c:651
+#: src/service.c:641
 msgid "Power Settings…"
 msgstr ""
 
-#: src/service.c:677
+#: src/service.c:667
 msgid "Adjust brightness automatically"
 msgstr ""
 
-#: src/service.c:685
+#: src/service.c:675
 msgid "Flashlight"
 msgstr ""
 
-#: src/service.c:691
+#: src/service.c:681
 msgid "Warning: Heavy use can damage the LED!"
 msgstr ""
 
-#: src/service.c:697
+#: src/service.c:687
 msgid "Battery settings…"
 msgstr ""
 
-#: src/service.c:848 src/utils.c:68
+#: src/service.c:838 src/utils.c:68
 msgid "Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: src/service.c:849
+#: src/service.c:839
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
