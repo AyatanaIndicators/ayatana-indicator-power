@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:12+0200\n"
-"PO-Revision-Date: 2022-09-05 19:31+0000\n"
+"PO-Revision-Date: 2023-06-10 11:48+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/he/>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -110,70 +110,69 @@ msgstr "קלט בקר משחק"
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "עט"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "משטח מגע"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "מודם"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "התקן רשת"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "אוזניות עם מיקרופון"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "רמקולים"
 
 #: src/device.c:742
-#, fuzzy
 msgid "Headphones"
-msgstr "טלפון סלולרי"
+msgstr "אוזניות"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "התקן וידאו"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "התקן שמע"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "שלט רחוק"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "מדפסת"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "סורק"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "מצלמה"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "התקן לביש"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "צעצוע"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "התקן בלוטות׳"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -257,9 +256,9 @@ msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, fuzzy, c-format
+#, c-format
 msgid "%s %.0lf%%"
-msgstr "(%s, %.0lf%%)"
+msgstr "%s %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -269,9 +268,9 @@ msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
@@ -281,9 +280,9 @@ msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, fuzzy, c-format
+#, c-format
 msgid "%.0lf%%"
-msgstr "(%.0lf%%)"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
