@@ -1,3 +1,15 @@
+Overview of changes in ayatana-indicator-power 23.6.0
+
+  - src: add support for getting flashlight paths through deviceinfo.
+  - src/device.c: Don't show parentheses around time-remaining / battery charge
+    percentage values when in Lomiri.
+  - Do not use charge-aware icons in the menu.
+  - Use the device model name in the menu.
+  - src/service.c: Use level or progress IDO as needed.
+  - CMakeLists.txt: Fix minimum required CMake warning.
+  - Show battery level for all devices (including bluetooth).
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 22.9.5
 
   - src/service.c: Create a fake primary device icon on Lomiri if no device is

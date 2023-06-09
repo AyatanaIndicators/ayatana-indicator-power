@@ -1,6 +1,84 @@
+2023-06-09 Mike Gabriel
+
+        * release 23.6.0 (HEAD -> main, tag: 23.6.0)
+        * d/control: Add to S: ayatana-ido (>= 0.10.0). Older versions don't
+          ship the 'level' menu item. (930179e)
+
+2023-06-08 Robert Tari
+
+        * Merge branch 'muhammad23012009-main' (238d705)
+
+2023-06-06 Mike Gabriel
+
+        * src/device.c: Don't show parentheses around time-remaining /
+          battery charge percentage values when in Lomiri. (0ed3e17)
+
+2023-06-08 Robert Tari
+
+        * Merge branch 'sunweaver-pr/no-parentheses-in-lomiri' (c20a21f)
+
+2023-06-06 Mike Gabriel
+
+        * src/device.c: Don't show parentheses around time-remaining /
+          battery charge percentage values when in Lomiri. (80312bd)
+
+2023-06-05 Muhammad
+
+        * Merge branch 'AyatanaIndicators:main' into main (37ce149)
+
+2023-05-12 Muhammad
+
+        * src: add support for getting flashlight paths through deviceinfo
+          (dd3dccb)
+
+2023-05-20 Milo Ivir
+
+        * Translated using Weblate (Croatian) (22d2a52)
+
+2023-05-05 Mike Gabriel
+
+        * Merge branch 'tari01-pr/adapt-to-level-ido' (08039f0)
+
+2023-04-05 Robert Tari
+
+        * Do not use charge-aware icons in the menu (8f7c0cd)
+        * Use the device model name in the menu (906c021)
+        * src/service.c: Use level or progress IDO as needed (eeea7ea)
+        * CMakeLists.txt: Fix minimum requred CMake warning (490ec9d)
+        * Whitespace fix (858276b)
+
+2023-04-20 Vilakone Thammavong
+
+        * Translated using Weblate (Lao) (e62300d)
+
+2023-04-06 ssantos
+
+        * Translated using Weblate (Portuguese) (813f52b)
+
+2023-04-07 Mike Gabriel
+
+        * CMakeLists.txt: Fix version number. (3bd498c)
+
+2023-04-03 Mike Gabriel
+
+        * Merge branch 'tari01-pr/show-bluetooth-devices' (e6e69b2)
+
+2023-03-06 Robert Tari
+
+        * Show battery level for all devices (including bluetooth) (c80d5eb)
+
+2023-03-16 Heimen Stoffels
+
+        * Translated using Weblate (Dutch) (e1f4b7f)
+        * Translated using Weblate (Dutch) (0c28f81)
+
+2023-03-03 gallegonovato
+
+        * Translated using Weblate (Spanish) (c63e0de)
+
 2023-02-28 Mike Gabriel
 
-        * release 22.9.5 (HEAD -> main, tag: 22.9.5)
+        * release 22.9.5 (44408bb) (tag: 22.9.5)
         * Merge branch 'tari01-pr/lomiri-fake-battery' (b173fa1)
 
 2023-02-16 Robert Tari
