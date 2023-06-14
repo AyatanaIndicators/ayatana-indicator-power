@@ -726,6 +726,7 @@ rebuild_now (IndicatorPowerService * self, guint sections)
 
   if (sections & SECTION_DEVICES)
     {
+      rebuild_section (phone->submenu, 0, create_devices_section (self, PROFILE_PHONE));
       rebuild_section (desktop->submenu, 0, create_devices_section (self, PROFILE_DESKTOP));
       rebuild_section (greeter->submenu, 0, create_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
