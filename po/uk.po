@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:13+0200\n"
-"PO-Revision-Date: 2022-09-15 23:18+0000\n"
+"PO-Revision-Date: 2023-06-15 15:50+0000\n"
 "Last-Translator: Sergii Horichenko <m@sgg.im>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18.1-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -111,70 +111,69 @@ msgstr "Ігровий вхід"
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Ручка"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Сенсорна панель"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Модем"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Мережевий пристрій"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Гарнітура"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Колонки"
 
 #: src/device.c:742
-#, fuzzy
 msgid "Headphones"
-msgstr "Мобільний телефон"
+msgstr "Навушники"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Відеопристрій"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Аудіопристрій"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Пульт дистанційного керування"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Принтер"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Сканер"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Фотокамера"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Пристрій, який носять"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Іграшка"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Пристрій Bluetooth"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -260,9 +259,9 @@ msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, fuzzy, c-format
+#, c-format
 msgid "%s %.0lf%%"
-msgstr "(%s, %.0lf%%)"
+msgstr "%s %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -272,9 +271,9 @@ msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
@@ -284,9 +283,9 @@ msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, fuzzy, c-format
+#, c-format
 msgid "%.0lf%%"
-msgstr "(%.0lf%%)"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
