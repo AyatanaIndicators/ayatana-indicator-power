@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:12+0200\n"
-"PO-Revision-Date: 2023-06-22 17:15+0000\n"
-"Last-Translator: Jozef Mlich <jmlich83@gmail.com>\n"
+"PO-Revision-Date: 2023-06-23 20:34+0000\n"
+"Last-Translator: Milan Korecky <milan.korecky@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/cs/>\n"
 "Language: cs\n"
@@ -110,7 +110,7 @@ msgstr "Herní vstup"
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr "Pero"
+msgstr "Dotykové pero"
 
 #: src/device.c:726
 msgid "Touchpad"
@@ -126,7 +126,7 @@ msgstr "Síťové zařízení"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr "Sluchátka"
+msgstr "Sluchátko"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
@@ -156,7 +156,7 @@ msgstr "Tiskárna"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr "Skener"
+msgstr "Scanner"
 
 #: src/device.c:761
 msgid "Camera"
@@ -164,7 +164,7 @@ msgstr "Fotoaparát"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr "Nositelné zařízení"
+msgstr "Chytré hodinky"
 
 #: src/device.c:767
 msgid "Toy"
@@ -172,7 +172,7 @@ msgstr "Hračka"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr "Zařízení bluetooth"
+msgstr "Zařízení Bluetooth"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -353,8 +353,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"Indikátor napájení Ayatana nepodporuje vyvolání\n"
-"aplikace statistik napájení vašeho desktopového prostředí.\n"
+"Indikátor napájení Ayatana nepodporuje spuštění\n"
+"aplikace statistiky napájení vašeho desktopového prostředí.\n"
 "\n"
 "Nahlaste to vývojářům na adrese:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
@@ -367,7 +367,7 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"Indikátor napájení Ayatana nepodporuje vyvolání\n"
+"Indikátor napájení Ayatana dosud nepodporuje vyvolání\n"
 "aplikace statistik napájení vašeho desktopového prostředí.\n"
 "\n"
 "Nahlaste to vývojářům na adrese:\n"
