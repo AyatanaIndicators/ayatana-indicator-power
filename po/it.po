@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:12+0200\n"
-"PO-Revision-Date: 2020-04-28 11:11+0000\n"
-"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/it/>\n"
+"PO-Revision-Date: 2023-06-28 11:47+0000\n"
+"Last-Translator: Sylke Vicious <silkevicious@tuta.io>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.2\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -105,75 +105,74 @@ msgstr "Elaboratore"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
 msgid "Gaming input"
-msgstr ""
+msgstr "Input di gioco"
 
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Penna"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Touchpad"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Modem"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Dispositivo di rete"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Cuffia"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Altoparlanti"
 
 #: src/device.c:742
-#, fuzzy
 msgid "Headphones"
-msgstr "Telefono cellulare"
+msgstr "Cuffie"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Dispositivo video"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Dispositivo audio"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Telecomando"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Stampante"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Scanner"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Fotocamera"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Dispositivo Indossabile"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Giocattolo"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Dispositivo Bluetooth"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -257,9 +256,9 @@ msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, fuzzy, c-format
+#, c-format
 msgid "%s %.0lf%%"
-msgstr "(%s, %.0lf%%)"
+msgstr "%s %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -269,9 +268,9 @@ msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
@@ -281,9 +280,9 @@ msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, fuzzy, c-format
+#, c-format
 msgid "%.0lf%%"
-msgstr "(%.0lf%%)"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
@@ -314,7 +313,7 @@ msgstr "Impostazioni della batteria"
 
 #: src/service.c:435
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Stato della batteria e gestione dell'alimentazione"
 
 #: src/service.c:526
 msgid "Charge level"
@@ -352,6 +351,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"L'indicatore di alimentazione di Ayatana non supporta ancora l'evocazione\n"
+"dell'applicazione delle statistiche di energia dell'ambiente desktop.\n"
+"\n"
+"Si prega di segnalarlo agli sviluppatori all'indirizzo:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: src/utils.c:69
 msgid ""
@@ -361,6 +365,12 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"L'indicatore di alimentazione di Ayatana non supporta ancora l'evocazione\n"
+"dell'applicazione del dialogo delle impostazioni di energia dell'ambiente "
+"desktop.\n"
+"\n"
+"Si prega di segnalarlo agli sviluppatori all'indirizzo:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #~ msgid "Show Time in Menu Bar"
 #~ msgstr "Mostra l'ora nella barra dei menù"
