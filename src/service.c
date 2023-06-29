@@ -531,25 +531,11 @@ create_devices_section (IndicatorPowerService * self, int profile)
                 sLabel = indicator_power_device_get_readable_text (device, TRUE);
             }
 
-            gchar *sIndicator = NULL;
-            gchar *sProperty = NULL;
-
-            if (!ayatana_common_utils_is_lomiri())
-            {
-                sIndicator = "org.ayatana.indicator.level";
-                sProperty = "x-ayatana-level";
-            }
-            else
-            {
-                sIndicator = "org.ayatana.indicator.progress";
-                sProperty = "x-ayatana-progress";
-            }
-
             GMenuItem * item = g_menu_item_new (sLabel, NULL);
             g_free (sLabel);
-            g_menu_item_set_attribute (item, "x-ayatana-type", "s", sIndicator);
+            g_menu_item_set_attribute (item, "x-ayatana-type", "s", "org.ayatana.indicator.level");
             guint16 battery_level = (guint16)(indicator_power_device_get_percentage (device) + 0.5);
-            g_menu_item_set_attribute (item, sProperty, "q", battery_level);
+            g_menu_item_set_attribute (item, "x-ayatana-level", "q", battery_level);
 
             if (!ayatana_common_utils_is_lomiri())
             {
