@@ -13,7 +13,7 @@ requires:
     - cmake
     - cmake-extras
     - intltool
-#    - libayatana-common
+    - libayatana-common
     - liblomiri-url-dispatcher
     - gobject-introspection
     - vala
@@ -21,6 +21,7 @@ requires:
     - libnotify
     - systemd
     - gstreamer
+    - librda
 
   debian:
     # Useful URL: https://salsa.debian.org/debian-ayatana-team/ayatana-indicator-power
@@ -47,6 +48,7 @@ requires:
     - libdbustest1-dev
     - systemd
     - libgstreamer1.0-dev
+    - librda-dev
 
   ubuntu:
     - clang
@@ -69,6 +71,7 @@ requires:
     - libdbustest1-dev
     - systemd
     - libgstreamer1.0-dev
+    - librda-dev
 
   ubuntu:focal:
     - clang
@@ -91,6 +94,7 @@ requires:
     - libdbustest1-dev
     - systemd
     - libgstreamer1.0-dev
+    - librda-dev
 
 variables:
   - 'CHECKERS="
