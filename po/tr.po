@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:13+0200\n"
-"PO-Revision-Date: 2023-06-11 15:49+0000\n"
+"PO-Revision-Date: 2023-08-21 22:52+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -126,7 +126,7 @@ msgstr "Ağ aygıtı"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr "Kulaklık"
+msgstr "Kulaklık Seti"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
