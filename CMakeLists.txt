@@ -73,6 +73,7 @@ set(
     gio-unix-2.0>=2.36
     libnotify>=0.7.6
     libayatana-common>=0.9.1
+    rda
 )
 
 if (ENABLE_LOMIRI_FEATURES)

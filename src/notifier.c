@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Canonical Ltd.
- * Copyright 2021-2022 Robert Tari
+ * Copyright 2021-2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -309,7 +309,6 @@ notification_show(IndicatorPowerNotifier * self)
     icon_name = NULL;
   nn = notify_notification_new(title, body, icon_name);
   g_strfreev (icon_names);
-  g_free (body);
 
   if (are_actions_supported(self))
     {
@@ -355,6 +354,8 @@ notification_show(IndicatorPowerNotifier * self)
       g_error_free(error);
       g_object_unref(nn);
     }
+
+  g_free (body);
 }
 
 /***

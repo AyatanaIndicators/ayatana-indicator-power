@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <rda/rda.h>
 #include <ayatana/common/utils.h>
 #include "brightness.h"
 #include "dbus-shared.h"
@@ -118,7 +119,7 @@ struct _IndicatorPowerServicePrivate
   GSimpleAction * battery_level_action;
   GSimpleAction * device_state_action;
   GSimpleAction * brightness_action;
-
+  gboolean bLocal;
   IndicatorPowerDevice * primary_device;
   GList * devices; /* IndicatorPowerDevice */
 
@@ -387,13 +388,18 @@ count_batteries (GList * devices, int *total, int *inuse)
 static gboolean
 should_be_visible (IndicatorPowerService * self)
 {
+  gboolean visible = TRUE;
+  priv_t * p = self->priv;
+
+  if (!self->priv->bLocal)
+  {
+      return FALSE;
+  }
+
   if (!ayatana_common_utils_is_lomiri())
   {
       return TRUE;
   }
-
-  gboolean visible = TRUE;
-  priv_t * p = self->priv;
 
   const int policy = g_settings_get_enum (p->settings, SETTINGS_ICON_POLICY_S);
   g_debug ("policy is: %d (present==0, charge==1, never==2)", policy);
@@ -1182,7 +1188,7 @@ indicator_power_service_init (IndicatorPowerService * self)
   self->priv = p;
 
   p->cancellable = g_cancellable_new ();
-
+  p->bLocal = rda_session_is_local ();
   p->settings = g_settings_new ("org.ayatana.indicator.power");
 
   p->brightness = indicator_power_brightness_new();
