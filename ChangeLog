@@ -1,6 +1,94 @@
+2023-08-24 Mike Gabriel
+
+        * release 23.6.1 (HEAD -> main, tag: 23.6.1)
+        * src/deviceinfo-flashlight.c: Add copyright header. (1ccd548)
+        * Merge branch 'tari01-pr/detect-remote-session' (dc14508)
+
+2023-08-20 Sabri Ünal
+
+        * Translated using Weblate (Turkish) (62d78d5)
+        * Translated using Weblate (Turkish) (12e9c96)
+
+2023-08-07 Robert Tari
+
+        * .build.yml: Add librda dependency (60c00e4)
+        * debian/control: Add librda dependency (7db56c6)
+
+2023-08-10 Robert Tari
+
+        * Do not show when in a remote session (319748d)
+
+2023-08-04 Robert Tari
+
+        * src/notifier.c: Do not access freed variable (2256383)
+
+2023-07-11 Jozef Mlich
+
+        * Translated using Weblate (Czech) (7ae6155)
+
+2023-06-30 Ratchanan Srirattanamet
+
+        * src/service.c: stop special-casing Lomiri for level indicator type
+          (822b801)
+
+2023-07-12 Robert Tari
+
+        * Merge branch 'personal/peat-psuwit/update-phone-section' (9823a1d)
+
+2023-06-15 Ratchanan Srirattanamet
+
+        * src/service.c: also update devices section on phone profile
+          (1ac0b0f)
+
+2023-06-27 Sylke Vicious
+
+        * Translated using Weblate (Italian) (7737c05)
+
+2023-06-25 ssantos
+
+        * Translated using Weblate (Portuguese) (2e7cd28)
+
+2023-06-22 Milan Korecky
+
+        * Translated using Weblate (Czech) (5ca05bd)
+
+2023-06-21 Daniel Frost
+
+        * Translated using Weblate (German) (e7d41b0)
+
+2023-06-22 Jozef Mlich
+
+        * Translated using Weblate (Czech) (c1f0d8c)
+
+2023-06-14 Sergii Horichenko
+
+        * Translated using Weblate (Ukrainian) (c5d6946)
+        * Translated using Weblate (Russian) (09e39d7)
+
+2023-06-10 Sabri Ünal
+
+        * Translated using Weblate (Turkish) (dfcc519)
+
+2023-06-10 gallegonovato
+
+        * Translated using Weblate (Spanish) (c2b219d)
+
+2023-06-09 Wellington Terumi Uemura
+
+        * Translated using Weblate (Portuguese (Brazil)) (844930c)
+
+2023-06-09 Heimen Stoffels
+
+        * Translated using Weblate (Dutch) (c7954a9)
+
+2023-06-09 Yaron Shahrabani
+
+        * Translated using Weblate (Hebrew) (dee6536)
+
 2023-06-09 Mike Gabriel
 
-        * release 23.6.0 (HEAD -> main, tag: 23.6.0)
+        * po/: Translation update. (149b66a)
+        * release 23.6.0 (8eb43ec) (tag: 23.6.0)
         * d/control: Add to S: ayatana-ido (>= 0.10.0). Older versions don't
           ship the 'level' menu item. (930179e)
 

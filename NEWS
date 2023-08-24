@@ -1,3 +1,13 @@
+Overview of changes in ayatana-indicator-power 23.6.1
+
+  - src/deviceinfo-flashlight.c: Add copyright header.
+  - Do not show when in a remote session (RDA support).
+  - src/notifier.c: Do not access freed variable.
+  - src/service.c: stop special-casing Lomiri for level
+    indicator type.
+  - src/service.c: also update devices section on phone profile.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 23.6.0
 
   - src: add support for getting flashlight paths through deviceinfo.
