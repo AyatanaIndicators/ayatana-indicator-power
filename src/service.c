@@ -1188,7 +1188,14 @@ indicator_power_service_init (IndicatorPowerService * self)
   self->priv = p;
 
   p->cancellable = g_cancellable_new ();
-  p->bLocal = rda_session_is_local ();
+
+  if (!ayatana_common_utils_is_lomiri())
+  {
+      p->bLocal = rda_session_is_local ();
+  }
+  else {
+      p->bLocal = TRUE;
+  }
   p->settings = g_settings_new ("org.ayatana.indicator.power");
 
   p->brightness = indicator_power_brightness_new();
