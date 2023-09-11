@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-09 08:12+0200\n"
-"PO-Revision-Date: 2023-06-22 17:15+0000\n"
-"Last-Translator: Daniel Frost <one@frostinfo.de>\n"
+"PO-Revision-Date: 2023-09-11 19:55+0000\n"
+"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -164,7 +164,7 @@ msgstr "Kamera"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Tragbares Gerät"
 
 #: src/device.c:767
 msgid "Toy"
@@ -258,7 +258,7 @@ msgstr "%s (%s)"
 #: src/device.c:1071
 #, c-format
 msgid "%s %.0lf%%"
-msgstr "%s, %.0lf% %"
+msgstr "%s, %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -282,7 +282,7 @@ msgstr "(%s)"
 #: src/device.c:1097
 #, c-format
 msgid "%.0lf%%"
-msgstr "%.0lf% %"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
