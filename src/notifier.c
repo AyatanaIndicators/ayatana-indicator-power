@@ -147,6 +147,19 @@ get_battery_power_level (IndicatorPowerDevice * battery)
   return ret;
 }
 
+static gdouble
+get_battery_power_percentage (IndicatorPowerDevice * battery)
+{
+  gdouble ret;
+
+  g_return_val_if_fail(battery != NULL, 0);
+  g_return_val_if_fail(indicator_power_device_get_kind(battery) == UP_DEVICE_KIND_BATTERY, 0);
+
+  ret = indicator_power_device_get_percentage(battery);
+
+  return ret;
+}
+
 /***
 ****  Sounds
 ***/
@@ -366,6 +379,7 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
   PowerLevel new_power_level;
   gboolean old_discharging;
   gboolean new_discharging;
+  gdouble new_percentage;
 
   g_return_if_fail(INDICATOR_IS_POWER_NOTIFIER(self));
   p = get_priv (self);
@@ -376,6 +390,8 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
 
   old_discharging = p->discharging;
   new_discharging = indicator_power_device_get_state(p->battery) == UP_DEVICE_STATE_DISCHARGING;
+
+  new_percentage = get_battery_power_percentage (p->battery);
 
   /* pop up a 'low battery' notification if either:
      a) it's already discharging, and its PowerLevel worsens, OR
@@ -391,6 +407,8 @@ on_battery_property_changed (IndicatorPowerNotifier * self)
     }
 
   dbus_battery_set_power_level (p->dbus_battery, power_level_to_dbus_string (new_power_level));
+  dbus_battery_set_power_percentage (p->dbus_battery, new_percentage);
+  dbus_battery_set_is_discharging (p->dbus_battery, new_discharging);
   p->power_level = new_power_level;
   p->discharging = new_discharging;
 }
