@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-09 08:13+0200\n"
+"POT-Creation-Date: 2023-10-10 23:59+0200\n"
 "PO-Revision-Date: 2023-01-07 17:47+0000\n"
 "Last-Translator: Andy Chiang <andy.chiang.13@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -51,7 +51,7 @@ msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:679 src/service.c:433
+#: src/device.c:679 src/service.c:439
 msgid "Battery"
 msgstr ""
 
@@ -288,60 +288,60 @@ msgstr ""
 msgid "(%.0lf%%)"
 msgstr ""
 
-#: src/notifier.c:301
+#: src/notifier.c:314
 msgid "Battery Low"
 msgstr ""
 
-#: src/notifier.c:302
+#: src/notifier.c:315
 msgid "Battery Critical"
 msgstr ""
 
-#: src/notifier.c:304
+#: src/notifier.c:317
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr ""
 
-#: src/notifier.c:339
+#: src/notifier.c:347
 msgid "OK"
 msgstr ""
 
-#: src/notifier.c:340
+#: src/notifier.c:348
 msgid "Battery settings"
 msgstr ""
 
-#: src/service.c:435
+#: src/service.c:441
 msgid "Battery status and power management"
 msgstr ""
 
-#: src/service.c:526
+#: src/service.c:532
 msgid "Charge level"
 msgstr ""
 
-#: src/service.c:641
+#: src/service.c:633
 msgid "Power Settings…"
 msgstr ""
 
-#: src/service.c:667
+#: src/service.c:659
 msgid "Adjust brightness automatically"
 msgstr ""
 
-#: src/service.c:675
+#: src/service.c:667
 msgid "Flashlight"
 msgstr ""
 
-#: src/service.c:681
+#: src/service.c:673
 msgid "Warning: Heavy use can damage the LED!"
 msgstr ""
 
-#: src/service.c:687
+#: src/service.c:679
 msgid "Battery settings…"
 msgstr ""
 
-#: src/service.c:838 src/utils.c:68
+#: src/service.c:831 src/utils.c:68
 msgid "Warning"
 msgstr ""
 
-#: src/service.c:839
+#: src/service.c:832
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-09 08:12+0200\n"
+"POT-Creation-Date: 2023-10-10 23:59+0200\n"
 "PO-Revision-Date: 2022-09-08 18:17+0000\n"
 "Last-Translator: Moo <hazap@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/ayatana-"
@@ -46,8 +46,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Parametrai kada rodyti baterijos būseną. Teisingi parametrai yra \"present"
-"\", \"charge\" ir \"never\"."
+"Parametrai kada rodyti baterijos būseną. Teisingi parametrai yra "
+"\"present\", \"charge\" ir \"never\"."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:675
@@ -55,7 +55,7 @@ msgid "AC Adapter"
 msgstr "KS adapteris"
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:679 src/service.c:433
+#: src/device.c:679 src/service.c:439
 msgid "Battery"
 msgstr "Baterija"
 
@@ -295,60 +295,60 @@ msgstr "(%.0lf%%)"
 msgid "(%.0lf%%)"
 msgstr "(%.0lf%%)"
 
-#: src/notifier.c:301
+#: src/notifier.c:314
 msgid "Battery Low"
 msgstr "Žemas baterijos lygis"
 
-#: src/notifier.c:302
+#: src/notifier.c:315
 msgid "Battery Critical"
 msgstr "Kritinis baterijos lygis"
 
-#: src/notifier.c:304
+#: src/notifier.c:317
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr "Liko %.0f%% įkrovos"
 
-#: src/notifier.c:339
+#: src/notifier.c:347
 msgid "OK"
 msgstr "Gerai"
 
-#: src/notifier.c:340
+#: src/notifier.c:348
 msgid "Battery settings"
 msgstr "Baterijos nustatymai"
 
-#: src/service.c:435
+#: src/service.c:441
 msgid "Battery status and power management"
 msgstr "Baterijos būsena ir maitinimo valdymas"
 
-#: src/service.c:526
+#: src/service.c:532
 msgid "Charge level"
 msgstr "Įkrovos lygis"
 
-#: src/service.c:641
+#: src/service.c:633
 msgid "Power Settings…"
 msgstr "Maitinimo nustatymai…"
 
-#: src/service.c:667
+#: src/service.c:659
 msgid "Adjust brightness automatically"
 msgstr "Automatiškai reguliuoti ryškumą"
 
-#: src/service.c:675
+#: src/service.c:667
 msgid "Flashlight"
 msgstr "Žibintuvėlis"
 
-#: src/service.c:681
+#: src/service.c:673
 msgid "Warning: Heavy use can damage the LED!"
 msgstr "Įspėjimas: Intensyvus naudojimas gali pažeisti šviesos diodą!"
 
-#: src/service.c:687
+#: src/service.c:679
 msgid "Battery settings…"
 msgstr "Baterijos nustatymai…"
 
-#: src/service.c:838 src/utils.c:68
+#: src/service.c:831 src/utils.c:68
 msgid "Warning"
 msgstr "Įspėjimas"
 
-#: src/service.c:839
+#: src/service.c:832
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"

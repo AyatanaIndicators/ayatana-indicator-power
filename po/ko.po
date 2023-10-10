@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-09 08:12+0200\n"
+"POT-Creation-Date: 2023-10-10 23:59+0200\n"
 "PO-Revision-Date: 2022-09-30 18:18+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/ayatana-"
@@ -53,7 +53,7 @@ msgid "AC Adapter"
 msgstr "AC 어댑터"
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:679 src/service.c:433
+#: src/device.c:679 src/service.c:439
 msgid "Battery"
 msgstr "배터리"
 
@@ -289,60 +289,60 @@ msgstr "(%.0lf%%)"
 msgid "(%.0lf%%)"
 msgstr "(%.0lf%%)"
 
-#: src/notifier.c:301
+#: src/notifier.c:314
 msgid "Battery Low"
 msgstr "배터리 부족"
 
-#: src/notifier.c:302
+#: src/notifier.c:315
 msgid "Battery Critical"
 msgstr "배터리 위험수준"
 
-#: src/notifier.c:304
+#: src/notifier.c:317
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr "%.0f%% 충전 잔량"
 
-#: src/notifier.c:339
+#: src/notifier.c:347
 msgid "OK"
 msgstr "확인"
 
-#: src/notifier.c:340
+#: src/notifier.c:348
 msgid "Battery settings"
 msgstr "배터리 설정"
 
-#: src/service.c:435
+#: src/service.c:441
 msgid "Battery status and power management"
 msgstr "배터리 상태 및 전원 관리"
 
-#: src/service.c:526
+#: src/service.c:532
 msgid "Charge level"
 msgstr "충전 수준"
 
-#: src/service.c:641
+#: src/service.c:633
 msgid "Power Settings…"
 msgstr "전원 설정…"
 
-#: src/service.c:667
+#: src/service.c:659
 msgid "Adjust brightness automatically"
 msgstr "자동으로 밝기 조정"
 
-#: src/service.c:675
+#: src/service.c:667
 msgid "Flashlight"
 msgstr "플래시"
 
-#: src/service.c:681
+#: src/service.c:673
 msgid "Warning: Heavy use can damage the LED!"
 msgstr "경고: 과도하게 사용하면 LED가 손상 될 수 있습니다!"
 
-#: src/service.c:687
+#: src/service.c:679
 msgid "Battery settings…"
 msgstr "배터리 설정…"
 
-#: src/service.c:838 src/utils.c:68
+#: src/service.c:831 src/utils.c:68
 msgid "Warning"
 msgstr "경고"
 
-#: src/service.c:839
+#: src/service.c:832
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
