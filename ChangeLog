@@ -1,6 +1,59 @@
+2023-10-13 Mike Gabriel
+
+        * release 23.10.0 (HEAD -> main, tag: 23.10.0)
+
+2023-10-10 Mike Gabriel
+
+        * po/: Update translation files. (75641c9)
+
+2023-10-06 Mike Gabriel
+
+        * Merge branch 'tari01-pr/drop-zenity' (c5c442e)
+
+2023-10-04 Robert Tari
+
+        * debian/control: Drop zenity dependency (7b96161)
+
+2023-10-02 Mike Gabriel
+
+        * Merge branch 'personal/mariogrip/dbus-updates' (2e602b9)
+
+2023-09-18 Marius Gripsgard
+
+        * dbus: Add power percentage and is discharging (b794ebd)
+
+2023-09-15 gallegonovato
+
+        * Translated using Weblate (Spanish) (2aefd84)
+
+2023-09-11 Mike Gabriel
+
+        * Translated using Weblate (German) (09dd9f9)
+
+2023-09-09 Mike Gabriel
+
+        * Merge branch 'tari01-pr/notification-cleanup' (c049657)
+
+2023-09-09 Robert Tari
+
+        * Remove orphan osd-notify remnants (ba37bd3)
+
+2023-09-06 Luna Jernberg
+
+        * Translated using Weblate (Swedish) (9c70557)
+
+2023-09-02 Robert Tari
+
+        * Merge branch 'sunweaver-pr/no-rda-checks-on-lomiri' (7b04435)
+
+2023-08-31 Mike Gabriel
+
+        * src/service.c: Ignore RDA's opinion when on Lomiri. Assume local
+          session for Lomiri. (bc6df20)
+
 2023-08-24 Mike Gabriel
 
-        * release 23.6.1 (HEAD -> main, tag: 23.6.1)
+        * release 23.6.1 (3ddb532) (tag: 23.6.1)
         * src/deviceinfo-flashlight.c: Add copyright header. (1ccd548)
         * Merge branch 'tari01-pr/detect-remote-session' (dc14508)
 

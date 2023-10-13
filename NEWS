@@ -1,3 +1,11 @@
+Overview of changes in ayatana-indicator-power 23.10.0
+
+  - src/service.c: Ignore RDA's opinion when on Lomiri. Assume local
+    session for Lomiri.
+  - Remove orphan osd-notify remnants.
+  - dbus: Add power percentage and is discharging.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 23.6.1
 
   - src/deviceinfo-flashlight.c: Add copyright header.
