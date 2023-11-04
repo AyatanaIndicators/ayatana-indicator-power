@@ -22,7 +22,9 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <rda/rda.h>
+#ifdef RDA_ENABLED
+#  include <rda/rda.h>
+#endif /* RDA_ENABLED */
 #include <ayatana/common/utils.h>
 #include "brightness.h"
 #include "dbus-shared.h"
@@ -1189,11 +1191,14 @@ indicator_power_service_init (IndicatorPowerService * self)
 
   p->cancellable = g_cancellable_new ();
 
+#ifdef RDA_ENABLED
   if (!ayatana_common_utils_is_lomiri())
   {
       p->bLocal = rda_session_is_local ();
   }
-  else {
+  else
+#endif /* RDA_ENABLED */
+  {
       p->bLocal = TRUE;
   }
   p->settings = g_settings_new ("org.ayatana.indicator.power");

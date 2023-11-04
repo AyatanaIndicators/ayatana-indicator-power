@@ -16,6 +16,7 @@ option(ENABLE_COVERAGE "Enable coverage reports (includes enabling all tests and
 option(ENABLE_WERROR "Treat all build warnings as errors" OFF)
 option(ENABLE_LOMIRI_FEATURES "Build with Lomiri-specific libraries, schemas and media" OFF)
 option(ENABLE_DEVICEINFO "Build with deviceinfo integration" OFF)
+option(ENABLE_RDA "Build with RDA (remote desktop awareness) support" ON)
 
 if(ENABLE_COVERAGE)
     set(ENABLE_TESTS ON)
@@ -73,7 +74,6 @@ set(
     gio-unix-2.0>=2.36
     libnotify>=0.7.6
     libayatana-common>=0.9.1
-    rda
 )
 
 if (ENABLE_LOMIRI_FEATURES)
@@ -87,6 +87,17 @@ if (ENABLE_LOMIRI_FEATURES)
     add_definitions (
         -DLOMIRI_FEATURES_ENABLED
         -DLOMIRI_SOUNDSDIR="${LOMIRI_SOUNDSDIR}"
+    )
+endif ()
+
+if (ENABLE_RDA)
+    list (
+        APPEND
+        SERVICE_DEPS
+        rda
+    )
+    add_definitions (
+      -DRDA_ENABLED
     )
 endif ()
 
