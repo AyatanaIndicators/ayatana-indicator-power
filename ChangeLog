@@ -1,6 +1,27 @@
+2023-11-06 Mike Gabriel
+
+        * release 23.10.1 (HEAD -> main, tag: 23.10.1)
+
+2023-11-04 Robert Tari
+
+        * Merge branch 'sunweaver-pr/rda-optional' (0b8c415)
+
+2023-11-04 Mike Gabriel
+
+        * {CMakeLists.txt,src/service.c}: Make building against librda
+          optional. (55c6fbd)
+
+2023-10-24 Moo
+
+        * Translated using Weblate (Lithuanian) (5a02948)
+
+2023-10-14 Quentin PAGÈS
+
+        * Translated using Weblate (Occitan) (5d81ce6)
+
 2023-10-13 Mike Gabriel
 
-        * release 23.10.0 (HEAD -> main, tag: 23.10.0)
+        * release 23.10.0 (02fba87) (tag: 23.10.0)
 
 2023-10-10 Mike Gabriel
 

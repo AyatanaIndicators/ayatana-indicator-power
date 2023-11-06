@@ -1,3 +1,8 @@
+Overview of changes in ayatana-indicator-power 23.10.1
+
+  - Make building against librda optional.
+  - Update translations.
+
 Overview of changes in ayatana-indicator-power 23.10.0
 
   - src/service.c: Ignore RDA's opinion when on Lomiri. Assume local
