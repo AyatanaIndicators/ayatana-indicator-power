@@ -72,8 +72,6 @@ protected:
   static constexpr char const * METHOD_GET_INFO {"GetServerInformation"};
   static constexpr char const * SIGNAL_CLOSED {"NotificationClosed"};
 
-  static constexpr char const * HINT_TIMEOUT {"x-lomiri-snap-decisions-timeout"};
-
 protected:
 
   void SetUp()
