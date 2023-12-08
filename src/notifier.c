@@ -88,6 +88,9 @@ typedef struct
 
   gboolean caps_queried;
   gboolean actions_supported;
+  #ifdef LOMIRI_FEATURES_ENABLED
+  gboolean lomiri_snap_decisions_supported;
+  #endif
 
   GCancellable * cancellable;
   #ifdef LOMIRI_FEATURES_ENABLED
@@ -265,8 +268,8 @@ on_dismiss_clicked(NotifyNotification * nn        G_GNUC_UNUSED,
   /* no-op; libnotify warns if we have a NULL action callback */
 }
 
-static gboolean
-are_actions_supported(IndicatorPowerNotifier * self)
+static void
+ensure_caps_queried(IndicatorPowerNotifier * self)
 {
   priv_t * const p = get_priv(self);
 
@@ -276,21 +279,53 @@ are_actions_supported(IndicatorPowerNotifier * self)
       GList * caps;
       GList * l;
 
-      /* see if actions are supported */
+      #ifdef LOMIRI_FEATURES_ENABLED
+      gboolean lomiri_snap_decisions_supported = FALSE;
+      #endif
+
+      /* see if actions and snap decisions are supported */
       actions_supported = FALSE;
       caps = notify_get_server_caps();
-      for (l=caps; l!=NULL && !actions_supported; l=l->next)
+      for (l=caps; l!=NULL; l=l->next) {
         if (!g_strcmp0(l->data, "actions"))
           actions_supported = TRUE;
+        #ifdef LOMIRI_FEATURES_ENABLED
+        else if (!g_strcmp0(l->data, "x-lomiri-snap-decisions"))
+          lomiri_snap_decisions_supported = TRUE;
+        #endif
+      }
 
       p->actions_supported = actions_supported;
+      #ifdef LOMIRI_FEATURES_ENABLED
+      p->lomiri_snap_decisions_supported = lomiri_snap_decisions_supported;
+      #endif
       p->caps_queried = TRUE;
 
       g_list_free_full(caps, g_free);
     }
+}
+
+static gboolean
+are_actions_supported(IndicatorPowerNotifier * self)
+{
+  priv_t * const p = get_priv(self);
+
+  ensure_caps_queried(self);
 
   return p->actions_supported;
 }
+
+#ifdef LOMIRI_FEATURES_ENABLED
+static gboolean
+are_lomiri_snap_decisions_supported(IndicatorPowerNotifier * self)
+{
+  priv_t * const p = get_priv(self);
+
+  ensure_caps_queried(self);
+
+  return p->lomiri_snap_decisions_supported;
+}
+#endif
 
 static void
 notification_show(IndicatorPowerNotifier * self)
@@ -342,11 +377,14 @@ notification_show(IndicatorPowerNotifier * self)
               notify_notification_set_hint(nn, "sound-file", g_variant_new_string("file://" LOMIRI_SOUNDSDIR "/notifications/" LOW_BATTERY_SOUND));
             }
         }
-
-      notify_notification_set_hint(nn, "x-lomiri-snap-decisions", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-lomiri-non-shaped-icon", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-lomiri-private-affirmative-tint", g_variant_new_string("true"));
-      notify_notification_set_hint(nn, "x-lomiri-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
+      #ifdef LOMIRI_FEATURES_ENABLED
+      if (are_lomiri_snap_decisions_supported(self)) {
+        notify_notification_set_hint(nn, "x-lomiri-snap-decisions", g_variant_new_string("true"));
+        notify_notification_set_hint(nn, "x-lomiri-non-shaped-icon", g_variant_new_string("true"));
+        notify_notification_set_hint(nn, "x-lomiri-private-affirmative-tint", g_variant_new_string("true"));
+        notify_notification_set_hint(nn, "x-lomiri-snap-decisions-timeout", g_variant_new_int32(INT32_MAX));
+      }
+      #endif
       notify_notification_set_timeout(nn, NOTIFY_EXPIRES_NEVER);
       notify_notification_add_action(nn, "dismiss", _("OK"), on_dismiss_clicked, NULL, NULL);
       notify_notification_add_action(nn, "settings", _("Battery settings"), on_battery_settings_clicked, NULL, NULL);
