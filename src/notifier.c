@@ -379,6 +379,7 @@ notification_show(IndicatorPowerNotifier * self)
         }
       #ifdef LOMIRI_FEATURES_ENABLED
       if (are_lomiri_snap_decisions_supported(self)) {
+        /* Yes, all supposedly boolean values take strings... */
         notify_notification_set_hint(nn, "x-lomiri-snap-decisions", g_variant_new_string("true"));
         notify_notification_set_hint(nn, "x-lomiri-non-shaped-icon", g_variant_new_string("true"));
         notify_notification_set_hint(nn, "x-lomiri-private-affirmative-tint", g_variant_new_string("true"));
