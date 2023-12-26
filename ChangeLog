@@ -1,6 +1,29 @@
+2023-12-26 Mike Gabriel
+
+        * release 24.1.0 (HEAD -> main, tag: 24.1.0)
+
+2023-12-19 Mike Gabriel
+
+        * Merge branch 'personal/peat-psuwit/bring-back-lomiri-hints'
+          (635be6a)
+
+2023-12-08 Ratchanan Srirattanamet
+
+        * Confirm that all supposedly boolean hints take strings (c96d7ed)
+        * Guard Lomiri-specific notification hints under conditionals
+          (28b0b55)
+
+2023-12-07 Ratchanan Srirattanamet
+
+        * tests/test-notify: remove unused hint variable (f494eae)
+
+2023-12-06 Ratchanan Srirattanamet
+
+        * Revert "Remove orphan osd-notify remnants" (18d92e3)
+
 2023-11-06 Mike Gabriel
 
-        * release 23.10.1 (HEAD -> main, tag: 23.10.1)
+        * release 23.10.1 (51d6185) (tag: 23.10.1)
 
 2023-11-04 Robert Tari
 

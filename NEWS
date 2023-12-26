@@ -1,3 +1,10 @@
+Overview of changes in ayatana-indicator-power 24.1.0
+
+  - Revert "Remove orphan osd-notify remnants".
+  - tests/test-notify: Remove unused hint variable.
+  - Guard Lomiri-specific notification hints under conditionals.
+  - Confirm that all supposedly boolean hints take strings.
+
 Overview of changes in ayatana-indicator-power 23.10.1
 
   - Make building against librda optional.
