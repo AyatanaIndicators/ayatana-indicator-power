@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2021-02-20 01:50+0000\n"
-"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/fr/>\n"
+"PO-Revision-Date: 2024-03-23 23:01+0000\n"
+"Last-Translator: Steve <steve.kueffer.ch@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -105,75 +105,74 @@ msgstr "Ordinateur"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
 msgid "Gaming input"
-msgstr ""
+msgstr "Entrée de jeu"
 
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Stylo"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Pavé tactile"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Modem"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Appareil de réseau"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Casque"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Haut-parleurs"
 
 #: src/device.c:742
-#, fuzzy
 msgid "Headphones"
-msgstr "Téléphone portable"
+msgstr "Écouteurs"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Appareil vidéo"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Appareil audio"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Télécommande"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Imprimante"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Scanner"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Appareil photo"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Portable"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Jouet"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Appareil Bluetooth"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -257,9 +256,9 @@ msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, fuzzy, c-format
+#, c-format
 msgid "%s %.0lf%%"
-msgstr "(%s, %.0lf%%)"
+msgstr "%s %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -269,9 +268,9 @@ msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
@@ -281,9 +280,9 @@ msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, fuzzy, c-format
+#, c-format
 msgid "%.0lf%%"
-msgstr "(%.0lf%%)"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
@@ -314,7 +313,7 @@ msgstr "Réglages de la batterie"
 
 #: src/service.c:441
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Statut de la batterie et gestion d'énergie"
 
 #: src/service.c:532
 msgid "Charge level"
