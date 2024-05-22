@@ -1,3 +1,9 @@
+Overview of changes in ayatana-indicator-power 24.5.0
+
+  - data/ayatana-indicator-power.service.in: Become part of
+    lomiri-indicators.target.
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 24.1.0
 
   - Revert "Remove orphan osd-notify remnants".
