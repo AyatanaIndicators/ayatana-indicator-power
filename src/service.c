@@ -1194,7 +1194,7 @@ indicator_power_service_init (IndicatorPowerService * self)
 #ifdef RDA_ENABLED
   if (!ayatana_common_utils_is_lomiri())
   {
-      p->bLocal = rda_session_is_local ();
+      p->bLocal = !rda_session_is_remote ();
   }
   else
 #endif /* RDA_ENABLED */
