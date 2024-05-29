@@ -1,3 +1,8 @@
+Overview of changes in ayatana-indicator-power 24.5.1
+
+  - src/service.c: A session is local, if it is not remote. This avoids
+    detecting e.g. chroots as remote sessions.
+
 Overview of changes in ayatana-indicator-power 24.5.0
 
   - data/ayatana-indicator-power.service.in: Become part of

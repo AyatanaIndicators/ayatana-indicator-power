@@ -1,6 +1,19 @@
+2024-05-29 Mike Gabriel
+
+        * release 24.5.1 (HEAD -> main, tag: 24.5.1)
+
+2024-05-28 Robert Tari
+
+        * Merge branch 'sunweaver-pr/rda-is-not-remote' (442c2d52)
+
+2024-05-27 Mike Gabriel
+
+        * src/service.c: A session is local, if it is not remote. This avoids
+          detecting e.g. chroots as remote sessions. (f57a1661)
+
 2024-05-22 Mike Gabriel
 
-        * release 24.5.0 (HEAD -> main, tag: 24.5.0)
+        * release 24.5.0 (dab59821) (tag: 24.5.0)
 
 2024-05-21 Robert Tari
 
