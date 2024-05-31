@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2019-01-12 16:06+0000\n"
-"Last-Translator: Louies <louies0623@gmail.com>\n"
+"PO-Revision-Date: 2024-05-31 17:48+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -36,9 +36,8 @@ msgid "Whether or not to show the percentage in the menu bar."
 msgstr "是否在功能表列中顯示百分比。"
 
 #: data/org.ayatana.indicator.power.gschema.xml:5
-#, fuzzy
 msgid "When to show the battery status in the menu bar?"
-msgstr "何時在功能表列中顯示電池狀態。"
+msgstr "何時在功能表列中顯示電池狀態？"
 
 #: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
@@ -308,9 +307,8 @@ msgid "OK"
 msgstr "確定"
 
 #: src/notifier.c:348
-#, fuzzy
 msgid "Battery settings"
-msgstr "電池設置…"
+msgstr "電池設定"
 
 #: src/service.c:441
 msgid "Battery status and power management"
@@ -342,7 +340,7 @@ msgstr "電池設置…"
 
 #: src/service.c:831 src/utils.c:68
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: src/service.c:832
 msgid ""
