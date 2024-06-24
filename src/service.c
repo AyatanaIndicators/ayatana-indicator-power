@@ -1,6 +1,6 @@
 /*
  * Copyright 2013-2016 Canonical Ltd.
- * Copyright 2021-2023 Robert Tari
+ * Copyright 2021-2024 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -562,7 +562,10 @@ create_devices_section (IndicatorPowerService * self, int profile)
                     g_object_unref (icon);
                 }
 
-                g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s", indicator_power_device_get_object_path (device));
+                if (profile != PROFILE_DESKTOP_GREETER)
+                {
+                    g_menu_item_set_action_and_target(item, "indicator.activate-statistics", "s", indicator_power_device_get_object_path (device));
+                }
             }
 
             g_menu_append_item (menu, item);
