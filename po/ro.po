@@ -8,339 +8,343 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2017-07-21 14:55+0200\n"
-"Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
-"Language-Team: Romanian\n"
+"PO-Revision-Date: 2024-09-29 00:16+0000\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Afișează ora în bara de meniu"
 
 #: data/org.ayatana.indicator.power.gschema.xml:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Dacă se afișează sau nu ora în bara de meniu."
 
 #: data/org.ayatana.indicator.power.gschema.xml:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Afișează procentul în bara de meniu"
 
 #: data/org.ayatana.indicator.power.gschema.xml:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Dacă se afișează sau nu procentul în bara de meniu."
 
 #: data/org.ayatana.indicator.power.gschema.xml:5
 msgid "When to show the battery status in the menu bar?"
-msgstr ""
+msgstr "Când să se afișeze starea bateriei în bara de meniu?"
 
 #: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Opțiuni pentru momentul în care se afișează starea bateriei. Opțiunile "
+"valabile sunt „mereu”, „încărcare” și „niciodată”."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:675
 msgid "AC Adapter"
-msgstr ""
+msgstr "Adaptor CA/CC"
 
 #. TRANSLATORS: laptop primary battery
 #: src/device.c:679 src/service.c:439
 msgid "Battery"
-msgstr ""
+msgstr "Baterie"
 
 #. TRANSLATORS: battery-backed AC power source
 #: src/device.c:683
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
 msgid "Mouse"
-msgstr ""
+msgstr "Mouse"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: src/device.c:695
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatură"
 
 #. TRANSLATORS: portable device
 #: src/device.c:699
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: src/device.c:703
 msgid "Cell phone"
-msgstr ""
+msgstr "Telefon mobil"
 
 #. TRANSLATORS: media player, mp3 etc
 #: src/device.c:707
 msgid "Media player"
-msgstr ""
+msgstr "Reproducător multimedia"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:711
 msgid "Tablet"
-msgstr ""
+msgstr "Tabletă"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:715
 msgid "Computer"
-msgstr ""
+msgstr "Calculator"
 
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
 msgid "Gaming input"
-msgstr ""
+msgstr "Intrare pentru jocuri"
 
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Stilou digital"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Touchpad"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Modem"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Dispozitiv de rețea"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Căști"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Difuzoare"
 
 #: src/device.c:742
 msgid "Headphones"
-msgstr ""
+msgstr "Căști auriculare"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Dispozitiv video"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Dispozitiv audio"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Telecomandă"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Imprimantă"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Scaner"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Aparat foto"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Portabil"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Jucărie"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Dispozitiv Bluetooth"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
 msgid "Unknown"
-msgstr ""
+msgstr "Necunoscut"
 
 #: src/device.c:814
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "se estimează…"
 
 #: src/device.c:818
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "necunoscut"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: src/device.c:847
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d:%02d pentru încărcare"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: src/device.c:852
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "mai durează %0d:%02d"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: src/device.c:887
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s pentru încărcare"
 
 #: src/device.c:888 src/device.c:906
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "oră"
+msgstr[1] "ore"
+msgstr[2] "de ore"
 
 #: src/device.c:889 src/device.c:896 src/device.c:907
 #: src/device.c:914
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "minut"
+msgstr[1] "minute"
+msgstr[2] "de minute"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: src/device.c:895
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s pentru încărcare"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: src/device.c:905
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "mai durează %d %s %d %s"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: src/device.c:913
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "mai durează %d %s"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: src/device.c:979
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (încărcată)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: src/device.c:996
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
 #, c-format
 msgid "%s %.0lf%%"
-msgstr ""
+msgstr "%s %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
 #, c-format
 msgid "%.0lf%%"
-msgstr ""
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: src/notifier.c:314
 msgid "Battery Low"
-msgstr ""
+msgstr "Baterie descărcată"
 
 #: src/notifier.c:315
 msgid "Battery Critical"
-msgstr ""
+msgstr "Baterie în stare critică"
 
 #: src/notifier.c:317
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "a(u) mai rămas %.0f%% de încărcare"
 
 #: src/notifier.c:347
 msgid "OK"
-msgstr ""
+msgstr "Ok"
 
 #: src/notifier.c:348
 msgid "Battery settings"
-msgstr ""
+msgstr "Configurarea bateriei"
 
 #: src/service.c:441
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Starea bateriei și gestionarea alimentării"
 
 #: src/service.c:532
 msgid "Charge level"
-msgstr ""
+msgstr "Nivelul de încărcare"
 
 #: src/service.c:633
 msgid "Power Settings…"
-msgstr ""
+msgstr "Configurare alimentare…"
 
 #: src/service.c:659
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Ajustează automat luminozitatea"
 
 #: src/service.c:667
 msgid "Flashlight"
-msgstr ""
+msgstr "Lanternă"
 
 #: src/service.c:673
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Atenție: Utilizarea intensă poate deteriora LED-ul!"
 
 #: src/service.c:679
 msgid "Battery settings…"
-msgstr ""
+msgstr "Configurare baterie…"
 
 #: src/service.c:831 src/utils.c:68
 msgid "Warning"
-msgstr ""
+msgstr "Avertisment"
 
 #: src/service.c:832
 msgid ""
@@ -350,6 +354,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Indicatorul de alimentare Ayatana nu permite deocamdată evocarea\n"
+"aplicației de statistici de alimentare din mediul dvs. desktop.\n"
+"\n"
+"Vă rugăm să raportați acest lucru dezvoltatorilor la adresa:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: src/utils.c:69
 msgid ""
@@ -359,3 +368,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Indicatorul de alimentare Ayatana nu permite evocarea ferestrei\n"
+"dialogul de configurare a alimentării din mediul dvs. de birou, încă.\n"
+"\n"
+"Vă rugăm să raportați acest lucru dezvoltatorilor la adresa:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
