@@ -8,67 +8,69 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2021-02-20 01:50+0000\n"
-"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/ayatana-"
-"indicators/power-applet/fi/>\n"
+"PO-Revision-Date: 2024-12-18 11:00+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/"
+"ayatana-indicators/power-applet/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 5.9.2-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
-msgstr ""
+msgstr "Näytä aika valikkopalkissa"
 
 #: data/org.ayatana.indicator.power.gschema.xml:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr ""
+msgstr "Näytetäänkö aika valikkopalkissa vai ei."
 
 #: data/org.ayatana.indicator.power.gschema.xml:3
 msgid "Show percentage in Menu Bar"
-msgstr ""
+msgstr "Näytä prosenttiosuus valikkopalkissa"
 
 #: data/org.ayatana.indicator.power.gschema.xml:4
 msgid "Whether or not to show the percentage in the menu bar."
-msgstr ""
+msgstr "Näytetäänkö prosenttiosuus valikkopalkissa."
 
 #: data/org.ayatana.indicator.power.gschema.xml:5
 msgid "When to show the battery status in the menu bar?"
-msgstr ""
+msgstr "Milloin akun tila näytetään valikkopalkissa?"
 
 #: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
+"Vaihtoehdot akun tilan näyttämiselle. Kelvolliset vaihtoehdot ovat \"läsnä\""
+", \"latautumassa\" ja \"ei koskaan\"."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:675
 msgid "AC Adapter"
-msgstr ""
+msgstr "AC-virtasovitin"
 
 #. TRANSLATORS: laptop primary battery
 #: src/device.c:679 src/service.c:439
 msgid "Battery"
-msgstr ""
+msgstr "Akku"
 
 #. TRANSLATORS: battery-backed AC power source
 #: src/device.c:683
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
 msgid "Monitor"
-msgstr ""
+msgstr "Valvomislaite"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
 msgid "Mouse"
-msgstr ""
+msgstr "Hiiri"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: src/device.c:695
@@ -78,268 +80,268 @@ msgstr "Näppäimistö"
 #. TRANSLATORS: portable device
 #: src/device.c:699
 msgid "PDA"
-msgstr ""
+msgstr "PDA-laite"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: src/device.c:703
 msgid "Cell phone"
-msgstr ""
+msgstr "Matkapuhelin"
 
 #. TRANSLATORS: media player, mp3 etc
 #: src/device.c:707
 msgid "Media player"
-msgstr ""
+msgstr "Mediasoitin"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:711
 msgid "Tablet"
-msgstr ""
+msgstr "Tabletti"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:715
 msgid "Computer"
-msgstr ""
+msgstr "Tietokone"
 
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
 msgid "Gaming input"
-msgstr ""
+msgstr "Pelin sisääntulo"
 
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Kynä"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Kosketuslevy"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Modeemi"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Verkkolaite"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Kuulokkeet"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Kaiuttimet"
 
 #: src/device.c:742
 msgid "Headphones"
-msgstr ""
+msgstr "PääKuulokkeet"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Videolaite"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Äänilaite"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Kaukosäädin"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Tulostin"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Skanneri"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Puettavissa"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Lelu"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Bluetooth-laite"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 #: src/device.c:814
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "arvioidaan…"
 
 #: src/device.c:818
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "tuntematon"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: src/device.c:847
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr ""
+msgstr "%0d:%02d latausaika"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: src/device.c:852
 #, c-format
 msgid "%0d:%02d left"
-msgstr ""
+msgstr "%0d:%02d jäljellä"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) to charge" the battery.
 #. Example: "1 hour 10 minutes to charge"
 #: src/device.c:887
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr ""
+msgstr "%d %s %d %s latausaika"
 
 #: src/device.c:888 src/device.c:906
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tunti"
+msgstr[1] "tuntia"
 
 #: src/device.c:889 src/device.c:896 src/device.c:907
 #: src/device.c:914
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minuutti"
+msgstr[1] "minuuttia"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
 #: src/device.c:895
 #, c-format
 msgid "%d %s to charge"
-msgstr ""
+msgstr "%d %s latausaika"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: src/device.c:905
 #, c-format
 msgid "%d %s %d %s left"
-msgstr ""
+msgstr "%d %s %d %s jäljellä"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: src/device.c:913
 #, c-format
 msgid "%d %s left"
-msgstr ""
+msgstr "%d %s jäljellä"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: src/device.c:979
 #, c-format
 msgid "%s (charged)"
-msgstr ""
+msgstr "%s (ladattuna)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: src/device.c:996
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
 #, c-format
 msgid "%s %.0lf%%"
-msgstr ""
+msgstr "%s %.0lf %%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
 #, c-format
 msgid "(%s, %.0lf%%)"
-msgstr ""
+msgstr "(%s, %.0lf %%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
 #, c-format
 msgid "%.0lf%%"
-msgstr ""
+msgstr "%.0lf %%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
 #, c-format
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf %%)"
 
 #: src/notifier.c:314
 msgid "Battery Low"
-msgstr ""
+msgstr "Akku vähissä"
 
 #: src/notifier.c:315
 msgid "Battery Critical"
-msgstr ""
+msgstr "Akku kriittinen"
 
 #: src/notifier.c:317
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr ""
+msgstr "%.0f %% varausta jäljellä"
 
 #: src/notifier.c:347
 msgid "OK"
-msgstr ""
+msgstr "Kunnossa"
 
 #: src/notifier.c:348
 msgid "Battery settings"
-msgstr ""
+msgstr "Akun asetukset"
 
 #: src/service.c:441
 msgid "Battery status and power management"
-msgstr ""
+msgstr "Akun tila ja virranhallinta"
 
 #: src/service.c:532
 msgid "Charge level"
-msgstr ""
+msgstr "Lataustaso"
 
 #: src/service.c:633
 msgid "Power Settings…"
-msgstr ""
+msgstr "Virta-asetukset…"
 
 #: src/service.c:659
 msgid "Adjust brightness automatically"
-msgstr ""
+msgstr "Säädä kirkkautta automaattisesti"
 
 #: src/service.c:667
 msgid "Flashlight"
-msgstr ""
+msgstr "Taskulamppu"
 
 #: src/service.c:673
 msgid "Warning: Heavy use can damage the LED!"
-msgstr ""
+msgstr "Varoitus: Kova käyttö voi vahingoittaa LEDiä!"
 
 #: src/service.c:679
 msgid "Battery settings…"
-msgstr ""
+msgstr "Akkuasetukset…"
 
 #: src/service.c:831 src/utils.c:68
 msgid "Warning"
-msgstr ""
+msgstr "Varoitus"
 
 #: src/service.c:832
 msgid ""
@@ -349,6 +351,11 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana Power Indicator ei tue työpöytäympäristösi\n"
+"virtatilastosovelluksen tiedottamista, vielä.\n"
+"\n"
+"Ilmoita tästä kehittäjille osoitteessa:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 
 #: src/utils.c:69
 msgid ""
@@ -358,3 +365,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
+"Ayatana Power Indicator ei tue työpöytäympäristösi virta-asetusten\n"
+"valintaikkunan tiedottamista.\n"
+"\n"
+"Ilmoita tästä kehittäjille osoitteessa:\n"
+"https://github.com/ArcticaProject/ayatana-indicator-power/issues"
