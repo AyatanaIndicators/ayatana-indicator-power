@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2023-01-07 17:47+0000\n"
-"Last-Translator: Andy Chiang <andy.chiang.13@gmail.com>\n"
+"PO-Revision-Date: 2025-03-05 08:15+0000\n"
+"Last-Translator: Droit <3118138007@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/zh_LATN@pinyin/>\n"
 "Language: zh_LATN@pinyin\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: src/notifier.c:347
 msgid "OK"
-msgstr ""
+msgstr "好的"
 
 #: src/notifier.c:348
 msgid "Battery settings"
