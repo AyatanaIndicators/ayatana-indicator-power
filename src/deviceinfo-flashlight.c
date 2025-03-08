@@ -30,3 +30,15 @@ char* flashlight_switch_path()
         struct DeviceInfo* di = deviceinfo_new();
         return deviceinfo_get(di, "FlashlightSwitchPath", "");
 }
+
+char* flashlight_simple_enable_value()
+{
+         struct DeviceInfo* di = deviceinfo_new();
+         return deviceinfo_get(di, "FlashlightSimpleEnableValue", "");
+}
+
+char* flashlight_simple_disable_value()
+{
+         struct DeviceInfo* di = deviceinfo_new();
+         return deviceinfo_get(di, "FlashlightSimpleDisableValue", "");
+}
