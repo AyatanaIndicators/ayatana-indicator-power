@@ -34,6 +34,8 @@
 #ifdef ENABLE_LIBDEVICEINFO
 extern char* flashlight_path();
 extern char* flashlight_switch_path();
+extern char* flashlight_simple_enable_value();
+extern char* flashlight_simple_disable_value();
 #endif
 
 const size_t qcom_sysfs_size = 7;
@@ -141,7 +143,25 @@ toggle_flashlight_action_simple()
 
   fd = fopen(flash_sysfs_path, "w");
   if (fd != NULL) {
+# ifdef ENABLE_LIBDEVICEINFO
+    char* enable_value = flashlight_simple_enable_value();
+    char* disable_value = flashlight_simple_disable_value();
+
+    const char* value_to_write;
+    if (activated)
+        value_to_write = (strcmp(disable_value, "") != 0) ? disable_value : SIMPLE_DISABLE;
+    else
+        value_to_write = (strcmp(enable_value, "") != 0) ? enable_value : SIMPLE_ENABLE;
+
+    fprintf(fd, "%s", value_to_write);
+
+    if (enable_value)
+        free(enable_value);
+    if (disable_value)
+        free(disable_value);
+# else
     fprintf(fd, activated ? SIMPLE_DISABLE : SIMPLE_ENABLE);
+# endif
     fclose(fd);
     return 1;
   }
