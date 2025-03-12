@@ -1,3 +1,10 @@
+Overview of changes in ayatana-indicator-power 24.5.2
+
+  - src/service.c: Suppress power statistics in greeter mode
+  - flashlight: allow to get simple flashlight enable and disable
+    values from deviceinfo
+  - Translation updates.
+
 Overview of changes in ayatana-indicator-power 24.5.1
 
   - src/service.c: A session is local, if it is not remote. This avoids
