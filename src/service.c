@@ -30,6 +30,7 @@
 #include "dbus-shared.h"
 #include "device.h"
 #include "device-provider.h"
+#include "keep-screen-on.h"
 #include "notifier.h"
 #include "service.h"
 #include "flashlight.h"
@@ -681,6 +682,14 @@ create_phone_settings_section(IndicatorPowerService * self)
     }
   }
 
+  if (keep_screen_on_supported())
+  {
+    item = g_menu_item_new(_("Keep screen on"), "indicator.keep-screen-on(true)");
+    g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
+    g_menu_append_item(section, item);
+    g_object_unref(item);
+  }
+
   g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
 
   return G_MENU_MODEL(section);
@@ -915,6 +924,13 @@ init_gactions (IndicatorPowerService * self)
                               convert_auto_state_to_prop,
                               NULL, NULL);
   g_action_map_add_action(G_ACTION_MAP(p->actions), G_ACTION(a));
+
+  /* add the keep screen on action */
+  pType = g_variant_type_new ("b");
+  a = g_simple_action_new_stateful ("keep-screen-on", pType, g_variant_new_boolean (FALSE));
+  g_variant_type_free (pType);
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
+  g_signal_connect(a, "change-state", G_CALLBACK(toggle_keep_screen_on_action), self);
 
   /* add the flashlight action */
   pType = g_variant_type_new ("b");
