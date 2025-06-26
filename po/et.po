@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2025-05-08 10:03+0000\n"
+"PO-Revision-Date: 2025-06-27 09:21+0000\n"
 "Last-Translator: Priit Jõerüüt <hwlate@joeruut.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/"
 "ayatana-indicators/power-applet/et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -110,70 +110,69 @@ msgstr "Mängude sisendid"
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "Graafikalaua pliiats"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "Puuteplaat"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "Modem"
 
 #: src/device.c:732
 msgid "Network device"
-msgstr ""
+msgstr "Võrguseade"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "Mikrofoniga kõrvaklapid"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "Kõlarid"
 
 #: src/device.c:742
-#, fuzzy
 msgid "Headphones"
-msgstr "Mobiiltelefon"
+msgstr "Kõrvaklapid"
 
 #: src/device.c:745
 msgid "Video device"
-msgstr ""
+msgstr "Videoseade"
 
 #: src/device.c:748
 msgid "Audio device"
-msgstr ""
+msgstr "Heliseade"
 
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr ""
+msgstr "Kaugjuhtimispult"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "Printer"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "Skänner"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "Kaamera"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "Kantav seade"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "Mänguasi"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr ""
+msgstr "Bluetooth-seade"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -257,9 +256,9 @@ msgstr "%s (%s)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, fuzzy, c-format
+#, c-format
 msgid "%s %.0lf%%"
-msgstr "(%s, %.0lf%%)"
+msgstr "%s, %.0lf%%"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
@@ -269,9 +268,9 @@ msgstr "(%s, %.0lf%%)"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
@@ -281,9 +280,9 @@ msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, fuzzy, c-format
+#, c-format
 msgid "%.0lf%%"
-msgstr "(%.0lf%%)"
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
