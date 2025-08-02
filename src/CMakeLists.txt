@@ -13,6 +13,7 @@ set(SERVICE_MANUAL_SOURCES
     device-provider-upower.c
     device-provider.c
     device.c
+    keep-screen-on.c
     flashlight.c
     notifier.c
     testing.c
