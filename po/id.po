@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2026-02-17 12:09+0000\n"
+"PO-Revision-Date: 2026-03-10 14:09+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -75,7 +75,7 @@ msgstr "Mouse"
 #. TRANSLATORS: wireless keyboard with internal battery
 #: src/device.c:695
 msgid "Keyboard"
-msgstr "Keyboard"
+msgstr "Papan Ketik"
 
 #. TRANSLATORS: portable device
 #: src/device.c:699
