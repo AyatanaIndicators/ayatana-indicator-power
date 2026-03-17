@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 23:59+0200\n"
-"PO-Revision-Date: 2024-08-14 08:09+0000\n"
-"Last-Translator: umesaburo sagawa <atowa-notonare-yamatonare427@pm.me>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/"
-"ayatana-indicators/power-applet/ja/>\n"
+"PO-Revision-Date: 2026-03-18 20:09+0000\n"
+"Last-Translator: BackSpec <jiyuunote@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/ayatana-"
+"indicators/power-applet/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 #, fuzzy
@@ -26,7 +26,7 @@ msgstr "メニュー バーに時間を表示する"
 
 #: data/org.ayatana.indicator.power.gschema.xml:2
 msgid "Whether or not to show the time in the menu bar."
-msgstr "メニューバーの時刻を表示しますか"
+msgstr "メニューバーの時刻を表示しますか。"
 
 #: data/org.ayatana.indicator.power.gschema.xml:3
 #, fuzzy
@@ -188,9 +188,8 @@ msgstr ""
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
-#, fuzzy
 msgid "Unknown"
-msgstr "未知"
+msgstr "不明"
 
 #: src/device.c:814
 #, c-format
