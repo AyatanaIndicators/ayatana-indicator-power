@@ -681,7 +681,9 @@ create_phone_settings_section(IndicatorPowerService * self)
     }
   }
 
-  g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
+  if (g_strcmp0("lightdm", g_get_user_name()) != 0) {
+    g_menu_append(section, _("Battery settings…"), "indicator.activate-phone-settings");
+  }
 
   return G_MENU_MODEL(section);
 }
