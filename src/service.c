@@ -72,6 +72,7 @@ enum
 enum
 {
   PROFILE_PHONE,
+  PROFILE_PHONE_GREETER,
   PROFILE_DESKTOP,
   PROFILE_DESKTOP_GREETER,
   N_PROFILES
@@ -80,6 +81,7 @@ enum
 static const char * const menu_names[N_PROFILES] =
 {
   "phone",
+  "phone_greeter",
   "desktop",
   "desktop_greeter"
 };
@@ -718,9 +720,10 @@ static void
 rebuild_now (IndicatorPowerService * self, guint sections)
 {
   priv_t * p = self->priv;
-  struct ProfileMenuInfo * phone   = &p->menus[PROFILE_PHONE];
-  struct ProfileMenuInfo * desktop = &p->menus[PROFILE_DESKTOP];
-  struct ProfileMenuInfo * greeter = &p->menus[PROFILE_DESKTOP_GREETER];
+  struct ProfileMenuInfo * phone           = &p->menus[PROFILE_PHONE];
+  struct ProfileMenuInfo * phone_greeter   = &p->menus[PROFILE_PHONE_GREETER];
+  struct ProfileMenuInfo * desktop         = &p->menus[PROFILE_DESKTOP];
+  struct ProfileMenuInfo * desktop_greeter = &p->menus[PROFILE_DESKTOP_GREETER];
 
   if (sections & SECTION_HEADER)
     {
@@ -733,8 +736,9 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   if (sections & SECTION_DEVICES)
     {
       rebuild_section (phone->submenu, 0, create_devices_section (self, PROFILE_PHONE));
+      rebuild_section (phone_greeter->submenu, 0, create_devices_section (self, PROFILE_PHONE_GREETER));
       rebuild_section (desktop->submenu, 0, create_devices_section (self, PROFILE_DESKTOP));
-      rebuild_section (greeter->submenu, 0, create_devices_section (self, PROFILE_DESKTOP_GREETER));
+      rebuild_section (desktop_greeter->submenu, 0, create_devices_section (self, PROFILE_DESKTOP_GREETER));
     }
 
   if (sections & SECTION_SETTINGS)
@@ -770,6 +774,10 @@ create_menu (IndicatorPowerService * self, int profile)
       case PROFILE_PHONE:
         sections[n++] = create_devices_section (self, PROFILE_PHONE);
         sections[n++] = create_phone_settings_section (self);
+        break;
+
+      case PROFILE_PHONE_GREETER:
+        sections[n++] = create_devices_section (self, PROFILE_PHONE_GREETER);
         break;
 
       case PROFILE_DESKTOP:

@@ -17,7 +17,7 @@ ObjectPath=/org/ayatana/indicator/power/desktop_greeter
 ObjectPath=/org/ayatana/indicator/power/desktop_greeter
 
 [phone_greeter]
-ObjectPath=/org/ayatana/indicator/power/phone
+ObjectPath=/org/ayatana/indicator/power/phone_greeter
 Position=25
 
 [ubiquity]
