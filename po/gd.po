@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 23:59+0200\n"
+"POT-Creation-Date: 2026-06-13 00:05+0200\n"
 "PO-Revision-Date: 2017-07-21 14:55+0200\n"
 "Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
 "Language-Team: Scottish Gaelic\n"
@@ -49,7 +49,7 @@ msgid "AC Adapter"
 msgstr ""
 
 #. TRANSLATORS: laptop primary battery
-#: src/device.c:679 src/service.c:439
+#: src/device.c:679 src/service.c:442
 msgid "Battery"
 msgstr ""
 
@@ -252,13 +252,11 @@ msgstr ""
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
-#, c-format
 msgid "%s %.0lf%%"
 msgstr ""
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
-#, c-format
 msgid "(%s, %.0lf%%)"
 msgstr ""
 
@@ -276,70 +274,72 @@ msgstr ""
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
-#, c-format
 msgid "%.0lf%%"
 msgstr ""
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
-#, c-format
 msgid "(%.0lf%%)"
 msgstr ""
 
-#: src/notifier.c:314
+#: src/notifier.c:349
 msgid "Battery Low"
 msgstr ""
 
-#: src/notifier.c:315
+#: src/notifier.c:350
 msgid "Battery Critical"
 msgstr ""
 
-#: src/notifier.c:317
+#: src/notifier.c:352
 #, c-format
 msgid "%.0f%% charge remaining"
 msgstr ""
 
-#: src/notifier.c:347
+#: src/notifier.c:390
 msgid "OK"
 msgstr ""
 
-#: src/notifier.c:348
+#: src/notifier.c:391
 msgid "Battery settings"
 msgstr ""
 
-#: src/service.c:441
+#: src/service.c:444
 msgid "Battery status and power management"
 msgstr ""
 
-#: src/service.c:532
+#: src/service.c:535
 msgid "Charge level"
 msgstr ""
 
-#: src/service.c:633
+#: src/service.c:639
 msgid "Power Settings…"
 msgstr ""
 
-#: src/service.c:659
+#: src/service.c:665
 msgid "Adjust brightness automatically"
 msgstr ""
 
-#: src/service.c:667
+#: src/service.c:673
 msgid "Flashlight"
 msgstr ""
 
-#: src/service.c:673
+#: src/service.c:679
 msgid "Warning: Heavy use can damage the LED!"
 msgstr ""
 
-#: src/service.c:679
+#: src/service.c:687
+msgid "Keep screen on"
+msgstr ""
+
+#: src/service.c:693
 msgid "Battery settings…"
 msgstr ""
 
-#: src/service.c:831 src/utils.c:68
+#: src/service.c:845 src/utils.c:68
 msgid "Warning"
 msgstr ""
 
-#: src/service.c:832
+#: src/service.c:846
 msgid ""
 "The Ayatana Power Indicator does not support evoking the\n"
 "power statistics application of your desktop environment, yet.\n"
