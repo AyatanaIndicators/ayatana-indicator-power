@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2026-06-12 21:01+0000\n"
+"PO-Revision-Date: 2026-06-13 09:06+0000\n"
 "Last-Translator: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/de/>\n"
@@ -333,7 +333,7 @@ msgstr "Warnung: Zu starke Nutzung kann die LED schädigen!"
 
 #: src/service.c:687
 msgid "Keep screen on"
-msgstr ""
+msgstr "Bildschirm eingeschaltet lassen"
 
 #: src/service.c:693
 msgid "Battery settings…"
