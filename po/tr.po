@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2023-08-21 22:52+0000\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"PO-Revision-Date: 2026-06-13 18:06+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -333,7 +333,7 @@ msgstr "Uyarı: Aşırı kullanım LED'e zarar verebilir!"
 
 #: src/service.c:687
 msgid "Keep screen on"
-msgstr ""
+msgstr "Ekranı açık tut"
 
 #: src/service.c:693
 msgid "Battery settings…"
