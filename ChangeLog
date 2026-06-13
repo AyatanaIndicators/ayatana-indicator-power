@@ -1,6 +1,79 @@
+2026-06-13 Mike Gabriel
+
+        * Release 26.6.0 (HEAD -> main, tag: 26.6.0)
+        * Merge branch 'sunweaver-pr/phone-greeter' (0968f9b)
+
+2026-06-12 Mike Gabriel
+
+        * Add phone_greeter profile (ea5a8f3)
+
+2026-06-13 Priit Jõerüüt
+
+        * Translated using Weblate (Estonian) (90e8e4a)
+
+2026-06-13 Oğuz Ersen
+
+        * Translated using Weblate (Turkish) (814e08f)
+
+2026-06-13 Adam Havelka
+
+        * Translated using Weblate (Czech) (9d24ac9)
+
+2026-06-13 Grzegorz Szymaszek
+
+        * Translated using Weblate (Polish) (1363015)
+
+2026-06-13 Remus-Gabriel Chelu
+
+        * Translated using Weblate (Romanian) (ed3052e)
+
+2026-06-13 Arif Budiman
+
+        * Translated using Weblate (Indonesian) (6e89266)
+
+2026-06-13 Heimen Stoffels
+
+        * Translated using Weblate (Dutch) (e49674c)
+
+2026-06-13 Lorenzo Torracchi
+
+        * Translated using Weblate (Italian) (28b8773)
+
+2026-06-13 Quentin PAGÈS
+
+        * Translated using Weblate (Occitan) (2f04f53)
+
+2026-06-13 Mike Gabriel
+
+        * Translated using Weblate (German) (43afd6b)
+
+2026-06-13 libermax
+
+        * Translated using Weblate (French) (ebced70)
+
+2026-06-13 Mike Gabriel
+
+        * po/: Update translation files. (d57ac58)
+
 2026-06-11 Mike Gabriel
 
-        * Release 24.5.3 (HEAD -> main, tag: 24.5.3)
+        * Translated using Weblate (German) (91622b6)
+
+2026-06-11 Priit Jõerüüt
+
+        * Translated using Weblate (Estonian) (5ac6336)
+
+2026-06-12 Mike Gabriel
+
+        * Merge branch 'sap-nocops-keep_screen_on' (a6570d0)
+
+2025-06-03 S@P
+
+        * keep screen on toggle for lomiri (1e3fa1f)
+
+2026-06-11 Mike Gabriel
+
+        * Release 24.5.3 (8baa199) (tag: 24.5.3)
 
 2026-03-18 Andi Chandler
 
