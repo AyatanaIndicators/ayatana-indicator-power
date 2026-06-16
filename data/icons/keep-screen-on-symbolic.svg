@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="96"
+   height="96"
+   id="svg-lock-bar"
+   version="1.1"
+   viewBox="0 0 96 96">
+  <defs id="defs-lock-bar">
+    <!-- Knockout mask: white = visible. Black diagonal = transparent gap cut through the lock. -->
+    <mask id="bar-cut">
+      <rect x="0" y="0" width="96" height="96" fill="#ffffff" />
+      <rect x="43" y="-18" width="6" height="132" fill="#000000"
+            transform="rotate(45 48 48)" />
+    </mask>
+  </defs>
+  <g id="lock"
+     style="fill:#808080;fill-opacity:1;stroke:none"
+     mask="url(#bar-cut)">
+    <!-- Shackle (inverted U) -->
+    <path
+       id="shackle"
+       d="M 30.75,39.95 L 30.75,29.6 A 17.25,17.25 0 0 1 65.25,29.6 L 65.25,39.95 L 57.2,39.95 L 57.2,29.6 A 9.2,9.2 0 0 0 38.8,29.6 L 38.8,39.95 Z" />
+    <!-- Body -->
+    <rect id="body" x="22.7" y="38.8" width="50.6" height="46" rx="5.75" ry="5.75" />
+  </g>
+  <!-- Diagonal slash, same themeable color, sitting alongside the transparent gap -->
+  <rect
+     id="bar"
+     x="46" y="-8.5" width="4" height="113"
+     transform="rotate(45 48 48)"
+     style="fill:#808080;fill-opacity:1;stroke:none" />
+</svg>
