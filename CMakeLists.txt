@@ -16,6 +16,7 @@ option(ENABLE_COVERAGE "Enable coverage reports (includes enabling all tests and
 option(ENABLE_WERROR "Treat all build warnings as errors" OFF)
 option(ENABLE_LOMIRI_FEATURES "Build with Lomiri-specific libraries, schemas and media" OFF)
 option(ENABLE_DEVICEINFO "Build with deviceinfo integration" OFF)
+option(ENABLE_LIBGBINDER "Build with the camera HAL flashlight backend" OFF)
 option(ENABLE_RDA "Build with RDA (remote desktop awareness) support" ON)
 
 if(ENABLE_COVERAGE)
@@ -107,6 +108,13 @@ include_directories (SYSTEM ${SERVICE_DEPS_INCLUDE_DIRS})
 if (ENABLE_DEVICEINFO)
     pkg_check_modules (DEVICEINFO IMPORTED_TARGET "deviceinfo")
     include_directories (${DEVICEINFO_INCLUDE_DIRS})
+endif ()
+
+if (ENABLE_LIBGBINDER)
+    pkg_check_modules (GBINDER REQUIRED libgbinder)
+    include_directories (${GBINDER_INCLUDE_DIRS})
+    link_directories (${GBINDER_LIBRARY_DIRS})
+    add_definitions (-DENABLE_LIBGBINDER)
 endif ()
 
 ##
