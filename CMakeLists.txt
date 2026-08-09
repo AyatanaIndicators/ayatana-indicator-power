@@ -109,6 +109,10 @@ if (ENABLE_DEVICEINFO)
     include_directories (${DEVICEINFO_INCLUDE_DIRS})
 endif ()
 
+## icons directory
+
+add_definitions(-DINDICATOR_ICONS_DIR="${CMAKE_INSTALL_FULL_DATADIR}/ayatana-indicator-power/icons")
+
 ##
 ##  custom targets
 ##

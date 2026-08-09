@@ -60,3 +60,8 @@ set (AYATANA_INDICATOR_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${AYATANA_INDICATOR_NAM
 
 install (FILES "${AYATANA_INDICATOR_FILE}"
          DESTINATION "${AYATANA_INDICATOR_DIR}")
+
+## Icon Files
+
+install (FILES "icons/keep-screen-on-symbolic.svg"
+        DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/ayatana-indicator-power/icons")
