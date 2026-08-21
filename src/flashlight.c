@@ -23,6 +23,8 @@
 
 #include <gio/gio.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -36,6 +38,7 @@ extern char* flashlight_path();
 extern char* flashlight_switch_path();
 extern char* flashlight_simple_enable_value();
 extern char* flashlight_simple_disable_value();
+extern char* flashlight_backend();
 #endif
 
 const size_t qcom_sysfs_size = 7;
@@ -61,8 +64,19 @@ enum TorchType torch_type = SIMPLE;
 gboolean activated = 0;
 
 int
-set_sysfs_path()
+probe_flashlight()
 {
+# if defined(ENABLE_LIBDEVICEINFO) && defined(ENABLE_LIBGBINDER)
+  char* backend = flashlight_backend();
+  int use_camera_hal = !strcmp(backend, "camera-hal");
+
+  free(backend);
+
+  if (use_camera_hal) {
+    torch_type = CAMERA_HAL;
+    return flashlight_camera_hal_supported();
+  }
+# endif
 # ifdef ENABLE_LIBDEVICEINFO
   if (strcmp(flashlight_path(), "")) {
     if (access(flashlight_path(), F_OK) != -1) {
@@ -176,13 +190,18 @@ toggle_flashlight_action(GAction *action,
   GVariant *state;
   int toggled;
 
-  if (!set_sysfs_path())
+  if (!probe_flashlight())
     return;
 
   state = g_action_get_state(action);
   activated = g_variant_get_boolean(state);
   g_variant_unref(state);
 
+# ifdef ENABLE_LIBGBINDER
+  if (torch_type == CAMERA_HAL)
+    toggled = flashlight_camera_hal_set(!activated);
+  else
+# endif
   if (torch_type == QCOM)
     toggled = toggle_flashlight_action_qcom();
   else
@@ -195,5 +214,5 @@ toggle_flashlight_action(GAction *action,
 int
 flashlight_supported()
 {
-  return set_sysfs_path();
+  return probe_flashlight();
 }
