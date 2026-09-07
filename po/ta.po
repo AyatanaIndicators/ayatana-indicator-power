@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2026-08-21 11:51+0000\n"
+"PO-Revision-Date: 2026-09-08 02:51+0000\n"
 "Last-Translator: Alagirisamy Rengaraj <radhaalagirisamy@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/ta/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.9.1.dev0\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -29,7 +29,7 @@ msgstr "பட்டியல் பட்டியில் நேரத்த�
 
 #: data/org.ayatana.indicator.power.gschema.xml:3
 msgid "Show percentage in Menu Bar"
-msgstr "பட்டியல் பட்டியில் சதவீதம்காட்டு"
+msgstr "பட்டியல் பட்டியில் சதவீதம் காட்டு"
 
 #: data/org.ayatana.indicator.power.gschema.xml:4
 msgid "Whether or not to show the percentage in the menu bar."
@@ -37,15 +37,15 @@ msgstr "பட்டியல் பட்டியில் சதவீதம�
 
 #: data/org.ayatana.indicator.power.gschema.xml:5
 msgid "When to show the battery status in the menu bar?"
-msgstr "பட்டியல் பட்டியில் மின்கலம் நிலைமை எப்போது காட்டவேண்டும்?"
+msgstr "பட்டியல் பட்டியில் மின்கலம் நிலவரம் எப்பொழுது காட்டவேண்டும்?"
 
 #: data/org.ayatana.indicator.power.gschema.xml:6
 msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"பேட்டரி நிலைமை வாய்ப்புக்கள் காட்டவேண்டிய பொழுது .பொருத்தமான வாய்ப்புக்கள் \"இருப்பு\", "
-"\"மின்னேற்றம்\" மற்றும் \"இல்லவே இல்லை\"."
+"மின்கலம் நிலவரம் எப்பொழுது காட்டவேண்டுவதற்கான தேர்வுகள் .பொருத்தமான தேர்வுகள் \"இருப்பு\", "
+"\"மின்னேற்றம்\" மற்றும் \"எப்போதும் இல்லை\"."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:675
@@ -65,7 +65,7 @@ msgstr "தடையில்லா மின் வழங்கி"
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
 msgid "Monitor"
-msgstr "மின் கண்காணிப்பான்"
+msgstr "கண்காணி"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
@@ -80,7 +80,7 @@ msgstr "விசைப்பலகை"
 #. TRANSLATORS: portable device
 #: src/device.c:699
 msgid "PDA"
-msgstr "கையடக்க சாதனம்"
+msgstr "தனிப்பட்ட எண் உதவிச்சாதனம்(PDA)"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: src/device.c:703
@@ -90,12 +90,12 @@ msgstr "அலைபேசி"
 #. TRANSLATORS: media player, mp3 etc
 #: src/device.c:707
 msgid "Media player"
-msgstr "ஊடக இயக்கி"
+msgstr "ஊடகம் இசைப்பான்"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:711
 msgid "Tablet"
-msgstr "கைக் கணினி"
+msgstr "பலகைக்கணினி"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:715
@@ -110,7 +110,7 @@ msgstr "விளையாட்டு உள்ளீடு"
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr "மின்வரைகோல்"
+msgstr "மின்எழுதுகோல்"
 
 #: src/device.c:726
 msgid "Touchpad"
@@ -126,16 +126,16 @@ msgstr "பிணைய சாதனம்"
 
 #: src/device.c:735
 msgid "Headset"
-msgstr "காதுக்கருவி"
+msgstr "தலைமாட்டும்பேசுகருவி"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr "ஒலிப்பெட்டிகள்"
+msgstr "பேசும் கருவிகள்"
 
 #: src/device.c:742
 msgid "Headphones"
-msgstr "காதொலிப்பான்"
+msgstr "தலைபேசிகள்"
 
 #: src/device.c:745
 msgid "Video device"
@@ -148,15 +148,15 @@ msgstr "ஒலி சாதனம்"
 #. TRANSLATORS: remote control device with internal battery
 #: src/device.c:752
 msgid "Remote control"
-msgstr "தொலை கட்டுப்பாடு"
+msgstr "தொலைக் கட்டுப்பாடு"
 
 #: src/device.c:755
 msgid "Printer"
-msgstr "அச்சுப்பொறி"
+msgstr "அச்சுக்கருவி"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr "ஊடுருவி"
+msgstr "எண்நகலாக்க கருவி"
 
 #: src/device.c:761
 msgid "Camera"
@@ -172,7 +172,7 @@ msgstr "பொம்மை"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr "நீலப்பல்அலை சாதனம்"
+msgstr "நீலப்பல் சாதனம்"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -193,7 +193,7 @@ msgstr "அறியாதது"
 #: src/device.c:847
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr "%0d:%02d மின்னூட்ட மணி1:30நிமிடங்கள்"
+msgstr "%0d:%02d மின்னேற்ற மணி1:30நிமிடங்கள்"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: src/device.c:852
@@ -206,7 +206,7 @@ msgstr "%0d:%02d மணி 1.30 நிமிடங்கள் மீதமு�
 #: src/device.c:887
 #, c-format
 msgid "%d %s %d %s to charge"
-msgstr "%d %s %d %sமின்னூட்டத்திற்கு 1மணி10நிமிடங்கள்உள்ளது"
+msgstr "%d %s %d %sமின்னேற்ற 1மணி10நிமிடங்கள்உள்ளது"
 
 #: src/device.c:888 src/device.c:906
 msgid "hour"
@@ -226,65 +226,65 @@ msgstr[1] "நிமிடங்கள்"
 #: src/device.c:895
 #, c-format
 msgid "%d %s to charge"
-msgstr "மின்னூட்டத்திற்கு%d %s59 நிமிடங்கள் உள்ளது"
+msgstr "%d %sமின்னேற்றதிற்கு 59 நிமிடங்கள் உள்ளது"
 
 #. TRANSLATORS: "X (hour,hours) Y (minute,minutes) left" until the battery's empty.
 #. Example: "1 hour 10 minutes left"
 #: src/device.c:905
 #, c-format
 msgid "%d %s %d %s left"
-msgstr "%d %s %d %s மின்கலம் முழுவதும் தீர 1மணி 10 நிமிடங்கள் மீதம் உள்ளது"
+msgstr "%d %s %d %s 1மணி 10 நிமிடங்கள் மீதம் உள்ளது"
 
 #. TRANSLATORS: "Y (minute,minutes) left" until the battery's empty.
 #. Example: "59 minutes left"
 #: src/device.c:913
 #, c-format
 msgid "%d %s left"
-msgstr "%d %sமின்கலம் முழுவதும் தீர 59 நிமிடங்கள் மீதம் உள்ளது"
+msgstr "%d %sமுழுவதும் தீர 59 நிமிடங்கள் மீதம் உள்ளது"
 
 #. TRANSLATORS: example: "battery (charged)"
 #: src/device.c:979
 #, c-format
 msgid "%s (charged)"
-msgstr "%s(மின்னூட்டம் நிறைவு)"
+msgstr "%s(மின்னேற்றப்பட்டது)"
 
 #. TRANSLATORS: example: "battery (time remaining)"
 #: src/device.c:996
 #, c-format
 msgid "%s (%s)"
-msgstr "%s (%s)மின்கலம் மீதநேரம்"
+msgstr "%s (%s)மின்கலம்(மீதமுள்ள நேரம்)"
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "0:59 33%"
 #: src/device.c:1071
 msgid "%s %.0lf%%"
-msgstr "%s%.0lf %%மின்கலம் மீதம் மணி0:59நிமிடம் 33%"
+msgstr "%s%.0lf %% \"0:59 33%\""
 
 #. TRANSLATORS: after the icon, a time-remaining string + battery %. Example: "(0:59, 33%)"
 #: src/device.c:1075
 msgid "(%s, %.0lf%%)"
-msgstr "(%s,%.0lf %%)மின்கலம் மீதம் மணி0:59நிமிடம் 33%"
+msgstr "(%s,%.0lf %%)\"0:59 33%\""
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "0:59"
 #: src/device.c:1084
 #, c-format
 msgid "%s"
-msgstr "%sமின்கலம் மணி 0:59நிமிடம்"
+msgstr "%s\"0:59\""
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
 #, c-format
 msgid "(%s)"
-msgstr "(%sமின்கலம் மணி 0:59நிமிடம்)"
+msgstr "(%s\"( 0:59)\""
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
 msgid "%.0lf%%"
-msgstr "%.0lf %%மின்கலம் 33%"
+msgstr "%.0lf %% \"( 33%)\""
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
 msgid "(%.0lf%%)"
-msgstr "(%.0lf %%)மின்கலம் 33%"
+msgstr "(%.0lf %%) \"(33%)\""
 
 #: src/notifier.c:349
 msgid "Battery Low"
@@ -309,11 +309,11 @@ msgstr "மின்கலம் அமைப்புகள்"
 
 #: src/service.c:444
 msgid "Battery status and power management"
-msgstr "மின்கலம் நிலை & ஆற்றல் மேலாண்மை"
+msgstr "மின்கலம் நிலை மற்றும் ஆற்றல் மேலாண்மை"
 
 #: src/service.c:535
 msgid "Charge level"
-msgstr "மின்னேற்றம்நிலை"
+msgstr "மின்னேற்றம் நிலை"
 
 #: src/service.c:639
 msgid "Power Settings…"
@@ -321,19 +321,19 @@ msgstr "ஆற்றல் அமைப்புகள்…"
 
 #: src/service.c:665
 msgid "Adjust brightness automatically"
-msgstr "ஒளிஅளவை தானாகச் சரிசெய்"
+msgstr "வெளிச்சத்தை தானாகவே தகவமை"
 
 #: src/service.c:673
 msgid "Flashlight"
-msgstr "ஒளிவிளக்கு"
+msgstr "ஒளிர்விளக்கு"
 
 #: src/service.c:679
 msgid "Warning: Heavy use can damage the LED!"
-msgstr "எச்சரிக்கை: அதீத பயன்பாடு ஒளிஉமிழ் இருமுனையத்தை சேதப்படுத்தலாம்!"
+msgstr "எச்சரிக்கை: அதீத பயன்பாடு ஒ.உ.இ(ஒளிஉமிழ் இருமுனை)க்கு தீங்கு ஏற்படலாம்!"
 
 #: src/service.c:687
 msgid "Keep screen on"
-msgstr "திரையை இயக்கத்தில் வைத்திரு"
+msgstr "திரை இயக்கி வை"
 
 #: src/service.c:693
 msgid "Battery settings…"
@@ -351,10 +351,10 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"உங்கள் மேசைக்கணிணி சூழலின் ஆற்றல் புள்ளிவிவர பயன்பாட்டை தூண்டுவதை\n"
+"உங்கள் மேசைக்கணினி சூழலின் ஆற்றல் புள்ளிவிவர பயன்பாட்டை தூண்டுவதை\n"
 "அயடானா ஆற்றல் குறியீடு இன்னும் ஆதரிக்கவில்லை.\n"
 "\n"
-"இதை பின்வரும் முகவரியில் மேம்பாட்டாளர்களிடம் அறிக்கை தரவும்:\n"
+"தயவு செய்து இதை மேம்பாட்டாளர்களிடம் இங்கு அறிக்கை தரவும்:\n"
 "https://github.com/arcticaproject/ayatana-indicator-power/issues"
 
 #: src/utils.c:69
@@ -365,8 +365,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"உங்கள் மேசைக்கணிணி சூழலின் ஆற்றல் அமைப்புஉரையாடலை தூண்டுவதை\n"
+"உங்கள் மேசைக்கணிணி சூழலின் ஆற்றல் அமைப்புக்கள் உரையாடலைத் தூண்டுவதை\n"
 "அயடானா ஆற்றல் குறியீடு இன்னும் ஆதரிக்கவில்லை.\n"
 "\n"
-"இதை பின்வரும் முகவரியில் மேம்பாட்டாளர்களிடம் அறிக்கை தரவும்:\n"
+"இதை பின்வரும் முகவரியில் மேம்பாட்டாளர்களிடம் இங்கு அறிக்கை தரவும்:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
