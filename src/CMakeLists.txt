@@ -16,6 +16,7 @@ set(SERVICE_MANUAL_SOURCES
     keep-screen-on.c
     flashlight.c
     notifier.c
+    power-saver.c
     testing.c
     service.c
     utils.c)
