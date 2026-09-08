@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2025-09-30 17:01+0000\n"
+"PO-Revision-Date: 2026-09-09 04:51+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -63,22 +63,22 @@ msgstr "UPS"
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
 msgid "Monitor"
-msgstr ""
+msgstr "ეკრანი"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
 msgid "Mouse"
-msgstr ""
+msgstr "თაგუნა"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: src/device.c:695
 msgid "Keyboard"
-msgstr ""
+msgstr "კლავიატურა"
 
 #. TRANSLATORS: portable device
 #: src/device.c:699
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: src/device.c:703
@@ -93,12 +93,12 @@ msgstr ""
 #. TRANSLATORS: tablet device
 #: src/device.c:711
 msgid "Tablet"
-msgstr ""
+msgstr "ტაბლეტი"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:715
 msgid "Computer"
-msgstr ""
+msgstr "კომპიუტერი"
 
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
@@ -108,15 +108,15 @@ msgstr ""
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
 msgid "Pen"
-msgstr ""
+msgstr "კალამი"
 
 #: src/device.c:726
 msgid "Touchpad"
-msgstr ""
+msgstr "სენსორული პანელი"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr ""
+msgstr "მოდემი"
 
 #: src/device.c:732
 msgid "Network device"
@@ -124,16 +124,16 @@ msgstr ""
 
 #: src/device.c:735
 msgid "Headset"
-msgstr ""
+msgstr "ყურსასმენი"
 
 #. TRANSLATORS: loudspeakers with internal batteries
 #: src/device.c:739
 msgid "Speakers"
-msgstr ""
+msgstr "დინამიკები"
 
 #: src/device.c:742
 msgid "Headphones"
-msgstr ""
+msgstr "ყურსასმენები"
 
 #: src/device.c:745
 msgid "Video device"
@@ -150,23 +150,23 @@ msgstr ""
 
 #: src/device.c:755
 msgid "Printer"
-msgstr ""
+msgstr "პრინტერი"
 
 #: src/device.c:758
 msgid "Scanner"
-msgstr ""
+msgstr "სკანერი"
 
 #: src/device.c:761
 msgid "Camera"
-msgstr ""
+msgstr "კამერა"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr ""
+msgstr "სატარებელი მოწყობილობა"
 
 #: src/device.c:767
 msgid "Toy"
-msgstr ""
+msgstr "სათამაშო"
 
 #: src/device.c:770
 msgid "Bluetooth device"
@@ -175,17 +175,17 @@ msgstr ""
 #. TRANSLATORS: unknown device
 #: src/device.c:774
 msgid "Unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: src/device.c:814
 #, c-format
 msgid "estimating…"
-msgstr ""
+msgstr "დარჩენილია…"
 
 #: src/device.c:818
 #, c-format
 msgid "unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #. TRANSLATORS: H:MM (hours, minutes) to charge the battery. Example: "1:30 to charge"
 #: src/device.c:847
@@ -209,15 +209,15 @@ msgstr ""
 #: src/device.c:888 src/device.c:906
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "საათი"
+msgstr[1] "საათი"
 
 #: src/device.c:889 src/device.c:896 src/device.c:907
 #: src/device.c:914
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "წუთი"
+msgstr[1] "წუთი"
 
 #. TRANSLATORS: "Y (minute,minutes) to charge" the battery.
 #. Example: "59 minutes to charge"
@@ -266,23 +266,23 @@ msgstr ""
 #: src/device.c:1084
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #. TRANSLATORS: after the icon, a time-remaining string Example: "(0:59)"
 #: src/device.c:1088
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1097
 msgid "%.0lf%%"
-msgstr ""
+msgstr "%.0lf%%"
 
 #. TRANSLATORS: after the icon, a battery %. Example: "(33%)"
 #: src/device.c:1101
 msgid "(%.0lf%%)"
-msgstr ""
+msgstr "(%.0lf%%)"
 
 #: src/notifier.c:349
 msgid "Battery Low"
@@ -311,7 +311,7 @@ msgstr ""
 
 #: src/service.c:535
 msgid "Charge level"
-msgstr ""
+msgstr "მუხტის დონე"
 
 #: src/service.c:639
 msgid "Power Settings…"
@@ -323,7 +323,7 @@ msgstr ""
 
 #: src/service.c:673
 msgid "Flashlight"
-msgstr ""
+msgstr "განათება"
 
 #: src/service.c:679
 msgid "Warning: Heavy use can damage the LED!"
