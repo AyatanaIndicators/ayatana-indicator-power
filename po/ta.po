@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2026-09-08 02:51+0000\n"
+"PO-Revision-Date: 2026-09-09 04:51+0000\n"
 "Last-Translator: Alagirisamy Rengaraj <radhaalagirisamy@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/ta/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1.dev0\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -60,7 +60,7 @@ msgstr "மின்கலம்"
 #. TRANSLATORS: battery-backed AC power source
 #: src/device.c:683
 msgid "UPS"
-msgstr "தடையில்லா மின் வழங்கி"
+msgstr "த.மி.வ(தடங்கலற்ற மின் வழங்கி)"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
@@ -80,7 +80,7 @@ msgstr "விசைப்பலகை"
 #. TRANSLATORS: portable device
 #: src/device.c:699
 msgid "PDA"
-msgstr "தனிப்பட்ட எண் உதவிச்சாதனம்(PDA)"
+msgstr "த.எ.உசா(தனிப்பட்ட எண் உதவிச்சாதனம்)(PDA)"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: src/device.c:703
@@ -90,7 +90,7 @@ msgstr "அலைபேசி"
 #. TRANSLATORS: media player, mp3 etc
 #: src/device.c:707
 msgid "Media player"
-msgstr "ஊடகம் இசைப்பான்"
+msgstr "ஊடகம் இயக்கி"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:711
@@ -118,7 +118,7 @@ msgstr "தொடுபலகை"
 
 #: src/device.c:729
 msgid "Modem"
-msgstr "இணைய இணைப்பான்"
+msgstr "இணக்கி"
 
 #: src/device.c:732
 msgid "Network device"
