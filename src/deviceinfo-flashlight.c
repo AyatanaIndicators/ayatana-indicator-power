@@ -42,3 +42,11 @@ char* flashlight_simple_disable_value()
          struct DeviceInfo* di = deviceinfo_new();
          return deviceinfo_get(di, "FlashlightSimpleDisableValue", "");
 }
+
+char* flashlight_backend()
+{
+         struct DeviceInfo* di = deviceinfo_new();
+         char* backend = deviceinfo_get(di, "FlashlightBackend", "");
+         deviceinfo_delete(di);
+         return backend;
+}

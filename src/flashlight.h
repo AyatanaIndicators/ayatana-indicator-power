@@ -41,8 +41,16 @@ flashlight_supported();
 gboolean
 flashlight_activated();
 
+#ifdef ENABLE_LIBGBINDER
+int
+flashlight_camera_hal_supported();
+
+int
+flashlight_camera_hal_set(int enable);
+#endif
+
 enum
-TorchType { SIMPLE = 1, QCOM };
+TorchType { SIMPLE = 1, QCOM, CAMERA_HAL };
 
 G_END_DECLS
 
