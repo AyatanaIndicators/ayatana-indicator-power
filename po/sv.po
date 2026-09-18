@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2023-09-07 05:05+0000\n"
-"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
+"PO-Revision-Date: 2026-09-19 22:51+0000\n"
+"Last-Translator: Daniel Nylander <yeagersthlm@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ayatana-"
 "indicators/power-applet/sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -44,8 +44,8 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"Alternativ för när batteristatus ska visas. Giltiga alternativ är "
-"”närvarande”, ”laddning” och ”aldrig”."
+"Alternativ för när batteristatus ska visas. Giltiga alternativ är ”present”, "
+"”charge” och ”never”."
 
 #. TRANSLATORS: system power cord
 #: src/device.c:675
@@ -65,7 +65,7 @@ msgstr "UPS"
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/device.c:687
 msgid "Monitor"
-msgstr "Övervakare"
+msgstr "Bildskärm"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
@@ -95,7 +95,7 @@ msgstr "Mediaspelare"
 #. TRANSLATORS: tablet device
 #: src/device.c:711
 msgid "Tablet"
-msgstr "Platta"
+msgstr "Surfplatta"
 
 #. TRANSLATORS: tablet device
 #: src/device.c:715
@@ -105,7 +105,7 @@ msgstr "Dator"
 #. TRANSLATORS: game controller/joystick with internal batteries
 #: src/device.c:719
 msgid "Gaming input"
-msgstr "Spelkontroll/Joystick"
+msgstr "Spelenhet"
 
 #. TRANSLATORS: graphic tablet pen with internal battery
 #: src/device.c:723
@@ -164,7 +164,7 @@ msgstr "Kamera"
 
 #: src/device.c:764
 msgid "Wearable"
-msgstr "Kroppsnära"
+msgstr "Bärbar enhet"
 
 #: src/device.c:767
 msgid "Toy"
@@ -172,7 +172,7 @@ msgstr "Leksak"
 
 #: src/device.c:770
 msgid "Bluetooth device"
-msgstr "Blåtands enhet"
+msgstr "Bluetooth-enhet"
 
 #. TRANSLATORS: unknown device
 #: src/device.c:774
@@ -292,12 +292,12 @@ msgstr "Lågt batteri"
 
 #: src/notifier.c:350
 msgid "Battery Critical"
-msgstr "Kritiskt batteri"
+msgstr "Batteriet är kritiskt lågt"
 
 #: src/notifier.c:352
 #, c-format
 msgid "%.0f%% charge remaining"
-msgstr "%.0f%% batteri återstår"
+msgstr "%.0f %% batteriladdning återstår"
 
 #: src/notifier.c:390
 msgid "OK"
@@ -333,7 +333,7 @@ msgstr "Varning: Överdriven användning kan skada LED-lampan!"
 
 #: src/service.c:687
 msgid "Keep screen on"
-msgstr ""
+msgstr "Håll skärmen på"
 
 #: src/service.c:693
 msgid "Battery settings…"
@@ -351,8 +351,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"Ayatana Power Indicator stöder inte att framkalla\n"
-"strömstatistikapplikationen för din skrivbordsmiljö ännu.\n"
+"Ayatana Power Indicator kan ännu inte öppna\n"
+"programmet för strömstatistik i din skrivbordsmiljö.\n"
 "\n"
 "Rapportera detta till utvecklarna på:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
@@ -365,8 +365,8 @@ msgid ""
 "Please report this to the developers at:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
 msgstr ""
-"Ayatana Power Indicator stöder inte att framkalla\n"
-"strömstatistikapplikationen för din skrivbordsmiljö ännu.\n"
+"Ayatana Power Indicator kan ännu inte öppna\n"
+"dialogrutan för ströminställningar i din skrivbordsmiljö.\n"
 "\n"
 "Rapportera detta till utvecklarna på:\n"
 "https://github.com/ArcticaProject/ayatana-indicator-power/issues"
