@@ -433,11 +433,25 @@ should_be_visible (IndicatorPowerService * self)
   return visible;
 }
 
+static gboolean
+is_keep_screen_on_active (const priv_t *p)
+{
+  GAction *kso = g_action_map_lookup_action (G_ACTION_MAP(p->actions), "keep-screen-on");
+  if (kso == NULL)
+    return FALSE;
+
+  GVariant *state = g_action_get_state (kso);
+  gboolean active = g_variant_get_boolean (state);
+  g_variant_unref (state);
+  return active;
+}
+
 static GVariant *
 create_header_state (IndicatorPowerService * self)
 {
   GVariantBuilder b;
   const priv_t * const p = self->priv;
+  const gboolean kso_active = is_keep_screen_on_active (p);
 
   g_variant_builder_init (&b, G_VARIANT_TYPE("a{sv}"));
 
@@ -448,6 +462,8 @@ create_header_state (IndicatorPowerService * self)
   g_variant_builder_add (&b, "{sv}", "visible",
                          g_variant_new_boolean (should_be_visible (self)));
 
+  GVariant *serialized_icons[2];
+  guint n_icons = 0;
   if (p->primary_device != NULL)
     {
       char * title;
@@ -476,31 +492,53 @@ create_header_state (IndicatorPowerService * self)
           else
             g_free (title);
         }
-
-      if ((icon = indicator_power_device_get_gicon (p->primary_device, TRUE, TRUE)))
-        {
-          GVariant * serialized_icon = g_icon_serialize (icon);
-
-          if (serialized_icon != NULL)
-            {
-              g_variant_builder_add (&b, "{sv}", "icon", serialized_icon);
-              g_variant_unref (serialized_icon);
-            }
-
-          g_object_unref (icon);
-        }
+        icon = indicator_power_device_get_gicon (p->primary_device, TRUE, TRUE);
+        if (icon != NULL)
+          {
+            GVariant *sv = g_icon_serialize (icon);
+            g_object_unref (icon);
+            if (sv != NULL)
+              serialized_icons[n_icons++] = sv;
+          }
     }
     else if (ayatana_common_utils_is_lomiri())
     {
         g_variant_builder_add (&b, "{sv}", "label", g_variant_new_string ("Fake battery"));
         g_variant_builder_add (&b, "{sv}", "accessible-desc", g_variant_new_string ("Fake battery"));
-        GIcon *pIcon = g_themed_icon_new_with_default_fallbacks ("battery-missing-symbolic");
-        GVariant *pIconSerialised = g_icon_serialize (pIcon);
-        g_object_unref (pIcon);
-        g_variant_builder_add (&b, "{sv}", "icon", pIconSerialised);
-        g_variant_unref (pIconSerialised);
-    }
 
+        GIcon *pIcon = g_themed_icon_new_with_default_fallbacks ("battery-missing-symbolic");
+        GVariant *sv = g_icon_serialize (pIcon);
+        g_object_unref (pIcon);
+        if (sv != NULL)
+          serialized_icons[n_icons++] = sv;
+    }
+  if (kso_active)
+    {
+      GFile *file = g_file_new_for_path(INDICATOR_ICONS_DIR "/keep-screen-on-symbolic.svg");
+      GIcon *kso_icon = g_file_icon_new(file);
+      g_object_unref(file);
+      GVariant *sv = g_icon_serialize (kso_icon);
+      g_object_unref (kso_icon);
+      if (sv != NULL)
+        serialized_icons[n_icons++] = sv;
+    }
+  if (n_icons == 1)
+    {
+      g_variant_builder_add (&b, "{sv}", "icon", serialized_icons[0]);
+      g_variant_unref (serialized_icons[0]);
+    }
+  else if (n_icons > 1)
+    {
+      GVariantBuilder icons_builder;
+      g_variant_builder_init (&icons_builder, G_VARIANT_TYPE ("av"));
+      for (guint i = 0; i < n_icons; i++)
+        {
+          g_variant_builder_add (&icons_builder, "v", serialized_icons[i]);
+          g_variant_unref (serialized_icons[i]);
+        }
+      GVariant *icons_variant = g_variant_builder_end (&icons_builder);
+      g_variant_builder_add (&b, "{sv}", "icons", icons_variant);
+    }
   return g_variant_builder_end (&b);
 }
 
@@ -941,6 +979,7 @@ init_gactions (IndicatorPowerService * self)
     g_variant_type_free (pType);
     g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
     g_signal_connect(a, "change-state", G_CALLBACK(toggle_keep_screen_on_action), p->settings);
+    g_signal_connect_swapped(a, "notify::state", G_CALLBACK(rebuild_header_now), self);
   }
 
   /* add the flashlight action */
