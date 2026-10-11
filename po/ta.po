@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 00:05+0200\n"
-"PO-Revision-Date: 2026-09-28 10:51+0000\n"
-"Last-Translator: Alagirisamy Rengaraj <radhaalagirisamy@gmail.com>\n"
+"PO-Revision-Date: 2026-10-12 15:51+0000\n"
+"Last-Translator: Alagirisamy Rengaraj "
+"<ahalyachinnasamy1967@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/ayatana-indicators/"
 "power-applet/ta/>\n"
 "Language: ta\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: data/org.ayatana.indicator.power.gschema.xml:1
 msgid "Show time in Menu Bar"
@@ -44,7 +45,7 @@ msgid ""
 "Options for when to show battery status. Valid options are \"present\", "
 "\"charge\", and \"never\"."
 msgstr ""
-"மின்கலம் நிலவரம் எப்பொழுது காட்டவேண்டுவதற்கான தேர்வுகள் .பொருத்தமான தேர்வுகள் \"இருப்பு\", "
+"மின்கலம் நிலவரம் எப்பொழுது காட்டவேண்டுவதற்கான தேர்வுகள்.பொருத்தமான தேர்வுகள் \"இருப்பு\", "
 "\"மின்னேற்றம்\" மற்றும் \"எப்போதும் இல்லை\"."
 
 #. TRANSLATORS: system power cord
@@ -70,7 +71,7 @@ msgstr "கண்காணி"
 #. TRANSLATORS: wireless mice with internal batteries
 #: src/device.c:691
 msgid "Mouse"
-msgstr "சொடுக்கி"
+msgstr "சுட்டி"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: src/device.c:695
@@ -193,7 +194,7 @@ msgstr "அறியாதது"
 #: src/device.c:847
 #, c-format
 msgid "%0d:%02d to charge"
-msgstr "%0d:%02d மின்னேற்ற மணி1:30நிமிடங்கள்"
+msgstr "%0d:%02d மின்னேற்ற மணி1:30நிமிடங்கள் உள்ளது"
 
 #. TRANSLATORS: H:MM (hours, minutes) to discharge the battery. Example: "1:30 left"
 #: src/device.c:852
@@ -313,7 +314,7 @@ msgstr "மின்கலம் நிலை மற்றும் ஆற்ற
 
 #: src/service.c:535
 msgid "Charge level"
-msgstr "மின்னேற்றம் நிலை"
+msgstr "மின்னேற்றம் அளவு"
 
 #: src/service.c:639
 msgid "Power Settings…"
