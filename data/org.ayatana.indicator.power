@@ -20,5 +20,8 @@ ObjectPath=/org/ayatana/indicator/power/desktop_greeter
 ObjectPath=/org/ayatana/indicator/power/phone_greeter
 Position=25
 
+[phone_lockscreen]
+ObjectPath=/org/ayatana/indicator/power/desktop_greeter
+
 [ubiquity]
 ObjectPath=/org/ayatana/indicator/power/desktop_greeter
