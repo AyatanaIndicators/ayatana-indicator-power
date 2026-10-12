@@ -4,11 +4,17 @@ if (ENABLE_DEVICEINFO)
     add_definitions(-DENABLE_LIBDEVICEINFO)
 endif ()
 
+if (ENABLE_LIBGBINDER)
+    set(FLASHLIGHT_BINDER
+        flashlight-binder.c)
+endif ()
+
 # handwritten sources
 set(SERVICE_MANUAL_SOURCES
     brightness.c
     datafiles.c
     ${FLASHLIGHT_DEVICEINFO}
+    ${FLASHLIGHT_BINDER}
     device-provider-mock.c
     device-provider-upower.c
     device-provider.c
@@ -53,5 +59,5 @@ link_directories(${SERVICE_DEPS_LIBRARY_DIRS})
 
 # the executable: lib + main()
 add_executable (${SERVICE_EXEC} main.c)
-target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${DEVICEINFO_LIBRARIES})
+target_link_libraries (${SERVICE_EXEC} ${SERVICE_LIB} ${SERVICE_DEPS_LIBRARIES} ${DEVICEINFO_LIBRARIES} ${GBINDER_LIBRARIES})
 install (TARGETS ${SERVICE_EXEC} RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/${CMAKE_PROJECT_NAME}")
