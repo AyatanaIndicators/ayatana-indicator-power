@@ -683,6 +683,14 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 }
 
 static GMenuModel *
+create_desktop_greeter_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
+{
+  GMenu * menu = g_menu_new ();
+
+  return G_MENU_MODEL (menu);
+}
+
+static GMenuModel *
 create_phone_settings_section(IndicatorPowerService * self)
 {
   GMenu * section;
@@ -735,6 +743,49 @@ create_phone_settings_section(IndicatorPowerService * self)
   return G_MENU_MODEL(section);
 }
 
+static GMenuModel *
+create_phone_greeter_settings_section(IndicatorPowerService * self)
+{
+  GMenu * section;
+  GMenuItem * item;
+  gboolean ab_supported;
+
+  section = g_menu_new();
+
+  item = create_brightness_menu_item();
+  g_menu_append_item(section, item);
+  update_brightness_action_state(self);
+  g_object_unref(item);
+
+  g_object_get(self->priv->brightness,
+               "auto-brightness-supported", &ab_supported,
+               NULL);
+
+  if (ab_supported)
+    {
+      item = g_menu_item_new(_("Adjust brightness automatically"), "indicator.auto-brightness(true)");
+      g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
+      g_menu_append_item(section, item);
+      g_object_unref(item);
+    }
+
+  if (flashlight_supported())
+  {
+    item = g_menu_item_new(_("Flashlight"), "indicator.flashlight(true)");
+    g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
+    g_menu_append_item(section, item);
+    g_object_unref(item);
+    if (flashlight_activated())
+    {
+      item = g_menu_item_new(_("Warning: Heavy use can damage the LED!"), "indicator.flashlight(true)");
+      g_menu_append_item(section, item);
+      g_object_unref(item);
+    }
+  }
+
+  return G_MENU_MODEL(section);
+}
+
 /***
 ****
 ****  SECTION REBUILDING
@@ -782,7 +833,9 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   if (sections & SECTION_SETTINGS)
     {
       rebuild_section (desktop->submenu, 1, create_desktop_settings_section (self));
+      rebuild_section (desktop_greeter->submenu, 1, create_desktop_greeter_settings_section (self));
       rebuild_section (phone->submenu, 1, create_phone_settings_section (self));
+      rebuild_section (phone_greeter->submenu, 1, create_phone_greeter_settings_section (self));
     }
 }
 
@@ -816,6 +869,7 @@ create_menu (IndicatorPowerService * self, int profile)
 
       case PROFILE_PHONE_GREETER:
         sections[n++] = create_devices_section (self, PROFILE_PHONE_GREETER);
+        sections[n++] = create_phone_greeter_settings_section (self);
         break;
 
       case PROFILE_DESKTOP:
@@ -825,6 +879,7 @@ create_menu (IndicatorPowerService * self, int profile)
 
       case PROFILE_DESKTOP_GREETER:
         sections[n++] = create_devices_section (self, PROFILE_DESKTOP_GREETER);
+        sections[n++] = create_desktop_greeter_settings_section (self);
         break;
     }
 
