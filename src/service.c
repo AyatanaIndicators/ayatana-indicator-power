@@ -32,6 +32,7 @@
 #include "device-provider.h"
 #include "keep-screen-on.h"
 #include "notifier.h"
+#include "power-saver.h"
 #include "service.h"
 #include "flashlight.h"
 #include "utils.h"
@@ -64,9 +65,10 @@ static GParamSpec * properties[LAST_PROP];
 
 enum
 {
-  SECTION_HEADER    = (1<<0),
-  SECTION_DEVICES   = (1<<1),
-  SECTION_SETTINGS  = (1<<2),
+  SECTION_HEADER     = (1<<0),
+  SECTION_DEVICES    = (1<<1),
+  SECTION_SETTINGS   = (1<<2),
+  SECTION_POWERSAVE  = (1<<3),
 };
 
 enum
@@ -111,6 +113,9 @@ struct _IndicatorPowerServicePrivate
   GSettings * settings;
 
   IndicatorPowerBrightness * brightness;
+  IndicatorPowerSaver * power_saver;
+  gboolean power_saver_visible;
+  GSimpleAction * battery_saver_action;
 
   guint own_id;
   guint actions_export_id;
@@ -645,6 +650,27 @@ create_desktop_settings_section (IndicatorPowerService * self G_GNUC_UNUSED)
 }
 
 static GMenuModel *
+create_power_saver_section(IndicatorPowerService * self)
+{
+  priv_t * p = self->priv;
+  GMenu * section = g_menu_new();
+  GMenuItem * item;
+
+  p->power_saver_visible = indicator_power_saver_service_available(p->power_saver);
+  if (!p->power_saver_visible)
+    return G_MENU_MODEL(section);
+
+  item = g_menu_item_new(_("Battery saver"), "indicator.battery-saver(true)");
+  g_menu_item_set_attribute(item, "x-ayatana-type", "s", "org.ayatana.indicator.switch");
+  g_menu_append_item(section, item);
+  g_object_unref(item);
+
+  g_menu_append(section, _("Battery saver settings…"), "indicator.activate-battery-saver-settings");
+
+  return G_MENU_MODEL(section);
+}
+
+static GMenuModel *
 create_phone_settings_section(IndicatorPowerService * self)
 {
   GMenu * section;
@@ -744,7 +770,12 @@ rebuild_now (IndicatorPowerService * self, guint sections)
   if (sections & SECTION_SETTINGS)
     {
       rebuild_section (desktop->submenu, 1, create_desktop_settings_section (self));
-      rebuild_section (phone->submenu, 1, create_phone_settings_section (self));
+      rebuild_section (phone->submenu, 2, create_phone_settings_section (self));
+    }
+
+  if (sections & SECTION_POWERSAVE)
+    {
+      rebuild_section (phone->submenu, 1, create_power_saver_section (self));
     }
 }
 
@@ -773,6 +804,7 @@ create_menu (IndicatorPowerService * self, int profile)
     {
       case PROFILE_PHONE:
         sections[n++] = create_devices_section (self, PROFILE_PHONE);
+        sections[n++] = create_power_saver_section (self);
         sections[n++] = create_phone_settings_section (self);
         break;
 
@@ -863,6 +895,41 @@ on_phone_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
     utils_handle_settings_request();
 }
 
+static void
+on_battery_saver_settings_activated (GSimpleAction * a      G_GNUC_UNUSED,
+                                     GVariant      * param  G_GNUC_UNUSED,
+                                     gpointer        gself  G_GNUC_UNUSED)
+{
+    ayatana_common_utils_open_url("settings:///system/battery?subpage=battery-saver");
+}
+
+static void
+on_battery_saver_change_state (GSimpleAction * action,
+                               GVariant      * value,
+                               gpointer        gself)
+{
+  IndicatorPowerService * self = INDICATOR_POWER_SERVICE(gself);
+
+  indicator_power_saver_set_battery_saver(self->priv->power_saver,
+                                          g_variant_get_boolean(value));
+  g_simple_action_set_state(action, value);
+}
+
+static void
+on_power_saver_changed (IndicatorPowerSaver * saver,
+                        gpointer              gself)
+{
+  IndicatorPowerService * self = INDICATOR_POWER_SERVICE(gself);
+  priv_t * p = self->priv;
+
+  g_simple_action_set_state(p->battery_saver_action,
+                            g_variant_new_boolean(
+                              indicator_power_saver_get_battery_saver(saver)));
+
+  if (p->power_saver_visible != indicator_power_saver_service_available(saver))
+    rebuild_now(self, SECTION_POWERSAVE);
+}
+
 /***
 ****
 ***/
@@ -900,6 +967,7 @@ init_gactions (IndicatorPowerService * self)
   GActionEntry entries[] = {
     { "activate-settings", on_settings_activated },
     { "activate-phone-settings", on_phone_settings_activated },
+    { "activate-battery-saver-settings", on_battery_saver_settings_activated },
     { "activate-statistics", on_statistics_activated, "s" }
   };
 
@@ -955,6 +1023,13 @@ init_gactions (IndicatorPowerService * self)
   g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
   g_signal_connect (a, "change-state", G_CALLBACK(on_brightness_change_requested), self);
   p->brightness_action = a;
+
+  /* add the battery saver action */
+  a = g_simple_action_new_stateful ("battery-saver", G_VARIANT_TYPE_BOOLEAN,
+                                    g_variant_new_boolean (FALSE));
+  g_action_map_add_action (G_ACTION_MAP(p->actions), G_ACTION(a));
+  g_signal_connect (a, "change-state", G_CALLBACK(on_battery_saver_change_state), self);
+  p->battery_saver_action = a;
 
   /* add the show-time action */
   show_time_action = g_settings_create_action (p->settings, "show-time");
@@ -1194,6 +1269,10 @@ my_dispose (GObject * o)
   g_clear_object (&p->notifier);
   g_clear_object (&p->brightness_action);
   g_clear_object (&p->brightness);
+  if (p->power_saver)
+    g_signal_handlers_disconnect_by_data (p->power_saver, self);
+  g_clear_object (&p->power_saver);
+  g_clear_object (&p->battery_saver_action);
   g_clear_object (&p->battery_level_action);
   g_clear_object (&p->header_action);
   g_clear_object (&p->actions);
@@ -1237,7 +1316,11 @@ indicator_power_service_init (IndicatorPowerService * self)
   g_signal_connect_swapped(p->brightness, "notify::percentage",
                            G_CALLBACK(update_brightness_action_state), self);
 
+  p->power_saver = indicator_power_saver_new();
+
   init_gactions (self);
+
+  g_signal_connect (p->power_saver, "changed", G_CALLBACK(on_power_saver_changed), self);
 
   g_signal_connect_swapped (p->settings, "changed", G_CALLBACK(rebuild_header_now), self);
 
