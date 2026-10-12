@@ -89,5 +89,5 @@ toggle_keep_screen_on_action (GAction *action,
 int
 keep_screen_on_supported ()
 {
-  return ayatana_common_utils_is_lomiri ();
+  return ( ayatana_common_utils_is_lomiri () | ayatana_common_utils_is_ubuntutouch () );
 }
